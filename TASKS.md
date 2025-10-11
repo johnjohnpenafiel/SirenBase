@@ -7,9 +7,10 @@ This document contains clear, actionable tasks to start building the SirenBase i
 ## Phase 0: Project Setup & Research
 
 ### Environment Setup
-- [ ] Install PostgreSQL locally or set up Docker
-  - If using Docker: Create `docker-compose.yml` with PostgreSQL service
+- [ ] Verify PostgreSQL installation
+  - Check PostgreSQL is running: `psql --version`
   - Test connection with `psql` or a GUI tool (pgAdmin, Postico, DBeaver)
+  - Create database: `createdb sirenbase` or via GUI tool
 - [ ] Create project directories (already done: `frontend/`, `backend/`)
 - [ ] Initialize Git repository and create `.gitignore` files
   - Backend: Ignore `venv/`, `__pycache__/`, `.env`, `*.pyc`
@@ -56,11 +57,13 @@ This document contains clear, actionable tasks to start building the SirenBase i
   ```
 - [ ] Create `.env.example` file with required variables
   ```
-  DATABASE_URL=postgresql://user:password@localhost:5432/sirenbase
+  DATABASE_URL=postgresql://username@localhost:5432/sirenbase
   JWT_SECRET_KEY=your-secret-key-change-in-production
   FLASK_ENV=development
   ```
-- [ ] Copy to `.env` and fill with actual values
+- [ ] Copy to `.env` and fill with actual PostgreSQL credentials
+  - Update `username` with your PostgreSQL username
+  - Add password if required: `postgresql://username:password@localhost:5432/sirenbase`
 
 ### Frontend Setup (Next.js)
 - [ ] Initialize Next.js project with TypeScript
@@ -172,7 +175,7 @@ This document contains clear, actionable tasks to start building the SirenBase i
   - Create at least one admin user
   - Add sample items for testing (optional)
 - [ ] Run seed script to populate initial data
-- [ ] Verify data in PostgreSQL
+- [ ] Verify data in PostgreSQL using `psql` or GUI tool
 
 ---
 
@@ -499,4 +502,4 @@ This document contains clear, actionable tasks to start building the SirenBase i
 
 ---
 
-*Last Updated: September 30, 2025*
+*Last Updated: October 10, 2025*

@@ -50,7 +50,7 @@
 
 - **Frontend**: Next.js 14+ with TypeScript, TailwindCSS, ShadCN UI
 - **Backend**: Flask with SQLAlchemy, JWT authentication
-- **Database**: PostgreSQL 15+ (Docker locally, AWS RDS in production)
+- **Database**: PostgreSQL 15+ (Local installation for development, AWS RDS in production)
 
 ## 📋 Project Awareness & Context
 
@@ -240,8 +240,8 @@ SirenBase/
 ### Local Development
 
 ```bash
-# Start PostgreSQL (Docker)
-docker-compose up -d postgres
+# Ensure PostgreSQL is running
+# Check with: pg_isready or via GUI tool
 
 # Start Backend (from backend/)
 source venv/bin/activate

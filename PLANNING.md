@@ -151,10 +151,10 @@ Create a reliable, intuitive, and fast inventory management tool that:
   - Production-grade reliability
   - ACID compliance for data integrity
   - Excellent for relational data
-- **Local Development**: Docker PostgreSQL container
-  - Consistent environment across team
-  - Easy setup and teardown
-  - Matches production environment
+- **Local Development**: Local PostgreSQL installation
+  - Direct connection for simplicity
+  - Full control over database configuration
+  - Familiar tooling and workflows
 - **Production**: AWS RDS PostgreSQL
   - Managed service (automatic backups, updates)
   - High availability options
@@ -168,9 +168,10 @@ Create a reliable, intuitive, and fast inventory management tool that:
 - **API Testing**: Postman
   - Test endpoints during development
   - Share API collections with team
-- **Containerization**: Docker + Docker Compose
-  - Local PostgreSQL setup
-  - Consistent development environment
+- **Database Management**: pgAdmin / Postico / DBeaver
+  - GUI tools for database management
+  - Query execution and visualization
+  - Schema inspection and modification
 - **IDE**: VS Code (recommended)
   - Python and TypeScript support
   - Git integration
@@ -404,4 +405,4 @@ See **TASKS.md** for the detailed, actionable task breakdown to begin developmen
 
 ---
 
-_Last Updated: September 30, 2025_
+_Last Updated: October 10, 2025_

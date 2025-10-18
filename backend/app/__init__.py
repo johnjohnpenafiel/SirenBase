@@ -31,6 +31,10 @@ def create_app(config_name='default'):
     # Configure CORS
     CORS(app, origins=app.config['CORS_ORIGINS'])
 
+    # Import models (required for Flask-Migrate to detect them)
+    with app.app_context():
+        from app.models import User, Item, History
+
     # Register blueprints (will be added as we create routes)
     # from app.routes.auth import auth_bp
     # from app.routes.items import items_bp

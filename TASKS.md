@@ -71,10 +71,10 @@ This document contains clear, actionable tasks to start building the SirenBase i
 
 ---
 
-## Phase 1: Database Schema Design
+## Phase 1: Database Schema Design ✅ COMPLETED (October 17, 2025)
 
 ### Design Database Tables
-- [ ] Design `users` table schema
+- [x] Design `users` table schema
   - id (UUID, primary key)
   - partner_number (String, unique, not null)
   - name (String, not null)
@@ -83,15 +83,17 @@ This document contains clear, actionable tasks to start building the SirenBase i
   - created_at (Timestamp)
   - updated_at (Timestamp)
 
-- [ ] Design `items` table schema
+- [x] Design `items` table schema ✅
   - id (UUID, primary key)
   - name (String, not null)
   - code (String, unique, not null, 4 characters)
   - added_by (UUID, foreign key to users.id)
   - added_at (Timestamp)
-  - removed_at (Timestamp, nullable - for soft deletes)
+  - is_removed (Boolean, for soft deletes)
+  - removed_at (Timestamp, nullable)
+  - removed_by (UUID, foreign key to users.id, nullable)
 
-- [ ] Design `history` table schema
+- [x] Design `history` table schema ✅
   - id (UUID, primary key)
   - action (Enum: 'ADD', 'REMOVE')
   - item_name (String, not null)
@@ -100,36 +102,45 @@ This document contains clear, actionable tasks to start building the SirenBase i
   - timestamp (Timestamp)
   - notes (Text, nullable)
 
-- [ ] Document relationships
+- [x] Document relationships ✅
   - users → items (one-to-many: one user can add many items)
   - users → history (one-to-many: one user has many history entries)
+  - Documented in `backend/app/models/__init__.py`
 
 ### Implement Database Models
-- [ ] Create SQLAlchemy models in `backend/app/models.py`
-  - User model with password hashing methods
-  - Item model with code generation logic
-  - History model
-- [ ] Set up Alembic for migrations
-  ```bash
-  cd backend
-  alembic init migrations
-  ```
-- [ ] Configure Alembic to use your database URL
-- [ ] Create initial migration
-  ```bash
-  alembic revision --autogenerate -m "Initial schema"
-  ```
-- [ ] Review migration file and apply
-  ```bash
-  alembic upgrade head
-  ```
+- [x] Create SQLAlchemy models in `backend/app/models/` ✅
+  - User model with password hashing methods (`models/user.py`)
+  - Item model with soft delete support (`models/item.py`)
+  - History model with helper methods (`models/history.py`)
+  - All models using SQLAlchemy 2.0 syntax with type hints
+- [x] Set up Flask-Migrate for migrations ✅
+  - Flask-Migrate 4.1.0 already installed
+  - Initialized with `flask db init`
+- [x] Configure migrations to detect models ✅
+  - Models imported in `app/__init__.py`
+- [x] Create initial migration ✅
+  - Migration file: `95337b169892_initial_schema_users_items_and_history_.py`
+  - Includes all tables, indexes, and foreign keys
+- [x] Review and apply migration ✅
+  - Migration reviewed and verified
+  - Applied with `flask db upgrade`
+  - All tables created successfully
 
 ### Seed Database
-- [ ] Create database seeding script (`backend/seed.py`)
-  - Create at least one admin user
-  - Add sample items for testing (optional)
-- [ ] Run seed script to populate initial data
-- [ ] Verify data in PostgreSQL using `psql` or GUI tool
+- [x] Create database seeding script (`backend/seed.py`) ✅
+  - Admin user creation (ADMIN001, PIN: 1234)
+  - Test staff user creation (TEST123, PIN: 5678)
+  - Sample items with unique 4-digit codes
+  - History entries for all actions
+  - Support for `--with-test-data` and `--clear` flags
+- [x] Run seed script to populate initial data ✅
+  - Created 2 users (1 admin, 1 staff)
+  - Created 5 test items
+  - Created 5 history entries
+- [x] Verify data in PostgreSQL ✅
+  - All tables populated correctly
+  - Foreign key relationships working
+  - Indexes created successfully
 
 ---
 

@@ -132,6 +132,47 @@ SirenBase/
 - **Database**: snake_case for all table and column names
 - **Files**: kebab-case for general files, PascalCase for React components
 
+### Architectural Changes (Database Schema, New Features)
+
+**CRITICAL RULE**: Never implement architectural changes without proper documentation workflow.
+
+#### Before Implementing Features NOT in PLANNING.md:
+
+1. **STOP and Ask User for Confirmation**
+   - Explain what you want to add
+   - Explain why it's needed
+   - Wait for explicit user approval
+   - Do NOT proceed without confirmation
+
+2. **After User Approval:**
+   - Implement the feature
+   - Test to ensure it works as intended
+
+3. **Immediately After Implementation (BEFORE next task):**
+   - Update `PLANNING.md` with architectural decisions
+   - Update `TASKS.md` to reflect completed work
+   - Ensure documentation matches implementation
+
+4. **Before Committing:**
+   - Verify `PLANNING.md` reflects ALL implemented features
+   - Verify `TASKS.md` is up to date
+   - No orphaned features (code exists but not documented)
+
+#### Examples of Architectural Changes Requiring This Process:
+- Adding new database tables or columns
+- Adding new fields to existing models
+- Changing data types or relationships
+- Adding new validation rules or business logic
+- Changing API contracts or endpoints
+
+#### Why This Matters:
+- Prevents documentation drift
+- Ensures team alignment on features
+- Creates clear decision trail
+- Maintains PLANNING.md as source of truth
+
+**Remember**: Implementation flexibility is preserved, but documentation MUST be updated before commit.
+
 ## 🧪 Testing Strategy
 
 ### Test Requirements

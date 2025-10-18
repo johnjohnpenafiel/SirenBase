@@ -90,17 +90,18 @@ def seed_test_data(admin_user):
     # Create test items
     print("Creating test items...")
     test_items = [
-        {'name': 'Coffee Beans - Pike Place', 'code': '1001'},
-        {'name': 'Coffee Beans - Pike Place', 'code': '1002'},
-        {'name': 'Milk - 2% Gallon', 'code': '2001'},
-        {'name': 'Milk - Whole Gallon', 'code': '2002'},
-        {'name': 'Vanilla Syrup', 'code': '3001'},
+        {'name': 'Coffee Beans - Pike Place', 'code': '1001', 'category': 'coffee_beans'},
+        {'name': 'Coffee Beans - Pike Place', 'code': '1002', 'category': 'coffee_beans'},
+        {'name': 'Vanilla Syrup', 'code': '3001', 'category': 'syrups'},
+        {'name': 'Caramel Sauce', 'code': '4001', 'category': 'sauces'},
+        {'name': 'Cleaning Spray', 'code': '5001', 'category': 'cleaning_supplies'},
     ]
 
     for item_data in test_items:
         item = Item(
             name=item_data['name'],
             code=item_data['code'],
+            category=item_data['category'],
             added_by=admin_user.id,
             added_at=datetime.utcnow()
         )

@@ -86,6 +86,7 @@ This document contains clear, actionable tasks to start building the SirenBase i
 - [x] Design `items` table schema ✅
   - id (UUID, primary key)
   - name (String, not null)
+  - **category (String, not null, indexed)** ← Added October 17, 2025
   - code (String, unique, not null, 4 characters)
   - added_by (UUID, foreign key to users.id)
   - added_at (Timestamp)
@@ -110,9 +111,11 @@ This document contains clear, actionable tasks to start building the SirenBase i
 ### Implement Database Models
 - [x] Create SQLAlchemy models in `backend/app/models/` ✅
   - User model with password hashing methods (`models/user.py`)
-  - Item model with soft delete support (`models/item.py`)
+  - Item model with soft delete support + **category field** (`models/item.py`)
   - History model with helper methods (`models/history.py`)
   - All models using SQLAlchemy 2.0 syntax with type hints
+  - Category validation via constants file + Marshmallow schema (String + Validation approach)
+  - See `UpdateLogs/CATEGORY_FIELD_DECISION.md` for rationale
 - [x] Set up Flask-Migrate for migrations ✅
   - Flask-Migrate 4.1.0 already installed
   - Initialized with `flask db init`
@@ -249,10 +252,12 @@ This document contains clear, actionable tasks to start building the SirenBase i
 - [ ] Create inventory page (`app/inventory/page.tsx`)
   - Display items grouped by name
   - Show all codes under each item group
+  - **Category filter dropdown** (filter by category)
   - "Add Item" button
   - "Remove Item" functionality for each code
 - [ ] Create "Add Item" modal/dialog
   - Input for item name
+  - **Category dropdown** (required, validated from predefined list)
   - Submit button
   - Display generated code
   - "I've written the code on the box" confirmation
@@ -303,13 +308,18 @@ This document contains clear, actionable tasks to start building the SirenBase i
   - Axios instance with base URL
   - Automatic JWT token injection in headers
   - Error handling interceptor
+- [ ] **Create category constants file** (`lib/constants.ts`)
+  - Define ITEM_CATEGORIES array (matches backend)
+  - Create ItemCategory type
+  - Create formatCategory utility function (e.g., "coffee_beans" → "Coffee Beans")
 - [ ] Create TypeScript types for API responses (`types/index.ts`)
   - User type
-  - Item type
+  - Item type **(include category field)**
   - HistoryEntry type
+  - ItemCategory type (from constants)
 - [ ] Implement all API calls
   - Auth: login, signup, getMe
-  - Items: getItems, addItem, removeItem
+  - Items: getItems, addItem **(with category)**, removeItem
   - History: getHistory
   - Admin: getUsers, addUser, removeUser
 

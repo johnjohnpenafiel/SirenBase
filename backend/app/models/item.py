@@ -21,6 +21,7 @@ class Item(db.Model):
     Attributes:
         id: UUID primary key
         name: Item name/description
+        category: Item category for organization/filtering
         code: Unique 4-digit identifier (written on physical item)
         added_by: Foreign key to user who added the item
         added_at: Timestamp when item was added
@@ -40,6 +41,11 @@ class Item(db.Model):
 
     # Item details
     name: Mapped[str] = mapped_column(String(100), nullable=False)
+    category: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        index=True  # Index for filtering by category
+    )
     code: Mapped[str] = mapped_column(
         String(4),
         unique=True,
@@ -101,6 +107,7 @@ class Item(db.Model):
         data = {
             'id': self.id,
             'name': self.name,
+            'category': self.category,
             'code': self.code,
             'added_by': self.added_by,
             'added_at': self.added_at.isoformat(),

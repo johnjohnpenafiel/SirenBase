@@ -248,16 +248,22 @@ Create a reliable, intuitive, and fast inventory management tool that:
 
 ### Tables (High-Level)
 
-1. **users** - Staff accounts (partner_number, name, pin_hash, role, created_at)
-2. **items** - Current inventory (id, name, code, added_by, added_at)
-3. **history** - Audit log (id, action, item_name, code, user_id, timestamp)
+1. **users** - Staff accounts (partner_number, name, pin_hash, role, created_at, updated_at)
+2. **items** - Current inventory (id, name, **category**, code, added_by, added_at, is_removed, removed_at, removed_by)
+3. **history** - Audit log (id, action, item_name, code, user_id, timestamp, notes)
 
 ### Key Decisions
 
 - Use UUIDs for primary keys (prevents enumeration attacks)
-- Index frequently queried columns (item codes, partner numbers)
-- Cascade deletes for referential integrity
+- Index frequently queried columns (item codes, partner numbers, **item categories**)
+- Referential integrity with foreign key constraints:
+  - RESTRICT for users with items/history (preserve audit trail)
+  - SET NULL for item removals (preserve record if user deleted)
 - Timestamps on all tables for auditing
+- **Soft delete for items** - Use `is_removed` flag instead of hard delete to preserve audit trail
+- **Category field uses String + Validation** - Flexible for MVP, validated via frontend dropdown + backend schema
+  - Categories: syrups, sauces, coffee_beans, powders, cups, lids, condiments, cleaning_supplies, other
+  - See `UpdateLogs/CATEGORY_FIELD_DECISION.md` for detailed rationale
 
 ---
 

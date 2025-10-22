@@ -35,13 +35,14 @@ def create_app(config_name='default'):
     with app.app_context():
         from app.models import User, Item, History
 
-    # Register blueprints (will be added as we create routes)
-    # from app.routes.auth import auth_bp
+    # Register blueprints
+    from app.routes.auth import auth_bp
+    app.register_blueprint(auth_bp)
+
+    # TODO: Register additional blueprints as they are created
     # from app.routes.items import items_bp
     # from app.routes.history import history_bp
     # from app.routes.admin import admin_bp
-    #
-    # app.register_blueprint(auth_bp)
     # app.register_blueprint(items_bp)
     # app.register_blueprint(history_bp)
     # app.register_blueprint(admin_bp)

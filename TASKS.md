@@ -149,22 +149,27 @@ This document contains clear, actionable tasks to start building the SirenBase i
 
 ## Phase 2: Backend API Development
 
-### Authentication Endpoints
-- [ ] Implement POST `/api/auth/login`
-  - Accept partner_number and PIN
-  - Validate credentials
-  - Return JWT access token
-  - Return user info (name, role)
-- [ ] Implement POST `/api/auth/signup`
-  - Accept partner_number, name, PIN
-  - Check if partner_number is authorized (admin pre-added)
-  - Create user account
-  - Return success/error
-- [ ] Implement GET `/api/auth/me`
-  - Validate JWT token
-  - Return current user info
-- [ ] Create JWT token middleware for protected routes
-- [ ] Test all auth endpoints with Postman
+### Authentication Endpoints ✅ COMPLETED (October 22, 2025)
+- [x] Implement POST `/api/auth/login`
+  - Accept partner_number and PIN ✅
+  - Validate credentials ✅
+  - Return JWT access token ✅
+  - Return user info (name, role) ✅
+- [x] Implement POST `/api/auth/signup`
+  - Accept partner_number, name, PIN ✅
+  - Create user account (defaults to staff role) ✅
+  - Return success/error ✅
+- [x] Implement GET `/api/auth/me`
+  - Validate JWT token ✅
+  - Return current user info ✅
+- [x] Create JWT token middleware for protected routes ✅
+  - `@jwt_required()` decorator working ✅
+  - `admin_required` decorator for admin-only routes ✅
+- [x] Test all auth endpoints ✅
+  - Login with valid/invalid credentials ✅
+  - Signup with new user ✅
+  - Get current user with JWT ✅
+  - Validation error handling ✅
 
 ### Items/Inventory Endpoints
 - [ ] Implement GET `/api/items`

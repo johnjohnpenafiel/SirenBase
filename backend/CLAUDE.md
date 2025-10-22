@@ -88,8 +88,8 @@ backend/
   - `snake_case` for variables, functions, methods
   - `PascalCase` for classes
   - `SCREAMING_SNAKE_CASE` for constants
-- **Type hints**: Use for all function signatures
-- **Docstrings**: Google style for all public functions
+- **Type hints**: Use for utility functions and helper methods (optional for Flask route handlers since Flask wraps responses)
+- **Docstrings**: Google style for all public functions (including Returns section for route handlers)
 
 ```python
 # ✅ Good

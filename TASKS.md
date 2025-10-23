@@ -198,15 +198,23 @@ This document contains clear, actionable tasks to start building the SirenBase i
   - Authorization checks ✅
   - Validation error handling ✅
 
-### History Endpoints
-- [ ] Implement GET `/api/history`
-  - Return recent history entries (last 50 or 100)
-  - Include user name, action, item details, timestamp
-  - Sort by most recent first
-  - Requires authentication
-- [ ] Implement GET `/api/history?user_id=X` (optional filter)
-  - Filter history by specific user
-- [ ] Test history endpoints with Postman
+### History Endpoints ✅ COMPLETED (October 23, 2025)
+- [x] Implement GET `/api/history` ✅
+  - Return recent history entries (configurable limit) ✅
+  - Include user name via eager loading ✅
+  - Include action, item details, timestamp ✅
+  - Sort by most recent first ✅
+  - Requires authentication ✅
+- [x] Filtering support ✅
+  - Filter by user_id (optional) ✅
+  - Filter by action type (ADD/REMOVE) ✅
+  - Configurable limit (default 100, max 500) ✅
+- [x] Test history endpoints ✅
+  - Get history with/without filters ✅
+  - Action filtering (ADD/REMOVE) ✅
+  - Invalid action validation ✅
+  - Authentication required ✅
+  - Limit parameter validation ✅
 
 ### Admin Endpoints
 - [ ] Implement GET `/api/admin/users`

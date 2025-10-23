@@ -171,23 +171,32 @@ This document contains clear, actionable tasks to start building the SirenBase i
   - Get current user with JWT ✅
   - Validation error handling ✅
 
-### Items/Inventory Endpoints
-- [ ] Implement GET `/api/items`
-  - Return all active items grouped by name
-  - Include codes for each item
-  - Requires authentication
-- [ ] Implement POST `/api/items`
-  - Accept item name
-  - Generate unique 4-digit code
-  - Save to database
-  - Log action in history
-  - Return item with generated code
-- [ ] Implement DELETE `/api/items/:code`
-  - Accept item code
-  - Mark item as removed (soft delete or hard delete)
-  - Log action in history
-  - Return success/error
-- [ ] Test all item endpoints with Postman
+### Items/Inventory Endpoints ✅ COMPLETED (October 23, 2025)
+- [x] Implement GET `/api/items` ✅
+  - Return all active items ✅
+  - Support filtering by category ✅
+  - Optional include_removed parameter ✅
+  - Requires authentication ✅
+- [x] Implement POST `/api/items` ✅
+  - Accept item name and category ✅
+  - Generate unique 4-digit code ✅
+  - Save to database ✅
+  - Log ADD action in history ✅
+  - Return item with generated code ✅
+- [x] Implement DELETE `/api/items/<code>` ✅
+  - Accept item code ✅
+  - Soft delete (mark as removed) ✅
+  - Log REMOVE action in history ✅
+  - Return success/error ✅
+- [x] Create utility helper for code generation ✅
+  - `generate_unique_code()` with collision detection ✅
+  - `format_category_display()` for UI formatting ✅
+- [x] Test all item endpoints ✅
+  - Create item with valid/invalid category ✅
+  - Get items with/without filtering ✅
+  - Delete item (existing/non-existent) ✅
+  - Authorization checks ✅
+  - Validation error handling ✅
 
 ### History Endpoints
 - [ ] Implement GET `/api/history`

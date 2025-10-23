@@ -827,6 +827,26 @@ if __name__ == '__main__':
     app.run(debug=True, port=5000)
 ```
 
+## 📋 Feature Completion Requirements
+
+**MANDATORY**: Before marking ANY feature as complete in TASKS.md, you MUST follow the checklist in:
+
+👉 **[`backend/CHECKLIST.md`](CHECKLIST.md)** 👈
+
+This enforces the root CLAUDE.md requirement: "Generate tests alongside code"
+
+**Key Requirements:**
+- ✅ Pytest test files created in `tests/` directory
+- ✅ Unit tests for models and utilities
+- ✅ Integration tests for all API endpoints
+- ✅ All tests passing locally
+- ✅ Manual verification completed
+- ✅ Documentation updated
+
+**NO EXCEPTIONS** - If a feature doesn't have tests, it is **NOT COMPLETE**.
+
+---
+
 ## 🔍 Code Review Checklist
 
 Before submitting PR, verify:

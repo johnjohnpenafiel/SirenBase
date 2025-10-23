@@ -53,7 +53,7 @@ def get_history():
         if limit < 1:
             return jsonify({"error": "Limit must be at least 1"}), 400
         if limit > 500:
-            limit = 500  # Cap at 500 to prevent excessive queries
+            return jsonify({"error": "Limit cannot exceed 500"}), 400
     except ValueError:
         return jsonify({"error": "Invalid limit parameter"}), 400
 

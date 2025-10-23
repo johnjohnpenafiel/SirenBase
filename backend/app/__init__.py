@@ -39,13 +39,11 @@ def create_app(config_name='default'):
     from app.routes.auth import auth_bp
     from app.routes.items import items_bp
     from app.routes.history import history_bp
+    from app.routes.admin import admin_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(items_bp)
     app.register_blueprint(history_bp)
-
-    # TODO: Register additional blueprints as they are created
-    # from app.routes.admin import admin_bp
-    # app.register_blueprint(admin_bp)
+    app.register_blueprint(admin_bp)
 
     # Register error handlers
     register_error_handlers(app)
@@ -54,13 +52,64 @@ def create_app(config_name='default'):
 
 
 def register_error_handlers(app):
-    """Register global error handlers."""
+    """
+    Register global error handlers for consistent error responses.
+
+    All errors return JSON with format:
+    {
+        "error": "Error message or details"
+    }
+    """
+    from marshmallow import ValidationError
+    from werkzeug.exceptions import HTTPException
+
+    @app.errorhandler(ValidationError)
+    def handle_validation_error(error):
+        """Handle Marshmallow validation errors."""
+        return {"error": error.messages}, 400
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        """Handle bad request errors."""
+        return {"error": "Bad request"}, 400
+
+    @app.errorhandler(401)
+    def unauthorized(error):
+        """Handle unauthorized errors."""
+        return {"error": "Unauthorized"}, 401
+
+    @app.errorhandler(403)
+    def forbidden(error):
+        """Handle forbidden errors."""
+        return {"error": "Forbidden"}, 403
 
     @app.errorhandler(404)
     def not_found(error):
+        """Handle not found errors."""
         return {"error": "Resource not found"}, 404
+
+    @app.errorhandler(409)
+    def conflict(error):
+        """Handle conflict errors."""
+        return {"error": "Resource conflict"}, 409
 
     @app.errorhandler(500)
     def internal_error(error):
+        """Handle internal server errors."""
         db.session.rollback()
+        # Log the actual error for debugging (would use logging in production)
+        app.logger.error(f"Internal error: {error}")
         return {"error": "Internal server error"}, 500
+
+    @app.errorhandler(Exception)
+    def handle_unexpected_error(error):
+        """Catch-all handler for unexpected errors."""
+        db.session.rollback()
+        # Log the actual error for debugging
+        app.logger.error(f"Unexpected error: {error}")
+
+        # Don't expose internal errors to client in production
+        if app.config.get('ENV') == 'production':
+            return {"error": "An unexpected error occurred"}, 500
+        else:
+            return {"error": str(error)}, 500

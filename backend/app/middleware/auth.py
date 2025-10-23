@@ -33,7 +33,12 @@ def admin_required(fn):
         user = User.query.get(current_user_id)
 
         # Check if user exists and has admin role
-        if not user or user.role != 'admin':
+        # Handle both enum and string values
+        if not user:
+            return jsonify({"error": "Admin access required"}), 403
+
+        user_role = user.role.value if hasattr(user.role, 'value') else str(user.role)
+        if user_role != 'admin':
             return jsonify({"error": "Admin access required"}), 403
 
         return fn(*args, **kwargs)

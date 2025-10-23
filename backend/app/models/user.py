@@ -127,11 +127,14 @@ class User(db.Model):
         Returns:
             Dictionary representation of user (excludes pin_hash)
         """
+        # Extract role value from enum
+        role_value = self.role.value if hasattr(self.role, 'value') else str(self.role)
+
         data = {
             'id': self.id,
             'name': self.name,
-            'role': self.role,
-            'created_at': self.created_at.isoformat()
+            'role': role_value,
+            'created_at': self.created_at.isoformat() if self.created_at else None
         }
 
         if include_sensitive:

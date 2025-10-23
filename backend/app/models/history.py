@@ -92,9 +92,12 @@ class History(db.Model):
         Returns:
             Dictionary representation of history entry
         """
+        # Extract action value from enum
+        action_value = self.action.value if hasattr(self.action, 'value') else str(self.action)
+
         data = {
             'id': self.id,
-            'action': self.action,
+            'action': action_value,
             'item_name': self.item_name,
             'item_code': self.item_code,
             'user_id': self.user_id,

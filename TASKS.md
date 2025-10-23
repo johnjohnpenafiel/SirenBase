@@ -147,7 +147,7 @@ This document contains clear, actionable tasks to start building the SirenBase i
 
 ---
 
-## Phase 2: Backend API Development
+## Phase 2: Backend API Development ✅ COMPLETED (October 23, 2025)
 
 ### Authentication Endpoints ✅ COMPLETED (October 22, 2025)
 - [x] Implement POST `/api/auth/login`
@@ -216,35 +216,62 @@ This document contains clear, actionable tasks to start building the SirenBase i
   - Authentication required ✅
   - Limit parameter validation ✅
 
-### Admin Endpoints
-- [ ] Implement GET `/api/admin/users`
-  - Return all users
+### Admin Endpoints ✅ COMPLETED (October 23, 2025)
+- [x] Implement GET `/api/admin/users` ✅
+  - Return all users (ordered by created_at desc)
   - Requires admin role
-- [ ] Implement POST `/api/admin/users`
-  - Add new authorized user (just partner_number)
+- [x] Implement POST `/api/admin/users` ✅
+  - Add new authorized user (partner_number, name, PIN, optional role)
+  - Supports creating both admin and staff users
   - Requires admin role
-- [ ] Implement DELETE `/api/admin/users/:id`
-  - Remove user authorization
+- [x] Implement DELETE `/api/admin/users/:id` ✅
+  - Remove user authorization (hard delete)
+  - Prevents admins from deleting themselves
   - Requires admin role
-- [ ] Test admin endpoints with Postman
+- [x] Test admin endpoints ✅
+  - GET /api/admin/users: Lists all users correctly
+  - POST /api/admin/users: Creates staff and admin users
+  - DELETE /api/admin/users/:id: Deletes users with safeguards
+  - Authorization: Staff users properly blocked from admin endpoints
+  - Self-deletion prevention working
 
-### Error Handling & Validation
-- [ ] Implement global error handler
-- [ ] Add request validation using Marshmallow
-- [ ] Return consistent error response format
-  ```json
-  {
-    "error": "Error message",
-    "status_code": 400
-  }
-  ```
-- [ ] Test error cases (invalid data, unauthorized access, etc.)
+### Error Handling & Validation ✅ COMPLETED (October 23, 2025)
+- [x] Implement global error handler ✅
+  - Added handlers for 400, 401, 403, 404, 409, 500 errors
+  - ValidationError handler for Marshmallow validation
+  - Catch-all Exception handler with production/development modes
+  - All handlers return consistent JSON format
+- [x] Add request validation using Marshmallow ✅
+  - Marshmallow schemas already in use (LoginSchema, SignupSchema, etc.)
+  - Global ValidationError handler catches all validation errors
+- [x] Return consistent error response format ✅
+  - All errors return: `{"error": "message or details"}`
+  - Validation errors return: `{"error": {"field": ["error msg"]}}`
+- [x] Test error cases ✅
+  - 404: Resource not found
+  - Validation errors: Empty/invalid fields
+  - Unauthorized: Missing JWT tokens
 
-### CORS Configuration
-- [ ] Configure Flask-CORS to allow Next.js origin
-  ```python
-  CORS(app, origins=["http://localhost:3000", "https://your-frontend-url.vercel.app"])
-  ```
+### CORS Configuration ✅ COMPLETED (October 23, 2025)
+- [x] Configure Flask-CORS to allow Next.js origin ✅
+  - CORS configured in `app/__init__.py` line 32
+  - Origins from environment variable `CORS_ORIGINS`
+  - Default: `http://localhost:3000` for development
+  - Supports multiple origins via comma-separated values
+
+### Comprehensive Test Suite ✅ COMPLETED (October 23, 2025)
+- [x] Created complete pytest test suite for all Phase 2 endpoints and models ✅
+  - tests/conftest.py: Pytest fixtures (app, client, users, tokens, headers)
+  - tests/test_models.py: 13 unit tests for User, Item, History models
+  - tests/test_utils.py: 8 unit tests for helper functions
+  - tests/test_auth.py: 15 integration tests for authentication endpoints
+  - tests/test_items.py: 12 integration tests for inventory endpoints
+  - tests/test_history.py: 6 integration tests for history endpoint
+  - tests/test_admin.py: 12 integration tests for admin endpoints
+  - **Total: 66/66 tests passing (100% success rate)**
+  - All endpoints tested for success, error, authorization, and validation cases
+  - pytest and pytest-flask added to requirements.txt
+  - backend/CHECKLIST.md created to enforce systematic testing on all future features
 
 ---
 

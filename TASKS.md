@@ -1,6 +1,8 @@
-# SirenBase - Initial Tasks
+# SirenBase - Task Tracker
 
-This document contains clear, actionable tasks to start building the SirenBase inventory management system. Tasks are organized into logical phases and include checkboxes for tracking progress.
+This document contains clear, actionable tasks for building the SirenBase multi-tool platform. Tasks are organized by tool and development phase, with checkboxes for tracking progress.
+
+**Note**: See `PLANNING.md` for overall architecture, and individual tool docs (`InventoryTracking.md`, `MilkCount.md`, `RTDE.md`) for detailed feature planning.
 
 ---
 
@@ -275,7 +277,73 @@ This document contains clear, actionable tasks to start building the SirenBase i
 
 ---
 
-## Phase 3: Frontend Development
+## Phase 3A: Multi-Tool Architecture Setup
+
+### Backend API Restructuring
+- [ ] Rename existing routes to tracking namespace
+  - Move `/api/items` → `/api/tracking/items`
+  - Move `/api/history` → `/api/tracking/history`
+  - Keep `/api/auth/*` as shared authentication
+  - Keep `/api/admin/*` as shared admin (or rename to `/api/auth/admin/*`)
+- [ ] Update route blueprints
+  - Create `backend/app/routes/tools/` directory
+  - Move `tracking.py` routes to tools directory
+  - Update blueprint registration in `app/__init__.py`
+- [ ] Update existing tests for new routes
+  - Update all test files to use `/api/tracking/*` paths
+  - Verify all 66 tests still pass
+
+### Backend Database Restructuring
+- [ ] Rename existing tables with tracking prefix
+  - Rename `items` → `tracking_items`
+  - Rename `history` → `tracking_history`
+  - Create migration file
+  - Test migration on development database
+- [ ] Update model files
+  - Update `backend/app/models/item.py` with new table name
+  - Update `backend/app/models/history.py` with new table name
+  - Update all references in routes and tests
+- [ ] Run migration and verify
+  - Execute `flask db upgrade`
+  - Verify tables renamed successfully
+  - Verify foreign keys and indexes intact
+  - Run full test suite (should pass 66/66)
+
+### Frontend Directory Restructuring
+- [ ] Create tool-based directory structure
+  - Create `frontend/src/app/dashboard/` for tool grid
+  - Create `frontend/src/app/tools/tracking/` for tracking tool
+  - Create `frontend/src/app/admin/` for global admin panel
+  - Create `frontend/src/components/shared/` for shared components
+  - Create `frontend/src/components/tools/tracking/` for tracking components
+- [ ] Move/reorganize existing component placeholders
+  - Move any existing components to appropriate directories
+  - Update import paths
+
+### Dashboard Implementation
+- [ ] Create Dashboard page (`app/dashboard/page.tsx`)
+  - Grid layout with tool cards
+  - "Tracking System" card → `/tools/tracking/inventory`
+  - "Milk Count" card (disabled/coming soon)
+  - "RTD&E" card (disabled/coming soon)
+  - "Admin Panel" card (visible only to admin role users)
+- [ ] Create Tool Card component (`components/shared/ToolCard.tsx`)
+  - Props: title, description, icon, route, isDisabled
+  - Styling with ShadCN Card component
+  - Click handler for navigation
+- [ ] Implement role-based card visibility
+  - Show admin card only when `user.role === 'admin'`
+  - Use auth context to check user role
+
+### Update Documentation
+- [ ] Update backend README (if exists) with new structure
+- [ ] Update frontend README with new routing structure
+- [ ] Document architectural changes in `UpdateLogs/`
+- [ ] Verify PLANNING.md matches implemented architecture
+
+---
+
+## Phase 3B: Tool 1 Frontend Development (Tracking)
 
 ### Authentication UI
 - [ ] Create login page (`app/login/page.tsx`)
@@ -298,12 +366,13 @@ This document contains clear, actionable tasks to start building the SirenBase i
 - [ ] Test login/logout flow
 
 ### Inventory/Items UI
-- [ ] Create inventory page (`app/inventory/page.tsx`)
+- [ ] Create inventory page (`app/tools/tracking/inventory/page.tsx`)
   - Display items grouped by name
   - Show all codes under each item group
   - **Category filter dropdown** (filter by category)
   - "Add Item" button
   - "Remove Item" functionality for each code
+  - Update API calls to use `/api/tracking/items`
 - [ ] Create "Add Item" modal/dialog
   - Input for item name
   - **Category dropdown** (required, validated from predefined list)
@@ -322,19 +391,23 @@ This document contains clear, actionable tasks to start building the SirenBase i
 - [ ] Test add/remove workflows
 
 ### History UI
-- [ ] Create history page (`app/history/page.tsx`)
+- [ ] Create history page (`app/tools/tracking/history/page.tsx`)
   - Display recent actions in reverse chronological order
   - Show: staff name, action, item name, code, timestamp
   - Implement pagination or infinite scroll (if many entries)
+  - Update API calls to use `/api/tracking/history`
 - [ ] Fetch history data from backend
 - [ ] Add filters (optional: by user, by date range)
 - [ ] Test history display
 
-### Admin Panel UI
+### Global Admin Panel UI
 - [ ] Create admin page (`app/admin/page.tsx`)
+  - **Note**: This is the global admin panel (not tool-specific)
+  - Accessible from dashboard "Admin Panel" card
   - Require admin role (redirect if not admin)
   - Display all users in a table
   - Show partner number, name, role, created date
+  - Uses `/api/auth/admin/*` or `/api/admin/*` endpoints
 - [ ] Add "Add User" form/modal
   - Input for partner number
   - Submit button
@@ -366,11 +439,11 @@ This document contains clear, actionable tasks to start building the SirenBase i
   - Item type **(include category field)**
   - HistoryEntry type
   - ItemCategory type (from constants)
-- [ ] Implement all API calls
-  - Auth: login, signup, getMe
-  - Items: getItems, addItem **(with category)**, removeItem
-  - History: getHistory
-  - Admin: getUsers, addUser, removeUser
+- [ ] Implement all API calls with new namespaced routes
+  - Auth: login, signup, getMe → `/api/auth/*`
+  - **Tracking Items**: getItems, addItem (with category), removeItem → `/api/tracking/items`
+  - **Tracking History**: getHistory → `/api/tracking/history`
+  - Admin: getUsers, addUser, removeUser → `/api/auth/admin/*` or `/api/admin/*`
 
 ---
 
@@ -409,7 +482,147 @@ This document contains clear, actionable tasks to start building the SirenBase i
 
 ---
 
-## Phase 5: Deployment Preparation
+## Phase 5: Tool 2 - Milk Count System
+
+**Status**: Awaiting Tool 1 completion
+**Detailed Planning**: See `MilkCount.md`
+
+### Backend Development
+- [ ] Design database schema
+  - milk_count_sessions table (night/morning counts)
+  - milk_count_par_levels table (target inventory)
+  - milk_count_milk_types table (milk definitions)
+  - Create migration
+- [ ] Create SQLAlchemy models
+  - MilkCountSession model
+  - ParLevel model
+  - MilkType model
+- [ ] Implement API endpoints (`/api/milk-count/*`)
+  - POST `/api/milk-count/sessions` - Create new count session
+  - GET `/api/milk-count/sessions/:id` - Get session details
+  - PATCH `/api/milk-count/sessions/:id` - Update session (night/morning counts)
+  - GET `/api/milk-count/sessions` - Get historical sessions
+  - GET `/api/milk-count/par-levels` - Get par levels
+  - PUT `/api/milk-count/par-levels` - Update par levels (admin only)
+  - GET `/api/milk-count/milk-types` - Get milk type definitions
+- [ ] Implement calculation logic
+  - Delivered = Current BOH - Night BOH (for Option A)
+  - Total = FOH + BOH + Delivered
+  - Order = Par - Total
+- [ ] Write comprehensive test suite
+  - Session creation and updates
+  - Calculation accuracy
+  - Par level management
+  - Authorization checks
+
+### Frontend Development
+- [ ] Create routing structure
+  - `/tools/milk-count/` - Landing/status page
+  - `/tools/milk-count/night-count/foh` - Night FOH count
+  - `/tools/milk-count/night-count/boh` - Night BOH count
+  - `/tools/milk-count/morning-count` - Morning count
+  - `/tools/milk-count/summary` - Daily summary
+  - `/tools/milk-count/history` - Historical data
+  - `/tools/milk-count/admin/par-levels` - Par management (admin only)
+- [ ] Create shared Counter component
+  - +/- buttons for quick counting
+  - Large number display
+  - Reusable across FOH/BOH/morning screens
+- [ ] Implement Night Count screens
+  - FOH count screen with milk type list
+  - BOH count screen with milk type list
+  - Save and progress flow
+- [ ] Implement Morning Count screen
+  - Display night BOH counts
+  - Dual input methods (Option A: current BOH, Option B: direct delivered)
+  - Real-time calculation of delivered milks
+  - Method selection per milk type
+- [ ] Implement Summary screen
+  - Table matching logbook format
+  - All calculated values (FOH, BOH, Delivered, Total, Par, Order)
+  - Export/copy functionality
+- [ ] Implement Par Level Management (admin)
+  - List view of all par levels
+  - Edit interface with +/- or direct input
+  - Save with confirmation
+- [ ] Implement Historical Data view
+  - Past sessions with date filtering
+  - View summary for any past day
+
+### Testing & Deployment
+- [ ] Test complete workflow (night → morning → summary)
+- [ ] Test calculations with various scenarios
+- [ ] Test admin par level management
+- [ ] Mobile responsiveness testing
+- [ ] Deploy Tool 2 to production
+
+---
+
+## Phase 6: Tool 3 - RTD&E Counting System
+
+**Status**: Awaiting Tool 2 completion
+**Detailed Planning**: See `RTDE.md`
+
+### Backend Development
+- [ ] Design database schema
+  - rtde_items table (display items with expected quantities)
+  - rtde_pull_lists table (generated pull lists)
+  - Create migration
+- [ ] Create SQLAlchemy models
+  - RTDEItem model
+  - PullList model
+- [ ] Implement API endpoints (`/api/rtde/*`)
+  - GET `/api/rtde/items` - Get all display items
+  - PATCH `/api/rtde/items/:id` - Update item count
+  - POST `/api/rtde/pull-lists` - Generate pull list
+  - GET `/api/rtde/pull-lists/:id` - Get pull list details
+  - PATCH `/api/rtde/pull-lists/:id/items/:item_id` - Mark item as pulled
+  - PUT `/api/rtde/items` - Bulk update items (admin only)
+- [ ] Implement pull list generation logic
+  - Calculate missing = expected - current
+  - Filter items with missing > 0
+  - Create pull list record
+- [ ] Write comprehensive test suite
+  - Item counting
+  - Pull list generation
+  - Item marking as pulled
+  - Authorization checks
+
+### Frontend Development
+- [ ] Create routing structure
+  - `/tools/rtde/` - Landing page
+  - `/tools/rtde/count` - Counting screen
+  - `/tools/rtde/pull-list/:id` - Pull list view (BOH)
+  - `/tools/rtde/history` - Past pull lists
+  - `/tools/rtde/admin/items` - Item management (admin only)
+- [ ] Implement Counting screen
+  - List of all display items
+  - +/- buttons for counting (reuse Counter component)
+  - Direct number input for bulk items
+  - "Generate Pull List" button
+- [ ] Implement Pull List view
+  - List of items to pull with quantities
+  - "Mark as Pulled" button per item
+  - Progress indicator
+  - Return to display for restocking
+- [ ] Implement Item Management (admin)
+  - List view of all items
+  - Add/remove/edit items
+  - Set expected quantities
+  - Seasonal updates
+- [ ] Implement Historical Data view
+  - Past pull lists with date filtering
+  - View details for any past pull list
+
+### Testing & Deployment
+- [ ] Test complete workflow (count → pull list → mark pulled)
+- [ ] Test admin item management
+- [ ] Mobile responsiveness testing
+- [ ] Deploy Tool 3 to production
+
+---
+
+## Phase 7: Deployment Preparation
 
 ### Backend Deployment
 - [ ] Create production configuration
@@ -518,12 +731,26 @@ This document contains clear, actionable tasks to start building the SirenBase i
 
 ## Notes
 
-- **Prioritize ruthlessly**: Focus on core functionality first (auth, add/remove items, history).
-- **Test incrementally**: Don't wait until the end to test. Test each feature as you build it.
-- **Use Claude Code effectively**: Provide clear context from PLANNING.md when asking for help.
-- **Commit often**: Small, focused commits make debugging easier.
-- **Deploy early**: Get to production as soon as basic functionality works.
+### Development Workflow
+- **Build tools incrementally**: Complete and deploy Tool 1 before starting Tool 2
+- **Prioritize ruthlessly**: Focus on core functionality first (auth, add/remove, history)
+- **Test incrementally**: Test each feature as you build it, don't wait until the end
+- **Commit often**: Small, focused commits make debugging easier
+- **Deploy early**: Get to production as soon as basic functionality works
+
+### Multi-Tool Best Practices
+- **Shared first**: Build shared components and infrastructure before tool-specific features
+- **Reuse patterns**: Counter component, admin panels, history pages follow similar patterns
+- **Namespace consistently**: Use `/api/{tool-name}/*` and `/tools/{tool-name}/*` patterns
+- **Test isolation**: Each tool's tests should be independent
+
+### Documentation
+- **PLANNING.md**: Overall multi-tool architecture and decisions
+- **Tool-specific docs**: `InventoryTracking.md`, `MilkCount.md`, `RTDE.md` for detailed features
+- **TASKS.md**: This file - track progress across all phases
+- **CLAUDE.md**: AI assistant guidelines for maintaining codebase
 
 ---
 
-*Last Updated: October 10, 2025*
+*Last Updated: October 26, 2025*
+*Version: 2.0.0 - Multi-Tool Structure*

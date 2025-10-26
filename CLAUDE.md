@@ -2,7 +2,14 @@
 
 ## Project Overview
 
-**SirenBase** is a digital inventory management system designed to replace the paper-based inventory tracking used in the basement of a Starbucks store. The application provides a simple, secure, and accountable way for staff to track inventory items using 4-digit unique identifiers, eliminating the need for physical trips to the basement during daily ordering operations.
+**SirenBase** is a comprehensive digital operations platform for Starbucks store partners. It provides a unified suite of specialized tools to streamline daily workflows, replacing manual paper-based systems with fast, mobile-friendly, and accountable digital solutions.
+
+**Multi-Tool Architecture**: Partners log in once and access multiple tools from a central dashboard:
+- **Tool 1**: Inventory Tracking System (basement inventory with 4-digit codes)
+- **Tool 2**: Milk Count System (FOH/BOH counting with automated calculations)
+- **Tool 3**: RTD&E Counting System (display restocking with pull lists)
+
+Each tool operates independently with its own features, while sharing authentication, UI components, and design system.
 
 ## 🎯 Core Philosophy
 
@@ -58,19 +65,28 @@
 
 1. **ALWAYS read `PLANNING.md`** at the start of new conversations
 
-   - Contains architecture, goals, constraints
-   - Tech stack decisions and rationale
-   - Success criteria and metrics
+   - **Overall multi-tool architecture** and key decisions
+   - Shared tech stack and infrastructure
+   - API namespacing strategy (`/api/{tool-name}/*`)
+   - Database naming conventions (`tracking_items`, `milk_count_sessions`, etc.)
+   - Development roadmap (Tool 1 → Tool 2 → Tool 3)
 
-2. **Check `TASKS.md`** before starting work
+2. **Read tool-specific planning docs** when working on that tool
 
+   - `InventoryTracking.md` - Tool 1: Basement inventory tracking
+   - `MilkCount.md` - Tool 2: Milk count system with calculations
+   - `RTDE.md` - Tool 3: RTD&E display restocking
+
+3. **Check `TASKS.md`** before starting work
+
+   - Tasks organized by tool and phase
    - If task isn't listed, add it with date
    - Mark completed tasks immediately
    - Add discovered sub-tasks during work
 
-3. **Review relevant component CLAUDE.md files**
-   - `frontend/CLAUDE.md` for Next.js work
-   - `backend/CLAUDE.md` for Flask work
+4. **Review relevant component CLAUDE.md files**
+   - `frontend/CLAUDE.md` for Next.js work (when created)
+   - `backend/CLAUDE.md` for Flask work (when created)
 
 ## 🔒 Security Principles
 
@@ -111,17 +127,47 @@
 
 ```
 SirenBase/
-├── CLAUDE.md              # This file
-├── PLANNING.md            # Architecture & decisions
-├── TASKS.md               # Task tracking
+├── CLAUDE.md              # This file - Root project guidelines
+├── PLANNING.md            # Multi-tool architecture & decisions
+├── TASKS.md               # Task tracking (organized by tool)
 ├── README.md              # Setup & documentation
+│
+├── InventoryTracking.md   # Tool 1: Detailed planning
+├── MilkCount.md           # Tool 2: Detailed planning
+├── RTDE.md                # Tool 3: Detailed planning
+│
 ├── frontend/              # Next.js application
-│   ├── CLAUDE.md         # Frontend guidelines
+│   ├── CLAUDE.md         # Frontend guidelines (when created)
 │   ├── src/
+│   │   ├── app/
+│   │   │   ├── dashboard/          # Tool selection grid
+│   │   │   ├── tools/
+│   │   │   │   ├── tracking/       # Tool 1 pages
+│   │   │   │   ├── milk-count/     # Tool 2 pages
+│   │   │   │   └── rtde/           # Tool 3 pages
+│   │   │   └── admin/              # Global admin panel
+│   │   ├── components/
+│   │   │   ├── shared/             # Cross-tool components
+│   │   │   └── tools/              # Tool-specific components
+│   │   └── lib/
 │   └── ...
+│
 └── backend/               # Flask application
-    ├── CLAUDE.md         # Backend guidelines
+    ├── CLAUDE.md         # Backend guidelines (when created)
     ├── app/
+    │   ├── routes/
+    │   │   ├── auth.py             # Shared authentication
+    │   │   └── tools/
+    │   │       ├── tracking.py     # Tool 1 routes
+    │   │       ├── milk_count.py   # Tool 2 routes
+    │   │       └── rtde.py         # Tool 3 routes
+    │   ├── models/
+    │   │   ├── user.py             # Shared users table
+    │   │   └── tools/
+    │   │       ├── tracking.py     # Tool 1 models
+    │   │       ├── milk_count.py   # Tool 2 models
+    │   │       └── rtde.py         # Tool 3 models
+    │   └── ...
     └── ...
 ```
 
@@ -356,12 +402,17 @@ npm run dev
 
 ### Internal Docs
 
-- Architecture: See `PLANNING.md`
-- API Contracts: See `backend/docs/API.md` (when created)
-- Component Library: See `frontend/src/components/README.md` (when created)
+- **Overall Architecture**: See `PLANNING.md` (multi-tool system design)
+- **Tool-Specific Planning**:
+  - Tool 1: `InventoryTracking.md`
+  - Tool 2: `MilkCount.md`
+  - Tool 3: `RTDE.md`
+- **Task Tracking**: See `TASKS.md` (organized by tool and phase)
+- **API Contracts**: See `backend/docs/API.md` (when created)
+- **Component Library**: See `frontend/src/components/README.md` (when created)
 
 ---
 
-**Last Updated**: October 2025  
-**Version**: 1.0.0  
+**Last Updated**: October 26, 2025
+**Version**: 2.0.0 - Multi-Tool Architecture
 **Maintainer**: Development Team

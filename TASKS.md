@@ -367,28 +367,46 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ### Inventory/Items UI
 - [ ] Create inventory page (`app/tools/tracking/inventory/page.tsx`)
-  - Display items grouped by name
-  - Show all codes under each item group
-  - **Category filter dropdown** (filter by category)
-  - "Add Item" button
-  - "Remove Item" functionality for each code
+  - **Three view modes on single page**:
+    - **Categories View** (default/home): 2-column grid of category cards with item counts
+    - **All View**: Full-width list showing all items from all categories
+    - **Category-Filtered View**: Click category card to view items in that category only
+  - View toggle: `[All | Categories]` switching between modes
+  - Mobile-first design with large, touch-friendly rectangles (min 44x44px)
+  - Items display with code count (e.g., "Vanilla Syrup 3x")
+  - "Add Item" functionality accessible in all views
+  - "Remove Item" functionality for each item
+  - Individual code display mechanism (expand/modal/etc.) - determine during implementation
   - Update API calls to use `/api/tracking/items`
-- [ ] Create "Add Item" modal/dialog
-  - Input for item name
-  - **Category dropdown** (required, validated from predefined list)
-  - Submit button
-  - Display generated code
-  - "I've written the code on the box" confirmation
-  - Close and refresh inventory list
+- [ ] Create "Add Item" two-step flow
+  - **Step 1 - Generate Code Modal/Screen**:
+    - Input: Item name (max 255 characters)
+    - Dropdown: Category selection (validated from predefined list)
+    - Button: "Generate Code"
+  - **Step 2 - Confirm After Marking**:
+    - Display generated 4-digit code prominently
+    - Prompt: "Write this code on the physical item"
+    - Button: "Confirm & Save" (saves item to database with history entry)
+    - Cancel option available (discards code, doesn't save to database)
+  - Success: Item appears in inventory list immediately
 - [ ] Create "Remove Item" confirmation dialog
-  - Show item name and code
-  - Confirm/Cancel buttons
+  - Show item name and specific code (e.g., "Remove Vanilla Syrup (Code 2847)?")
+  - Buttons: "Cancel" | "Remove"
+  - On confirm: Soft delete (set is_removed=true) and create history entry
 - [ ] Implement API calls to backend
-  - Fetch items on page load
-  - Add item with name
-  - Remove item by code
+  - GET `/api/tracking/items` - Fetch items on page load
+  - POST `/api/tracking/items` - Add item (Step 2 of two-step flow)
+  - DELETE `/api/tracking/items/<code>` - Remove item by code
+  - Support category filtering via query params
 - [ ] Add loading states and error handling
-- [ ] Test add/remove workflows
+  - Loading spinners during API calls
+  - Toast notifications for success/error
+  - Handle network errors gracefully
+- [ ] Test complete workflows
+  - Test add item flow (both steps, including cancel)
+  - Test remove item flow (with confirmation)
+  - Test view switching (Categories ↔ All ↔ Category-filtered)
+  - Test on mobile devices (touch targets, responsive grid)
 
 ### History UI
 - [ ] Create history page (`app/tools/tracking/history/page.tsx`)

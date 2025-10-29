@@ -30,7 +30,7 @@ class Item(db.Model):
         removed_by: Foreign key to user who removed the item (nullable)
     """
 
-    __tablename__ = 'items'
+    __tablename__ = 'tracking_items'
 
     # Primary key
     id: Mapped[str] = mapped_column(

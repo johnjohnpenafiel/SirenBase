@@ -313,22 +313,23 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Update all test files to use `/api/tracking/*` paths ✅
   - Verify all 66 tests still pass ✅ (Commits: 0eff74a, a4bdf11)
 
-### Backend Database Restructuring
+### Backend Database Restructuring ✅ COMPLETED (October 29, 2025)
 
-- [ ] Rename existing tables with tracking prefix
-  - Rename `items` → `tracking_items`
-  - Rename `history` → `tracking_history`
-  - Create migration file
-  - Test migration on development database
-- [ ] Update model files
-  - Update `backend/app/models/item.py` with new table name
-  - Update `backend/app/models/history.py` with new table name
-  - Update all references in routes and tests
-- [ ] Run migration and verify
-  - Execute `flask db upgrade`
-  - Verify tables renamed successfully
-  - Verify foreign keys and indexes intact
-  - Run full test suite (should pass 66/66)
+- [x] Rename existing tables with tracking prefix
+  - Rename `items` → `tracking_items` ✅
+  - Rename `history` → `tracking_history` ✅
+  - Create migration file ✅
+  - Test migration on development database ✅
+- [x] Update model files
+  - Update `backend/app/models/item.py` with new table name ✅
+  - Update `backend/app/models/history.py` with new table name ✅
+  - All references automatically updated (no explicit route/test references to table names) ✅
+- [x] Run migration and verify
+  - Execute `flask db upgrade` ✅
+  - Verify tables renamed successfully ✅
+  - Verify foreign keys and indexes intact ✅
+  - Run full test suite (66/66 passing) ✅
+  - Verify data preserved (6 items, 7 history entries) ✅ (Commit: 998d434)
 
 ### Frontend Directory Restructuring
 

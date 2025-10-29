@@ -35,7 +35,7 @@ class History(db.Model):
         notes: Optional notes about the action
     """
 
-    __tablename__ = 'history'
+    __tablename__ = 'tracking_history'
 
     # Primary key
     id: Mapped[str] = mapped_column(

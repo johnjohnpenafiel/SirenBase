@@ -1,6 +1,25 @@
 # SirenBase
 
-A digital inventory management system designed to replace paper-based inventory tracking for a Starbucks store. Track items using unique 4-digit codes with complete audit history and secure authentication.
+A comprehensive digital operations platform for Starbucks store partners, providing a unified suite of specialized tools to streamline daily workflows. Partners log in once and access multiple tools from a central dashboard, each designed to solve specific operational challenges while sharing authentication, UI components, and design systems.
+
+## Multi-Tool Platform
+
+SirenBase consists of three independent tools:
+
+- **Tool 1: Inventory Tracking System** _(Current Phase)_
+  - Track basement inventory using unique 4-digit codes
+  - Eliminate physical trips during ordering
+  - Complete audit history of all actions
+
+- **Tool 2: Milk Count System** _(Next)_
+  - Automate milk inventory counting (FOH/BOH)
+  - Calculate delivery amounts and order quantities
+  - Replace manual paper logbook system
+
+- **Tool 3: RTD&E Counting System** _(Future)_
+  - Streamline Ready-to-Drink & Eat display restocking
+  - Generate pull lists automatically
+  - Reduce walking time and counting errors
 
 ## Tech Stack
 
@@ -23,20 +42,38 @@ A digital inventory management system designed to replace paper-based inventory 
 
 ```
 SirenBase/
-   frontend/          # Next.js application
-      app/          # Next.js App Router pages
-      components/   # React components
-      hooks/        # Custom React hooks
-      lib/          # Utilities
-      types/        # TypeScript types
-   backend/          # Flask API
-      app/         # Application code
-         models/  # Database models
-         routes/  # API endpoints
-         schemas/ # Validation schemas
-         utils/   # Helper functions
-      tests/       # Test files
-   docs/            # Documentation
+├── Tools/                 # Tool-specific planning documents
+│   ├── InventoryTracking.md   # Tool 1 detailed planning
+│   ├── MilkCount.md           # Tool 2 detailed planning
+│   └── RTDE.md                # Tool 3 detailed planning
+│
+├── frontend/              # Next.js application
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── dashboard/          # Tool selection grid
+│   │   │   ├── tools/
+│   │   │   │   ├── tracking/       # Tool 1 pages
+│   │   │   │   ├── milk-count/     # Tool 2 pages (future)
+│   │   │   │   └── rtde/           # Tool 3 pages (future)
+│   │   │   └── admin/              # Global admin panel
+│   │   ├── components/
+│   │   │   ├── shared/             # Cross-tool components
+│   │   │   └── tools/              # Tool-specific components
+│   │   └── lib/                    # Utilities
+│
+└── backend/               # Flask API
+    ├── app/
+    │   ├── routes/
+    │   │   ├── auth.py             # Shared authentication
+    │   │   └── tools/
+    │   │       ├── tracking.py     # Tool 1 routes
+    │   │       ├── milk_count.py   # Tool 2 routes (future)
+    │   │       └── rtde.py         # Tool 3 routes (future)
+    │   ├── models/
+    │   │   ├── user.py             # Shared users table
+    │   │   └── tools/              # Tool-specific models
+    │   └── utils/                  # Helper functions
+    └── tests/                      # Test files
 ```
 
 ## Prerequisites
@@ -173,20 +210,48 @@ npm run test
 
 ## Key Features
 
-- Secure authentication with JWT tokens
-- Role-based access control (Admin/Staff)
+### Platform-Wide
+- **Single Sign-On**: One login for all tools
+- **Role-Based Access**: Global admin and staff roles
+- **Mobile-First Design**: Optimized for phones/tablets
+- **Dashboard Navigation**: Grid of tool cards for fast access
+- **Secure Authentication**: JWT tokens with 24-hour expiration
+
+### Tool 1: Inventory Tracking (Current)
 - Unique 4-digit code generation for items
 - Complete audit history of all actions
-- Mobile-first responsive design
-- Real-time inventory updates
+- Category-based organization
+- Soft delete with full audit trail
+- **Status**: Backend complete (66/66 tests passing), Frontend in progress
+
+### Tool 2: Milk Count (Planned)
+- Night count (FOH/BOH) with sequential screens
+- Morning count with dual input methods
+- Automatic delivery and order calculations
+- Par level management
+
+### Tool 3: RTD&E Counting (Planned)
+- Quick item counting interface
+- Automatic pull list generation
+- BOH fulfillment tracking
+- Siren's Eye integration
 
 ## Documentation
 
-- **[PLANNING.md](./PLANNING.md)** - Architecture and project planning
-- **[TASKS.md](./TASKS.md)** - Development task breakdown
+### Core Documentation
+- **[PLANNING.md](./PLANNING.md)** - Multi-tool architecture and key decisions
+- **[TASKS.md](./TASKS.md)** - Development task breakdown (organized by tool)
 - **[CLAUDE.md](./CLAUDE.md)** - Development guidelines and conventions
-- **[backend/CLAUDE.md](./backend/CLAUDE.md)** - Backend-specific guidelines
-- **[frontend/CLAUDE.md](./frontend/CLAUDE.md)** - Frontend-specific guidelines
+- **[README.md](./README.md)** - This file: Setup and overview
+
+### Tool-Specific Planning
+- **[Tools/InventoryTracking.md](./Tools/InventoryTracking.md)** - Tool 1 detailed planning
+- **[Tools/MilkCount.md](./Tools/MilkCount.md)** - Tool 2 detailed planning
+- **[Tools/RTDE.md](./Tools/RTDE.md)** - Tool 3 detailed planning
+
+### Component Documentation (Future)
+- **backend/CLAUDE.md** - Backend-specific guidelines (when created)
+- **frontend/CLAUDE.md** - Frontend-specific guidelines (when created)
 
 ## Environment Variables
 
@@ -250,5 +315,16 @@ For issues or questions, please create an issue in the GitHub repository.
 
 ---
 
-**Last Updated**: October 11, 2025
-**Version**: 0.1.0 (MVP in development)
+## Current Status
+
+- **Phase 0-2**: ✅ Complete (Project setup, database design, backend API)
+- **Phase 3**: 🔄 In Progress (Multi-tool architecture and Tool 1 frontend)
+- **Phase 4**: ⏭️ Pending (Tool 1 deployment)
+- **Phase 5-6**: 📅 Future (Tools 2 and 3)
+
+**Backend**: 66/66 tests passing | **Frontend**: In development
+
+---
+
+**Last Updated**: October 28, 2025
+**Version**: 0.2.0 (Multi-Tool Architecture, Tool 1 in progress)

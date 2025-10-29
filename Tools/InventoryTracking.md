@@ -341,6 +341,7 @@ ITEM_CATEGORIES = [
 #### 1. Categories View (Default/Home)
 
 **Layout**:
+
 - Header: "Inventory Tracking"
 - View Toggle: `[ All | Categories ]` (Categories selected by default)
 - Grid Layout: 2 columns on mobile
@@ -348,12 +349,14 @@ ITEM_CATEGORIES = [
 - Category cards displayed in grid
 
 **Category Cards**:
+
 - Smooth rounded rectangles
 - Display category name (e.g., "Syrups", "Cups")
 - Item count badge (e.g., "12") - display based on usefulness
 - Tap to view items in that category
 
 **Visual Example**:
+
 ```
 Inventory Tracking
 [ All | Categories ]
@@ -371,18 +374,21 @@ Inventory Tracking
 #### 2. All View
 
 **Layout**:
+
 - Header: "Inventory Tracking"
 - View Toggle: `[ All | Categories ]` (All selected)
 - "Add Item" functionality accessible
 - Full-width item rectangles (all categories mixed)
 
 **Item Display**:
+
 - List-style layout using full screen width
 - Each item shows: Name + code count (e.g., "Vanilla Syrup 3x")
 - Items from all categories displayed together
 - Exact display format to be determined during implementation
 
 **Visual Example**:
+
 ```
 Inventory Tracking
 [ All | Categories ]
@@ -401,16 +407,19 @@ Inventory Tracking
 #### 3. Category Item List
 
 **Layout**:
+
 - Header with back button: `[← Syrups]` (or selected category name)
 - "Add Item" functionality accessible
 - Full-width item rectangles (filtered to selected category)
 
 **Item Display**:
+
 - Same list style as All View
 - Only shows items from selected category
 - Individual code display mechanism to be determined during implementation
 
 **Visual Example**:
+
 ```
 [← Syrups]
 
@@ -430,11 +439,13 @@ Inventory Tracking
 **Two-Step Process**:
 
 **Step 1 - Enter Item Details**:
+
 - Input: Item name
 - Dropdown: Category selection
 - Button: "Generate Code"
 
 **Step 2 - Confirm After Marking**:
+
 - Display generated 4-digit code
 - Prompt: "Write this code on the physical item"
 - Button: "Confirm & Save" (saves to inventory)
@@ -443,6 +454,7 @@ Inventory Tracking
 ### Remove Item Flow
 
 **Confirmation Dialog**:
+
 - Message: "Remove Vanilla Syrup (Code 2847)?"
 - Buttons: "Cancel" | "Remove"
 
@@ -603,15 +615,6 @@ Tool-specific admin features (if any) will use same global admin role check.
    - Reverse accidental removals
    - Restore items from history
 
-4. **Export & Reporting**
-
-   - Export history to CSV/PDF
-   - Usage analytics (most used items, trends)
-
-5. **Item Expiration Tracking**
-   - Record expiration dates
-   - Alert before items expire
-
 ---
 
 ## Related Documentation
@@ -625,6 +628,6 @@ Tool-specific admin features (if any) will use same global admin role check.
 ---
 
 **Document Version:** 1.0
-**Last Updated:** October 26, 2025
+**Last Updated:** October 27, 2025
 **Status:** Backend Complete (66/66 tests passing), Frontend In Progress
 **Part of:** SirenBase Multi-Tool Platform (Tool 1 of 3)

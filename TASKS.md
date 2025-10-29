@@ -2,7 +2,7 @@
 
 This document contains clear, actionable tasks for building the SirenBase multi-tool platform. Tasks are organized by tool and development phase, with checkboxes for tracking progress.
 
-**Note**: See `PLANNING.md` for overall architecture, and individual tool docs (`InventoryTracking.md`, `MilkCount.md`, `RTDE.md`) for detailed feature planning.
+**Note**: See `PLANNING.md` for overall architecture, and individual tool docs (`Tools/InventoryTracking.md`, `Tools/MilkCount.md`, `Tools/RTDE.md`) for detailed feature planning.
 
 ---
 
@@ -503,7 +503,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 5: Tool 2 - Milk Count System
 
 **Status**: Awaiting Tool 1 completion
-**Detailed Planning**: See `MilkCount.md`
+**Detailed Planning**: See `Tools/MilkCount.md`
 
 ### Backend Development
 - [ ] Design database schema
@@ -579,7 +579,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 6: Tool 3 - RTD&E Counting System
 
 **Status**: Awaiting Tool 2 completion
-**Detailed Planning**: See `RTDE.md`
+**Detailed Planning**: See `Tools/RTDE.md`
 
 ### Backend Development
 - [ ] Design database schema
@@ -764,7 +764,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ### Documentation
 - **PLANNING.md**: Overall multi-tool architecture and decisions
-- **Tool-specific docs**: `InventoryTracking.md`, `MilkCount.md`, `RTDE.md` for detailed features
+- **Tool-specific docs**: `Tools/InventoryTracking.md`, `Tools/MilkCount.md`, `Tools/RTDE.md` for detailed features
 - **TASKS.md**: This file - track progress across all phases
 - **CLAUDE.md**: AI assistant guidelines for maintaining codebase
 

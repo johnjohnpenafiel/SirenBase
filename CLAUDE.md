@@ -73,9 +73,9 @@ Each tool operates independently with its own features, while sharing authentica
 
 2. **Read tool-specific planning docs** when working on that tool
 
-   - `InventoryTracking.md` - Tool 1: Basement inventory tracking
-   - `MilkCount.md` - Tool 2: Milk count system with calculations
-   - `RTDE.md` - Tool 3: RTD&E display restocking
+   - `Tools/InventoryTracking.md` - Tool 1: Basement inventory tracking
+   - `Tools/MilkCount.md` - Tool 2: Milk count system with calculations
+   - `Tools/RTDE.md` - Tool 3: RTD&E display restocking
 
 3. **Check `TASKS.md`** before starting work
 
@@ -132,9 +132,10 @@ SirenBase/
 ├── TASKS.md               # Task tracking (organized by tool)
 ├── README.md              # Setup & documentation
 │
-├── InventoryTracking.md   # Tool 1: Detailed planning
-├── MilkCount.md           # Tool 2: Detailed planning
-├── RTDE.md                # Tool 3: Detailed planning
+├── Tools/                 # Tool-specific planning documents
+│   ├── InventoryTracking.md   # Tool 1: Detailed planning
+│   ├── MilkCount.md           # Tool 2: Detailed planning
+│   └── RTDE.md                # Tool 3: Detailed planning
 │
 ├── frontend/              # Next.js application
 │   ├── CLAUDE.md         # Frontend guidelines (when created)
@@ -404,9 +405,9 @@ npm run dev
 
 - **Overall Architecture**: See `PLANNING.md` (multi-tool system design)
 - **Tool-Specific Planning**:
-  - Tool 1: `InventoryTracking.md`
-  - Tool 2: `MilkCount.md`
-  - Tool 3: `RTDE.md`
+  - Tool 1: `Tools/InventoryTracking.md`
+  - Tool 2: `Tools/MilkCount.md`
+  - Tool 3: `Tools/RTDE.md`
 - **Task Tracking**: See `TASKS.md` (organized by tool and phase)
 - **API Contracts**: See `backend/docs/API.md` (when created)
 - **Component Library**: See `frontend/src/components/README.md` (when created)

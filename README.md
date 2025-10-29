@@ -42,7 +42,7 @@ SirenBase consists of three independent tools:
 
 ```
 SirenBase/
-├── Tools/                 # Tool-specific planning documents
+├── Planning/              # Tool-specific planning documents
 │   ├── InventoryTracking.md   # Tool 1 detailed planning
 │   ├── MilkCount.md           # Tool 2 detailed planning
 │   └── RTDE.md                # Tool 3 detailed planning
@@ -245,9 +245,9 @@ npm run test
 - **[README.md](./README.md)** - This file: Setup and overview
 
 ### Tool-Specific Planning
-- **[Tools/InventoryTracking.md](./Tools/InventoryTracking.md)** - Tool 1 detailed planning
-- **[Tools/MilkCount.md](./Tools/MilkCount.md)** - Tool 2 detailed planning
-- **[Tools/RTDE.md](./Tools/RTDE.md)** - Tool 3 detailed planning
+- **[Planning/InventoryTracking.md](./Planning/InventoryTracking.md)** - Tool 1 detailed planning
+- **[Planning/MilkCount.md](./Planning/MilkCount.md)** - Tool 2 detailed planning
+- **[Planning/RTDE.md](./Planning/RTDE.md)** - Tool 3 detailed planning
 
 ### Component Documentation (Future)
 - **backend/CLAUDE.md** - Backend-specific guidelines (when created)

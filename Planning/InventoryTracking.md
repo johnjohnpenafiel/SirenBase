@@ -623,7 +623,7 @@ Tool-specific admin features (if any) will use same global admin role check.
 - **Database Schema Details**: See `backend/app/models/`
 - **API Implementation**: See `backend/app/routes/tracking.py`
 - **Test Suite**: See `backend/tests/`
-- **Category Field Decision**: See `UpdateLogs/CATEGORY_FIELD_DECISION.md`
+- **Category Field Decision**: See `ChangeLog/CATEGORY_FIELD_DECISION.md`
 
 ---
 

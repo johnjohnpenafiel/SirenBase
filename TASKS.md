@@ -2,13 +2,14 @@
 
 This document contains clear, actionable tasks for building the SirenBase multi-tool platform. Tasks are organized by tool and development phase, with checkboxes for tracking progress.
 
-**Note**: See `PLANNING.md` for overall architecture, and individual tool docs (`Tools/InventoryTracking.md`, `Tools/MilkCount.md`, `Tools/RTDE.md`) for detailed feature planning.
+**Note**: See `PLANNING.md` for overall architecture, and individual tool docs (`Planning/InventoryTracking.md`, `Planning/MilkCount.md`, `Planning/RTDE.md`) for detailed feature planning.
 
 ---
 
 ## Phase 0: Project Setup & Research ✅ COMPLETED (October 11, 2025)
 
 ### Environment Setup
+
 - [x] Verify PostgreSQL installation
   - Check PostgreSQL is running: `psql --version` ✅ PostgreSQL 17.4
   - Test connection with `psql` or a GUI tool (pgAdmin, Postico, DBeaver) ✅
@@ -23,6 +24,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - All Phase 0 work committed and pushed ✅
 
 ### Backend Setup (Flask)
+
 - [x] Create Python virtual environment
   - Python 3.12.9 with venv ✅
 - [x] Install initial dependencies
@@ -40,6 +42,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Configured for user `johnpenafiel` with sirenbase database ✅
 
 ### Frontend Setup (Next.js)
+
 - [x] Initialize Next.js project with TypeScript
   - Next.js 15.5.4 with App Router ✅
   - TypeScript 5.x configured ✅
@@ -59,6 +62,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - API URL configured: http://localhost:5000/api ✅
 
 ### Documentation
+
 - [x] Update main `README.md` with project overview
   - Comprehensive setup instructions ✅
   - Running commands for both apps ✅
@@ -76,7 +80,9 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 1: Database Schema Design ✅ COMPLETED (October 17, 2025)
 
 ### Design Database Tables
+
 - [x] Design `users` table schema
+
   - id (UUID, primary key)
   - partner_number (String, unique, not null)
   - name (String, not null)
@@ -86,6 +92,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - updated_at (Timestamp)
 
 - [x] Design `items` table schema ✅
+
   - id (UUID, primary key)
   - name (String, not null)
   - **category (String, not null, indexed)** ← Added October 17, 2025
@@ -97,6 +104,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - removed_by (UUID, foreign key to users.id, nullable)
 
 - [x] Design `history` table schema ✅
+
   - id (UUID, primary key)
   - action (Enum: 'ADD', 'REMOVE')
   - item_name (String, not null)
@@ -111,13 +119,14 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Documented in `backend/app/models/__init__.py`
 
 ### Implement Database Models
+
 - [x] Create SQLAlchemy models in `backend/app/models/` ✅
   - User model with password hashing methods (`models/user.py`)
   - Item model with soft delete support + **category field** (`models/item.py`)
   - History model with helper methods (`models/history.py`)
   - All models using SQLAlchemy 2.0 syntax with type hints
   - Category validation via constants file + Marshmallow schema (String + Validation approach)
-  - See `UpdateLogs/CATEGORY_FIELD_DECISION.md` for rationale
+  - See `ChangeLog/CATEGORY_FIELD_DECISION.md` for rationale
 - [x] Set up Flask-Migrate for migrations ✅
   - Flask-Migrate 4.1.0 already installed
   - Initialized with `flask db init`
@@ -132,6 +141,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - All tables created successfully
 
 ### Seed Database
+
 - [x] Create database seeding script (`backend/seed.py`) ✅
   - Admin user creation (ADMIN001, PIN: 1234)
   - Test staff user creation (TEST123, PIN: 5678)
@@ -152,6 +162,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 2: Backend API Development ✅ COMPLETED (October 23, 2025)
 
 ### Authentication Endpoints ✅ COMPLETED (October 22, 2025)
+
 - [x] Implement POST `/api/auth/login`
   - Accept partner_number and PIN ✅
   - Validate credentials ✅
@@ -174,6 +185,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Validation error handling ✅
 
 ### Items/Inventory Endpoints ✅ COMPLETED (October 23, 2025)
+
 - [x] Implement GET `/api/items` ✅
   - Return all active items ✅
   - Support filtering by category ✅
@@ -201,6 +213,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Validation error handling ✅
 
 ### History Endpoints ✅ COMPLETED (October 23, 2025)
+
 - [x] Implement GET `/api/history` ✅
   - Return recent history entries (configurable limit) ✅
   - Include user name via eager loading ✅
@@ -219,6 +232,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Limit parameter validation ✅
 
 ### Admin Endpoints ✅ COMPLETED (October 23, 2025)
+
 - [x] Implement GET `/api/admin/users` ✅
   - Return all users (ordered by created_at desc)
   - Requires admin role
@@ -238,6 +252,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Self-deletion prevention working
 
 ### Error Handling & Validation ✅ COMPLETED (October 23, 2025)
+
 - [x] Implement global error handler ✅
   - Added handlers for 400, 401, 403, 404, 409, 500 errors
   - ValidationError handler for Marshmallow validation
@@ -255,6 +270,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Unauthorized: Missing JWT tokens
 
 ### CORS Configuration ✅ COMPLETED (October 23, 2025)
+
 - [x] Configure Flask-CORS to allow Next.js origin ✅
   - CORS configured in `app/__init__.py` line 32
   - Origins from environment variable `CORS_ORIGINS`
@@ -262,6 +278,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Supports multiple origins via comma-separated values
 
 ### Comprehensive Test Suite ✅ COMPLETED (October 23, 2025)
+
 - [x] Created complete pytest test suite for all Phase 2 endpoints and models ✅
   - tests/conftest.py: Pytest fixtures (app, client, users, tokens, headers)
   - tests/test_models.py: 13 unit tests for User, Item, History models
@@ -280,6 +297,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 3A: Multi-Tool Architecture Setup
 
 ### Backend API Restructuring
+
 - [ ] Rename existing routes to tracking namespace
   - Move `/api/items` → `/api/tracking/items`
   - Move `/api/history` → `/api/tracking/history`
@@ -294,6 +312,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Verify all 66 tests still pass
 
 ### Backend Database Restructuring
+
 - [ ] Rename existing tables with tracking prefix
   - Rename `items` → `tracking_items`
   - Rename `history` → `tracking_history`
@@ -310,6 +329,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Run full test suite (should pass 66/66)
 
 ### Frontend Directory Restructuring
+
 - [ ] Create tool-based directory structure
   - Create `frontend/src/app/dashboard/` for tool grid
   - Create `frontend/src/app/tools/tracking/` for tracking tool
@@ -321,6 +341,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Update import paths
 
 ### Dashboard Implementation
+
 - [ ] Create Dashboard page (`app/dashboard/page.tsx`)
   - Grid layout with tool cards
   - "Tracking System" card → `/tools/tracking/inventory`
@@ -336,9 +357,10 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Use auth context to check user role
 
 ### Update Documentation
+
 - [ ] Update backend README (if exists) with new structure
 - [ ] Update frontend README with new routing structure
-- [ ] Document architectural changes in `UpdateLogs/`
+- [ ] Document architectural changes in `ChangeLog/`
 - [ ] Verify PLANNING.md matches implemented architecture
 
 ---
@@ -346,6 +368,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 3B: Tool 1 Frontend Development (Tracking)
 
 ### Authentication UI
+
 - [ ] Create login page (`app/login/page.tsx`)
   - Partner number input
   - PIN input (masked)
@@ -366,6 +389,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Test login/logout flow
 
 ### Inventory/Items UI
+
 - [ ] Create inventory page (`app/tools/tracking/inventory/page.tsx`)
   - **Three view modes on single page**:
     - **Categories View** (default/home): 2-column grid of category cards with item counts
@@ -409,6 +433,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Test on mobile devices (touch targets, responsive grid)
 
 ### History UI
+
 - [ ] Create history page (`app/tools/tracking/history/page.tsx`)
   - Display recent actions in reverse chronological order
   - Show: staff name, action, item name, code, timestamp
@@ -419,6 +444,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Test history display
 
 ### Global Admin Panel UI
+
 - [ ] Create admin page (`app/admin/page.tsx`)
   - **Note**: This is the global admin panel (not tool-specific)
   - Accessible from dashboard "Admin Panel" card
@@ -435,6 +461,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Test admin functionality
 
 ### UI/UX Polish
+
 - [ ] Add ShadCN components (Button, Input, Dialog, Card, etc.)
 - [ ] Implement consistent styling with TailwindCSS
 - [ ] Add loading spinners for async operations
@@ -444,6 +471,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Implement dark mode support (optional)
 
 ### API Integration
+
 - [ ] Create API client utility (`lib/api.ts`)
   - Axios instance with base URL
   - Automatic JWT token injection in headers
@@ -468,6 +496,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 4: Testing & Quality Assurance
 
 ### Backend Testing
+
 - [ ] Write unit tests for models
   - User password hashing
   - Code generation uniqueness
@@ -480,11 +509,13 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Run tests with `pytest`
 
 ### Frontend Testing (Optional for MVP)
+
 - [ ] Write component tests with React Testing Library
 - [ ] Test user flows (login, add item, remove item)
 - [ ] Test error states and edge cases
 
 ### Manual Testing
+
 - [ ] Test complete user workflows end-to-end
   - Admin adds user → User signs up → User logs in → User adds item → User removes item
 - [ ] Test on multiple browsers (Chrome, Safari, Firefox)
@@ -493,6 +524,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Test error scenarios (network errors, invalid data, unauthorized access)
 
 ### Performance Testing
+
 - [ ] Measure API response times
 - [ ] Measure frontend page load times
 - [ ] Test with larger datasets (100+ items)
@@ -503,9 +535,10 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 5: Tool 2 - Milk Count System
 
 **Status**: Awaiting Tool 1 completion
-**Detailed Planning**: See `Tools/MilkCount.md`
+**Detailed Planning**: See `Planning/MilkCount.md`
 
 ### Backend Development
+
 - [ ] Design database schema
   - milk_count_sessions table (night/morning counts)
   - milk_count_par_levels table (target inventory)
@@ -534,6 +567,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Authorization checks
 
 ### Frontend Development
+
 - [ ] Create routing structure
   - `/tools/milk-count/` - Landing/status page
   - `/tools/milk-count/night-count/foh` - Night FOH count
@@ -568,6 +602,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - View summary for any past day
 
 ### Testing & Deployment
+
 - [ ] Test complete workflow (night → morning → summary)
 - [ ] Test calculations with various scenarios
 - [ ] Test admin par level management
@@ -579,9 +614,10 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 6: Tool 3 - RTD&E Counting System
 
 **Status**: Awaiting Tool 2 completion
-**Detailed Planning**: See `Tools/RTDE.md`
+**Detailed Planning**: See `Planning/RTDE.md`
 
 ### Backend Development
+
 - [ ] Design database schema
   - rtde_items table (display items with expected quantities)
   - rtde_pull_lists table (generated pull lists)
@@ -607,6 +643,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Authorization checks
 
 ### Frontend Development
+
 - [ ] Create routing structure
   - `/tools/rtde/` - Landing page
   - `/tools/rtde/count` - Counting screen
@@ -633,6 +670,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - View details for any past pull list
 
 ### Testing & Deployment
+
 - [ ] Test complete workflow (count → pull list → mark pulled)
 - [ ] Test admin item management
 - [ ] Mobile responsiveness testing
@@ -643,6 +681,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 7: Deployment Preparation
 
 ### Backend Deployment
+
 - [ ] Create production configuration
   - Set `FLASK_ENV=production`
   - Use strong `JWT_SECRET_KEY`
@@ -656,6 +695,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Test production API endpoints
 
 ### Frontend Deployment
+
 - [ ] Update `NEXT_PUBLIC_API_URL` to production backend URL
 - [ ] Deploy to Vercel
   - Connect GitHub repository
@@ -664,6 +704,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Test production frontend
 
 ### Database Setup
+
 - [ ] Create AWS RDS PostgreSQL instance
   - Choose appropriate instance size
   - Enable automated backups
@@ -675,6 +716,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Seed production database with admin user
 
 ### Post-Deployment
+
 - [ ] Test complete production workflow
 - [ ] Set up monitoring and logging
   - AWS CloudWatch for backend
@@ -688,6 +730,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Phase 6: Documentation & Handoff
 
 ### User Documentation
+
 - [ ] Create quick start guide for staff
   - How to log in
   - How to add items
@@ -700,6 +743,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Common issues and solutions
 
 ### Developer Documentation
+
 - [ ] Document API endpoints with examples
   - Request/response formats
   - Authentication requirements
@@ -710,6 +754,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Add contribution guidelines (if open-sourcing)
 
 ### Training
+
 - [ ] Conduct training session with staff
 - [ ] Gather feedback on usability
 - [ ] Address any issues or confusion
@@ -720,6 +765,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Ongoing Tasks
 
 ### Maintenance
+
 - [ ] Monitor application health and errors
 - [ ] Review and rotate JWT secrets periodically
 - [ ] Keep dependencies up to date
@@ -727,6 +773,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Plan and implement feature enhancements
 
 ### Backups
+
 - [ ] Verify automated backups are running (AWS RDS)
 - [ ] Test restore procedures periodically
 - [ ] Document backup retention policy
@@ -750,6 +797,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ## Notes
 
 ### Development Workflow
+
 - **Build tools incrementally**: Complete and deploy Tool 1 before starting Tool 2
 - **Prioritize ruthlessly**: Focus on core functionality first (auth, add/remove, history)
 - **Test incrementally**: Test each feature as you build it, don't wait until the end
@@ -757,18 +805,20 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - **Deploy early**: Get to production as soon as basic functionality works
 
 ### Multi-Tool Best Practices
+
 - **Shared first**: Build shared components and infrastructure before tool-specific features
 - **Reuse patterns**: Counter component, admin panels, history pages follow similar patterns
 - **Namespace consistently**: Use `/api/{tool-name}/*` and `/tools/{tool-name}/*` patterns
 - **Test isolation**: Each tool's tests should be independent
 
 ### Documentation
+
 - **PLANNING.md**: Overall multi-tool architecture and decisions
-- **Tool-specific docs**: `Tools/InventoryTracking.md`, `Tools/MilkCount.md`, `Tools/RTDE.md` for detailed features
+- **Tool-specific docs**: `Planning/InventoryTracking.md`, `Planning/MilkCount.md`, `Planning/RTDE.md` for detailed features
 - **TASKS.md**: This file - track progress across all phases
 - **CLAUDE.md**: AI assistant guidelines for maintaining codebase
 
 ---
 
-*Last Updated: October 26, 2025*
-*Version: 2.0.0 - Multi-Tool Structure*
+_Last Updated: October 26, 2025_
+_Version: 2.0.0 - Multi-Tool Structure_

@@ -61,7 +61,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 **Status**: Backend complete (66/66 tests passing), Frontend in progress
 
-**Detailed Planning**: See `Tools/InventoryTracking.md`
+**Detailed Planning**: See `Planning/InventoryTracking.md`
 
 ---
 
@@ -80,7 +80,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 **Status**: Planning complete, awaiting Tool 1 completion
 
-**Detailed Planning**: See `Tools/MilkCount.md`
+**Detailed Planning**: See `Planning/MilkCount.md`
 
 ---
 
@@ -98,7 +98,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 **Status**: Planning complete, awaiting Tool 2 completion
 
-**Detailed Planning**: See `Tools/RTDE.md`
+**Detailed Planning**: See `Planning/RTDE.md`
 
 ---
 
@@ -449,9 +449,9 @@ rtde_pull_lists
 
 Each tool has its own prefixed tables. See individual tool planning docs:
 
-- **Tracking Tool**: `Tools/InventoryTracking.md` (tracking_items, tracking_history)
-- **Milk Count Tool**: `Tools/MilkCount.md` (milk_count_sessions, milk_count_par_levels, etc.)
-- **RTD&E Tool**: `Tools/RTDE.md` (rtde_items, rtde_pull_lists, etc.)
+- **Tracking Tool**: `Planning/InventoryTracking.md` (tracking_items, tracking_history)
+- **Milk Count Tool**: `Planning/MilkCount.md` (milk_count_sessions, milk_count_par_levels, etc.)
+- **RTD&E Tool**: `Planning/RTDE.md` (rtde_items, rtde_pull_lists, etc.)
 
 ### Key Database Principles
 
@@ -660,9 +660,9 @@ Located in `backend/app/tools/{tool_name}/`:
 ### Project Documentation
 
 - **PLANNING.md** (this file) - Overall multi-tool architecture
-- **Tools/InventoryTracking.md** - Tool 1 detailed planning
-- **Tools/MilkCount.md** - Tool 2 detailed planning
-- **Tools/RTDE.md** - Tool 3 detailed planning
+- **Planning/InventoryTracking.md** - Tool 1 detailed planning
+- **Planning/MilkCount.md** - Tool 2 detailed planning
+- **Planning/RTDE.md** - Tool 3 detailed planning
 - **TASKS.md** - Task tracking organized by tool
 - **CLAUDE.md** - AI assistant guidelines
 - **README.md** - Setup instructions and project overview

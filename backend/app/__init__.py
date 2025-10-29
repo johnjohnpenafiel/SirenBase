@@ -37,13 +37,12 @@ def create_app(config_name='default'):
 
     # Register blueprints
     from app.routes.auth import auth_bp
-    from app.routes.items import items_bp
-    from app.routes.history import history_bp
     from app.routes.admin import admin_bp
+    from app.routes.tools.tracking import tracking_bp
+
     app.register_blueprint(auth_bp)
-    app.register_blueprint(items_bp)
-    app.register_blueprint(history_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(tracking_bp)
 
     # Register error handlers
     register_error_handlers(app)

@@ -5,11 +5,11 @@ import pytest
 
 
 class TestGetHistory:
-    """Tests for GET /api/history."""
+    """Tests for GET /api/tracking/history."""
 
     def test_get_history_success(self, client, staff_headers):
         """Test retrieving history entries."""
-        response = client.get('/api/history/', headers=staff_headers)
+        response = client.get('/api/tracking/history', headers=staff_headers)
 
         assert response.status_code == 200
         assert 'history' in response.json
@@ -17,13 +17,13 @@ class TestGetHistory:
 
     def test_get_history_without_auth(self, client):
         """Test getting history without authentication."""
-        response = client.get('/api/history/')
+        response = client.get('/api/tracking/history')
 
         assert response.status_code == 401
 
     def test_get_history_with_limit(self, client, staff_headers):
         """Test getting history with limit parameter."""
-        response = client.get('/api/history/?limit=5', headers=staff_headers)
+        response = client.get('/api/tracking/history?limit=5', headers=staff_headers)
 
         assert response.status_code == 200
         assert len(response.json['history']) <= 5
@@ -31,25 +31,25 @@ class TestGetHistory:
     def test_get_history_filter_by_action(self, client, staff_headers, sample_item):
         """Test filtering history by action type."""
         # Create an item (generates ADD history)
-        client.post('/api/items/', headers=staff_headers, json={
+        client.post('/api/tracking/items', headers=staff_headers, json={
             'name': 'Test Item',
             'category': 'syrups'
         })
 
-        response = client.get('/api/history/?action=ADD', headers=staff_headers)
+        response = client.get('/api/tracking/history?action=ADD', headers=staff_headers)
 
         assert response.status_code == 200
         assert all(entry['action'] == 'ADD' for entry in response.json['history'])
 
     def test_get_history_invalid_action(self, client, staff_headers):
         """Test filtering with invalid action type."""
-        response = client.get('/api/history/?action=INVALID', headers=staff_headers)
+        response = client.get('/api/tracking/history?action=INVALID', headers=staff_headers)
 
         assert response.status_code == 400
 
     def test_get_history_limit_validation(self, client, staff_headers):
         """Test limit parameter validation."""
         # Limit too high
-        response = client.get('/api/history/?limit=1000', headers=staff_headers)
+        response = client.get('/api/tracking/history?limit=1000', headers=staff_headers)
 
         assert response.status_code == 400

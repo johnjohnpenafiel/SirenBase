@@ -4,45 +4,79 @@
  * Displays available tools for partners to access.
  * Shows admin panel card only for admin role users.
  */
+'use client';
+
+import { ToolCard } from '@/components/shared/ToolCard';
+import { useAuth } from '@/hooks/use-auth';
+import { Package, Milk, Box, ShieldCheck } from 'lucide-react';
+
 export default function DashboardPage() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen p-8 flex items-center justify-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
+  const isAdmin = user?.role === 'admin';
+
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">SirenBase Dashboard</h1>
-        <p className="text-muted-foreground mb-8">
-          Select a tool to get started
-        </p>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">SirenBase Dashboard</h1>
+          <p className="text-muted-foreground">
+            Welcome back, {user?.name || 'Partner'}! Select a tool to get started.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Tool cards will be implemented here */}
-          <div className="p-6 border rounded-lg">
-            <h2 className="text-xl font-semibold mb-2">Inventory Tracking</h2>
-            <p className="text-sm text-muted-foreground">
-              Track basement inventory with 4-digit codes
-            </p>
-          </div>
+          {/* Tool 1: Inventory Tracking - Active */}
+          <ToolCard
+            title="Inventory Tracking"
+            description="Track basement inventory with 4-digit codes"
+            route="/tools/tracking"
+            icon={<Package className="w-8 h-8 text-primary" />}
+          />
 
-          <div className="p-6 border rounded-lg opacity-50">
-            <h2 className="text-xl font-semibold mb-2">Milk Count</h2>
-            <p className="text-sm text-muted-foreground">
-              Coming soon...
-            </p>
-          </div>
+          {/* Tool 2: Milk Count - Coming Soon */}
+          <ToolCard
+            title="Milk Count"
+            description="FOH/BOH counting with automated calculations"
+            route="/tools/milk-count"
+            icon={<Milk className="w-8 h-8 text-muted-foreground" />}
+            isDisabled={true}
+          />
 
-          <div className="p-6 border rounded-lg opacity-50">
-            <h2 className="text-xl font-semibold mb-2">RTD&E Count</h2>
-            <p className="text-sm text-muted-foreground">
-              Coming soon...
-            </p>
-          </div>
+          {/* Tool 3: RTD&E - Coming Soon */}
+          <ToolCard
+            title="RTD&E Count"
+            description="Display restocking with pull lists"
+            route="/tools/rtde"
+            icon={<Box className="w-8 h-8 text-muted-foreground" />}
+            isDisabled={true}
+          />
 
-          <div className="p-6 border rounded-lg">
-            <h2 className="text-xl font-semibold mb-2">Admin Panel</h2>
-            <p className="text-sm text-muted-foreground">
-              Manage users and settings
-            </p>
-          </div>
+          {/* Admin Panel - Admin Only */}
+          {isAdmin && (
+            <ToolCard
+              title="Admin Panel"
+              description="Manage users and system settings"
+              route="/admin"
+              icon={<ShieldCheck className="w-8 h-8 text-amber-600" />}
+              isAdminOnly={true}
+            />
+          )}
         </div>
+
+        {!isAdmin && (
+          <p className="mt-8 text-sm text-muted-foreground text-center">
+            Need admin access? Contact your store manager.
+          </p>
+        )}
       </div>
     </div>
   );

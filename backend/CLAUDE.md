@@ -42,9 +42,9 @@ backend/
 │   ├── extensions.py         # Extension initialization (db, jwt, etc.)
 │   ├── models/               # Database models
 │   │   ├── __init__.py
-│   │   ├── user.py
-│   │   ├── item.py
-│   │   └── history.py
+│   │   ├── user.py          # Shared user model
+│   │   ├── item.py          # Tool 1: Tracking items
+│   │   └── history.py       # Tool 1: Tracking history
 │   ├── schemas/              # Marshmallow schemas for validation
 │   │   ├── __init__.py
 │   │   ├── user.py
@@ -52,10 +52,13 @@ backend/
 │   │   └── history.py
 │   ├── routes/               # API blueprints
 │   │   ├── __init__.py
-│   │   ├── auth.py           # /api/auth/* endpoints
-│   │   ├── items.py          # /api/items/* endpoints
-│   │   ├── history.py        # /api/history/* endpoints
-│   │   └── admin.py          # /api/admin/* endpoints
+│   │   ├── auth.py           # /api/auth/* endpoints (shared)
+│   │   ├── admin.py          # /api/admin/* endpoints (shared)
+│   │   └── tools/            # Tool-specific routes
+│   │       ├── __init__.py
+│   │       ├── tracking.py   # /api/tracking/* endpoints (Tool 1)
+│   │       ├── milk_count.py # /api/milk-count/* endpoints (Tool 2) - Future
+│   │       └── rtde.py       # /api/rtde/* endpoints (Tool 3) - Future
 │   ├── middleware/           # Custom middleware
 │   │   ├── __init__.py
 │   │   └── auth.py           # JWT verification, role checks
@@ -67,7 +70,8 @@ backend/
 │   ├── __init__.py
 │   ├── conftest.py          # Pytest fixtures
 │   ├── test_auth.py
-│   ├── test_items.py
+│   ├── test_items.py        # Tests for /api/tracking/items
+│   ├── test_history.py      # Tests for /api/tracking/history
 │   └── test_admin.py
 ├── migrations/               # Alembic migrations
 ├── .env                      # Environment variables (not in Git)
@@ -143,7 +147,7 @@ from app.extensions import db
 
 ### Flask Blueprint Structure
 ```python
-# routes/items.py
+# routes/tools/tracking.py
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -151,24 +155,25 @@ from app.models.item import Item
 from app.schemas.item import ItemSchema
 from app.extensions import db
 
-items_bp = Blueprint('items', __name__, url_prefix='/api/items')
+# Multi-tool architecture: Each tool has its own namespace
+tracking_bp = Blueprint('tracking', __name__, url_prefix='/api/tracking')
 
-@items_bp.route('/', methods=['GET'])
+@tracking_bp.route('/items', methods=['GET'])
 @jwt_required()
 def get_items():
     """
-    Get all current inventory items.
-    
+    Get all current inventory items for Tool 1: Tracking.
+
     Returns:
         JSON response with items array
     """
     try:
         current_user_id = get_jwt_identity()
         items = Item.query.filter_by(is_removed=False).all()
-        
+
         schema = ItemSchema(many=True)
         return jsonify(schema.dump(items)), 200
-        
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 ```
@@ -413,41 +418,42 @@ class ItemCreateSchema(Schema):
 
 ### Validation in Routes
 ```python
-@items_bp.route('/', methods=['POST'])
+@tracking_bp.route('/items', methods=['POST'])
 @jwt_required()
 def create_item():
     """
     Create a new inventory item with auto-generated code.
-    
+
     Request JSON:
-        {"name": "Coffee Beans"}
-    
+        {"name": "Coffee Beans", "category": "coffee_beans"}
+
     Returns:
         201: {"item": {...}}
         400: {"error": "Validation error"}
     """
     schema = ItemCreateSchema()
-    
+
     try:
         data = schema.load(request.json)
     except ValidationError as err:
         return jsonify({"error": err.messages}), 400
-    
+
     current_user_id = get_jwt_identity()
-    
+
     # Generate unique 4-digit code
     code = generate_unique_code()
-    
+
     # Create item
     item = Item(
         name=data['name'],
+        category=data['category'],
         code=code,
         added_by=current_user_id
     )
-    
+
     db.session.add(item)
     db.session.commit()
-    
+
     return jsonify({"item": ItemSchema().dump(item)}), 201
 ```
 
@@ -623,11 +629,11 @@ def test_login_validation_error(client):
 # tests/test_items.py
 def test_create_item(client, auth_headers):
     """Test creating inventory item."""
-    response = client.post('/api/items/', 
-        json={'name': 'Coffee Beans'},
+    response = client.post('/api/tracking/items',
+        json={'name': 'Coffee Beans', 'category': 'coffee_beans'},
         headers=auth_headers
     )
-    
+
     assert response.status_code == 201
     assert 'item' in response.json
     assert len(response.json['item']['code']) == 4
@@ -635,7 +641,8 @@ def test_create_item(client, auth_headers):
 
 def test_create_item_unauthorized(client):
     """Test creating item without authentication."""
-    response = client.post('/api/items/', json={'name': 'Coffee Beans'})
+    response = client.post('/api/tracking/items',
+        json={'name': 'Coffee Beans', 'category': 'coffee_beans'})
     assert response.status_code == 401
 ```
 
@@ -665,29 +672,29 @@ def register_error_handlers(app):
 
 ### Exception Handling in Routes
 ```python
-@items_bp.route('/<item_id>', methods=['DELETE'])
+@tracking_bp.route('/items/<code>', methods=['DELETE'])
 @jwt_required()
-def remove_item(item_id: str):
-    """Remove inventory item by ID."""
+def remove_item(code: str):
+    """Remove inventory item by 4-digit code."""
     try:
         current_user_id = get_jwt_identity()
-        
-        item = Item.query.get(item_id)
+
+        item = Item.query.filter_by(code=code).first()
         if not item:
             return jsonify({"error": "Item not found"}), 404
-        
+
         if item.is_removed:
             return jsonify({"error": "Item already removed"}), 400
-        
-        # Mark as removed
+
+        # Mark as removed (soft delete)
         item.is_removed = True
         item.removed_at = datetime.utcnow()
         item.removed_by = current_user_id
-        
+
         db.session.commit()
-        
+
         return jsonify({"message": "Item removed successfully"}), 200
-        
+
     except Exception as e:
         db.session.rollback()
         # Log error here
@@ -790,15 +797,17 @@ def create_app(config_class=Config):
     CORS(app, origins=app.config['CORS_ORIGINS'])
     
     # Register blueprints
+    # Shared routes
     from app.routes.auth import auth_bp
-    from app.routes.items import items_bp
-    from app.routes.history import history_bp
     from app.routes.admin import admin_bp
-    
+    # Tool-specific routes
+    from app.routes.tools.tracking import tracking_bp
+    # from app.routes.tools.milk_count import milk_count_bp  # Tool 2 - Future
+    # from app.routes.tools.rtde import rtde_bp  # Tool 3 - Future
+
     app.register_blueprint(auth_bp)
-    app.register_blueprint(items_bp)
-    app.register_blueprint(history_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(tracking_bp)
     
     # Register error handlers
     register_error_handlers(app)

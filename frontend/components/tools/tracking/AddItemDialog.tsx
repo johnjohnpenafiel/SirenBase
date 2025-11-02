@@ -1,0 +1,192 @@
+/**
+ * Add Item Dialog
+ *
+ * Two-step flow for adding items:
+ * Step 1: Enter name and category → Generate Code
+ * Step 2: Display code → Confirm & Save
+ */
+'use client';
+
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import apiClient from '@/lib/api';
+import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
+import type { ItemCategory } from '@/types';
+import { toast } from 'sonner';
+
+interface AddItemDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onItemAdded: () => void;
+}
+
+type Step = 'input' | 'confirm';
+
+export function AddItemDialog({ open, onOpenChange, onItemAdded }: AddItemDialogProps) {
+  const [step, setStep] = useState<Step>('input');
+  const [itemName, setItemName] = useState('');
+  const [category, setCategory] = useState<ItemCategory | ''>('');
+  const [generatedCode, setGeneratedCode] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleClose = () => {
+    // Reset form
+    setStep('input');
+    setItemName('');
+    setCategory('');
+    setGeneratedCode('');
+    onOpenChange(false);
+  };
+
+  const handleGenerateCode = async () => {
+    // Validation
+    if (!itemName.trim()) {
+      toast.error('Please enter an item name');
+      return;
+    }
+
+    if (!category) {
+      toast.error('Please select a category');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await apiClient.createItem({
+        name: itemName.trim(),
+        category: category as ItemCategory,
+      });
+
+      setGeneratedCode(response.item.code);
+      setStep('confirm');
+      toast.success('Code generated! Write it on the physical item.');
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.error || 'Failed to generate code';
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirm = () => {
+    toast.success(`${itemName} added to inventory!`);
+    onItemAdded();
+    handleClose();
+  };
+
+  const handleCancel = () => {
+    if (step === 'confirm') {
+      toast.info('Item not saved. Code discarded.');
+    }
+    handleClose();
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        {step === 'input' ? (
+          <>
+            <DialogHeader>
+              <DialogTitle>Add New Item</DialogTitle>
+              <DialogDescription>
+                Enter the item details to generate a unique 4-digit code.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="itemName">Item Name</Label>
+                <Input
+                  id="itemName"
+                  placeholder="e.g., Vanilla Syrup"
+                  value={itemName}
+                  onChange={(e) => setItemName(e.target.value)}
+                  maxLength={255}
+                  disabled={loading}
+                  autoFocus
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="category">Category</Label>
+                <Select
+                  value={category}
+                  onValueChange={(value) => setCategory(value as ItemCategory)}
+                  disabled={loading}
+                >
+                  <SelectTrigger id="category">
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ITEM_CATEGORIES.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {formatCategory(cat)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={handleCancel} disabled={loading}>
+                Cancel
+              </Button>
+              <Button onClick={handleGenerateCode} disabled={loading}>
+                {loading ? 'Generating...' : 'Generate Code'}
+              </Button>
+            </DialogFooter>
+          </>
+        ) : (
+          <>
+            <DialogHeader>
+              <DialogTitle>Code Generated!</DialogTitle>
+              <DialogDescription>
+                Write this code on the physical item with a marker, then confirm to save.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="py-8">
+              <div className="text-center">
+                <p className="text-sm text-gray-600 mb-2">Your 4-digit code:</p>
+                <div className="text-6xl font-bold text-blue-600 tracking-wider mb-4">
+                  {generatedCode}
+                </div>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-4">
+                  <p className="text-sm text-yellow-800">
+                    ⚠️ <strong>Important:</strong> Write this code on the item before confirming.
+                    Once confirmed, the item will be added to your inventory.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button onClick={handleConfirm}>Confirm & Save</Button>
+            </DialogFooter>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

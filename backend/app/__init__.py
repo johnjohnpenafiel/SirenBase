@@ -29,7 +29,7 @@ def create_app(config_name='default'):
     migrate.init_app(app, db)
 
     # Configure CORS
-    CORS(app, origins=app.config['CORS_ORIGINS'])
+    CORS(app, origins=app.config['CORS_ORIGINS'], supports_credentials=True)
 
     # Import models (required for Flask-Migrate to detect them)
     with app.app_context():

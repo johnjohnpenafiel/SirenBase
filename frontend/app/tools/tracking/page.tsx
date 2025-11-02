@@ -1,32 +1,27 @@
 /**
  * Inventory Tracking Tool - Landing Page
  *
- * Main page for the basement inventory tracking system.
+ * Auto-redirects to the main inventory page.
  */
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 export default function TrackingToolPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Automatically redirect to the inventory page
+    router.push('/tools/tracking/inventory');
+  }, [router]);
+
+  // Show loading state while redirecting
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">Inventory Tracking</h1>
-        <p className="text-muted-foreground mb-8">
-          Track basement inventory with unique 4-digit codes
-        </p>
-
-        <div className="space-y-4">
-          <div className="p-6 border rounded-lg">
-            <h2 className="text-xl font-semibold mb-2">Quick Actions</h2>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>• View and manage inventory items</li>
-              <li>• Add new items with generated codes</li>
-              <li>• Remove items from inventory</li>
-              <li>• View action history</li>
-            </ul>
-          </div>
-
-          <p className="text-sm text-muted-foreground text-center">
-            Full interface coming soon...
-          </p>
-        </div>
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="text-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading inventory...</p>
       </div>
     </div>
   );

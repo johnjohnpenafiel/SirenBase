@@ -9,6 +9,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
 import { Footer } from '@/components/shared/Footer';
@@ -19,11 +20,12 @@ import apiClient from '@/lib/api';
 import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
 import type { Item, ItemCategory, GroupedItem } from '@/types';
 import { toast } from 'sonner';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { ArrowLeft, Plus, History } from 'lucide-react';
 
 type ViewMode = 'categories' | 'all' | 'filtered';
 
 export default function InventoryPage() {
+  const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('categories');
@@ -163,10 +165,19 @@ export default function InventoryPage() {
                   </h1>
                 </div>
 
-                <Button onClick={() => setAddDialogOpen(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Item
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => router.push('/tools/tracking/history')}
+                  >
+                    <History className="h-4 w-4 mr-2" />
+                    History
+                  </Button>
+                  <Button onClick={() => setAddDialogOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Item
+                  </Button>
+                </div>
               </div>
 
               {/* View Toggle */}

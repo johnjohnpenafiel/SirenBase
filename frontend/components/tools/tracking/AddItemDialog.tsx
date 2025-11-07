@@ -7,7 +7,7 @@
  */
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -35,22 +35,33 @@ interface AddItemDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onItemAdded: () => void;
+  preselectedCategory?: ItemCategory | null;
 }
 
 type Step = 'input' | 'confirm';
 
-export function AddItemDialog({ open, onOpenChange, onItemAdded }: AddItemDialogProps) {
+export function AddItemDialog({
+  open,
+  onOpenChange,
+  onItemAdded,
+  preselectedCategory
+}: AddItemDialogProps) {
   const [step, setStep] = useState<Step>('input');
   const [itemName, setItemName] = useState('');
-  const [category, setCategory] = useState<ItemCategory | ''>('');
+  const [category, setCategory] = useState<ItemCategory | ''>(preselectedCategory || '');
   const [generatedCode, setGeneratedCode] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Update category when preselectedCategory changes (always sync, including null)
+  useEffect(() => {
+    setCategory(preselectedCategory || '');
+  }, [preselectedCategory]);
 
   const handleClose = () => {
     // Reset form
     setStep('input');
     setItemName('');
-    setCategory('');
+    setCategory(preselectedCategory || '');
     setGeneratedCode('');
     onOpenChange(false);
   };

@@ -174,14 +174,20 @@ export default function InventoryPage() {
                 <Button
                   variant={viewMode === 'all' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setViewMode('all')}
+                  onClick={() => {
+                    setViewMode('all');
+                    setSelectedCategory(null);
+                  }}
                 >
                   All Items
                 </Button>
                 <Button
                   variant={viewMode === 'categories' ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setViewMode('categories')}
+                  onClick={() => {
+                    setViewMode('categories');
+                    setSelectedCategory(null);
+                  }}
                 >
                   Categories
                 </Button>
@@ -243,6 +249,7 @@ export default function InventoryPage() {
           open={addDialogOpen}
           onOpenChange={setAddDialogOpen}
           onItemAdded={handleItemAdded}
+          preselectedCategory={viewMode === 'filtered' ? selectedCategory : null}
         />
 
         {selectedItem && (

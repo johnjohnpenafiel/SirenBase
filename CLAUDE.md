@@ -84,7 +84,14 @@ Each tool operates independently with its own features, while sharing authentica
    - Mark completed tasks immediately
    - Add discovered sub-tasks during work
 
-4. **Review relevant component CLAUDE.md files**
+4. **Check `BUGS.md`** when encountering or fixing issues
+
+   - All bugs tracked with IDs (e.g., `[BUG-001]`)
+   - Update when discovering new bugs during development
+   - Reference bug IDs in commit messages when fixing
+   - Move to archive section when resolved
+
+5. **Review relevant component CLAUDE.md files**
    - `frontend/CLAUDE.md` for Next.js work (when created)
    - `backend/CLAUDE.md` for Flask work (when created)
 
@@ -130,6 +137,7 @@ SirenBase/
 ├── CLAUDE.md              # This file - Root project guidelines
 ├── PLANNING.md            # Multi-tool architecture & decisions
 ├── TASKS.md               # Task tracking (organized by tool)
+├── BUGS.md                # Bug & issue tracker (with IDs)
 ├── README.md              # Setup & documentation
 │
 ├── Planning/              # Tool-specific planning documents
@@ -282,6 +290,120 @@ SirenBase/
 - Update related documentation
 - Commit with clear, descriptive message
 
+## 🐛 Bug Tracking & Issue Management
+
+### When to Report a Bug
+
+**ALWAYS add to `BUGS.md` when you discover**:
+- Incorrect behavior (code doesn't match expected behavior)
+- Data integrity issues or data loss scenarios
+- Security vulnerabilities or authentication bypasses
+- UX issues that prevent task completion
+- Performance regressions
+- Edge cases that cause crashes or errors
+- API contract violations (frontend/backend mismatch)
+
+**DO NOT add to `BUGS.md`** (use `TASKS.md` instead):
+- Missing features that were never implemented
+- Feature requests or enhancements
+- Planned future functionality
+
+### Bug Reporting Workflow
+
+1. **Discover Bug During Development**
+   - Immediately add to `BUGS.md` with unique ID
+   - Use format: `[BUG-XXX]` where XXX is next sequential number
+   - Include affected components, description, expected vs current behavior
+   - Assign priority: High, Medium, or Low
+
+2. **Categorize Properly**
+   - **Active Bugs** → Actual bugs preventing correct operation
+   - **Known Issues / Technical Debt** → Non-critical improvements or refactoring needs
+
+3. **When Fixing a Bug**
+   - Reference bug ID in commit message: `Fix: [BUG-001] Description of fix`
+   - Move bug entry from "Active Bugs" to "Fixed Bugs Archive"
+   - Include: Fix date, commit hash, developer name
+
+4. **Bug Entry Requirements**
+   - **Affected Component**: File path or component name
+   - **Description**: Clear explanation of the issue
+   - **Expected Behavior**: What should happen
+   - **Current Behavior**: What actually happens
+   - **Impact**: High/Medium/Low with justification
+   - **Related Files**: Paths with line numbers where possible
+   - **Fix Approach** (optional): Suggested solution
+
+### Bug Tracking Best Practices
+
+- **Be Specific**: Include file paths, line numbers, reproduction steps
+- **Prioritize Correctly**:
+  - High: Data loss, security issues, blocking workflows
+  - Medium: Poor UX, inconsistent behavior, non-critical failures
+  - Low: Minor visual issues, edge cases, nice-to-haves
+- **Keep Updated**: Don't let bug list go stale
+- **Link to Context**: Reference related TASKS.md items if applicable
+- **Archive When Fixed**: Don't delete - move to archive for historical reference
+
+### Example Bug Entry
+
+```markdown
+#### [BUG-042] User session expires without warning during active use
+
+**Affected Component**: `frontend/contexts/auth-context.tsx`
+
+**Description**:
+JWT tokens expire after 24 hours but there's no warning or automatic refresh,
+causing users to lose their session mid-task.
+
+**Expected Behavior**:
+- Warn user 5 minutes before expiration
+- Auto-refresh token if user is active
+- Gracefully handle expiration with save-state option
+
+**Current Behavior**:
+- Token expires silently
+- Next API call returns 401
+- User redirected to login without warning
+- Any unsaved work is lost
+
+**Impact**: Medium
+Users lose work and context when session expires unexpectedly
+
+**Reported**: 2025-01-05
+**Status**: Open
+**Assigned**: -
+
+**Related Files**:
+- `frontend/contexts/auth-context.tsx:45`
+- `frontend/lib/api.ts:32` (401 interceptor)
+
+**Fix Approach**:
+1. Add token refresh endpoint to backend
+2. Implement refresh logic in auth context
+3. Show warning toast at 5 minutes remaining
+```
+
+### Integration with Git Workflow
+
+**Commit Messages for Bug Fixes**:
+```bash
+# Single bug fix
+git commit -m "Fix: [BUG-001] Delay item save until Step 2 confirmation"
+
+# Multiple related bugs
+git commit -m "Fix: [BUG-001] [BUG-003] Fix add item flow and input validation"
+
+# Partial fix
+git commit -m "Partial: [BUG-002] Add logout button (Header only, pending other pages)"
+```
+
+**Branch Naming for Bug Fixes**:
+```bash
+git checkout -b bugfix/BUG-001-add-item-flow
+git checkout -b hotfix/BUG-042-session-expiration
+```
+
 ## 🎨 Design Principles
 
 ### User Experience
@@ -409,11 +531,12 @@ npm run dev
   - Tool 2: `Planning/MilkCount.md`
   - Tool 3: `Planning/RTDE.md`
 - **Task Tracking**: See `TASKS.md` (organized by tool and phase)
+- **Bug Tracking**: See `BUGS.md` (all bugs with IDs and status)
 - **API Contracts**: See `backend/docs/API.md` (when created)
 - **Component Library**: See `frontend/src/components/README.md` (when created)
 
 ---
 
-**Last Updated**: October 26, 2025
-**Version**: 2.0.0 - Multi-Tool Architecture
+**Last Updated**: January 5, 2025
+**Version**: 2.1.0 - Bug Tracking Integration
 **Maintainer**: Development Team

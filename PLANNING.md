@@ -47,7 +47,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 ## Planned Tools
 
-### 🎯 Tool 1: Inventory Tracking System (CURRENT PHASE)
+### 🎯 Tool 1: Inventory Tracking System (CURRENT PHASE - ~80% Complete)
 
 **Purpose**: Track basement inventory items using unique 4-digit codes to eliminate physical trips during ordering.
 
@@ -55,11 +55,12 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 - Add items with auto-generated unique codes
 - Remove items by selecting specific codes
-- View current inventory grouped by category
+- View current inventory grouped by category (3 view modes)
+- Category preselection for streamlined data entry
 - Complete audit history of all actions
 - Admin user management
 
-**Status**: Backend complete (66/66 tests passing), Frontend in progress
+**Status**: Backend 100% complete (66/66 tests passing), Frontend 80% complete (authentication, dashboard, inventory UI implemented; history and admin panel pending)
 
 **Detailed Planning**: See `Planning/InventoryTracking.md`
 
@@ -615,39 +616,70 @@ Located in `backend/app/tools/{tool_name}/`:
 
 ## Development Roadmap
 
-### Phase 1: Foundation & Tool 1 (CURRENT)
+### Phase 0-2: Foundation (COMPLETED)
 
-**Timeline**: Weeks 1-6
+**Timeline**: Weeks 1-4 (Oct 11 - Oct 23, 2025)
 
 - ✅ Project setup (backend, frontend, database)
 - ✅ Shared authentication system
 - ✅ Tool 1 backend API (Inventory Tracking)
-- 🔄 Multi-tool architecture setup (dashboard, routing)
-- 🔄 Tool 1 frontend UI (Inventory, History, Admin)
-- Testing and deployment
+- ✅ Backend testing (66/66 tests passing)
 
-### Phase 2: Tool 2 (NEXT)
+### Phase 3A: Multi-Tool Architecture (COMPLETED)
 
-**Timeline**: Weeks 7-10
+**Timeline**: Week 5 (Oct 29-30, 2025)
+
+- ✅ Multi-tool architecture setup (dashboard, routing)
+- ✅ Backend API restructuring (`/api/tracking/*` namespace)
+- ✅ Database table renaming (`tracking_*` prefix)
+- ✅ Frontend directory restructuring
+
+### Phase 3B: Tool 1 Frontend (CURRENT - ~80% Complete)
+
+**Timeline**: Weeks 6-7 (Oct-Nov 2025)
+
+- ✅ Authentication UI (login, protected routes, auth context)
+- ✅ Dashboard with role-based tool cards
+- ✅ Inventory UI (3 view modes, add/remove items, category preselection)
+- ✅ Shared components (Header, Footer, ToolCard)
+- 🔄 History page (pending)
+- 🔄 Admin panel (pending)
+- Testing and polish
+
+### Phase 4: Testing & Quality Assurance
+
+**Timeline**: Week 8
+
+- Complete Tool 1 frontend (History, Admin panel)
+- Backend/frontend integration testing
+- Mobile device testing
+- Performance optimization
+- Bug fixes
+
+### Phase 5: Tool 2 - Milk Count System (NEXT)
+
+**Timeline**: Weeks 9-12
 
 - Milk Count backend API (sessions, par levels, calculations)
 - Milk Count frontend UI (night/morning counts, summary)
 - Admin par level management
 - Testing and deployment
 
-### Phase 3: Tool 3 (FUTURE)
+### Phase 6: Tool 3 - RTD&E Counting System (FUTURE)
 
-**Timeline**: Weeks 11-14
+**Timeline**: Weeks 13-16
 
 - RTD&E backend API (items, pull lists)
 - RTD&E frontend UI (counting, pull list generation)
 - Admin item management
 - Testing and deployment
 
-### Phase 4: Polish & Optimization (FUTURE)
+### Phase 7: Deployment & Production Launch (FUTURE)
 
-**Timeline**: Weeks 15-16
+**Timeline**: Weeks 17-18
 
+- AWS deployment (RDS, Elastic Beanstalk)
+- Vercel frontend deployment
 - Performance optimization
 - Mobile testing and refinement
 - User training and documentation
@@ -664,6 +696,7 @@ Located in `backend/app/tools/{tool_name}/`:
 - **Planning/MilkCount.md** - Tool 2 detailed planning
 - **Planning/RTDE.md** - Tool 3 detailed planning
 - **TASKS.md** - Task tracking organized by tool
+- **BUGS.md** - Bug and issue tracker with priorities
 - **CLAUDE.md** - AI assistant guidelines
 - **README.md** - Setup instructions and project overview
 
@@ -691,6 +724,6 @@ See **TASKS.md** for the detailed, actionable task breakdown organized by tool a
 
 ---
 
-_Last Updated: October 26, 2025_
-_Version: 2.0.0 - Multi-Tool Architecture_
+_Last Updated: November 7, 2025_
+_Version: 2.1.0 - Phase 3B Progress Update & Bug Tracking Integration_
 _Maintainer: Development Team_

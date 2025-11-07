@@ -2,7 +2,7 @@
 
 This document contains clear, actionable tasks for building the SirenBase multi-tool platform. Tasks are organized by tool and development phase, with checkboxes for tracking progress.
 
-**Note**: See `PLANNING.md` for overall architecture, and individual tool docs (`Planning/InventoryTracking.md`, `Planning/MilkCount.md`, `Planning/RTDE.md`) for detailed feature planning.
+**Note**: See `PLANNING.md` for overall architecture, `BUGS.md` for active bugs and technical debt, and individual tool docs (`Planning/InventoryTracking.md`, `Planning/MilkCount.md`, `Planning/RTDE.md`) for detailed feature planning.
 
 ---
 
@@ -409,11 +409,11 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
-## Phase 3B: Tool 1 Frontend Development (Tracking)
+## Phase 3B: Tool 1 Frontend Development (Tracking) - ~80% Complete
 
-### Authentication UI
+### Authentication UI ✅ COMPLETED
 
-- [ ] Create login page (`app/login/page.tsx`)
+- [x] Create login page (`app/login/page.tsx`)
   - Partner number input
   - PIN input (masked)
   - Login button
@@ -423,18 +423,19 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Name input
   - PIN input (with confirmation)
   - Submit button
-- [ ] Implement authentication context/provider
+  - **Note**: Not implemented yet; users created via admin panel
+- [x] Implement authentication context/provider
   - Store JWT token in localStorage or secure cookie
   - Provide `login()`, `logout()`, `isAuthenticated()` functions
   - Provide current user info
-- [ ] Create protected route wrapper
+- [x] Create protected route wrapper
   - Redirect to login if not authenticated
   - Wrap inventory, history, and admin pages
-- [ ] Test login/logout flow
+- [x] Test login/logout flow
 
-### Inventory/Items UI
+### Inventory/Items UI ✅ COMPLETED
 
-- [ ] Create inventory page (`app/tools/tracking/inventory/page.tsx`)
+- [x] Create inventory page (`app/tools/tracking/inventory/page.tsx`)
   - **Three view modes on single page**:
     - **Categories View** (default/home): 2-column grid of category cards with item counts
     - **All View**: Full-width list showing all items from all categories
@@ -444,12 +445,14 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Items display with code count (e.g., "Vanilla Syrup 3x")
   - "Add Item" functionality accessible in all views
   - "Remove Item" functionality for each item
-  - Individual code display mechanism (expand/modal/etc.) - determine during implementation
+  - Individual code display mechanism (ItemCodesDialog component)
   - Update API calls to use `/api/tracking/items`
-- [ ] Create "Add Item" two-step flow
+  - **Enhancement**: Category preselection in Add Item dialog when in filtered view (commit 8960aad)
+- [x] Create "Add Item" two-step flow
   - **Step 1 - Generate Code Modal/Screen**:
     - Input: Item name (max 255 characters)
     - Dropdown: Category selection (validated from predefined list)
+    - **Category auto-preselected when in category-filtered view**
     - Button: "Generate Code"
   - **Step 2 - Confirm After Marking**:
     - Display generated 4-digit code prominently
@@ -457,24 +460,26 @@ This document contains clear, actionable tasks for building the SirenBase multi-
     - Button: "Confirm & Save" (saves item to database with history entry)
     - Cancel option available (discards code, doesn't save to database)
   - Success: Item appears in inventory list immediately
-- [ ] Create "Remove Item" confirmation dialog
+  - **Known Issue**: [BUG-001] Item saves prematurely in Step 1 (see BUGS.md)
+- [x] Create "Remove Item" confirmation dialog
   - Show item name and specific code (e.g., "Remove Vanilla Syrup (Code 2847)?")
   - Buttons: "Cancel" | "Remove"
   - On confirm: Soft delete (set is_removed=true) and create history entry
-- [ ] Implement API calls to backend
+- [x] Implement API calls to backend
   - GET `/api/tracking/items` - Fetch items on page load
   - POST `/api/tracking/items` - Add item (Step 2 of two-step flow)
   - DELETE `/api/tracking/items/<code>` - Remove item by code
   - Support category filtering via query params
-- [ ] Add loading states and error handling
+- [x] Add loading states and error handling
   - Loading spinners during API calls
-  - Toast notifications for success/error
+  - Toast notifications for success/error (using Sonner)
   - Handle network errors gracefully
-- [ ] Test complete workflows
+- [x] Test complete workflows
   - Test add item flow (both steps, including cancel)
   - Test remove item flow (with confirmation)
   - Test view switching (Categories ↔ All ↔ Category-filtered)
   - Test on mobile devices (touch targets, responsive grid)
+  - Test category preselection behavior
 
 ### History UI
 
@@ -504,32 +509,33 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [ ] Implement API calls for user management
 - [ ] Test admin functionality
 
-### UI/UX Polish
+### UI/UX Polish ✅ MOSTLY COMPLETED
 
-- [ ] Add ShadCN components (Button, Input, Dialog, Card, etc.)
-- [ ] Implement consistent styling with TailwindCSS
-- [ ] Add loading spinners for async operations
-- [ ] Add toast notifications for success/error messages
-- [ ] Ensure mobile responsiveness (test on various screen sizes)
+- [x] Add ShadCN components (Button, Input, Dialog, Card, etc.)
+- [x] Implement consistent styling with TailwindCSS
+- [x] Add loading spinners for async operations
+- [x] Add toast notifications for success/error messages (Sonner library)
+- [x] Ensure mobile responsiveness (test on various screen sizes)
 - [ ] Add keyboard shortcuts for common actions (optional)
 - [ ] Implement dark mode support (optional)
+- **Known Issue**: [BUG-002] No logout button in Header (see BUGS.md)
 
-### API Integration
+### API Integration ✅ COMPLETED
 
-- [ ] Create API client utility (`lib/api.ts`)
+- [x] Create API client utility (`lib/api.ts`)
   - Axios instance with base URL
   - Automatic JWT token injection in headers
   - Error handling interceptor
-- [ ] **Create category constants file** (`lib/constants.ts`)
+- [x] **Create category constants file** (`lib/constants.ts`)
   - Define ITEM_CATEGORIES array (matches backend)
   - Create ItemCategory type
   - Create formatCategory utility function (e.g., "coffee_beans" → "Coffee Beans")
-- [ ] Create TypeScript types for API responses (`types/index.ts`)
+- [x] Create TypeScript types for API responses (`types/index.ts`)
   - User type
   - Item type **(include category field)**
   - HistoryEntry type
   - ItemCategory type (from constants)
-- [ ] Implement all API calls with new namespaced routes
+- [x] Implement all API calls with new namespaced routes
   - Auth: login, signup, getMe → `/api/auth/*`
   - **Tracking Items**: getItems, addItem (with category), removeItem → `/api/tracking/items`
   - **Tracking History**: getHistory → `/api/tracking/history`
@@ -771,7 +777,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
-## Phase 6: Documentation & Handoff
+## Phase 8: Documentation & Handoff
 
 ### User Documentation
 
@@ -864,5 +870,5 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
-_Last Updated: October 26, 2025_
-_Version: 2.0.0 - Multi-Tool Structure_
+_Last Updated: November 7, 2025_
+_Version: 2.1.0 - Phase 3B Progress Update & Bug Tracking Integration_

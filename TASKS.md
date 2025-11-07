@@ -409,7 +409,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
-## Phase 3B: Tool 1 Frontend Development (Tracking) - ~80% Complete
+## Phase 3B: Tool 1 Frontend Development (Tracking) ✅ COMPLETED (100%)
 
 ### Authentication UI ✅ COMPLETED
 
@@ -481,33 +481,39 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Test on mobile devices (touch targets, responsive grid)
   - Test category preselection behavior
 
-### History UI
+### History UI ✅ COMPLETED
 
-- [ ] Create history page (`app/tools/tracking/history/page.tsx`)
+- [x] Create history page (`app/tools/tracking/history/page.tsx`)
   - Display recent actions in reverse chronological order
   - Show: staff name, action, item name, code, timestamp
-  - Implement pagination or infinite scroll (if many entries)
+  - Implement pagination (client-side, 20 items per page)
   - Update API calls to use `/api/tracking/history`
-- [ ] Fetch history data from backend
-- [ ] Add filters (optional: by user, by date range)
-- [ ] Test history display
+  - Desktop table + mobile card layout
+  - **Navigation**: "Back to Inventory" button added
+- [x] Fetch history data from backend
+- [x] Add filters (action type: All/Add/Remove)
+- [x] Test history display
+- [x] Add navigation between Inventory ↔ History
 
-### Global Admin Panel UI
+### Global Admin Panel UI ✅ COMPLETED
 
-- [ ] Create admin page (`app/admin/page.tsx`)
+- [x] Create admin page (`app/admin/page.tsx`)
   - **Note**: This is the global admin panel (not tool-specific)
   - Accessible from dashboard "Admin Panel" card
-  - Require admin role (redirect if not admin)
-  - Display all users in a table
-  - Show partner number, name, role, created date
-  - Uses `/api/auth/admin/*` or `/api/admin/*` endpoints
-- [ ] Add "Add User" form/modal
-  - Input for partner number
-  - Submit button
-- [ ] Add "Remove User" button for each user
-  - Confirmation dialog
-- [ ] Implement API calls for user management
-- [ ] Test admin functionality
+  - Require admin role (redirect if not admin via ProtectedRoute)
+  - Display all users in table (desktop) + cards (mobile)
+  - Show partner number, name, role badges, created date
+  - Uses `/api/admin/*` endpoints
+  - Stats cards (Total Users, Admin count)
+- [x] Add "Add User" form/modal (`components/admin/AddUserDialog.tsx`)
+  - Partner number, name, PIN (with confirmation), role selection
+  - Full validation (required fields, 4-digit PIN, PIN match)
+  - Auto-uppercase partner number
+- [x] Add "Remove User" button for each user (`components/admin/DeleteUserDialog.tsx`)
+  - Confirmation dialog with warning
+  - Self-deletion prevention with error message
+- [x] Implement API calls for user management
+- [x] Test admin functionality (production-ready)
 
 ### UI/UX Polish ✅ MOSTLY COMPLETED
 

@@ -7,6 +7,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
 import { Footer } from '@/components/shared/Footer';
@@ -22,9 +23,10 @@ import apiClient from '@/lib/api';
 import { HISTORY_PAGE_SIZE, HISTORY_MAX_FETCH } from '@/lib/constants';
 import type { HistoryEntry, HistoryAction } from '@/types';
 import { toast } from 'sonner';
-import { ChevronLeft, ChevronRight, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Trash2 } from 'lucide-react';
 
 export default function HistoryPage() {
+  const router = useRouter();
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionFilter, setActionFilter] = useState<HistoryAction | 'all'>('all');
@@ -100,6 +102,15 @@ export default function HistoryPage() {
           <div className="max-w-6xl mx-auto">
             {/* Header */}
             <div className="mb-6">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.push('/tools/tracking/inventory')}
+                className="mb-2"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Inventory
+              </Button>
               <h1 className="text-2xl md:text-3xl font-bold mb-2">Audit History</h1>
               <p className="text-gray-600">Complete record of all inventory actions</p>
             </div>

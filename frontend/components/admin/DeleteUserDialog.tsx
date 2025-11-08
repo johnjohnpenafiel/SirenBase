@@ -70,28 +70,31 @@ export function DeleteUserDialog({
           </DialogTitle>
           <DialogDescription>
             {isSelf ? (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-2">
-                <p className="text-sm text-yellow-800">
-                  ⚠️ You cannot delete your own account. Please ask another admin to remove your
-                  account if needed.
-                </p>
-              </div>
+              'You cannot delete your own account.'
             ) : (
-              <div className="mt-2">
-                <p className="mb-2">
-                  Are you sure you want to delete <strong>{user.name}</strong> (
-                  <span className="font-mono">{user.partner_number}</span>)?
-                </p>
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-3">
-                  <p className="text-sm text-red-800">
-                    ⚠️ <strong>Warning:</strong> This action cannot be undone. The user will
-                    immediately lose access to the system.
-                  </p>
-                </div>
-              </div>
+              <>
+                Are you sure you want to delete <strong>{user.name}</strong> (
+                <span className="font-mono">{user.partner_number}</span>)?
+              </>
             )}
           </DialogDescription>
         </DialogHeader>
+
+        {isSelf ? (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            <p className="text-sm text-yellow-800">
+              ⚠️ You cannot delete your own account. Please ask another admin to remove your
+              account if needed.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <p className="text-sm text-red-800">
+              ⚠️ <strong>Warning:</strong> This action cannot be undone. The user will
+              immediately lose access to the system.
+            </p>
+          </div>
+        )}
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={deleting}>

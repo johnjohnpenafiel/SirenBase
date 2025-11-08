@@ -168,29 +168,31 @@ export default function InventoryPage() {
                 </div>
               </div>
 
-              {/* View Toggle */}
-              <div className="flex gap-2">
-                <Button
-                  variant={viewMode === 'all' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => {
-                    setViewMode('all');
-                    setSelectedCategory(null);
-                  }}
-                >
-                  All Items
-                </Button>
-                <Button
-                  variant={viewMode === 'categories' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => {
-                    setViewMode('categories');
-                    setSelectedCategory(null);
-                  }}
-                >
-                  Categories
-                </Button>
-              </div>
+              {/* View Toggle - Only show when not in filtered category view */}
+              {viewMode !== 'filtered' && (
+                <div className="flex gap-2">
+                  <Button
+                    variant={viewMode === 'all' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => {
+                      setViewMode('all');
+                      setSelectedCategory(null);
+                    }}
+                  >
+                    All Items
+                  </Button>
+                  <Button
+                    variant={viewMode === 'categories' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => {
+                      setViewMode('categories');
+                      setSelectedCategory(null);
+                    }}
+                  >
+                    Categories
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Categories View */}

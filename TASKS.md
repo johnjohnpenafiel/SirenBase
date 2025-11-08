@@ -549,6 +549,86 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
+## Phase 3C: Naming Consistency Enhancement 🔄 IN PROGRESS (~50% Complete)
+
+**Started**: November 8, 2025
+**Goal**: Prevent item naming fragmentation through template-enhanced autocomplete without enforcing strict naming rules.
+
+**Context**: Solved the root problem by switching from grouped display to individual item display (unique codes are truth). Autocomplete provides consistency guidance without restricting flexibility.
+
+### Day 1: Simplify Display Logic ✅ COMPLETED (Nov 8, 2025)
+
+- [x] Remove `GroupedItem` type from `frontend/types/index.ts`
+- [x] Refactor `frontend/app/tools/tracking/inventory/page.tsx`
+  - Remove `groupedItems` useMemo logic
+  - Display items individually with unique codes
+  - Add inline "Remove" button per item
+  - Update `filteredItems` to work on Item[] directly
+- [x] Delete `ItemCodesDialog` component (no longer needed)
+- [x] Update category counts logic (count individual items, not groups)
+- [x] Test frontend build (verify no errors)
+- [x] **Commit**: 4c38ae3 - "Refactor: Display items individually (remove grouping logic)"
+
+### Day 2: Backend Autocomplete Infrastructure ✅ COMPLETED (Nov 8, 2025)
+
+- [x] Create database migration `2025110801_add_item_name_suggestions_table.py`
+  - Table: `item_name_suggestions` (id, name, category, created_at, updated_at)
+  - Index: `idx_suggestions_category_name` for fast queries
+  - Seed 49 common Starbucks items (8 syrups, 6 sauces, 5 coffee beans, 4 powders, 6 cups, 4 lids, 5 condiments, 6 cleaning supplies, 5 other)
+- [x] Create `ItemSuggestion` model (`backend/app/models/item_suggestion.py`)
+  - to_dict() method for serialization
+  - Add to models __init__.py
+- [x] Run migration (`flask db upgrade`)
+  - Verified 49 templates seeded successfully
+- [x] Add search endpoint to `backend/app/routes/tools/tracking.py`
+  - Route: `GET /api/tracking/items/search`
+  - Query params: q (search query), category (required), limit (optional, max 15)
+  - Returns combined results from existing items + template suggestions
+  - Existing items include code, templates marked as "template" source
+- [x] **Commit**: b590f42 - "Add backend support for autocomplete with template suggestions"
+
+### Day 3: Frontend Autocomplete Component ⏳ PENDING
+
+- [ ] Check if `debounce` utility exists in `frontend/lib/utils.ts`
+  - If not, add debounce function (300ms delay)
+- [ ] Create `ItemNameAutocomplete.tsx` component (`frontend/components/tools/tracking/`)
+  - Props: value, onChange, category, disabled, autoFocus
+  - State: suggestions[], showSuggestions, loading
+  - Debounced search after 2+ characters
+  - Dropdown with suggestions (min 44px touch targets)
+  - Highlight matching text in bold
+  - Show "Code: XXXX" for existing items, "Suggested" for templates
+  - Keyboard-friendly (arrow keys, Enter to select - optional)
+- [ ] Add `searchItemNames()` method to `frontend/lib/api.ts`
+  - `GET /api/tracking/items/search?q=${query}&category=${category}`
+  - Returns { suggestions: [...] }
+- [ ] Update `AddItemDialog.tsx` to use `ItemNameAutocomplete`
+  - Replace `<Input>` with `<ItemNameAutocomplete>`
+  - Pass category prop for filtering
+  - Maintain existing two-step flow
+
+### Day 4: Testing & Documentation ⏳ PENDING
+
+- [ ] **Backend tests** (`backend/tests/test_tracking.py`)
+  - Test search endpoint with existing items
+  - Test search endpoint with template suggestions
+  - Test combined results (existing + templates)
+  - Test min query length (2 chars)
+  - Test category filtering
+  - Test limit parameter
+- [ ] **Manual testing**
+  - Desktop browsers (Chrome, Firefox, Safari)
+  - Mobile devices (iOS Safari, Android Chrome)
+  - Slow network simulation (3G throttling)
+  - Touch interaction (tap suggestions, scroll)
+- [ ] **Update documentation**
+  - TASKS.md: Mark Phase 3C complete
+  - PLANNING.md: Update Tool 1 status to include autocomplete
+  - Planning/InventoryTracking.md: Add autocomplete section
+- [ ] **Final commit**: "Complete Phase 3C: Naming consistency with autocomplete"
+
+---
+
 ## Phase 4: Testing & Quality Assurance
 
 ### Backend Testing

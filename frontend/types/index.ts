@@ -149,14 +149,3 @@ export interface AuthState {
   loading: boolean;
   isAuthenticated: boolean;
 }
-
-// Grouped items for inventory display (e.g., "Vanilla Syrup" with multiple codes)
-export interface GroupedItem {
-  name: string;
-  category: ItemCategory;
-  codes: {
-    code: string;
-    id: string;
-    added_at: string;
-  }[];
-}

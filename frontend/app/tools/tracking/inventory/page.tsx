@@ -3,8 +3,8 @@
  *
  * Main inventory page with three view modes:
  * - Categories: Grid of category cards
- * - All: List of all items
- * - Filtered: Items filtered by selected category
+ * - All: List of all items (individual display)
+ * - Filtered: Items filtered by selected category (individual display)
  */
 'use client';
 
@@ -15,12 +15,11 @@ import { Header } from '@/components/shared/Header';
 import { Footer } from '@/components/shared/Footer';
 import { Button } from '@/components/ui/button';
 import { AddItemDialog } from '@/components/tools/tracking/AddItemDialog';
-import { ItemCodesDialog } from '@/components/tools/tracking/ItemCodesDialog';
 import apiClient from '@/lib/api';
 import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
-import type { Item, ItemCategory, GroupedItem } from '@/types';
+import type { Item, ItemCategory } from '@/types';
 import { toast } from 'sonner';
-import { ArrowLeft, Plus, History } from 'lucide-react';
+import { ArrowLeft, Plus, History, Trash2 } from 'lucide-react';
 
 type ViewMode = 'categories' | 'all' | 'filtered';
 
@@ -31,7 +30,7 @@ export default function InventoryPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('categories');
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<GroupedItem | null>(null);
+  const [removingCode, setRemovingCode] = useState<string | null>(null);
 
   // Fetch items on mount
   useEffect(() => {
@@ -50,34 +49,11 @@ export default function InventoryPage() {
     }
   };
 
-  // Group items by name and category
-  const groupedItems = useMemo(() => {
-    const groups: Record<string, GroupedItem> = {};
-
-    items.forEach(item => {
-      const key = `${item.name}-${item.category}`;
-      if (!groups[key]) {
-        groups[key] = {
-          name: item.name,
-          category: item.category,
-          codes: [],
-        };
-      }
-      groups[key].codes.push({
-        code: item.code,
-        id: item.id,
-        added_at: item.added_at,
-      });
-    });
-
-    return Object.values(groups);
-  }, [items]);
-
   // Filter items by category if in filtered mode
-  const filteredGroupedItems = useMemo(() => {
-    if (viewMode !== 'filtered' || !selectedCategory) return groupedItems;
-    return groupedItems.filter(item => item.category === selectedCategory);
-  }, [groupedItems, viewMode, selectedCategory]);
+  const filteredItems = useMemo(() => {
+    if (viewMode !== 'filtered' || !selectedCategory) return items;
+    return items.filter(item => item.category === selectedCategory);
+  }, [items, viewMode, selectedCategory]);
 
   // Count items per category
   const categoryCounts = useMemo(() => {
@@ -93,21 +69,33 @@ export default function InventoryPage() {
       other: 0,
     };
 
-    groupedItems.forEach(item => {
-      counts[item.category] += item.codes.length;
+    items.forEach(item => {
+      counts[item.category] += 1;
     });
 
     return counts;
-  }, [groupedItems]);
+  }, [items]);
 
   const handleItemAdded = () => {
     fetchItems(); // Refresh items after adding
     setAddDialogOpen(false);
   };
 
-  const handleItemRemoved = () => {
-    fetchItems(); // Refresh items after removing
-    setSelectedItem(null);
+  const handleRemoveItem = async (code: string) => {
+    if (!confirm(`Remove item with code ${code}?`)) {
+      return;
+    }
+
+    try {
+      setRemovingCode(code);
+      await apiClient.deleteItem(code);
+      toast.success('Item removed successfully');
+      fetchItems(); // Refresh list
+    } catch (error: any) {
+      toast.error('Failed to remove item');
+    } finally {
+      setRemovingCode(null);
+    }
   };
 
   const handleCategoryClick = (category: ItemCategory) => {
@@ -222,31 +210,39 @@ export default function InventoryPage() {
               </div>
             )}
 
-            {/* All Items / Filtered View */}
+            {/* All Items / Filtered View - Individual Display */}
             {(viewMode === 'all' || viewMode === 'filtered') && (
               <div className="space-y-3">
-                {filteredGroupedItems.length === 0 ? (
+                {filteredItems.length === 0 ? (
                   <div className="text-center py-12 text-gray-500">
                     <p>No items in inventory. Click "Add Item" to get started.</p>
                   </div>
                 ) : (
-                  filteredGroupedItems.map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedItem(item)}
-                      className="w-full p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-500 hover:shadow-md transition-all text-left"
+                  filteredItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="w-full p-4 bg-white rounded-lg border-2 border-gray-200 hover:shadow-md transition-all"
                     >
                       <div className="flex justify-between items-center">
-                        <div>
+                        <div className="flex-1">
                           <h3 className="font-semibold text-lg">{item.name}</h3>
                           <p className="text-sm text-gray-500">{formatCategory(item.category)}</p>
+                          <p className="text-sm font-mono font-bold text-blue-600 mt-1">
+                            Code: {item.code}
+                          </p>
                         </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-bold text-blue-600">{item.codes.length}x</p>
-                          <p className="text-xs text-gray-500">Click to view codes</p>
-                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleRemoveItem(item.code)}
+                          disabled={removingCode === item.code}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          {removingCode === item.code ? 'Removing...' : 'Remove'}
+                        </Button>
                       </div>
-                    </button>
+                    </div>
                   ))
                 )}
               </div>
@@ -255,22 +251,13 @@ export default function InventoryPage() {
         </main>
         <Footer />
 
-        {/* Dialogs */}
+        {/* Add Item Dialog */}
         <AddItemDialog
           open={addDialogOpen}
           onOpenChange={setAddDialogOpen}
           onItemAdded={handleItemAdded}
           preselectedCategory={viewMode === 'filtered' ? selectedCategory : null}
         />
-
-        {selectedItem && (
-          <ItemCodesDialog
-            item={selectedItem}
-            open={!!selectedItem}
-            onOpenChange={(open) => !open && setSelectedItem(null)}
-            onItemRemoved={handleItemRemoved}
-          />
-        )}
       </div>
     </ProtectedRoute>
   );

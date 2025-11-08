@@ -150,8 +150,8 @@ export default function InventoryPage() {
                       onClick={handleBackToCategories}
                       className="mb-2"
                     >
-                      <ArrowLeft className="h-4 w-4 mr-2" />
-                      Back to Categories
+                      <ArrowLeft className="h-4 w-4 md:mr-2" />
+                      <span className="hidden md:inline">Back to Categories</span>
                     </Button>
                   )}
                   <h1 className="text-2xl md:text-3xl font-bold">
@@ -166,12 +166,12 @@ export default function InventoryPage() {
                     variant="outline"
                     onClick={() => router.push('/tools/tracking/history')}
                   >
-                    <History className="h-4 w-4 mr-2" />
-                    History
+                    <History className="h-4 w-4 md:mr-2" />
+                    <span className="hidden md:inline">History</span>
                   </Button>
                   <Button onClick={() => setAddDialogOpen(true)}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Item
+                    <Plus className="h-4 w-4 md:mr-2" />
+                    <span className="hidden md:inline">Add Item</span>
                   </Button>
                 </div>
               </div>
@@ -248,8 +248,10 @@ export default function InventoryPage() {
                           disabled={removingCode === item.code}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          {removingCode === item.code ? 'Removing...' : 'Remove'}
+                          <Trash2 className="h-4 w-4 md:mr-2" />
+                          <span className="hidden md:inline">
+                            {removingCode === item.code ? 'Removing...' : 'Remove'}
+                          </span>
                         </Button>
                       </div>
                     </div>

@@ -108,8 +108,8 @@ export default function HistoryPage() {
                 onClick={() => router.push('/tools/tracking/inventory')}
                 className="mb-2"
               >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Inventory
+                <ArrowLeft className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Back to Inventory</span>
               </Button>
               <h1 className="text-2xl md:text-3xl font-bold mb-2">Audit History</h1>
               <p className="text-gray-600">Complete record of all inventory actions</p>
@@ -241,8 +241,8 @@ export default function HistoryPage() {
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         disabled={currentPage === 1}
                       >
-                        <ChevronLeft className="h-4 w-4 mr-1" />
-                        Previous
+                        <ChevronLeft className="h-4 w-4 md:mr-1" />
+                        <span className="hidden md:inline">Previous</span>
                       </Button>
                       <Button
                         variant="outline"
@@ -250,8 +250,8 @@ export default function HistoryPage() {
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                         disabled={currentPage === totalPages}
                       >
-                        Next
-                        <ChevronRight className="h-4 w-4 ml-1" />
+                        <span className="hidden md:inline">Next</span>
+                        <ChevronRight className="h-4 w-4 md:ml-1" />
                       </Button>
                     </div>
                   </div>

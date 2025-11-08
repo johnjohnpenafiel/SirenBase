@@ -17,7 +17,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   Select,
@@ -26,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { ItemNameAutocomplete } from '@/components/tools/tracking/ItemNameAutocomplete';
 import apiClient from '@/lib/api';
 import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
 import type { ItemCategory } from '@/types';
@@ -124,12 +124,10 @@ export function AddItemDialog({
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label htmlFor="itemName">Item Name</Label>
-                <Input
-                  id="itemName"
-                  placeholder="e.g., Vanilla Syrup"
+                <ItemNameAutocomplete
                   value={itemName}
-                  onChange={(e) => setItemName(e.target.value)}
-                  maxLength={255}
+                  onChange={setItemName}
+                  category={category}
                   disabled={loading}
                   autoFocus
                 />

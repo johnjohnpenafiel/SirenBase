@@ -107,6 +107,17 @@ export interface DeleteItemResponse {
   message: string;
 }
 
+// Item Search (Autocomplete)
+export interface ItemSuggestion {
+  name: string;
+  source: 'existing' | 'template';
+  code?: string; // Only present for 'existing' items
+}
+
+export interface SearchItemNamesResponse {
+  suggestions: ItemSuggestion[];
+}
+
 // History
 export interface GetHistoryResponse {
   history: HistoryEntry[];

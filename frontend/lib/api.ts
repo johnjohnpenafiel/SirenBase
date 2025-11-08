@@ -13,6 +13,7 @@ import type {
   CreateItemRequest,
   CreateItemResponse,
   DeleteItemResponse,
+  SearchItemNamesResponse,
   GetHistoryResponse,
   GetUsersResponse,
   CreateUserRequest,
@@ -127,6 +128,18 @@ class APIClient {
   async deleteItem(code: string): Promise<DeleteItemResponse> {
     const response = await this.client.delete<DeleteItemResponse>(
       `/api/tracking/items/${code}`
+    );
+    return response.data;
+  }
+
+  async searchItemNames(params: {
+    q: string;
+    category: ItemCategory;
+    limit?: number;
+  }): Promise<SearchItemNamesResponse> {
+    const response = await this.client.get<SearchItemNamesResponse>(
+      '/api/tracking/items/search',
+      { params }
     );
     return response.data;
   }

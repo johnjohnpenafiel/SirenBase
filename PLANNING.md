@@ -47,20 +47,21 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 ## Planned Tools
 
-### 🎯 Tool 1: Inventory Tracking System (CURRENT PHASE - ~80% Complete)
+### 🎯 Tool 1: Inventory Tracking System (CURRENT PHASE - ~95% Complete)
 
 **Purpose**: Track basement inventory items using unique 4-digit codes to eliminate physical trips during ordering.
 
 **Key Features**:
 
 - Add items with auto-generated unique codes
-- Remove items by selecting specific codes
-- View current inventory grouped by category (3 view modes)
+- **Autocomplete suggestions** for item names (combines existing items + 49 developer-managed templates)
+- Remove items by unique code (individual display, no grouping)
+- View current inventory with category filtering (3 view modes)
 - Category preselection for streamlined data entry
 - Complete audit history of all actions
 - Admin user management
 
-**Status**: Backend 100% complete (66/66 tests passing), Frontend 80% complete (authentication, dashboard, inventory UI implemented; history and admin panel pending)
+**Status**: Backend 100% complete (75/75 tests passing including autocomplete), Frontend 95% complete (authentication, dashboard, inventory UI with autocomplete implemented; history and admin panel pending)
 
 **Detailed Planning**: See `Planning/InventoryTracking.md`
 

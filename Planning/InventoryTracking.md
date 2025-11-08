@@ -42,9 +42,15 @@ A digital inventory system that:
 1. **Item Management**
 
    - Add items with auto-generated unique 4-digit codes
-   - Remove items by selecting specific codes
-   - View current inventory grouped by category
-   - Display all codes under each item type
+   - **Autocomplete suggestions** for item names during entry
+     - Combines existing items (with their codes) + 49 developer-managed templates
+     - Case-insensitive search with 300ms debounce
+     - Mobile-friendly dropdown (44px touch targets)
+     - Visual badges: "Existing" (green) vs "Suggested" (blue)
+     - Keyboard navigation support
+   - Remove items by unique code with inline "Remove" button
+   - View current inventory displayed individually (no grouping)
+   - Category filtering for focused viewing
 
 2. **Categorization**
 
@@ -211,6 +217,37 @@ notes             TEXT NULL
 - **Auth**: Required (JWT)
 - **Response**: Success message
 - **Side Effect**: Sets `is_removed=true`, creates history entry with action="REMOVE"
+
+**GET `/api/tracking/items/search`**
+
+- **Purpose**: Search item names for autocomplete suggestions
+- **Query Params**:
+  - `q` (required): Search query (min 2 characters)
+  - `category` (required): Category to filter by
+  - `limit` (optional, default 8, max 15): Max suggestions to return
+- **Auth**: Required (JWT)
+- **Response**:
+  ```json
+  {
+    "suggestions": [
+      {
+        "name": "Vanilla Syrup",
+        "source": "existing",
+        "code": "2847"
+      },
+      {
+        "name": "Vanilla Bean Syrup",
+        "source": "template"
+      }
+    ]
+  }
+  ```
+- **Logic**:
+  - Searches existing items (active only, `is_removed=false`) via case-insensitive ILIKE
+  - Searches template suggestions from `item_name_suggestions` table
+  - Returns up to 50% existing items (with codes), fills remaining with templates
+  - Deduplicates: if template name matches existing item, only shows existing
+- **Use Case**: Provides real-time autocomplete in Add Item dialog
 
 #### History Endpoints
 

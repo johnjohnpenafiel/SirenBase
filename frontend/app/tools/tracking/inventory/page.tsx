@@ -15,6 +15,7 @@ import { Header } from '@/components/shared/Header';
 import { Footer } from '@/components/shared/Footer';
 import { Button } from '@/components/ui/button';
 import { AddItemDialog } from '@/components/tools/tracking/AddItemDialog';
+import { RemoveItemDialog } from '@/components/tools/tracking/RemoveItemDialog';
 import apiClient from '@/lib/api';
 import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
 import type { Item, ItemCategory } from '@/types';
@@ -30,6 +31,8 @@ export default function InventoryPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('categories');
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+  const [itemToRemove, setItemToRemove] = useState<Item | null>(null);
   const [removingCode, setRemovingCode] = useState<string | null>(null);
 
   // Fetch items on mount
@@ -81,20 +84,25 @@ export default function InventoryPage() {
     setAddDialogOpen(false);
   };
 
-  const handleRemoveItem = async (code: string) => {
-    if (!confirm(`Remove item with code ${code}?`)) {
-      return;
-    }
+  const handleRemoveClick = (item: Item) => {
+    setItemToRemove(item);
+    setRemoveDialogOpen(true);
+  };
+
+  const handleConfirmRemove = async () => {
+    if (!itemToRemove) return;
 
     try {
-      setRemovingCode(code);
-      await apiClient.deleteItem(code);
+      setRemovingCode(itemToRemove.code);
+      await apiClient.deleteItem(itemToRemove.code);
       toast.success('Item removed successfully');
       fetchItems(); // Refresh list
+      setRemoveDialogOpen(false);
     } catch (error: any) {
       toast.error('Failed to remove item');
     } finally {
       setRemovingCode(null);
+      setItemToRemove(null);
     }
   };
 
@@ -236,7 +244,7 @@ export default function InventoryPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleRemoveItem(item.code)}
+                          onClick={() => handleRemoveClick(item)}
                           disabled={removingCode === item.code}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
@@ -260,6 +268,18 @@ export default function InventoryPage() {
           onItemAdded={handleItemAdded}
           preselectedCategory={viewMode === 'filtered' ? selectedCategory : null}
         />
+
+        {/* Remove Item Dialog */}
+        {itemToRemove && (
+          <RemoveItemDialog
+            open={removeDialogOpen}
+            onOpenChange={setRemoveDialogOpen}
+            itemName={itemToRemove.name}
+            itemCode={itemToRemove.code}
+            onConfirm={handleConfirmRemove}
+            isRemoving={removingCode === itemToRemove.code}
+          />
+        )}
       </div>
     </ProtectedRoute>
   );

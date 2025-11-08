@@ -64,6 +64,7 @@ Indexes:
 from app.models.user import User, UserRole
 from app.models.item import Item
 from app.models.history import History, HistoryAction
+from app.models.item_suggestion import ItemSuggestion
 
 __all__ = [
     'User',
@@ -71,4 +72,5 @@ __all__ = [
     'Item',
     'History',
     'HistoryAction',
+    'ItemSuggestion',
 ]

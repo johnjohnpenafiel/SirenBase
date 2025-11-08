@@ -11,6 +11,7 @@ from sqlalchemy.orm import joinedload
 
 from app.models.item import Item
 from app.models.history import History
+from app.models.item_suggestion import ItemSuggestion
 from app.schemas.item import ItemCreateSchema, ItemResponseSchema
 from app.extensions import db
 from app.utils.helpers import generate_unique_code
@@ -79,6 +80,81 @@ def get_items():
         "items": items_data,
         "count": len(items_data)
     }), 200
+
+
+@tracking_bp.route('/items/search', methods=['GET'])
+@jwt_required()
+def search_item_names():
+    """
+    Search item names for autocomplete suggestions.
+    Combines existing items + template suggestions.
+
+    Query Parameters:
+        q (required): Search query (min 2 characters)
+        category (required): Item category to filter by
+        limit (optional): Max results (default 8, max 15)
+
+    Returns:
+        200: {
+            "suggestions": [
+                {
+                    "name": "Vanilla Syrup",
+                    "source": "template"
+                },
+                {
+                    "name": "Vanilla Sauce",
+                    "source": "existing",
+                    "code": "1234"
+                }
+            ]
+        }
+        400: {"error": "Query too short" | "Category required"}
+        401: {"msg": "Missing Authorization Header"}
+    """
+    # Get query parameters
+    query = request.args.get('q', '').strip()
+    category = request.args.get('category', '').strip()
+    limit = min(int(request.args.get('limit', 8)), 15)
+
+    # Validation
+    if len(query) < 2:
+        return jsonify({"suggestions": []}), 200
+
+    if not category:
+        return jsonify({"error": "Category parameter required"}), 400
+
+    suggestions = []
+
+    # Search existing items (active only)
+    existing_items = db.session.query(Item.name, Item.code).filter(
+        Item.is_removed == False,
+        Item.name.ilike(f'%{query}%'),
+        Item.category == category
+    ).distinct(Item.name).limit(limit // 2).all()
+
+    for name, code in existing_items:
+        suggestions.append({
+            "name": name,
+            "source": "existing",
+            "code": code
+        })
+
+    # Search template suggestions
+    template_items = db.session.query(ItemSuggestion.name).filter(
+        ItemSuggestion.name.ilike(f'%{query}%'),
+        ItemSuggestion.category == category
+    ).limit(limit - len(suggestions)).all()
+
+    # Add templates (skip if already in existing)
+    existing_names = {s['name'] for s in suggestions}
+    for (name,) in template_items:
+        if name not in existing_names:
+            suggestions.append({
+                "name": name,
+                "source": "template"
+            })
+
+    return jsonify({"suggestions": suggestions}), 200
 
 
 @tracking_bp.route('/items', methods=['POST'])

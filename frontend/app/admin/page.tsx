@@ -90,8 +90,8 @@ export default function AdminPage() {
               <div className="flex justify-between items-center mb-2">
                 <h1 className="text-2xl md:text-3xl font-bold">Admin Panel</h1>
                 <Button onClick={() => setAddDialogOpen(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add User
+                  <Plus className="h-4 w-4 md:mr-2" />
+                  <span className="hidden md:inline">Add User</span>
                 </Button>
               </div>
               <p className="text-gray-600">Manage user accounts and access</p>

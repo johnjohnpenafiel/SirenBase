@@ -5,6 +5,12 @@
  * - Categories: Grid of category cards
  * - All: List of all items (individual display)
  * - Filtered: Items filtered by selected category (individual display)
+ *
+ * Follows DESIGN.md guidelines:
+ * - App-like scrolling (h-screen layout with overflow-y-auto)
+ * - Nature theme color tokens throughout
+ * - Adaptive buttons (icon-only on mobile)
+ * - Responsive grid layouts
  */
 'use client';
 
@@ -20,7 +26,7 @@ import apiClient from '@/lib/api';
 import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
 import type { Item, ItemCategory } from '@/types';
 import { toast } from 'sonner';
-import { ArrowLeft, Plus, History, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, History, Trash2, Loader2 } from 'lucide-react';
 
 type ViewMode = 'categories' | 'all' | 'filtered';
 
@@ -119,12 +125,12 @@ export default function InventoryPage() {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col h-screen">
           <Header />
           <main className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading inventory...</p>
+              <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading inventory...</p>
             </div>
           </main>
           <Footer />
@@ -135,10 +141,10 @@ export default function InventoryPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col h-screen">
         <Header />
-        <main className="flex-1 p-4 md:p-8">
-          <div className="max-w-6xl mx-auto">
+        <main className="flex-1 overflow-y-auto">
+          <div className="container max-w-6xl mx-auto p-4 md:p-8">
             {/* Header Section */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
@@ -154,7 +160,7 @@ export default function InventoryPage() {
                       <span className="hidden md:inline">Back to Categories</span>
                     </Button>
                   )}
-                  <h1 className="text-2xl md:text-3xl font-bold">
+                  <h1 className="text-2xl md:text-3xl font-bold text-foreground">
                     {viewMode === 'filtered' && selectedCategory
                       ? formatCategory(selectedCategory)
                       : 'Inventory Tracking'}
@@ -210,11 +216,13 @@ export default function InventoryPage() {
                   <button
                     key={category}
                     onClick={() => handleCategoryClick(category)}
-                    className="p-6 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-500 hover:shadow-md transition-all text-left"
+                    className="p-6 bg-card rounded-xl border-2 border-border hover:border-primary hover:shadow-md transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
-                    <h3 className="font-semibold text-lg mb-1">{formatCategory(category)}</h3>
-                    <p className="text-2xl font-bold text-blue-600">{categoryCounts[category]}</p>
-                    <p className="text-xs text-gray-500 mt-1">items</p>
+                    <h3 className="font-semibold text-lg mb-1 text-foreground">
+                      {formatCategory(category)}
+                    </h3>
+                    <p className="text-2xl font-bold text-primary">{categoryCounts[category]}</p>
+                    <p className="text-xs text-muted-foreground mt-1">items</p>
                   </button>
                 ))}
               </div>
@@ -224,20 +232,24 @@ export default function InventoryPage() {
             {(viewMode === 'all' || viewMode === 'filtered') && (
               <div className="space-y-3">
                 {filteredItems.length === 0 ? (
-                  <div className="text-center py-12 text-gray-500">
-                    <p>No items in inventory. Click "Add Item" to get started.</p>
+                  <div className="text-center py-12">
+                    <p className="text-muted-foreground">
+                      No items in inventory. Click "Add Item" to get started.
+                    </p>
                   </div>
                 ) : (
                   filteredItems.map((item) => (
                     <div
                       key={item.id}
-                      className="w-full p-4 bg-white rounded-lg border-2 border-gray-200 hover:shadow-md transition-all"
+                      className="w-full p-4 bg-card rounded-xl border-2 border-border hover:shadow-md transition-all"
                     >
                       <div className="flex justify-between items-center">
                         <div className="flex-1">
-                          <h3 className="font-semibold text-lg">{item.name}</h3>
-                          <p className="text-sm text-gray-500">{formatCategory(item.category)}</p>
-                          <p className="text-sm font-mono font-bold text-blue-600 mt-1">
+                          <h3 className="font-semibold text-lg text-foreground">{item.name}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            {formatCategory(item.category)}
+                          </p>
+                          <p className="text-sm font-mono font-bold text-primary mt-1">
                             Code: {item.code}
                           </p>
                         </div>
@@ -246,7 +258,7 @@ export default function InventoryPage() {
                           size="sm"
                           onClick={() => handleRemoveClick(item)}
                           disabled={removingCode === item.code}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          className="hover:border-destructive hover:text-destructive hover:bg-destructive/10"
                         >
                           <Trash2 className="h-4 w-4 md:mr-2" />
                           <span className="hidden md:inline">

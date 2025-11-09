@@ -2,56 +2,117 @@
  * Header Component
  *
  * Global navigation header shared across all pages.
- * Shows user info and navigation links when authenticated.
+ * Follows DESIGN.md adaptive interface guidelines:
+ * - Desktop: Full navigation with text labels
+ * - Mobile: Collapsed dropdown menu with icon-only buttons
+ * - Sticky positioning with backdrop blur for app-like feel
+ * - Uses Nature theme color tokens
  */
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useAuth } from '@/hooks/use-auth';
-import { Button } from '@/components/ui/button';
-import { LogOut, User } from 'lucide-react';
+import Link from "next/link";
+import { useAuth } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LogOut, User, Home, Menu } from "lucide-react";
 
 export function Header() {
   const { user, isAuthenticated, logout } = useAuth();
 
   return (
-    <header className="border-b bg-white">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto px-4 h-16 flex justify-between items-center">
+        {/* Logo / Brand */}
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold text-blue-600">SirenBase</h1>
+          <h1 className="text-xl font-bold text-foreground">SirenBase</h1>
         </div>
 
-        <nav className="flex items-center gap-4">
+        {/* Navigation */}
+        <nav className="flex items-center gap-2">
           {isAuthenticated ? (
             <>
-              <Link
-                href="/dashboard"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                Dashboard
-              </Link>
+              {/* Desktop Navigation - Full labels visible */}
+              <div className="hidden md:flex items-center gap-4">
+                <Link href="/dashboard">
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <Home className="h-4 w-4" />
+                    Dashboard
+                  </Button>
+                </Link>
 
-              <div className="flex items-center gap-2 border-l pl-4">
-                <User className="h-4 w-4 text-gray-500" />
-                <span className="text-sm font-medium text-gray-700">{user?.name}</span>
+                <div className="flex items-center gap-2 border-l border-border pl-4">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-foreground">
+                    {user?.name}
+                  </span>
+                </div>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={logout}
+                  className="gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </Button>
               </div>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={logout}
-                className="gap-2"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Logout</span>
-              </Button>
+              {/* Mobile Navigation - Dropdown menu with icon-only trigger */}
+              <div className="md:hidden flex items-center gap-2">
+                <Link href="/dashboard">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9"
+                    aria-label="Go to dashboard"
+                  >
+                    <Home className="h-5 w-5" />
+                  </Button>
+                </Link>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9"
+                      aria-label="Open menu"
+                    >
+                      <Menu className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <div className="px-2 py-1.5 text-sm font-semibold">
+                      {user?.name}
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard" className="cursor-pointer">
+                        <Home className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={logout} className="cursor-pointer">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </>
           ) : (
-            <Link
-              href="/login"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-            >
-              Login
+            <Link href="/login">
+              <Button variant="ghost" size="sm">
+                Login
+              </Button>
             </Link>
           )}
         </nav>

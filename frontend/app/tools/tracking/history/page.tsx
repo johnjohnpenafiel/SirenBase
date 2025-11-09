@@ -23,7 +23,7 @@ import apiClient from '@/lib/api';
 import { HISTORY_PAGE_SIZE, HISTORY_MAX_FETCH } from '@/lib/constants';
 import type { HistoryEntry, HistoryAction } from '@/types';
 import { toast } from 'sonner';
-import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Trash2, Loader2 } from 'lucide-react';
 
 export default function HistoryPage() {
   const router = useRouter();
@@ -80,12 +80,12 @@ export default function HistoryPage() {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col h-screen">
           <Header />
           <main className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading history...</p>
+              <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading history...</p>
             </div>
           </main>
           <Footer />
@@ -96,10 +96,10 @@ export default function HistoryPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col h-screen">
         <Header />
-        <main className="flex-1 p-4 md:p-8">
-          <div className="max-w-6xl mx-auto">
+        <main className="flex-1 overflow-y-auto">
+          <div className="container max-w-6xl mx-auto p-4 md:p-8">
             {/* Header */}
             <div className="mb-6">
               <Button
@@ -111,8 +111,8 @@ export default function HistoryPage() {
                 <ArrowLeft className="h-4 w-4 md:mr-2" />
                 <span className="hidden md:inline">Back to Inventory</span>
               </Button>
-              <h1 className="text-2xl md:text-3xl font-bold mb-2">Audit History</h1>
-              <p className="text-gray-600">Complete record of all inventory actions</p>
+              <h1 className="text-2xl md:text-3xl font-bold mb-2 text-foreground">Audit History</h1>
+              <p className="text-muted-foreground">Complete record of all inventory actions</p>
             </div>
 
             {/* Filters */}
@@ -133,63 +133,63 @@ export default function HistoryPage() {
                 </Select>
               </div>
 
-              <div className="flex-1 text-sm text-gray-600 flex items-center">
+              <div className="flex-1 text-sm text-muted-foreground flex items-center">
                 Showing {filteredHistory.length} {filteredHistory.length === 1 ? 'entry' : 'entries'}
               </div>
             </div>
 
             {/* History Table */}
             {paginatedHistory.length === 0 ? (
-              <div className="text-center py-12 bg-white rounded-lg border">
-                <p className="text-gray-500">No history entries found.</p>
+              <div className="text-center py-12 bg-card rounded-xl border border-border">
+                <p className="text-muted-foreground">No history entries found.</p>
               </div>
             ) : (
               <>
-                <div className="bg-white rounded-lg border overflow-hidden">
+                <div className="bg-card rounded-xl border border-border overflow-hidden">
                   {/* Desktop Table */}
                   <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">
-                      <thead className="bg-gray-50 border-b">
+                      <thead className="bg-muted border-b border-border">
                         <tr>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             Date & Time
                           </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             Partner
                           </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             Action
                           </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             Item
                           </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             Code
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-200">
+                      <tbody className="divide-y divide-border">
                         {paginatedHistory.map((entry) => (
-                          <tr key={entry.id} className="hover:bg-gray-50">
-                            <td className="px-4 py-3 text-sm text-gray-900">
+                          <tr key={entry.id} className="hover:bg-muted/50">
+                            <td className="px-4 py-3 text-sm text-foreground">
                               {formatDate(entry.timestamp)}
                             </td>
-                            <td className="px-4 py-3 text-sm text-gray-900">{entry.user_name}</td>
+                            <td className="px-4 py-3 text-sm text-foreground">{entry.user_name}</td>
                             <td className="px-4 py-3 text-sm">
                               {entry.action === 'ADD' ? (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
                                   <Plus className="h-3 w-3 mr-1" />
                                   Add
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-destructive/10 text-destructive">
                                   <Trash2 className="h-3 w-3 mr-1" />
                                   Remove
                                 </span>
                               )}
                             </td>
-                            <td className="px-4 py-3 text-sm text-gray-900">{entry.item_name}</td>
-                            <td className="px-4 py-3 text-sm font-mono font-semibold text-blue-600">
+                            <td className="px-4 py-3 text-sm text-foreground">{entry.item_name}</td>
+                            <td className="px-4 py-3 text-sm font-mono font-semibold text-primary">
                               {entry.item_code}
                             </td>
                           </tr>
@@ -199,25 +199,25 @@ export default function HistoryPage() {
                   </div>
 
                   {/* Mobile Cards */}
-                  <div className="md:hidden divide-y divide-gray-200">
+                  <div className="md:hidden divide-y divide-border">
                     {paginatedHistory.map((entry) => (
                       <div key={entry.id} className="p-4">
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <p className="font-semibold text-gray-900">{entry.item_name}</p>
-                            <p className="text-sm text-gray-600">{entry.user_name}</p>
+                            <p className="font-semibold text-foreground">{entry.item_name}</p>
+                            <p className="text-sm text-muted-foreground">{entry.user_name}</p>
                           </div>
-                          <div className="font-mono font-semibold text-blue-600">{entry.item_code}</div>
+                          <div className="font-mono font-semibold text-primary">{entry.item_code}</div>
                         </div>
                         <div className="flex justify-between items-center mt-2">
-                          <span className="text-xs text-gray-500">{formatDate(entry.timestamp)}</span>
+                          <span className="text-xs text-muted-foreground">{formatDate(entry.timestamp)}</span>
                           {entry.action === 'ADD' ? (
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
                               <Plus className="h-3 w-3 mr-1" />
                               Add
                             </span>
                           ) : (
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-destructive/10 text-destructive">
                               <Trash2 className="h-3 w-3 mr-1" />
                               Remove
                             </span>
@@ -231,7 +231,7 @@ export default function HistoryPage() {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <div className="flex items-center justify-between mt-6">
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-muted-foreground">
                       Page {currentPage} of {totalPages}
                     </div>
                     <div className="flex gap-2">

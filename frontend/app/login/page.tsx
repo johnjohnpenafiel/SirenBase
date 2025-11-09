@@ -45,7 +45,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Welcome to SirenBase</CardTitle>
@@ -85,7 +85,7 @@ export default function LoginPage() {
                 required
                 autoComplete="current-password"
               />
-              <p className="text-xs text-gray-500">Enter your 4-digit PIN</p>
+              <p className="text-xs text-muted-foreground">Enter your 4-digit PIN</p>
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>

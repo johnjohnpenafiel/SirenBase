@@ -44,7 +44,7 @@ export function RemoveItemDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Trash2 className="h-5 w-5 text-red-600" />
+            <Trash2 className="h-5 w-5 text-destructive" />
             Remove Item?
           </DialogTitle>
           <DialogDescription>
@@ -54,18 +54,18 @@ export function RemoveItemDialog({
 
         <div className="space-y-3">
           {/* Item details box */}
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+          <div className="bg-muted border border-border rounded-lg p-3">
             <div className="text-sm">
-              <p className="font-semibold text-gray-900">{itemName}</p>
-              <p className="text-gray-600 mt-1">
-                Code: <span className="font-mono font-medium">{itemCode}</span>
+              <p className="font-semibold text-foreground">{itemName}</p>
+              <p className="text-muted-foreground mt-1">
+                Code: <span className="font-mono font-medium text-primary">{itemCode}</span>
               </p>
             </div>
           </div>
 
           {/* Warning box */}
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-            <p className="text-sm text-amber-800 flex items-start gap-2">
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+            <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2">
               <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" />
               <span>
                 This action will mark the item as removed and create a history entry.
@@ -84,9 +84,10 @@ export function RemoveItemDialog({
             Cancel
           </Button>
           <Button
-            variant="destructive"
+            variant="outline"
             onClick={handleConfirm}
             disabled={isRemoving}
+            className="hover:border-destructive hover:text-destructive hover:bg-destructive/10"
           >
             {isRemoving ? 'Removing...' : 'Remove Item'}
           </Button>

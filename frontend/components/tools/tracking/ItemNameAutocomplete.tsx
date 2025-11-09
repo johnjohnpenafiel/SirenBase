@@ -168,7 +168,7 @@ export function ItemNameAutocomplete({
         />
         {loading && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
           </div>
         )}
       </div>
@@ -177,7 +177,7 @@ export function ItemNameAutocomplete({
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto"
+          className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-lg max-h-64 overflow-y-auto"
         >
           {suggestions.map((suggestion, index) => (
             <button
@@ -185,29 +185,29 @@ export function ItemNameAutocomplete({
               type="button"
               onClick={() => handleSelectSuggestion(suggestion)}
               className={`
-                w-full px-4 py-3 text-left hover:bg-gray-50 border-b last:border-b-0
+                w-full px-4 py-3 text-left hover:bg-muted border-b border-border last:border-b-0
                 min-h-[44px] flex items-center justify-between
-                ${selectedIndex === index ? 'bg-blue-50' : ''}
+                ${selectedIndex === index ? 'bg-primary/10' : ''}
               `}
               onMouseEnter={() => setSelectedIndex(index)}
             >
               <div className="flex-1">
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-foreground">
                   {suggestion.name}
                 </span>
                 {suggestion.source === 'existing' && suggestion.code && (
-                  <span className="ml-2 text-xs text-gray-500">
+                  <span className="ml-2 text-xs font-mono text-muted-foreground">
                     Code: {suggestion.code}
                   </span>
                 )}
               </div>
               <div className="ml-2">
                 {suggestion.source === 'template' ? (
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
                     Suggested
                   </span>
                 ) : (
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
                     Existing
                   </span>
                 )}
@@ -221,9 +221,9 @@ export function ItemNameAutocomplete({
       {showSuggestions && !loading && value.length >= 2 && suggestions.length === 0 && (
         <div
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg p-4"
+          className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-lg p-4"
         >
-          <p className="text-sm text-gray-500 text-center">
+          <p className="text-sm text-muted-foreground text-center">
             No suggestions found. You can still enter any name.
           </p>
         </div>

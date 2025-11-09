@@ -174,12 +174,12 @@ export function AddItemDialog({
 
             <div className="py-8">
               <div className="text-center">
-                <p className="text-sm text-gray-600 mb-2">Your 4-digit code:</p>
-                <div className="text-6xl font-bold text-blue-600 tracking-wider mb-4">
+                <p className="text-sm text-muted-foreground mb-2">Your 4-digit code:</p>
+                <div className="text-6xl font-bold font-mono text-primary tracking-wider mb-4">
                   {generatedCode}
                 </div>
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-yellow-800">
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mt-4">
+                  <p className="text-sm text-amber-900 dark:text-amber-200">
                     ⚠️ <strong>Important:</strong> Write this code on the item before confirming.
                     Once confirmed, the item will be added to your inventory.
                   </p>

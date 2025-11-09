@@ -65,7 +65,7 @@ export function DeleteUserDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-red-600" />
+            <AlertTriangle className="h-5 w-5 text-muted-foreground" />
             Delete User?
           </DialogTitle>
           <DialogDescription>
@@ -81,15 +81,15 @@ export function DeleteUserDialog({
         </DialogHeader>
 
         {isSelf ? (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-            <p className="text-sm text-yellow-800">
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+            <p className="text-sm text-amber-900 dark:text-amber-200">
               ⚠️ You cannot delete your own account. Please ask another admin to remove your
               account if needed.
             </p>
           </div>
         ) : (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-            <p className="text-sm text-red-800">
+          <div className="bg-muted border border-border rounded-lg p-3">
+            <p className="text-sm text-muted-foreground">
               ⚠️ <strong>Warning:</strong> This action cannot be undone. The user will
               immediately lose access to the system.
             </p>
@@ -102,9 +102,10 @@ export function DeleteUserDialog({
           </Button>
           {!isSelf && (
             <Button
-              variant="destructive"
+              variant="outline"
               onClick={handleDelete}
               disabled={deleting}
+              className="hover:border-destructive hover:text-destructive hover:bg-destructive/10"
             >
               {deleting ? 'Deleting...' : 'Delete User'}
             </Button>

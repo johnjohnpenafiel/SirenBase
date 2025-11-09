@@ -23,6 +23,20 @@ The real problem is when users intend to add an item to the same group (for exam
 
 ---
 
+### MOBILE ICON IMPROVEMENTS
+
+When in mobile view hide name for buttons and just show icons, where it make sense for better space usage.
+For example:
+instead of [(Delete Icon) Delete] just [(Delete Icon)]
+instead of [(History Icon) History] just [(History Icon)]
+instead of [(Back to Inventory Icon) Back to Inventory] just [(Back to Inventory Icon)]
+
+### HEADER/NAVBAR
+
+This section needs work, mainly it needs spacing and removing unnecessary user naming at least on mobile view. Keep icon.
+Logout button could be from a drop down when clicking on the profile icon on the header to save more space.
+Profile icon could have more functionality in the future.
+
 ## 🥛 MILK COUNT
 
 ---

@@ -179,7 +179,7 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
                   <SelectItem value="admin">Admin</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Admins have full access to all features and user management
               </p>
             </div>

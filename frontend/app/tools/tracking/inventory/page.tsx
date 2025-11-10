@@ -143,10 +143,10 @@ export default function InventoryPage() {
     <ProtectedRoute>
       <div className="flex flex-col h-screen">
         <Header />
-        <main className="flex-1 overflow-y-auto">
-          <div className="container max-w-6xl mx-auto p-4 md:p-8">
-            {/* Header Section */}
-            <div className="mb-6">
+        <main className="flex-1 flex flex-col overflow-hidden">
+          {/* Fixed Header Section */}
+          <div className="border-b border-border">
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   {viewMode === 'filtered' && selectedCategory && (
@@ -208,69 +208,74 @@ export default function InventoryPage() {
                 </div>
               )}
             </div>
+          </div>
 
-            {/* Categories View */}
-            {viewMode === 'categories' && (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {ITEM_CATEGORIES.map(category => (
-                  <button
-                    key={category}
-                    onClick={() => handleCategoryClick(category)}
-                    className="p-6 bg-card rounded-xl border-2 border-border hover:border-primary hover:shadow-md transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  >
-                    <h3 className="font-semibold text-lg mb-1 text-foreground">
-                      {formatCategory(category)}
-                    </h3>
-                    <p className="text-2xl font-bold text-primary">{categoryCounts[category]}</p>
-                    <p className="text-xs text-muted-foreground mt-1">items</p>
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* All Items / Filtered View - Individual Display */}
-            {(viewMode === 'all' || viewMode === 'filtered') && (
-              <div className="space-y-3">
-                {filteredItems.length === 0 ? (
-                  <div className="text-center py-12">
-                    <p className="text-muted-foreground">
-                      No items in inventory. Click "Add Item" to get started.
-                    </p>
-                  </div>
-                ) : (
-                  filteredItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="w-full p-4 bg-card rounded-xl border-2 border-border hover:shadow-md transition-all"
+          {/* Scrollable Content Area - ONLY this scrolls */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+              {/* Categories View */}
+              {viewMode === 'categories' && (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {ITEM_CATEGORIES.map(category => (
+                    <button
+                      key={category}
+                      onClick={() => handleCategoryClick(category)}
+                      className="p-6 bg-card rounded-xl border-2 border-border hover:border-primary hover:shadow-md transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     >
-                      <div className="flex justify-between items-center">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg text-foreground">{item.name}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {formatCategory(item.category)}
-                          </p>
-                          <p className="text-sm font-mono font-bold text-primary mt-1">
-                            Code: {item.code}
-                          </p>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleRemoveClick(item)}
-                          disabled={removingCode === item.code}
-                          className="hover:border-destructive hover:text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-4 w-4 md:mr-2" />
-                          <span className="hidden md:inline">
-                            {removingCode === item.code ? 'Removing...' : 'Remove'}
-                          </span>
-                        </Button>
-                      </div>
+                      <h3 className="font-semibold text-lg mb-1 text-foreground">
+                        {formatCategory(category)}
+                      </h3>
+                      <p className="text-2xl font-bold text-primary">{categoryCounts[category]}</p>
+                      <p className="text-xs text-muted-foreground mt-1">items</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* All Items / Filtered View - Individual Display */}
+              {(viewMode === 'all' || viewMode === 'filtered') && (
+                <div className="space-y-3">
+                  {filteredItems.length === 0 ? (
+                    <div className="text-center py-12">
+                      <p className="text-muted-foreground">
+                        No items in inventory. Click "Add Item" to get started.
+                      </p>
                     </div>
-                  ))
-                )}
-              </div>
-            )}
+                  ) : (
+                    filteredItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="w-full p-4 bg-card rounded-xl border-2 border-border hover:shadow-md transition-all"
+                      >
+                        <div className="flex justify-between items-center">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-lg text-foreground">{item.name}</h3>
+                            <p className="text-sm text-muted-foreground">
+                              {formatCategory(item.category)}
+                            </p>
+                            <p className="text-sm font-mono font-bold text-primary mt-1">
+                              Code: {item.code}
+                            </p>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleRemoveClick(item)}
+                            disabled={removingCode === item.code}
+                            className="hover:border-destructive hover:text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="h-4 w-4 md:mr-2" />
+                            <span className="hidden md:inline">
+                              {removingCode === item.code ? 'Removing...' : 'Remove'}
+                            </span>
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </main>
         <Footer />

@@ -95,6 +95,13 @@ Each tool operates independently with its own features, while sharing authentica
    - `frontend/CLAUDE.md` for Next.js work (when created)
    - `backend/CLAUDE.md` for Flask work (when created)
 
+6. **ALWAYS read `DESIGN.md`** when working on UI/frontend
+
+   - Visual design tokens (colors, typography, spacing)
+   - Component patterns and variants
+   - Adaptive interface guidelines (mobile/desktop)
+   - Accessibility requirements
+
 ## 🔒 Security Principles
 
 ### Authentication & Authorization
@@ -494,6 +501,7 @@ npm run dev
 ### Context Management
 
 - Read essential files (PLANNING.md, TASKS.md, component CLAUDE.md)
+- **Read DESIGN.md for ALL UI/component work** (pages, components, styling)
 - Confirm file paths and module names exist
 - Reference actual code when suggesting changes
 
@@ -525,6 +533,7 @@ npm run dev
 
 ### Internal Docs
 
+- **Design System**: `DESIGN.md` - **READ BEFORE ALL UI WORK** - Visual design, components, patterns, accessibility
 - **Overall Architecture**: See `PLANNING.md` (multi-tool system design)
 - **Tool-Specific Planning**:
   - Tool 1: `Planning/InventoryTracking.md`
@@ -537,6 +546,6 @@ npm run dev
 
 ---
 
-**Last Updated**: January 5, 2025
-**Version**: 2.1.0 - Bug Tracking Integration
+**Last Updated**: November 9, 2025
+**Version**: 2.2.0 - DESIGN.md Integration
 **Maintainer**: Development Team

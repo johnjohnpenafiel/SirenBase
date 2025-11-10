@@ -83,10 +83,10 @@ export default function AdminPage() {
     <ProtectedRoute requireAdmin>
       <div className="flex flex-col h-screen">
         <Header />
-        <main className="flex-1 overflow-y-auto">
-          <div className="container max-w-6xl mx-auto p-4 md:p-8">
-            {/* Header */}
-            <div className="mb-6">
+        <main className="flex-1 flex flex-col overflow-hidden">
+          {/* Fixed Header Section */}
+          <div className="border-b border-border">
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <div className="flex justify-between items-center mb-2">
                 <h1 className="text-2xl md:text-3xl font-bold text-foreground">Admin Panel</h1>
                 <Button onClick={() => setAddDialogOpen(true)}>
@@ -96,8 +96,12 @@ export default function AdminPage() {
               </div>
               <p className="text-muted-foreground">Manage user accounts and access</p>
             </div>
+          </div>
 
-            {/* Users Table */}
+          {/* Scrollable Content Area - ONLY this scrolls */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+              {/* Users Table */}
             <div className="bg-card rounded-xl border border-border overflow-hidden">
               {/* Desktop Table */}
               <div className="hidden md:block overflow-x-auto">
@@ -209,6 +213,7 @@ export default function AdminPage() {
                   {users.filter(u => u.role === 'admin').length}
                 </p>
               </div>
+            </div>
             </div>
           </div>
         </main>

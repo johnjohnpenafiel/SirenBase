@@ -4,32 +4,41 @@
  * Displays audit trail of all inventory actions (ADD/REMOVE).
  * Includes client-side pagination and filtering.
  */
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Header } from "@/components/shared/Header";
+import { Footer } from "@/components/shared/Footer";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import apiClient from '@/lib/api';
-import { HISTORY_PAGE_SIZE, HISTORY_MAX_FETCH } from '@/lib/constants';
-import type { HistoryEntry, HistoryAction } from '@/types';
-import { toast } from 'sonner';
-import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Trash2, Loader2 } from 'lucide-react';
+} from "@/components/ui/select";
+import apiClient from "@/lib/api";
+import { HISTORY_PAGE_SIZE, HISTORY_MAX_FETCH } from "@/lib/constants";
+import type { HistoryEntry, HistoryAction } from "@/types";
+import { toast } from "sonner";
+import {
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Trash2,
+  Loader2,
+} from "lucide-react";
 
 export default function HistoryPage() {
   const router = useRouter();
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [actionFilter, setActionFilter] = useState<HistoryAction | 'all'>('all');
+  const [actionFilter, setActionFilter] = useState<HistoryAction | "all">(
+    "all"
+  );
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -42,7 +51,7 @@ export default function HistoryPage() {
       const response = await apiClient.getHistory({ limit: HISTORY_MAX_FETCH });
       setHistory(response.history);
     } catch (error: any) {
-      toast.error('Failed to load history');
+      toast.error("Failed to load history");
     } finally {
       setLoading(false);
     }
@@ -50,8 +59,8 @@ export default function HistoryPage() {
 
   // Filter by action
   const filteredHistory = useMemo(() => {
-    if (actionFilter === 'all') return history;
-    return history.filter(entry => entry.action === actionFilter);
+    if (actionFilter === "all") return history;
+    return history.filter((entry) => entry.action === actionFilter);
   }, [history, actionFilter]);
 
   // Pagination
@@ -67,12 +76,12 @@ export default function HistoryPage() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
       hour12: true,
     }).format(date);
   };
@@ -98,50 +107,62 @@ export default function HistoryPage() {
     <ProtectedRoute>
       <div className="flex flex-col h-screen">
         <Header />
-        <main className="flex-1 overflow-y-auto">
-          <div className="container max-w-6xl mx-auto p-4 md:p-8">
-            {/* Header */}
-            <div className="mb-6">
+        <main className="flex-1 flex flex-col overflow-hidden">
+          {/* Fixed Header Section */}
+          <div className="border-b border-border">
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => router.push('/tools/tracking/inventory')}
+                onClick={() => router.push("/tools/tracking/inventory")}
                 className="mb-2"
               >
                 <ArrowLeft className="h-4 w-4 md:mr-2" />
                 <span className="hidden md:inline">Back to Inventory</span>
               </Button>
-              <h1 className="text-2xl md:text-3xl font-bold mb-2 text-foreground">Audit History</h1>
-              <p className="text-muted-foreground">Complete record of all inventory actions</p>
-            </div>
+              <h1 className="text-2xl md:text-3xl font-bold mb-2 text-foreground">
+                Audit History
+              </h1>
+              <p className="text-muted-foreground mb-4">
+                Complete record of all inventory actions
+              </p>
 
-            {/* Filters */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <div className="w-full sm:w-48">
-                <Select
-                  value={actionFilter}
-                  onValueChange={(value) => setActionFilter(value as HistoryAction | 'all')}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Filter by action" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Actions</SelectItem>
-                    <SelectItem value="ADD">Add Only</SelectItem>
-                    <SelectItem value="REMOVE">Remove Only</SelectItem>
-                  </SelectContent>
-                </Select>
+              {/* Filters */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="w-full sm:w-48">
+                  <Select
+                    value={actionFilter}
+                    onValueChange={(value) =>
+                      setActionFilter(value as HistoryAction | "all")
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Filter by action" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Actions</SelectItem>
+                      <SelectItem value="ADD">Add Only</SelectItem>
+                      <SelectItem value="REMOVE">Remove Only</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex-1 text-sm text-muted-foreground flex items-center">
+                  Showing {filteredHistory.length}{" "}
+                  {filteredHistory.length === 1 ? "entry" : "entries"}
+                </div>
               </div>
-
-              <div className="flex-1 text-sm text-muted-foreground flex items-center">
-                Showing {filteredHistory.length} {filteredHistory.length === 1 ? 'entry' : 'entries'}
-              </div>
             </div>
+          </div>
 
-            {/* History Table */}
-            {paginatedHistory.length === 0 ? (
+          {/* Scrollable Content Area - ONLY this scrolls */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+              {paginatedHistory.length === 0 ? (
               <div className="text-center py-12 bg-card rounded-xl border border-border">
-                <p className="text-muted-foreground">No history entries found.</p>
+                <p className="text-muted-foreground">
+                  No history entries found.
+                </p>
               </div>
             ) : (
               <>
@@ -174,9 +195,11 @@ export default function HistoryPage() {
                             <td className="px-4 py-3 text-sm text-foreground">
                               {formatDate(entry.timestamp)}
                             </td>
-                            <td className="px-4 py-3 text-sm text-foreground">{entry.user_name}</td>
+                            <td className="px-4 py-3 text-sm text-foreground">
+                              {entry.user_name}
+                            </td>
                             <td className="px-4 py-3 text-sm">
-                              {entry.action === 'ADD' ? (
+                              {entry.action === "ADD" ? (
                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
                                   <Plus className="h-3 w-3 mr-1" />
                                   Add
@@ -188,7 +211,9 @@ export default function HistoryPage() {
                                 </span>
                               )}
                             </td>
-                            <td className="px-4 py-3 text-sm text-foreground">{entry.item_name}</td>
+                            <td className="px-4 py-3 text-sm text-foreground">
+                              {entry.item_name}
+                            </td>
                             <td className="px-4 py-3 text-sm font-mono font-semibold text-primary">
                               {entry.item_code}
                             </td>
@@ -204,14 +229,22 @@ export default function HistoryPage() {
                       <div key={entry.id} className="p-4">
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <p className="font-semibold text-foreground">{entry.item_name}</p>
-                            <p className="text-sm text-muted-foreground">{entry.user_name}</p>
+                            <p className="font-semibold text-foreground">
+                              {entry.item_name}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {entry.user_name}
+                            </p>
                           </div>
-                          <div className="font-mono font-semibold text-primary">{entry.item_code}</div>
+                          <div className="font-mono font-semibold text-primary">
+                            {entry.item_code}
+                          </div>
                         </div>
                         <div className="flex justify-between items-center mt-2">
-                          <span className="text-xs text-muted-foreground">{formatDate(entry.timestamp)}</span>
-                          {entry.action === 'ADD' ? (
+                          <span className="text-xs text-muted-foreground">
+                            {formatDate(entry.timestamp)}
+                          </span>
+                          {entry.action === "ADD" ? (
                             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
                               <Plus className="h-3 w-3 mr-1" />
                               Add
@@ -238,7 +271,9 @@ export default function HistoryPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        onClick={() =>
+                          setCurrentPage((p) => Math.max(1, p - 1))
+                        }
                         disabled={currentPage === 1}
                       >
                         <ChevronLeft className="h-4 w-4 md:mr-1" />
@@ -247,7 +282,9 @@ export default function HistoryPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        onClick={() =>
+                          setCurrentPage((p) => Math.min(totalPages, p + 1))
+                        }
                         disabled={currentPage === totalPages}
                       >
                         <span className="hidden md:inline">Next</span>
@@ -258,6 +295,7 @@ export default function HistoryPage() {
                 )}
               </>
             )}
+            </div>
           </div>
         </main>
         <Footer />

@@ -3,8 +3,8 @@
  *
  * Global navigation header shared across all pages.
  * Follows DESIGN.md adaptive interface guidelines:
- * - Desktop: Full navigation with text labels
- * - Mobile: Collapsed dropdown menu with icon-only buttons
+ * - Desktop: Dashboard button + User icon with name → dropdown with Logout
+ * - Mobile: Dashboard icon + User icon only → dropdown with Logout
  * - Sticky positioning with backdrop blur for app-like feel
  * - Uses Nature theme color tokens
  */
@@ -17,10 +17,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, Home, Menu } from "lucide-react";
+import { LogOut, User, Home } from "lucide-react";
 
 export function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -37,76 +36,36 @@ export function Header() {
         <nav className="flex items-center gap-2">
           {isAuthenticated ? (
             <>
-              {/* Desktop Navigation - Full labels visible */}
-              <div className="hidden md:flex items-center gap-4">
-                <Link href="/dashboard">
-                  <Button variant="ghost" size="sm" className="gap-2">
-                    <Home className="h-4 w-4" />
-                    Dashboard
-                  </Button>
-                </Link>
-
-                <div className="flex items-center gap-2 border-l border-border pl-4">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium text-foreground">
-                    {user?.name}
-                  </span>
-                </div>
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={logout}
-                  className="gap-2"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
+              {/* Dashboard Link - Always visible */}
+              <Link href="/dashboard">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <Home className="h-4 w-4 md:mr-2" />
+                  <span className="hidden md:inline">Dashboard</span>
                 </Button>
-              </div>
+              </Link>
 
-              {/* Mobile Navigation - Dropdown menu with icon-only trigger */}
-              <div className="md:hidden flex items-center gap-2">
-                <Link href="/dashboard">
+              {/* User Dropdown - Adaptive (icon+name on desktop, icon only on mobile) */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    size="icon"
-                    className="h-9 w-9"
-                    aria-label="Go to dashboard"
+                    size="sm"
+                    className="gap-2"
+                    aria-label="User menu"
                   >
-                    <Home className="h-5 w-5" />
-                  </Button>
-                </Link>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-9 w-9"
-                      aria-label="Open menu"
-                    >
-                      <Menu className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <div className="px-2 py-1.5 text-sm font-semibold">
+                    <User className="h-4 w-4 md:mr-2" />
+                    <span className="hidden md:inline text-sm font-medium">
                       {user?.name}
-                    </div>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/dashboard" className="cursor-pointer">
-                        <Home className="h-4 w-4 mr-2" />
-                        Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={logout} className="cursor-pointer">
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={logout} className="cursor-pointer">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             <Link href="/login">

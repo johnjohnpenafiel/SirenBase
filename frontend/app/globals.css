@@ -181,4 +181,10 @@
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
   }
+  /* iOS momentum scrolling for smooth scroll behavior */
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+  }
 }

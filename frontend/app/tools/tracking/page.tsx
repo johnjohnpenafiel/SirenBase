@@ -7,6 +7,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 export default function TrackingToolPage() {
   const router = useRouter();
@@ -20,8 +21,8 @@ export default function TrackingToolPage() {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="text-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600">Loading inventory...</p>
+        <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+        <p className="text-muted-foreground">Loading inventory...</p>
       </div>
     </div>
   );

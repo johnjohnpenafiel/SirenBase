@@ -145,7 +145,7 @@ export default function InventoryPage() {
         <Header />
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Fixed Header Section */}
-          <div className="border-b border-border">
+          <div>
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <div className="flex items-center justify-between mb-4">
                 <div>

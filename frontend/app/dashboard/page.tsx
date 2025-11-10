@@ -9,18 +9,18 @@
  * - Nature theme color tokens
  * - Responsive grid (1/2/3 columns)
  */
-'use client';
+"use client";
 
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
-import { ToolCard } from '@/components/shared/ToolCard';
-import { useAuth } from '@/hooks/use-auth';
-import { Package, Milk, Box, ShieldCheck } from 'lucide-react';
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Header } from "@/components/shared/Header";
+import { Footer } from "@/components/shared/Footer";
+import { ToolCard } from "@/components/shared/ToolCard";
+import { useAuth } from "@/hooks/use-auth";
+import { Package, Milk, Box, ShieldCheck } from "lucide-react";
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === "admin";
 
   return (
     <ProtectedRoute>
@@ -29,9 +29,11 @@ export default function DashboardPage() {
         <main className="flex-1 overflow-y-auto">
           <div className="container max-w-6xl mx-auto p-4 md:p-8">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold mb-2 text-foreground">SirenBase Dashboard</h1>
+              <h1 className="text-3xl font-bold mb-2 text-foreground">
+                Dashboard
+              </h1>
               <p className="text-muted-foreground">
-                Welcome back, {user?.name || 'Partner'}! Select a tool to get started.
+                Welcome back, {user?.name || "Partner"}!
               </p>
             </div>
 

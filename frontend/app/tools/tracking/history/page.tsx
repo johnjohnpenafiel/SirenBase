@@ -109,7 +109,7 @@ export default function HistoryPage() {
         <Header />
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Fixed Header Section */}
-          <div className="border-b border-border">
+          <div>
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <Button
                 variant="ghost"

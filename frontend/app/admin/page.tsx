@@ -85,7 +85,7 @@ export default function AdminPage() {
         <Header />
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Fixed Header Section */}
-          <div className="border-b border-border">
+          <div>
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <div className="flex justify-between items-center mb-2">
                 <h1 className="text-2xl md:text-3xl font-bold text-foreground">Admin Panel</h1>

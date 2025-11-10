@@ -1108,76 +1108,224 @@ a:focus-visible {
 
 ### Scrolling Behavior (App-Like Experience)
 
-**Design Guideline**: Use **contained (in-place) scrolling** instead of full-page scrolling. The overall layout should remain fixed, with only the relevant section scrolling within its boundaries.
+**Design Guideline**: Use **in-place list scrolling** with the "infinity pool" effect. ONLY the data list/grid scrolls, while all controls (title, buttons, filters) remain fixed and visible.
 
-**Why**: This gives the interface the feel of a native app rather than a traditional website — more focused, stable, and self-contained.
+**Why**:
+- Creates a focused, app-like experience with stable navigation
+- Controls always accessible without scrolling back up
+- Seamless visual flow without borders creates a polished, modern aesthetic
+- Mobile-friendly: action buttons never scroll out of reach
 
-#### Implementation Pattern
+**The "Infinity Pool" Effect**: No visual border between fixed controls and scrollable content. The list appears to flow seamlessly from the controls, creating the illusion of infinite content that extends naturally from the interface.
 
-**Fixed Layout Structure**:
+#### Implementation Pattern (STANDARD FOR ALL PAGES)
+
+**Structure Overview**:
 ```tsx
 <div className="flex flex-col h-screen">
-  {/* Header - Fixed */}
-  <header className="sticky top-0 z-50 border-b bg-background">
-    <div className="h-16 px-4">
-      {/* Navigation */}
-    </div>
-  </header>
+  {/* Global Header - Fixed */}
+  <Header />
 
-  {/* Main Content - Scrollable Container */}
-  <main className="flex-1 overflow-y-auto">
-    <div className="container max-w-4xl p-4">
-      {/* Page content scrolls here */}
+  {/* Main Content - Uses flex-col with overflow-hidden */}
+  <main className="flex-1 flex flex-col overflow-hidden">
+
+    {/* Fixed Controls Section - NO BORDER! */}
+    <div>
+      <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
+        {/* Title, buttons, filters, toggles - ALL FIXED */}
+        <h1>Page Title</h1>
+        <div>{/* Action buttons */}</div>
+        <div>{/* Filters or view toggles */}</div>
+      </div>
     </div>
+
+    {/* Scrollable Data Area - ONLY THIS SCROLLS */}
+    <div className="flex-1 overflow-y-auto">
+      <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+        {/* Categories grid, items list, table, etc. */}
+        {/* This is the ONLY part that scrolls */}
+      </div>
+    </div>
+
   </main>
 
-  {/* Footer or Bottom Nav - Fixed (optional) */}
-  <footer className="sticky bottom-0 border-t bg-background">
-    <div className="h-16 px-4">
-      {/* Actions or navigation */}
-    </div>
-  </footer>
+  {/* Footer - Fixed */}
+  <Footer />
 </div>
 ```
 
-#### Key Techniques
+#### Key Implementation Rules
 
-**1. Fixed Height Container with Overflow**:
+**1. Main Element Structure**:
+- Use `flex-1 flex flex-col overflow-hidden` on `<main>`
+- This creates a flex container that prevents the entire main from scrolling
+
+**2. Fixed Controls Section**:
+- Wrap in a plain `<div>` (no border-b!)
+- Contains: page title, action buttons, filters, view toggles
+- Uses container for max-width but NO padding-bottom (seamless transition)
+
+**3. Scrollable List Section**:
+- Use `flex-1 overflow-y-auto` to make it scrollable
+- Contains: data grid/list, pagination, empty states
+- Nested container with py-6 for proper spacing
+
+**4. No Borders Between Sections**:
+- ❌ DO NOT use `border-b border-border` on fixed section
+- ✅ Let content flow seamlessly (infinity pool effect)
+
+#### Real-World Examples
+
+**Example 1: Inventory Page**:
 ```tsx
-// List of inventory items with contained scrolling
-<div className="h-[600px] overflow-y-auto border rounded-lg">
-  {items.map(item => (
-    <ItemCard key={item.id} {...item} />
-  ))}
-</div>
+export default function InventoryPage() {
+  return (
+    <ProtectedRoute>
+      <div className="flex flex-col h-screen">
+        <Header />
+        <main className="flex-1 flex flex-col overflow-hidden">
+
+          {/* Fixed Controls - Title + Buttons + Toggles */}
+          <div>
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
+              <div className="flex items-center justify-between mb-4">
+                <h1 className="text-2xl md:text-3xl font-bold">
+                  Inventory Tracking
+                </h1>
+                <div className="flex gap-2">
+                  <Button variant="outline">
+                    <History className="h-4 w-4 md:mr-2" />
+                    <span className="hidden md:inline">History</span>
+                  </Button>
+                  <Button>
+                    <Plus className="h-4 w-4 md:mr-2" />
+                    <span className="hidden md:inline">Add Item</span>
+                  </Button>
+                </div>
+              </div>
+
+              {/* View Toggle Buttons */}
+              <div className="flex gap-2">
+                <Button variant="outline">All Items</Button>
+                <Button variant="outline">Categories</Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Scrollable List - ONLY THIS SCROLLS */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+              {/* Categories grid or Items list */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {categories.map(cat => (
+                  <CategoryCard key={cat.id} {...cat} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </main>
+        <Footer />
+      </div>
+    </ProtectedRoute>
+  );
+}
 ```
 
-**2. Flex-Based Full Height Layout**:
+**Example 2: History Page**:
 ```tsx
-// Tool page with fixed header and scrollable content
-<div className="flex flex-col h-screen">
-  <div className="flex-none">
-    {/* Fixed header content */}
-  </div>
-  <div className="flex-1 overflow-y-auto">
-    {/* Scrollable main content */}
-  </div>
-</div>
+export default function HistoryPage() {
+  return (
+    <ProtectedRoute>
+      <div className="flex flex-col h-screen">
+        <Header />
+        <main className="flex-1 flex flex-col overflow-hidden">
+
+          {/* Fixed Controls - Title + Back Button + Filters */}
+          <div>
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
+              <Button variant="ghost" onClick={() => router.back()}>
+                <ArrowLeft className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Back</span>
+              </Button>
+              <h1 className="text-2xl font-bold mb-2">Audit History</h1>
+
+              {/* Filter dropdown */}
+              <Select value={filter} onValueChange={setFilter}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Actions</SelectItem>
+                  <SelectItem value="add">Add Only</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Scrollable Table - ONLY THIS SCROLLS */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+              {/* History table and pagination */}
+              <table className="w-full">
+                {/* Table content */}
+              </table>
+
+              {/* Pagination also scrolls with table */}
+              <div className="flex justify-between mt-6">
+                <Button variant="outline">Previous</Button>
+                <Button variant="outline">Next</Button>
+              </div>
+            </div>
+          </div>
+
+        </main>
+        <Footer />
+      </div>
+    </ProtectedRoute>
+  );
+}
 ```
 
-**3. Grid with Scrollable Sections**:
+**Example 3: Admin Page**:
 ```tsx
-// Dashboard with scrollable tool list
-<div className="grid grid-rows-[auto_1fr] h-screen">
-  <div className="row-span-1">
-    {/* Fixed header */}
-  </div>
-  <div className="row-span-1 overflow-y-auto p-4">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {/* Scrollable grid of tool cards */}
-    </div>
-  </div>
-</div>
+export default function AdminPage() {
+  return (
+    <ProtectedRoute requireAdmin>
+      <div className="flex flex-col h-screen">
+        <Header />
+        <main className="flex-1 flex flex-col overflow-hidden">
+
+          {/* Fixed Controls - Title + Add Button */}
+          <div>
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
+              <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-bold">Admin Panel</h1>
+                <Button onClick={() => setAddDialogOpen(true)}>
+                  <Plus className="h-4 w-4 md:mr-2" />
+                  <span className="hidden md:inline">Add User</span>
+                </Button>
+              </div>
+              <p className="text-muted-foreground">Manage user accounts</p>
+            </div>
+          </div>
+
+          {/* Scrollable Table - ONLY THIS SCROLLS */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+              {/* Users table */}
+              <table className="w-full">
+                {/* Table content */}
+              </table>
+            </div>
+          </div>
+
+        </main>
+        <Footer />
+      </div>
+    </ProtectedRoute>
+  );
+}
 ```
 
 #### Mobile-Specific Scrolling
@@ -1197,67 +1345,31 @@ a:focus-visible {
 </div>
 ```
 
-#### Common Patterns
+#### Quick Reference: Common Patterns
 
-| Pattern | Use Case | Classes |
-|---------|----------|---------|
-| **Full-height with fixed header** | Tool pages | `flex flex-col h-screen` + `flex-1 overflow-y-auto` |
-| **Scrollable list** | Inventory items, history | `h-[600px] overflow-y-auto` or `max-h-screen overflow-y-auto` |
-| **Modal with scrollable body** | Long forms, item details | `max-h-[80vh] overflow-y-auto` |
-| **Fixed bottom action bar** | Add Item button | `sticky bottom-0` or `fixed bottom-0` |
+| Pattern | Use Case | Implementation |
+|---------|----------|----------------|
+| **In-place list scrolling** | All tool pages (standard) | Fixed controls + `flex-1 overflow-y-auto` list container |
+| **Modal with scrollable body** | Long forms, dialogs | `max-h-[80vh] overflow-y-auto` inside DialogContent |
+| **Scrollable data table** | History, admin tables | Table inside `flex-1 overflow-y-auto` container |
+| **Scrollable grid** | Categories, tool cards | Grid inside `flex-1 overflow-y-auto` container |
 
 #### What NOT to Do
 
 ❌ **Avoid**:
-- Full-page scrolling where header scrolls out of view (unless intentional)
+- Full-page scrolling where controls scroll out of view
+- Adding `border-b border-border` between fixed controls and scrollable content (breaks infinity pool effect)
 - Multiple nested scrollable containers (confusing UX)
+- Making the entire `<main>` scrollable instead of just the data section
 - Horizontal scrolling (except for carousels)
 - Scroll hijacking or custom scroll behavior
 
 ✅ **Do**:
-- Keep navigation/header visible (sticky or fixed)
-- Use natural browser scrolling (no custom scrollbars unless necessary)
+- Always use the standard in-place scrolling pattern (fixed controls + scrollable list)
+- Keep all action buttons and filters fixed (always visible)
+- Use seamless transitions (no borders between sections)
 - Test on mobile devices for momentum scrolling
-- Ensure scrollable areas have clear boundaries (borders, shadows)
-
-#### Example: Inventory Tool Page
-
-```tsx
-export default function InventoryPage() {
-  return (
-    <div className="flex flex-col h-screen">
-      {/* Fixed Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
-        <div className="h-16 px-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold">Inventory Tracking</h1>
-          <Button variant="default">Add Item</Button>
-        </div>
-      </header>
-
-      {/* Scrollable Content */}
-      <main className="flex-1 overflow-y-auto">
-        <div className="container max-w-4xl p-4 space-y-4">
-          {/* View mode tabs - scrolls with content */}
-          <Tabs defaultValue="comfortable">
-            <TabsList>
-              <TabsTrigger value="compact">Compact</TabsTrigger>
-              <TabsTrigger value="comfortable">Comfortable</TabsTrigger>
-              <TabsTrigger value="spacious">Spacious</TabsTrigger>
-            </TabsList>
-          </Tabs>
-
-          {/* Item list - scrolls naturally within main */}
-          <div className="space-y-2">
-            {items.map(item => (
-              <ItemCard key={item.code} {...item} />
-            ))}
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-}
-```
+- Ensure touch targets meet 44x44px minimum
 
 ---
 
@@ -1417,11 +1529,12 @@ Use this checklist when implementing new UI:
 
 ---
 
-**Last Updated**: November 8, 2025
-**Version**: 1.3.0
+**Last Updated**: November 9, 2025
+**Version**: 1.4.0
 **Maintainer**: Development Team
 
 **Change Log**:
+- **v1.4.0** (Nov 9, 2025): **MAJOR UPDATE**: Completely rewrote scrolling behavior section with "infinity pool" in-place scrolling pattern. ONLY data lists scroll while all controls remain fixed and visible. Removed borders between fixed/scrollable sections for seamless visual flow. Added 3 complete real-world examples (Inventory, History, Admin). Updated implementation rules, common patterns table, and what NOT to do section. This is now the STANDARD pattern for all pages.
 - **v1.3.0** (Nov 8, 2025): Added "Adaptive and Purposeful Interface Behavior" philosophy with comprehensive viewport adaptation framework. Includes desktop/mobile prioritization guidelines, functional consistency principles, information hierarchy table (P1-P4), 4 adaptive component patterns, and responsive testing checklist. Emphasizes clarity, adaptability, and intent across all screen sizes.
 - **v1.2.0** (Nov 8, 2025): Added comprehensive scrolling behavior guidelines for app-like experience. Added 6th core principle: "App-Like Behavior". Includes implementation patterns, code examples, mobile optimization, and common patterns table. Emphasizes contained scrolling over full-page scrolling.
 - **v1.1.0** (Nov 8, 2025): Updated to use Nature theme from tweakcn.com. Removed tool-specific accent colors for consistent green/nature palette across all tools. Updated font stack to Montserrat/Merriweather/Source Code Pro. Changed base radius from 10px to 8px.

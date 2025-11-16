@@ -96,6 +96,7 @@ export interface GetItemsResponse {
 export interface CreateItemRequest {
   name: string;
   category: ItemCategory;
+  code?: string; // Optional: frontend can provide pre-generated code
 }
 
 export interface CreateItemResponse {

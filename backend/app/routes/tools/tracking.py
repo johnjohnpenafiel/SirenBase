@@ -197,8 +197,15 @@ def create_item():
     current_user_id = get_jwt_identity()
 
     try:
-        # Generate unique 4-digit code
-        code = generate_unique_code()
+        # Use provided code or generate unique 4-digit code
+        if 'code' in data and data['code']:
+            code = data['code'].strip()
+            # Verify code doesn't already exist
+            existing_item = Item.query.filter_by(code=code).first()
+            if existing_item:
+                return jsonify({"error": {"code": ["Code already in use"]}}), 400
+        else:
+            code = generate_unique_code()
 
         # Create new item
         item = Item(

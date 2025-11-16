@@ -11,6 +11,7 @@ class ItemCreateSchema(Schema):
 
     name = fields.Str(required=True)
     category = fields.Str(required=True)
+    code = fields.Str(required=False, load_default=None, allow_none=True)  # Optional: frontend can provide pre-generated code
 
     @validates('name')
     def validate_name(self, value, **kwargs):
@@ -34,6 +35,16 @@ class ItemCreateSchema(Schema):
             raise ValidationError(
                 f"Invalid category. Must be one of: {', '.join(ITEM_CATEGORIES)}"
             )
+
+    @validates('code')
+    def validate_code(self, value, **kwargs):
+        """Validate code format if provided."""
+        if value is not None:
+            if not value.strip():
+                raise ValidationError("Code cannot be empty if provided")
+
+            if len(value) != 4 or not value.isdigit():
+                raise ValidationError("Code must be exactly 4 digits")
 
 
 class ItemResponseSchema(Schema):

@@ -33,8 +33,8 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login({
-        partner_number: partnerNumber,
-        pin,
+        partner_number: partnerNumber.trim(),
+        pin: pin.trim(),
       });
       // Navigation handled by login function
     } catch (error) {

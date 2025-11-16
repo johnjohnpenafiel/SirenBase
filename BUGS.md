@@ -6,122 +6,7 @@ This document tracks bugs, issues, and technical debt in the SirenBase platform.
 
 ## 🐛 Active Bugs
 
-### High Priority
-
-#### [BUG-001] AddItemDialog saves item prematurely (Step 1 instead of Step 2)
-
-**Affected Component**: `frontend/components/tools/tracking/AddItemDialog.tsx`
-
-**Description**:
-The two-step "Add Item" flow currently creates the item in the database during **Step 1** (when the user clicks "Generate Code"), rather than waiting for **Step 2** confirmation. This means:
-- The item is already saved to the database when the user sees the generated code
-- The "Confirm & Save" button in Step 2 doesn't actually save anything
-- If the user cancels at Step 2, the item remains in the database (orphaned)
-
-**Expected Behavior**:
-1. Step 1: User enters name + category, clicks "Generate Code"
-2. Backend generates code but **does NOT save to database yet**
-3. Step 2: User sees code, clicks "Confirm & Save"
-4. Backend saves item to database with history entry
-5. If user cancels at Step 2, nothing is saved
-
-**Current Behavior**:
-1. Step 1: Backend immediately saves item when "Generate Code" is clicked
-2. Step 2: "Confirm & Save" button does nothing (item already exists)
-
-**Impact**: Medium-High
-- Data integrity issue (orphaned items if user cancels)
-- User confusion (confirmation step is misleading)
-
-**Reported**: 2025-01-05
-**Status**: Open
-**Assigned**: -
-
-**Related Files**:
-- `frontend/components/tools/tracking/AddItemDialog.tsx:78` (handleGenerateCode function)
-- `backend/app/routes/tools/tracking.py:37` (POST /api/tracking/items)
-
-**Fix Approach**:
-Option A: Generate code on frontend only, send to backend on Step 2
-Option B: Add a "reserve code" endpoint that generates without saving, then "confirm" endpoint that saves
-Option C: Make code generation frontend-only (check existing codes, generate unique locally)
-
----
-
-### Medium Priority
-
-#### [BUG-002] No logout functionality in authenticated pages
-
-**Affected Components**:
-- `frontend/components/shared/Header.tsx`
-- `frontend/app/dashboard/page.tsx`
-- `frontend/app/tools/tracking/inventory/page.tsx`
-
-**Description**:
-Once a user logs in and navigates to the dashboard or inventory pages, there is no way to logout. The Header component does not include a logout button or user menu.
-
-**Expected Behavior**:
-- Header should display current user's name
-- Logout button/link should be visible in header
-- Clicking logout should:
-  - Clear JWT token from localStorage
-  - Call `logout()` from AuthContext
-  - Redirect to `/login`
-
-**Current Behavior**:
-- User must manually clear localStorage or close browser to logout
-- No visual indication of current logged-in user in header
-
-**Impact**: Medium
-- Poor UX (no way to switch users)
-- Security concern (shared device usage)
-
-**Reported**: 2025-01-05
-**Status**: Open
-**Assigned**: -
-
-**Related Files**:
-- `frontend/components/shared/Header.tsx`
-- `frontend/contexts/auth-context.tsx` (logout function exists but no UI trigger)
-
----
-
-### Low Priority
-
-#### [BUG-003] Frontend doesn't trim whitespace in form inputs
-
-**Affected Components**:
-- `frontend/components/tools/tracking/AddItemDialog.tsx`
-- `frontend/app/login/page.tsx`
-- Any other form components
-
-**Description**:
-User input is not trimmed before being sent to the API. This can lead to:
-- Items with leading/trailing spaces in names (e.g., " Vanilla Syrup ")
-- Partner numbers with accidental spaces
-- Inconsistent data display
-
-**Expected Behavior**:
-All text inputs should be trimmed before submission:
-```typescript
-const trimmedName = formData.name.trim()
-```
-
-**Current Behavior**:
-Raw input is sent to backend as-is. Backend **does** trim in some places, but frontend should handle this first.
-
-**Impact**: Low
-- Backend validation catches this in some cases
-- Minor data quality issue
-- Could cause duplicate entries due to whitespace differences
-
-**Reported**: 2025-01-05
-**Status**: Open
-**Assigned**: -
-
-**Related Files**:
-- `frontend/components/tools/tracking/AddItemDialog.tsx`
-- `frontend/app/login/page.tsx`
+_(No active bugs currently - all known bugs have been resolved!)_
 
 ---
 
@@ -185,15 +70,54 @@ Migrate forms to use react-hook-form + zod for better DX and type safety.
 
 ## ✅ Fixed Bugs Archive
 
-_(Bugs will be moved here when resolved, with date and commit reference)_
+### [BUG-001] AddItemDialog saves item prematurely (Step 1 instead of Step 2)
 
-**Format**:
-```markdown
-#### [BUG-XXX] Short description
-- Fixed: YYYY-MM-DD
-- Commit: abc1234
-- Fixed by: Developer Name
-```
+**Fixed**: 2025-01-15
+**Impact**: High - Data integrity issue (orphaned items if user cancels)
+
+**Solution Implemented**:
+- Frontend now generates unique 4-digit code locally by fetching existing codes and checking for duplicates
+- Step 1: Code is generated and displayed (NO database save)
+- Step 2: Item is saved to database only when user clicks "Confirm & Save" with the exact code displayed
+- Cancel at Step 2: No orphaned records created
+- Backend updated to accept optional `code` parameter to use frontend-generated code
+
+**Files Changed**:
+- `frontend/components/tools/tracking/AddItemDialog.tsx` - Refactored handleGenerateCode and handleConfirm
+- `frontend/types/index.ts` - Added optional `code` field to CreateItemRequest
+- `backend/app/schemas/item.py` - Added optional `code` field with validation
+- `backend/app/routes/tools/tracking.py` - Updated to use provided code or generate if not provided
+
+---
+
+### [BUG-002] No logout functionality in authenticated pages
+
+**Fixed**: 2025-01-15
+**Impact**: Medium - Poor UX and security concern
+
+**Solution**:
+This bug was already fixed before verification. The Header component includes complete logout functionality:
+- User dropdown menu with name displayed (desktop) / icon only (mobile)
+- Logout button calls `logout()` from auth context
+- Properly clears JWT token, user state, and redirects to login
+
+**Files Verified**:
+- `frontend/components/shared/Header.tsx` - Complete implementation exists
+- `frontend/contexts/auth-context.tsx` - logout() function properly implemented
+
+---
+
+### [BUG-003] Frontend doesn't trim whitespace in form inputs
+
+**Fixed**: 2025-01-15
+**Impact**: Low - Minor data quality issue
+
+**Solution Implemented**:
+- Added `.trim()` to `partnerNumber` and `pin` inputs in login page before submission
+- Note: AddItemDialog and AddUserDialog already had proper trimming
+
+**Files Changed**:
+- `frontend/app/login/page.tsx` - Added `.trim()` to partner_number and pin inputs
 
 ---
 
@@ -250,5 +174,5 @@ Ideas for how to fix
 
 ---
 
-_Last Updated: January 5, 2025_
+_Last Updated: January 15, 2025_
 _Maintainer: Development Team_

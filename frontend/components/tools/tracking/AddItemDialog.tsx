@@ -80,26 +80,86 @@ export function AddItemDialog({
 
     try {
       setLoading(true);
-      const response = await apiClient.createItem({
-        name: itemName.trim(),
-        category: category as ItemCategory,
-      });
 
-      setGeneratedCode(response.item.code);
+      // Fetch existing item codes to avoid duplicates
+      const response = await apiClient.getItems({ include_removed: true });
+      const existingCodes = new Set(response.items.map(item => item.code));
+
+      // Generate unique 4-digit code on frontend
+      let newCode = '';
+      let attempts = 0;
+      const maxAttempts = 100;
+
+      while (attempts < maxAttempts) {
+        newCode = Math.floor(1000 + Math.random() * 9000).toString();
+        if (!existingCodes.has(newCode)) {
+          break; // Found a unique code
+        }
+        attempts++;
+      }
+
+      if (attempts === maxAttempts) {
+        toast.error('Unable to generate unique code. Please try again.');
+        return;
+      }
+
+      setGeneratedCode(newCode);
       setStep('confirm');
       toast.success('Code generated! Write it on the physical item.');
     } catch (error: any) {
-      const errorMessage = error.response?.data?.error || 'Failed to generate code';
+      let errorMessage = 'Failed to generate code';
+
+      if (error.response?.data?.error) {
+        const err = error.response.data.error;
+        // Handle both string errors and validation error objects
+        if (typeof err === 'string') {
+          errorMessage = err;
+        } else if (typeof err === 'object') {
+          // Extract first error message from validation object
+          const firstKey = Object.keys(err)[0];
+          errorMessage = Array.isArray(err[firstKey]) ? err[firstKey][0] : err[firstKey];
+        }
+      }
+
       toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleConfirm = () => {
-    toast.success(`${itemName} added to inventory!`);
-    onItemAdded();
-    handleClose();
+  const handleConfirm = async () => {
+    try {
+      setLoading(true);
+
+      // Now save to backend with the generated code
+      await apiClient.createItem({
+        name: itemName.trim(),
+        category: category as ItemCategory,
+        code: generatedCode, // Pass the frontend-generated code
+      });
+
+      toast.success(`${itemName} added to inventory!`);
+      onItemAdded();
+      handleClose();
+    } catch (error: any) {
+      let errorMessage = 'Failed to save item';
+
+      if (error.response?.data?.error) {
+        const err = error.response.data.error;
+        // Handle both string errors and validation error objects
+        if (typeof err === 'string') {
+          errorMessage = err;
+        } else if (typeof err === 'object') {
+          // Extract first error message from validation object
+          const firstKey = Object.keys(err)[0];
+          errorMessage = Array.isArray(err[firstKey]) ? err[firstKey][0] : err[firstKey];
+        }
+      }
+
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCancel = () => {

@@ -6,7 +6,53 @@ This document tracks bugs, issues, and technical debt in the SirenBase platform.
 
 ## 🐛 Active Bugs
 
-_(No active bugs currently - all known bugs have been resolved!)_
+### [BUG-004] User deletion fails with 500 Internal Server Error
+
+**Fixed**: 2025-11-20
+**Impact**: High - Admin cannot delete users due to foreign key constraints
+
+**Affected Component**: `backend/app/routes/admin.py`
+
+**Description**:
+When admin attempts to delete a user via the admin panel, the request fails with a 500 error. The backend couldn't delete users because of RESTRICT foreign key constraints on `tracking_items.added_by` and `tracking_history.user_id`.
+
+**Expected Behavior**:
+- Admin clicks "Delete User" button
+- User is deleted from the system
+- User no longer appears in admin panel
+- Deleted user cannot log in
+- **Audit trail is preserved** (history and items remain intact)
+
+**Current Behavior** (before fix):
+- DELETE request to `/api/admin/users/:id` returns 500 error
+- Frontend shows "Failed to delete user" toast
+- Database throws foreign key constraint violation
+
+**Solution Implemented**:
+Implemented **soft delete** pattern to preserve audit trail:
+1. Added `is_deleted`, `deleted_at`, `deleted_by` columns to users table
+2. DELETE endpoint now marks user as deleted instead of removing from database
+3. GET /api/admin/users filters out deleted users
+4. Login endpoint rejects deleted users with clear error message
+5. History and items remain intact with original user references
+
+**Files Changed**:
+- `backend/app/models/user.py:79-94` - Added soft delete fields
+- `backend/migrations/versions/38f7e23d7ea7_*.py` - Database migration
+- `backend/app/routes/admin.py:45` - Filter deleted users in GET endpoint
+- `backend/app/routes/admin.py:138-205` - Soft delete in DELETE endpoint
+- `backend/app/routes/auth.py:58-59` - Reject deleted users at login
+- `backend/app/routes/auth.py:117-119` - Prevent reuse of deleted partner numbers
+- `backend/app/routes/auth.py:180-181` - Check deleted status in /me endpoint
+
+**Testing**:
+✅ User deletion sets is_deleted=True
+✅ Deleted users don't appear in admin panel
+✅ Deleted users cannot log in
+✅ History still shows deleted user's name
+✅ Items created by deleted user remain intact
+
+---
 
 ---
 

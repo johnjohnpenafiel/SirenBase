@@ -3,9 +3,9 @@ User model for staff authentication and authorization.
 """
 from datetime import datetime
 from uuid import uuid4
-from typing import TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
-from sqlalchemy import String, DateTime, Enum as SQLEnum
+from sqlalchemy import String, DateTime, Boolean, ForeignKey, Enum as SQLEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 import enum
@@ -74,6 +74,23 @@ class User(db.Model):
         default=datetime.utcnow,
         onupdate=datetime.utcnow,
         nullable=False
+    )
+
+    # Soft delete fields
+    is_deleted: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False,
+        index=True  # Index for filtering active users
+    )
+    deleted_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime,
+        nullable=True
+    )
+    deleted_by: Mapped[Optional[str]] = mapped_column(
+        String(36),
+        ForeignKey('users.id', ondelete='SET NULL'),
+        nullable=True
     )
 
     # Relationships

@@ -1,6 +1,7 @@
 """
 Admin routes for user management (admin-only access).
 """
+from datetime import datetime
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from marshmallow import ValidationError
@@ -40,8 +41,8 @@ def get_all_users():
         403: {"error": "Admin access required"}
     """
     try:
-        # Fetch all users, ordered by created_at
-        users = User.query.order_by(User.created_at.desc()).all()
+        # Fetch all active (non-deleted) users, ordered by created_at
+        users = User.query.filter_by(is_deleted=False).order_by(User.created_at.desc()).all()
 
         # Serialize users
         schema = UserResponseSchema(many=True)
@@ -140,10 +141,10 @@ def create_user():
 @admin_required
 def delete_user(user_id: str):
     """
-    Delete a user account by ID (admin only).
+    Soft delete a user account by ID (admin only).
 
-    Note: This is a hard delete. Consider implementing soft delete
-    if you need to preserve audit trail.
+    This marks the user as deleted but preserves all audit trail data.
+    History entries and items created by the user remain intact.
 
     Requires:
         Authorization header with Bearer token
@@ -164,6 +165,7 @@ def delete_user(user_id: str):
         403: {"error": "Admin access required"}
         403: {"error": "Cannot delete your own account"}
         404: {"error": "User not found"}
+        410: {"error": "User is already deleted"}
     """
     try:
         # Get current user ID from JWT
@@ -179,12 +181,19 @@ def delete_user(user_id: str):
         if not user:
             return jsonify({"error": "User not found"}), 404
 
+        # Check if user is already deleted
+        if user.is_deleted:
+            return jsonify({"error": "User is already deleted"}), 410
+
         # Serialize user data before deletion
         user_schema = UserResponseSchema()
         user_data = user_schema.dump(user)
 
-        # Delete user
-        db.session.delete(user)
+        # Soft delete: set flags instead of removing from database
+        user.is_deleted = True
+        user.deleted_at = datetime.utcnow()
+        user.deleted_by = current_user_id
+
         db.session.commit()
 
         return jsonify({

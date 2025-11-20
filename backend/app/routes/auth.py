@@ -54,6 +54,10 @@ def login():
     if not user or not user.check_pin(data['pin']):
         return jsonify({"error": "Invalid credentials"}), 401
 
+    # Prevent deleted users from logging in
+    if user.is_deleted:
+        return jsonify({"error": "Account has been deactivated. Please contact an administrator."}), 403
+
     # Create JWT access token
     access_token = create_access_token(identity=user.id)
 
@@ -104,12 +108,14 @@ def signup():
     except ValidationError as err:
         return jsonify({"error": err.messages}), 400
 
-    # Check if partner number already exists
+    # Check if partner number already exists (including deleted users)
     existing_user = User.query.filter_by(
         partner_number=data['partner_number'].strip()
     ).first()
 
     if existing_user:
+        if existing_user.is_deleted:
+            return jsonify({"error": "Partner number was previously used. Please contact an administrator."}), 409
         return jsonify({"error": "Partner number already exists"}), 409
 
     try:
@@ -169,6 +175,10 @@ def get_current_user():
 
     if not user:
         return jsonify({"error": "User not found"}), 404
+
+    # Check if user has been deleted
+    if user.is_deleted:
+        return jsonify({"error": "Account has been deactivated"}), 403
 
     # Serialize user data
     user_schema = UserResponseSchema()

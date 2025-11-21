@@ -7,7 +7,7 @@
 - **Language**: TypeScript 5.2+
 - **Styling**: TailwindCSS 3.4+ with ShadCN UI components
 - **State Management**: React hooks (useState, useContext, useReducer)
-- **HTTP Client**: Fetch API with custom hooks
+- **HTTP Client**: Axios with centralized APIClient class (see `lib/api.ts`)
 - **Testing**: Jest + React Testing Library
 - **Linting**: ESLint with @typescript-eslint
 - **Formatting**: Prettier
@@ -20,6 +20,7 @@
   "react": "^18.0.0",
   "typescript": "^5.2.0",
   "tailwindcss": "^3.4.0",
+  "axios": "^1.13.1",
   "@radix-ui/react-*": "latest",
   "class-variance-authority": "latest",
   "clsx": "latest",
@@ -220,17 +221,10 @@ export function useAuth() {
 
   const login = useCallback(async (partnerId: string, pin: string) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ partnerId, pin }),
-      });
-      
-      if (!response.ok) throw new Error('Login failed');
-      
-      const data = await response.json();
-      setUser(data.user);
-      localStorage.setItem('token', data.token);
+      // Use the centralized API client (see lib/api.ts)
+      const response = await apiClient.login({ partner_number: partnerId, pin });
+      setUser(response.user);
+      apiClient.setToken(response.token);
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -239,43 +233,59 @@ export function useAuth() {
 
   const logout = useCallback(() => {
     setUser(null);
-    localStorage.removeItem('token');
+    apiClient.clearToken();
   }, []);
 
   return { user, loading, login, logout };
 }
 ```
 
-### API Client Hook
-```typescript
-// hooks/use-api.ts
-import { useCallback } from 'react';
+### API Client Pattern
+**Note**: This project uses a centralized `APIClient` class (see `lib/api.ts`) built with Axios, not custom hooks.
 
-export function useApi() {
-  const request = useCallback(async <T>(
-    endpoint: string,
-    options?: RequestInit
-  ): Promise<T> => {
-    const token = localStorage.getItem('token');
-    
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options?.headers,
-      },
+```typescript
+// lib/api.ts
+import axios, { AxiosInstance } from 'axios';
+
+class APIClient {
+  private client: AxiosInstance;
+
+  constructor() {
+    this.client = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_API_URL,
+      headers: { 'Content-Type': 'application/json' },
     });
 
-    if (!response.ok) {
-      throw new Error(`API error: ${response.statusText}`);
-    }
+    // Auto-inject JWT token
+    this.client.interceptors.request.use((config) => {
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
 
-    return response.json();
-  }, []);
+    // Auto-logout on 401
+    this.client.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401) {
+          this.clearToken();
+          window.location.href = '/login';
+        }
+        return Promise.reject(error);
+      }
+    );
+  }
 
-  return { request };
+  async login(data: LoginRequest): Promise<LoginResponse> {
+    const response = await this.client.post('/api/auth/login', data);
+    return response.data;
+  }
 }
+
+const apiClient = new APIClient();
+export default apiClient;
 ```
 
 ## 🔐 Authentication Handling

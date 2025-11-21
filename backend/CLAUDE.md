@@ -42,9 +42,10 @@ backend/
 │   ├── extensions.py         # Extension initialization (db, jwt, etc.)
 │   ├── models/               # Database models
 │   │   ├── __init__.py
-│   │   ├── user.py          # Shared user model
-│   │   ├── item.py          # Tool 1: Tracking items
-│   │   └── history.py       # Tool 1: Tracking history
+│   │   ├── user.py           # Shared user model
+│   │   ├── item.py           # Tool 1: Tracking items
+│   │   ├── history.py        # Tool 1: Tracking history
+│   │   └── item_suggestion.py # Tool 1: Autocomplete templates
 │   ├── schemas/              # Marshmallow schemas for validation
 │   │   ├── __init__.py
 │   │   ├── user.py

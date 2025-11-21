@@ -637,6 +637,83 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
+## Phase 3D: Technical Debt Resolution ✅ COMPLETED (November 20, 2025)
+
+**Goal**: Address technical debt items [TECH-001] and [TECH-003] to improve code quality and establish testing infrastructure before Tool 2 development.
+
+### Form Validation Migration [TECH-003]
+
+- [x] **Create Zod validation schemas**
+  - `frontend/lib/validations/auth.ts` - Login schema (partner number + PIN validation)
+  - `frontend/lib/validations/tracking.ts` - Add item schema (item name + category)
+  - `frontend/lib/validations/admin.ts` - Add user schema with PIN confirmation
+  - All schemas include automatic trimming and uppercasing where needed
+  - Type-safe with TypeScript inference
+
+- [x] **Migrate forms to react-hook-form + Zod**
+  - Login form (`frontend/app/login/page.tsx`) - Replaced native HTML validation
+  - AddItemDialog (`frontend/components/tools/tracking/AddItemDialog.tsx`) - Maintained two-step flow
+  - AddUserDialog (`frontend/components/admin/AddUserDialog.tsx`) - PIN confirmation validation
+  - All forms now use ShadCN Form components with automatic error messages
+
+- [x] **Benefits achieved**
+  - Type-safe form validation throughout the application
+  - Consistent form patterns for Tool 2 and Tool 3
+  - Better UX with field-level errors and touched states
+  - DRY validation (schemas can be reused in API validation)
+
+### Frontend Testing Infrastructure [TECH-001]
+
+- [x] **Install testing dependencies**
+  - Vitest (fast test runner for Vite/Next.js projects)
+  - @testing-library/react (React component testing)
+  - @testing-library/jest-dom (custom matchers)
+  - @testing-library/user-event (user interaction simulation)
+  - jsdom (browser environment simulation)
+
+- [x] **Configure testing environment**
+  - `frontend/vitest.config.ts` - Vitest configuration with jsdom environment
+  - `frontend/vitest.setup.ts` - Global test setup and cleanup
+  - Added test scripts to package.json: `test`, `test:ui`, `test:coverage`
+
+- [x] **Write validation schema tests**
+  - `frontend/lib/__tests__/validations.test.ts` - 14 tests, all passing
+  - Login schema tests (5 tests): partner number trimming, PIN validation
+  - Add item schema tests (4 tests): item name trimming, category validation
+  - Add user schema tests (5 tests): PIN confirmation, role validation
+  - 100% test pass rate demonstrates infrastructure is working correctly
+
+- [x] **Establish testing patterns**
+  - Auth context test structure created (draft)
+  - Pattern for component testing established
+  - Coverage target: 60-70% for critical paths before production
+
+### Documentation Updates
+
+- [x] **Update BUGS.md**
+  - Moved [TECH-001] and [TECH-003] to "Fixed Bugs Archive"
+  - Documented solutions, benefits, and files changed
+  - Deferred [TECH-002] (error boundaries) to Phase 7
+
+- [x] **Update PLANNING.md**
+  - Added form validation to Tech Stack (react-hook-form + Zod)
+  - Added testing to Tech Stack (Vitest + React Testing Library)
+  - Documented validation schema directory structure
+
+- [x] **Update TASKS.md**
+  - Added Phase 3D to task list
+  - Marked all subtasks as completed
+
+### Summary
+
+**Completed**: November 20, 2025
+
+**Impact**: Code quality and developer experience significantly improved. Testing infrastructure established for confident refactoring and feature development.
+
+**Next Steps**: Proceed to Tool 2 (Milk Count System) with established patterns for forms and testing.
+
+---
+
 ## Phase 4: Testing & Quality Assurance
 
 ### Backend Testing

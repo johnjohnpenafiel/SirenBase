@@ -3,10 +3,13 @@
  *
  * Form for admins to create new user accounts.
  * Allows setting role (admin/staff) and initial PIN.
+ *
+ * Uses react-hook-form + zod for type-safe validation with PIN confirmation.
  */
 'use client';
 
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
   DialogContent,
@@ -17,7 +20,15 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
@@ -28,6 +39,7 @@ import {
 import apiClient from '@/lib/api';
 import type { UserRole } from '@/types';
 import { toast } from 'sonner';
+import { addUserSchema, type AddUserFormData } from '@/lib/validations/admin';
 
 interface AddUserDialogProps {
   open: boolean;
@@ -36,52 +48,33 @@ interface AddUserDialogProps {
 }
 
 export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialogProps) {
-  const [partnerNumber, setPartnerNumber] = useState('');
-  const [name, setName] = useState('');
-  const [pin, setPin] = useState('');
-  const [confirmPin, setConfirmPin] = useState('');
-  const [role, setRole] = useState<UserRole>('staff');
-  const [loading, setLoading] = useState(false);
+  const form = useForm<AddUserFormData>({
+    resolver: zodResolver(addUserSchema),
+    defaultValues: {
+      partnerNumber: '',
+      name: '',
+      pin: '',
+      confirmPin: '',
+      role: 'staff',
+    },
+  });
 
   const handleClose = () => {
     // Reset form
-    setPartnerNumber('');
-    setName('');
-    setPin('');
-    setConfirmPin('');
-    setRole('staff');
+    form.reset();
     onOpenChange(false);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validation
-    if (!partnerNumber.trim() || !name.trim() || !pin || !confirmPin) {
-      toast.error('All fields are required');
-      return;
-    }
-
-    if (pin.length !== 4 || !/^\d{4}$/.test(pin)) {
-      toast.error('PIN must be exactly 4 digits');
-      return;
-    }
-
-    if (pin !== confirmPin) {
-      toast.error('PINs do not match');
-      return;
-    }
-
+  const onSubmit = async (data: AddUserFormData) => {
     try {
-      setLoading(true);
       await apiClient.createUser({
-        partner_number: partnerNumber.trim().toUpperCase(),
-        name: name.trim(),
-        pin,
-        role,
+        partner_number: data.partnerNumber, // Already trimmed and uppercased by schema
+        name: data.name, // Already trimmed by schema
+        pin: data.pin,
+        role: data.role,
       });
 
-      toast.success(`User ${name} created successfully!`);
+      toast.success(`User ${data.name} created successfully!`);
       onUserAdded();
       handleClose();
     } catch (error: any) {
@@ -90,10 +83,10 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
       console.error('Error status:', error.response?.status);
       const errorMessage = error.response?.data?.error || error.message || 'Failed to create user';
       toast.error(`Failed to create user: ${errorMessage}`);
-    } finally {
-      setLoading(false);
     }
   };
+
+  const isLoading = form.formState.isSubmitting;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -105,95 +98,129 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="partnerNumber">Partner Number</Label>
-              <Input
-                id="partnerNumber"
-                placeholder="e.g., PART001"
-                value={partnerNumber}
-                onChange={(e) => setPartnerNumber(e.target.value.toUpperCase())}
-                disabled={loading}
-                required
-                autoFocus
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-4 py-4">
+              <FormField
+                control={form.control}
+                name="partnerNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Partner Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., PART001"
+                        autoFocus
+                        disabled={isLoading}
+                        {...field}
+                        onChange={(e) => field.onChange(e.target.value.toUpperCase())}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., John Smith"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="pin"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>PIN (4 digits)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        inputMode="numeric"
+                        maxLength={4}
+                        placeholder="••••"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="confirmPin"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm PIN</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        inputMode="numeric"
+                        maxLength={4}
+                        placeholder="••••"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      disabled={isLoading}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="staff">Staff</SelectItem>
+                        <SelectItem value="admin">Admin</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Admins have full access to all features and user management
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                placeholder="e.g., John Smith"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                disabled={loading}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="pin">PIN (4 digits)</Label>
-              <Input
-                id="pin"
-                type="password"
-                inputMode="numeric"
-                pattern="\d{4}"
-                maxLength={4}
-                placeholder="••••"
-                value={pin}
-                onChange={(e) => setPin(e.target.value)}
-                disabled={loading}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmPin">Confirm PIN</Label>
-              <Input
-                id="confirmPin"
-                type="password"
-                inputMode="numeric"
-                pattern="\d{4}"
-                maxLength={4}
-                placeholder="••••"
-                value={confirmPin}
-                onChange={(e) => setConfirmPin(e.target.value)}
-                disabled={loading}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <Select
-                value={role}
-                onValueChange={(value) => setRole(value as UserRole)}
-                disabled={loading}
-              >
-                <SelectTrigger id="role">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="staff">Staff</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                Admins have full access to all features and user management
-              </p>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={handleClose} disabled={loading}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Creating...' : 'Create User'}
-            </Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Creating...' : 'Create User'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -4,10 +4,14 @@
  * Two-step flow for adding items:
  * Step 1: Enter name and category → Generate Code
  * Step 2: Display code → Confirm & Save
+ *
+ * Uses react-hook-form + zod for type-safe validation.
  */
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
   DialogContent,
@@ -17,7 +21,14 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
@@ -30,6 +41,7 @@ import apiClient from '@/lib/api';
 import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
 import type { ItemCategory } from '@/types';
 import { toast } from 'sonner';
+import { addItemSchema, type AddItemFormData } from '@/lib/validations/tracking';
 
 interface AddItemDialogProps {
   open: boolean;
@@ -47,37 +59,34 @@ export function AddItemDialog({
   preselectedCategory
 }: AddItemDialogProps) {
   const [step, setStep] = useState<Step>('input');
-  const [itemName, setItemName] = useState('');
-  const [category, setCategory] = useState<ItemCategory | ''>(preselectedCategory || '');
   const [generatedCode, setGeneratedCode] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const form = useForm<AddItemFormData>({
+    resolver: zodResolver(addItemSchema),
+    defaultValues: {
+      itemName: '',
+      category: preselectedCategory || ('' as ItemCategory),
+    },
+  });
+
   // Update category when preselectedCategory changes (always sync, including null)
   useEffect(() => {
-    setCategory(preselectedCategory || '');
-  }, [preselectedCategory]);
+    form.setValue('category', preselectedCategory || ('' as ItemCategory));
+  }, [preselectedCategory, form]);
 
   const handleClose = () => {
     // Reset form
     setStep('input');
-    setItemName('');
-    setCategory(preselectedCategory || '');
+    form.reset({
+      itemName: '',
+      category: preselectedCategory || ('' as ItemCategory),
+    });
     setGeneratedCode('');
     onOpenChange(false);
   };
 
-  const handleGenerateCode = async () => {
-    // Validation
-    if (!itemName.trim()) {
-      toast.error('Please enter an item name');
-      return;
-    }
-
-    if (!category) {
-      toast.error('Please select a category');
-      return;
-    }
-
+  const handleGenerateCode = async (data: AddItemFormData) => {
     try {
       setLoading(true);
 
@@ -128,17 +137,19 @@ export function AddItemDialog({
   };
 
   const handleConfirm = async () => {
+    const formData = form.getValues();
+
     try {
       setLoading(true);
 
       // Now save to backend with the generated code
       await apiClient.createItem({
-        name: itemName.trim(),
-        category: category as ItemCategory,
+        name: formData.itemName, // Already trimmed by schema
+        category: formData.category,
         code: generatedCode, // Pass the frontend-generated code
       });
 
-      toast.success(`${itemName} added to inventory!`);
+      toast.success(`${formData.itemName} added to inventory!`);
       onItemAdded();
       handleClose();
     } catch (error: any) {
@@ -181,47 +192,67 @@ export function AddItemDialog({
               </DialogDescription>
             </DialogHeader>
 
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="itemName">Item Name</Label>
-                <ItemNameAutocomplete
-                  value={itemName}
-                  onChange={setItemName}
-                  category={category}
-                  disabled={loading}
-                  autoFocus
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleGenerateCode)} className="space-y-4 py-4">
+                <FormField
+                  control={form.control}
+                  name="itemName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Item Name</FormLabel>
+                      <FormControl>
+                        <ItemNameAutocomplete
+                          value={field.value}
+                          onChange={field.onChange}
+                          category={form.watch('category')}
+                          disabled={loading}
+                          autoFocus
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <Select
-                  value={category}
-                  onValueChange={(value) => setCategory(value as ItemCategory)}
-                  disabled={loading}
-                >
-                  <SelectTrigger id="category">
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ITEM_CATEGORIES.map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        {formatCategory(cat)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        disabled={loading}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {ITEM_CATEGORIES.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                              {formatCategory(cat)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <DialogFooter>
-              <Button variant="outline" onClick={handleCancel} disabled={loading}>
-                Cancel
-              </Button>
-              <Button onClick={handleGenerateCode} disabled={loading}>
-                {loading ? 'Generating...' : 'Generate Code'}
-              </Button>
-            </DialogFooter>
+                <DialogFooter>
+                  <Button type="button" variant="outline" onClick={handleCancel} disabled={loading}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={loading}>
+                    {loading ? 'Generating...' : 'Generate Code'}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </Form>
           </>
         ) : (
           <>

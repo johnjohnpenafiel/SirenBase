@@ -217,6 +217,17 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 - **HTTP Client**: Axios
   - Centralized API client with JWT token injection
   - Consistent error handling
+- **Form Validation**: react-hook-form + Zod
+  - Type-safe form validation with TypeScript inference
+  - Automatic field-level error messages and touched states
+  - DRY validation (reusable schemas across forms)
+  - Better UX with validation on blur/change
+  - Validation schemas in `/lib/validations/` directory
+- **Testing**: Vitest + React Testing Library
+  - Fast test execution with Vitest
+  - Component testing with React Testing Library
+  - Test coverage with `npm run test:coverage`
+  - Configured for jsdom environment
 
 ### Backend
 

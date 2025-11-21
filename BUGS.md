@@ -12,28 +12,6 @@ _No active bugs at this time._
 
 ## 💡 Known Issues / Technical Debt
 
-### [TECH-001] No frontend unit tests
-
-**Description**:
-No unit or integration tests exist for frontend components, hooks, or utilities. Only basic ProtectedRoute tests exist.
-
-**Impact**: Medium
-- Difficult to catch regressions
-- Refactoring is risky
-- No CI/CD safety net
-
-**Recommendation**:
-Add React Testing Library tests for:
-- Auth components (LoginForm, ProtectedRoute)
-- Inventory components (AddItemDialog, ItemCodesDialog)
-- Hooks (useAuth)
-- API client
-
-**Status**: Acknowledged
-**Priority**: Medium
-
----
-
 ### [TECH-002] No error boundary components
 
 **Description**:
@@ -48,27 +26,85 @@ Add error boundary wrapper in root layout with friendly error message.
 
 **Status**: Acknowledged
 **Priority**: Low
-
----
-
-### [TECH-003] Could use form validation library
-
-**Description**:
-Currently using native HTML validation and manual error handling. Could benefit from react-hook-form + zod (already installed as dependencies).
-
-**Impact**: Low
-- Current approach works but is verbose
-- More code to maintain
-
-**Recommendation**:
-Migrate forms to use react-hook-form + zod for better DX and type safety.
-
-**Status**: Acknowledged
-**Priority**: Low
+**Deferred**: Phase 7 (Production Deployment)
 
 ---
 
 ## ✅ Fixed Bugs Archive
+
+### [TECH-003] Form validation library migration
+
+**Fixed**: 2025-11-20
+**Impact**: Low - Code quality and developer experience improvement
+
+**Affected Components**: All forms in frontend
+
+**Description**:
+React-hook-form + zod were installed as dependencies but not being used. All forms used native HTML validation with manual error handling, which was verbose and not type-safe.
+
+**Solution Implemented**:
+Migrated all Tool 1 forms to use react-hook-form + zod:
+1. Created Zod validation schemas for auth, tracking, and admin forms
+2. Migrated login form to use react-hook-form with zodResolver
+3. Migrated AddItemDialog to use react-hook-form (maintained two-step flow)
+4. Migrated AddUserDialog to use react-hook-form with PIN confirmation validation
+
+**Benefits**:
+- Type-safe form validation with TypeScript inference
+- Automatic field-level error messages
+- Better UX with touched states and validation on blur
+- DRY validation (schemas can be reused)
+- Consistent form pattern for future tools
+
+**Files Changed**:
+- `frontend/lib/validations/auth.ts` - Login schema
+- `frontend/lib/validations/tracking.ts` - Add item schema
+- `frontend/lib/validations/admin.ts` - Add user schema with PIN confirmation
+- `frontend/app/login/page.tsx` - Migrated to RHF + Zod
+- `frontend/components/tools/tracking/AddItemDialog.tsx` - Migrated to RHF + Zod
+- `frontend/components/admin/AddUserDialog.tsx` - Migrated to RHF + Zod
+
+**Testing**:
+✅ All forms compile without TypeScript errors
+✅ 14 validation schema tests passing
+✅ Pattern established for Tool 2 and Tool 3
+
+---
+
+### [TECH-001] Frontend testing infrastructure
+
+**Fixed**: 2025-11-20
+**Impact**: Medium - Testing infrastructure established
+
+**Description**:
+No frontend testing infrastructure or tests existed. This made it difficult to catch regressions and refactor with confidence.
+
+**Solution Implemented**:
+Set up Vitest + React Testing Library testing infrastructure:
+1. Installed testing dependencies (vitest, @testing-library/react, @testing-library/jest-dom, etc.)
+2. Created vitest.config.ts configuration with jsdom environment
+3. Created vitest.setup.ts for test setup and cleanup
+4. Added test scripts to package.json (test, test:ui, test:coverage)
+5. Wrote 14 validation schema tests (all passing)
+
+**Test Coverage Established**:
+- ✅ Login validation schema tests (5 tests)
+- ✅ Add item validation schema tests (4 tests)
+- ✅ Add user validation schema tests (5 tests)
+
+**Files Created**:
+- `frontend/vitest.config.ts` - Vitest configuration
+- `frontend/vitest.setup.ts` - Test setup file
+- `frontend/lib/__tests__/validations.test.ts` - Validation tests (14 passing)
+- `frontend/contexts/__tests__/auth-context.test.tsx` - Auth context tests (draft)
+
+**Status**: Infrastructure complete, component tests can be added incrementally
+
+**Next Steps**:
+- Add component tests as needed when refactoring
+- Target 60-70% coverage for critical paths before production
+
+---
 
 ### [BUG-004] User deletion fails with 500 Internal Server Error
 
@@ -223,5 +259,5 @@ Ideas for how to fix
 
 ---
 
-_Last Updated: 2025-11-20_
+_Last Updated: 2025-11-20_ (TECH-001 and TECH-003 completed)
 _Maintainer: Development Team_

@@ -12,30 +12,32 @@
  * - Adaptive buttons (icon-only on mobile)
  * - Responsive grid layouts
  */
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
-import { Button } from '@/components/ui/button';
-import { AddItemDialog } from '@/components/tools/tracking/AddItemDialog';
-import { RemoveItemDialog } from '@/components/tools/tracking/RemoveItemDialog';
-import apiClient from '@/lib/api';
-import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
-import type { Item, ItemCategory } from '@/types';
-import { toast } from 'sonner';
-import { ArrowLeft, Plus, History, Trash2, Loader2 } from 'lucide-react';
+import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Header } from "@/components/shared/Header";
+import { Footer } from "@/components/shared/Footer";
+import { Button } from "@/components/ui/button";
+import { AddItemDialog } from "@/components/tools/tracking/AddItemDialog";
+import { RemoveItemDialog } from "@/components/tools/tracking/RemoveItemDialog";
+import apiClient from "@/lib/api";
+import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
+import type { Item, ItemCategory } from "@/types";
+import { toast } from "sonner";
+import { ArrowLeft, Plus, History, Trash2, Loader2 } from "lucide-react";
 
-type ViewMode = 'categories' | 'all' | 'filtered';
+type ViewMode = "categories" | "all" | "filtered";
 
 export default function InventoryPage() {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<ViewMode>('categories');
-  const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>("categories");
+  const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(
+    null
+  );
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
   const [itemToRemove, setItemToRemove] = useState<Item | null>(null);
@@ -50,9 +52,9 @@ export default function InventoryPage() {
     try {
       setLoading(true);
       const response = await apiClient.getItems();
-      setItems(response.items.filter(item => !item.is_removed));
+      setItems(response.items.filter((item) => !item.is_removed));
     } catch (error: any) {
-      toast.error('Failed to load inventory');
+      toast.error("Failed to load inventory");
     } finally {
       setLoading(false);
     }
@@ -60,8 +62,8 @@ export default function InventoryPage() {
 
   // Filter items by category if in filtered mode
   const filteredItems = useMemo(() => {
-    if (viewMode !== 'filtered' || !selectedCategory) return items;
-    return items.filter(item => item.category === selectedCategory);
+    if (viewMode !== "filtered" || !selectedCategory) return items;
+    return items.filter((item) => item.category === selectedCategory);
   }, [items, viewMode, selectedCategory]);
 
   // Count items per category
@@ -78,7 +80,7 @@ export default function InventoryPage() {
       other: 0,
     };
 
-    items.forEach(item => {
+    items.forEach((item) => {
       counts[item.category] += 1;
     });
 
@@ -101,11 +103,11 @@ export default function InventoryPage() {
     try {
       setRemovingCode(itemToRemove.code);
       await apiClient.deleteItem(itemToRemove.code);
-      toast.success('Item removed successfully');
+      toast.success("Item removed successfully");
       fetchItems(); // Refresh list
       setRemoveDialogOpen(false);
     } catch (error: any) {
-      toast.error('Failed to remove item');
+      toast.error("Failed to remove item");
     } finally {
       setRemovingCode(null);
       setItemToRemove(null);
@@ -114,11 +116,11 @@ export default function InventoryPage() {
 
   const handleCategoryClick = (category: ItemCategory) => {
     setSelectedCategory(category);
-    setViewMode('filtered');
+    setViewMode("filtered");
   };
 
   const handleBackToCategories = () => {
-    setViewMode('categories');
+    setViewMode("categories");
     setSelectedCategory(null);
   };
 
@@ -149,7 +151,7 @@ export default function InventoryPage() {
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  {viewMode === 'filtered' && selectedCategory && (
+                  {viewMode === "filtered" && selectedCategory && (
                     <Button
                       variant="ghost"
                       size="sm"
@@ -157,20 +159,22 @@ export default function InventoryPage() {
                       className="mb-2"
                     >
                       <ArrowLeft className="h-4 w-4 md:mr-2" />
-                      <span className="hidden md:inline">Back to Categories</span>
+                      <span className="hidden md:inline">
+                        Back to Categories
+                      </span>
                     </Button>
                   )}
                   <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-                    {viewMode === 'filtered' && selectedCategory
+                    {viewMode === "filtered" && selectedCategory
                       ? formatCategory(selectedCategory)
-                      : 'Inventory Tracking'}
+                      : "Inventory Tracking"}
                   </h1>
                 </div>
 
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    onClick={() => router.push('/tools/tracking/history')}
+                    onClick={() => router.push("/tools/tracking/history")}
                   >
                     <History className="h-4 w-4 md:mr-2" />
                     <span className="hidden md:inline">History</span>
@@ -183,23 +187,33 @@ export default function InventoryPage() {
               </div>
 
               {/* View Toggle - Only show when not in filtered category view */}
-              {viewMode !== 'filtered' && (
+              {viewMode !== "filtered" && (
                 <div className="flex gap-2">
                   <Button
-                    variant={viewMode === 'all' ? 'default' : 'outline'}
+                    variant={viewMode === "all" ? "default" : "outline"}
                     size="sm"
+                    className={
+                      viewMode === "all"
+                        ? "bg-accent text-accent-foreground hover:bg-accent/90"
+                        : ""
+                    }
                     onClick={() => {
-                      setViewMode('all');
+                      setViewMode("all");
                       setSelectedCategory(null);
                     }}
                   >
                     All Items
                   </Button>
                   <Button
-                    variant={viewMode === 'categories' ? 'default' : 'outline'}
+                    variant={viewMode === "categories" ? "default" : "outline"}
                     size="sm"
+                    className={
+                      viewMode === "categories"
+                        ? "bg-accent text-accent-foreground hover:bg-accent/90"
+                        : ""
+                    }
                     onClick={() => {
-                      setViewMode('categories');
+                      setViewMode("categories");
                       setSelectedCategory(null);
                     }}
                   >
@@ -214,26 +228,30 @@ export default function InventoryPage() {
           <div className="flex-1 overflow-y-auto">
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
               {/* Categories View */}
-              {viewMode === 'categories' && (
+              {viewMode === "categories" && (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {ITEM_CATEGORIES.map(category => (
+                  {ITEM_CATEGORIES.map((category) => (
                     <button
                       key={category}
                       onClick={() => handleCategoryClick(category)}
-                      className="p-6 bg-card rounded-xl border-2 border-border hover:border-primary hover:shadow-md transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      className="p-6 bg-card rounded-xl border-2 border-border hover:border-primary/50 hover:shadow-md transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     >
                       <h3 className="font-semibold text-lg mb-1 text-foreground">
                         {formatCategory(category)}
                       </h3>
-                      <p className="text-2xl font-bold text-primary">{categoryCounts[category]}</p>
-                      <p className="text-xs text-muted-foreground mt-1">items</p>
+                      <p className="text-2xl font-medium">
+                        {categoryCounts[category]}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        items
+                      </p>
                     </button>
                   ))}
                 </div>
               )}
 
               {/* All Items / Filtered View - Individual Display */}
-              {(viewMode === 'all' || viewMode === 'filtered') && (
+              {(viewMode === "all" || viewMode === "filtered") && (
                 <div className="space-y-3">
                   {filteredItems.length === 0 ? (
                     <div className="text-center py-12">
@@ -249,7 +267,9 @@ export default function InventoryPage() {
                       >
                         <div className="flex justify-between items-center">
                           <div className="flex-1">
-                            <h3 className="font-semibold text-lg text-foreground">{item.name}</h3>
+                            <h3 className="font-semibold text-lg text-foreground">
+                              {item.name}
+                            </h3>
                             <p className="text-sm text-muted-foreground">
                               {formatCategory(item.category)}
                             </p>
@@ -266,7 +286,9 @@ export default function InventoryPage() {
                           >
                             <Trash2 className="h-4 w-4 md:mr-2" />
                             <span className="hidden md:inline">
-                              {removingCode === item.code ? 'Removing...' : 'Remove'}
+                              {removingCode === item.code
+                                ? "Removing..."
+                                : "Remove"}
                             </span>
                           </Button>
                         </div>
@@ -285,7 +307,9 @@ export default function InventoryPage() {
           open={addDialogOpen}
           onOpenChange={setAddDialogOpen}
           onItemAdded={handleItemAdded}
-          preselectedCategory={viewMode === 'filtered' ? selectedCategory : null}
+          preselectedCategory={
+            viewMode === "filtered" ? selectedCategory : null
+          }
         />
 
         {/* Remove Item Dialog */}

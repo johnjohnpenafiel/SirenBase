@@ -4,713 +4,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 **Note**: See `PLANNING.md` for overall architecture, `BUGS.md` for active bugs and technical debt, and individual tool docs (`Planning/InventoryTracking.md`, `Planning/MilkCount.md`, `Planning/RTDE.md`) for detailed feature planning.
 
----
-
-## Phase 0: Project Setup & Research ✅ COMPLETED (October 11, 2025)
-
-### Environment Setup
-
-- [x] Verify PostgreSQL installation
-  - Check PostgreSQL is running: `psql --version` ✅ PostgreSQL 17.4
-  - Test connection with `psql` or a GUI tool (pgAdmin, Postico, DBeaver) ✅
-  - Create database: `createdb sirenbase` or via GUI tool ✅
-- [x] Create project directories (already done: `frontend/`, `backend/`)
-- [x] Initialize Git repository and create `.gitignore` files
-  - Backend: Ignore `venv/`, `__pycache__/`, `.env`, `*.pyc` ✅
-  - Frontend: Ignore `node_modules/`, `.next/`, `.env.local` ✅
-  - Root: Added `.gitignore` for project-level files ✅
-- [x] Set up GitHub repository
-  - Repository active on `main` branch ✅
-  - All Phase 0 work committed and pushed ✅
-
-### Backend Setup (Flask)
-
-- [x] Create Python virtual environment
-  - Python 3.12.9 with venv ✅
-- [x] Install initial dependencies
-  - Flask 3.1.2, SQLAlchemy 2.0.44, JWT, CORS, Marshmallow, bcrypt ✅
-  - psycopg2-binary 2.9.11 for PostgreSQL ✅
-- [x] Create `requirements.txt`
-  - All 21 dependencies documented ✅
-- [x] Set up basic Flask project structure
-  - Application factory pattern implemented ✅
-  - Modular structure: models/, routes/, schemas/, middleware/, utils/ ✅
-  - Extensions initialized: db, jwt, migrate ✅
-  - Global error handlers registered ✅
-- [x] Create `.env.example` file with required variables ✅
-- [x] Copy to `.env` and fill with actual PostgreSQL credentials
-  - Configured for user `johnpenafiel` with sirenbase database ✅
-
-### Frontend Setup (Next.js)
-
-- [x] Initialize Next.js project with TypeScript
-  - Next.js 15.5.4 with App Router ✅
-  - TypeScript 5.x configured ✅
-  - Tailwind CSS 4.0 integrated ✅
-- [x] Install additional dependencies
-  - Axios 1.7.9 for API calls ✅
-- [x] Install ShadCN UI
-  - Initialized with default Neutral theme ✅
-  - components.json configured ✅
-  - lib/utils.ts created ✅
-- [x] Set up Next.js project structure
-  - app/ directory with layout and pages ✅
-  - components/ with subdirectories (ui, layout, inventory, auth, history, admin) ✅
-  - hooks/, types/, lib/ directories created ✅
-- [x] Create `.env.local.example` ✅
-- [x] Copy to `.env.local`
-  - API URL configured: http://localhost:5000/api ✅
-
-### Documentation
-
-- [x] Update main `README.md` with project overview
-  - Comprehensive setup instructions ✅
-  - Running commands for both apps ✅
-  - Environment variables documented ✅
-  - Project structure overview ✅
-- [x] ~~Create `backend/README.md` with setup instructions~~
-  - **Decision**: Deferred to Phase 2 (after API endpoints implemented)
-  - **Rationale**: Backend README more valuable with actual features to document; root README covers all setup needs for now
-- [x] Update `frontend/README.md` with environment variable reference
-  - Added env var section pointing to `.env.local.example` ✅
-  - Links to main README for full documentation ✅
-
----
-
-## Phase 1: Database Schema Design ✅ COMPLETED (October 17, 2025)
-
-### Design Database Tables
-
-- [x] Design `users` table schema
-
-  - id (UUID, primary key)
-  - partner_number (String, unique, not null)
-  - name (String, not null)
-  - pin_hash (String, not null)
-  - role (Enum: 'admin', 'staff')
-  - created_at (Timestamp)
-  - updated_at (Timestamp)
-
-- [x] Design `items` table schema ✅
-
-  - id (UUID, primary key)
-  - name (String, not null)
-  - **category (String, not null, indexed)** ← Added October 17, 2025
-  - code (String, unique, not null, 4 characters)
-  - added_by (UUID, foreign key to users.id)
-  - added_at (Timestamp)
-  - is_removed (Boolean, for soft deletes)
-  - removed_at (Timestamp, nullable)
-  - removed_by (UUID, foreign key to users.id, nullable)
-
-- [x] Design `history` table schema ✅
-
-  - id (UUID, primary key)
-  - action (Enum: 'ADD', 'REMOVE')
-  - item_name (String, not null)
-  - item_code (String, not null)
-  - user_id (UUID, foreign key to users.id)
-  - timestamp (Timestamp)
-  - notes (Text, nullable)
-
-- [x] Document relationships ✅
-  - users → items (one-to-many: one user can add many items)
-  - users → history (one-to-many: one user has many history entries)
-  - Documented in `backend/app/models/__init__.py`
-
-### Implement Database Models
-
-- [x] Create SQLAlchemy models in `backend/app/models/` ✅
-  - User model with password hashing methods (`models/user.py`)
-  - Item model with soft delete support + **category field** (`models/item.py`)
-  - History model with helper methods (`models/history.py`)
-  - All models using SQLAlchemy 2.0 syntax with type hints
-  - Category validation via constants file + Marshmallow schema (String + Validation approach)
-  - See `ChangeLog/CATEGORY_FIELD_DECISION.md` for rationale
-- [x] Set up Flask-Migrate for migrations ✅
-  - Flask-Migrate 4.1.0 already installed
-  - Initialized with `flask db init`
-- [x] Configure migrations to detect models ✅
-  - Models imported in `app/__init__.py`
-- [x] Create initial migration ✅
-  - Migration file: `95337b169892_initial_schema_users_items_and_history_.py`
-  - Includes all tables, indexes, and foreign keys
-- [x] Review and apply migration ✅
-  - Migration reviewed and verified
-  - Applied with `flask db upgrade`
-  - All tables created successfully
-
-### Seed Database
-
-- [x] Create database seeding script (`backend/seed.py`) ✅
-  - Admin user creation (ADMIN001, PIN: 1234)
-  - Test staff user creation (TEST123, PIN: 5678)
-  - Sample items with unique 4-digit codes
-  - History entries for all actions
-  - Support for `--with-test-data` and `--clear` flags
-- [x] Run seed script to populate initial data ✅
-  - Created 2 users (1 admin, 1 staff)
-  - Created 5 test items
-  - Created 5 history entries
-- [x] Verify data in PostgreSQL ✅
-  - All tables populated correctly
-  - Foreign key relationships working
-  - Indexes created successfully
-
----
-
-## Phase 2: Backend API Development ✅ COMPLETED (October 23, 2025)
-
-### Authentication Endpoints ✅ COMPLETED (October 22, 2025)
-
-- [x] Implement POST `/api/auth/login`
-  - Accept partner_number and PIN ✅
-  - Validate credentials ✅
-  - Return JWT access token ✅
-  - Return user info (name, role) ✅
-- [x] Implement POST `/api/auth/signup`
-  - Accept partner_number, name, PIN ✅
-  - Create user account (defaults to staff role) ✅
-  - Return success/error ✅
-- [x] Implement GET `/api/auth/me`
-  - Validate JWT token ✅
-  - Return current user info ✅
-- [x] Create JWT token middleware for protected routes ✅
-  - `@jwt_required()` decorator working ✅
-  - `admin_required` decorator for admin-only routes ✅
-- [x] Test all auth endpoints ✅
-  - Login with valid/invalid credentials ✅
-  - Signup with new user ✅
-  - Get current user with JWT ✅
-  - Validation error handling ✅
-
-### Items/Inventory Endpoints ✅ COMPLETED (October 23, 2025)
-
-- [x] Implement GET `/api/items` ✅
-  - Return all active items ✅
-  - Support filtering by category ✅
-  - Optional include_removed parameter ✅
-  - Requires authentication ✅
-- [x] Implement POST `/api/items` ✅
-  - Accept item name and category ✅
-  - Generate unique 4-digit code ✅
-  - Save to database ✅
-  - Log ADD action in history ✅
-  - Return item with generated code ✅
-- [x] Implement DELETE `/api/items/<code>` ✅
-  - Accept item code ✅
-  - Soft delete (mark as removed) ✅
-  - Log REMOVE action in history ✅
-  - Return success/error ✅
-- [x] Create utility helper for code generation ✅
-  - `generate_unique_code()` with collision detection ✅
-  - `format_category_display()` for UI formatting ✅
-- [x] Test all item endpoints ✅
-  - Create item with valid/invalid category ✅
-  - Get items with/without filtering ✅
-  - Delete item (existing/non-existent) ✅
-  - Authorization checks ✅
-  - Validation error handling ✅
-
-### History Endpoints ✅ COMPLETED (October 23, 2025)
-
-- [x] Implement GET `/api/history` ✅
-  - Return recent history entries (configurable limit) ✅
-  - Include user name via eager loading ✅
-  - Include action, item details, timestamp ✅
-  - Sort by most recent first ✅
-  - Requires authentication ✅
-- [x] Filtering support ✅
-  - Filter by user_id (optional) ✅
-  - Filter by action type (ADD/REMOVE) ✅
-  - Configurable limit (default 100, max 500) ✅
-- [x] Test history endpoints ✅
-  - Get history with/without filters ✅
-  - Action filtering (ADD/REMOVE) ✅
-  - Invalid action validation ✅
-  - Authentication required ✅
-  - Limit parameter validation ✅
-
-### Admin Endpoints ✅ COMPLETED (October 23, 2025)
-
-- [x] Implement GET `/api/admin/users` ✅
-  - Return all users (ordered by created_at desc)
-  - Requires admin role
-- [x] Implement POST `/api/admin/users` ✅
-  - Add new authorized user (partner_number, name, PIN, optional role)
-  - Supports creating both admin and staff users
-  - Requires admin role
-- [x] Implement DELETE `/api/admin/users/:id` ✅
-  - Remove user authorization (hard delete)
-  - Prevents admins from deleting themselves
-  - Requires admin role
-- [x] Test admin endpoints ✅
-  - GET /api/admin/users: Lists all users correctly
-  - POST /api/admin/users: Creates staff and admin users
-  - DELETE /api/admin/users/:id: Deletes users with safeguards
-  - Authorization: Staff users properly blocked from admin endpoints
-  - Self-deletion prevention working
-
-### Error Handling & Validation ✅ COMPLETED (October 23, 2025)
-
-- [x] Implement global error handler ✅
-  - Added handlers for 400, 401, 403, 404, 409, 500 errors
-  - ValidationError handler for Marshmallow validation
-  - Catch-all Exception handler with production/development modes
-  - All handlers return consistent JSON format
-- [x] Add request validation using Marshmallow ✅
-  - Marshmallow schemas already in use (LoginSchema, SignupSchema, etc.)
-  - Global ValidationError handler catches all validation errors
-- [x] Return consistent error response format ✅
-  - All errors return: `{"error": "message or details"}`
-  - Validation errors return: `{"error": {"field": ["error msg"]}}`
-- [x] Test error cases ✅
-  - 404: Resource not found
-  - Validation errors: Empty/invalid fields
-  - Unauthorized: Missing JWT tokens
-
-### CORS Configuration ✅ COMPLETED (October 23, 2025)
-
-- [x] Configure Flask-CORS to allow Next.js origin ✅
-  - CORS configured in `app/__init__.py` line 32
-  - Origins from environment variable `CORS_ORIGINS`
-  - Default: `http://localhost:3000` for development
-  - Supports multiple origins via comma-separated values
-
-### Comprehensive Test Suite ✅ COMPLETED (October 23, 2025)
-
-- [x] Created complete pytest test suite for all Phase 2 endpoints and models ✅
-  - tests/conftest.py: Pytest fixtures (app, client, users, tokens, headers)
-  - tests/test_models.py: 13 unit tests for User, Item, History models
-  - tests/test_utils.py: 8 unit tests for helper functions
-  - tests/test_auth.py: 15 integration tests for authentication endpoints
-  - tests/test_items.py: 12 integration tests for inventory endpoints
-  - tests/test_history.py: 6 integration tests for history endpoint
-  - tests/test_admin.py: 12 integration tests for admin endpoints
-  - **Total: 66/66 tests passing (100% success rate)**
-  - All endpoints tested for success, error, authorization, and validation cases
-  - pytest and pytest-flask added to requirements.txt
-  - backend/CHECKLIST.md created to enforce systematic testing on all future features
-
----
-
-## Phase 3A: Multi-Tool Architecture Setup
-
-### Backend API Restructuring ✅ COMPLETED (October 29, 2025)
-
-- [x] Rename existing routes to tracking namespace
-  - Move `/api/items` → `/api/tracking/items` ✅
-  - Move `/api/history` → `/api/tracking/history` ✅
-  - Keep `/api/auth/*` as shared authentication ✅
-  - Keep `/api/admin/*` as shared admin ✅
-- [x] Update route blueprints
-  - Create `backend/app/routes/tools/` directory ✅
-  - Create `tracking.py` with consolidated routes in tools directory ✅
-  - Update blueprint registration in `app/__init__.py` ✅
-  - Remove obsolete `items.py` and `history.py` files ✅
-  - Update `backend/app/routes/__init__.py` imports ✅
-- [x] Update existing tests for new routes
-  - Update all test files to use `/api/tracking/*` paths ✅
-  - Verify all 66 tests still pass ✅ (Commits: 0eff74a, a4bdf11)
-
-### Backend Database Restructuring ✅ COMPLETED (October 29, 2025)
-
-- [x] Rename existing tables with tracking prefix
-  - Rename `items` → `tracking_items` ✅
-  - Rename `history` → `tracking_history` ✅
-  - Create migration file ✅
-  - Test migration on development database ✅
-- [x] Update model files
-  - Update `backend/app/models/item.py` with new table name ✅
-  - Update `backend/app/models/history.py` with new table name ✅
-  - All references automatically updated (no explicit route/test references to table names) ✅
-- [x] Run migration and verify
-  - Execute `flask db upgrade` ✅
-  - Verify tables renamed successfully ✅
-  - Verify foreign keys and indexes intact ✅
-  - Run full test suite (66/66 passing) ✅
-  - Verify data preserved (6 items, 7 history entries) ✅ (Commit: 998d434)
-
-### Frontend Directory Restructuring ✅ COMPLETED (October 30, 2025)
-
-- [x] Create tool-based directory structure
-  - Create `frontend/app/dashboard/` for tool grid ✅
-  - Create `frontend/app/tools/tracking/` for tracking tool ✅
-  - Create `frontend/app/tools/milk-count/` for milk count tool (placeholder) ✅
-  - Create `frontend/app/tools/rtde/` for RTD&E tool (placeholder) ✅
-  - Create `frontend/app/admin/` for global admin panel ✅
-  - Create `frontend/components/shared/` for shared components ✅
-  - Create `frontend/components/tools/tracking/` for tracking components ✅
-- [x] Move/reorganize existing component placeholders
-  - Reorganized empty placeholder directories ✅
-  - Removed `components/layout/` (consolidated into `components/shared/`) ✅
-- [x] Create placeholder pages with basic structure
-  - `app/page.tsx` - Redirects to dashboard ✅
-  - `app/dashboard/page.tsx` - Tool selection grid ✅
-  - `app/tools/tracking/page.tsx` - Tracking tool landing ✅
-  - `app/admin/page.tsx` - Admin panel landing ✅
-- [x] Create shared components
-  - `components/shared/Header.tsx` ✅
-  - `components/shared/Footer.tsx` ✅
-  - `components/shared/ToolCard.tsx` ✅
-- [x] Verify build succeeds
-  - All routes build successfully ✅
-  - TypeScript compilation passes ✅
-
-### Dashboard Implementation ✅ COMPLETED (October 30, 2025)
-
-- [x] Create Dashboard page (`app/dashboard/page.tsx`)
-  - Grid layout with tool cards ✅
-  - "Inventory Tracking" card → `/tools/tracking` ✅
-  - "Milk Count" card (disabled/coming soon) ✅
-  - "RTD&E Count" card (disabled/coming soon) ✅
-  - "Admin Panel" card (visible only to admin role users) ✅
-  - Icons for each tool (Package, Milk, Box, ShieldCheck from lucide-react) ✅
-  - Welcome message with user name ✅
-  - Loading state while checking authentication ✅
-- [x] Create Tool Card component (`components/shared/ToolCard.tsx`)
-  - Props: title, description, icon, route, isDisabled, isAdminOnly ✅
-  - Click handler for navigation using Next.js router ✅
-  - Visual states: hover, disabled, admin-only ✅
-  - Styled with Tailwind CSS (no ShadCN Card needed) ✅
-- [x] Implement role-based card visibility
-  - Show admin card only when `user.role === 'admin'` ✅
-  - Created `hooks/use-auth.ts` with minimal auth hook ✅
-  - Mock user data for testing (will be replaced in Phase 3B) ✅
-  - Message for non-admin users ✅
-- [x] Verify build and functionality
-  - Next.js build successful ✅
-  - TypeScript compilation passes ✅
-  - All routes working correctly ✅
-
-### Update Documentation ✅ COMPLETED (October 30, 2025)
-
-- [x] Update backend README (if exists) with new structure
-  - Created `backend/README.md` with multi-tool architecture overview ✅
-  - Flask setup instructions, API namespacing strategy, common tasks ✅
-- [x] Update frontend README with new routing structure
-  - Replaced boilerplate with SirenBase-specific content ✅
-  - Multi-tool routing structure, component organization, development guide ✅
-- [x] Update backend/CLAUDE.md with multi-tool structure
-  - Updated project structure diagram with routes/tools/ subdirectory ✅
-  - Updated blueprint registration examples ✅
-  - Updated all code examples to use /api/tracking/* namespace ✅
-- [x] Document architectural changes in `ChangeLog/`
-  - Created `ChangeLog/MULTI_TOOL_ARCHITECTURE.md` ✅
-  - Comprehensive documentation of all Phase 3A changes ✅
-  - Includes rationale, decisions, migration guide, and verification ✅
-- [x] Update root README.md with current phase status
-  - Updated to show Phase 3A complete ✅
-  - Added Phase 3B as current phase ✅
-  - Updated last modified date to October 30, 2025 ✅
-- [x] Verify PLANNING.md matches implemented architecture
-  - Confirmed PLANNING.md is accurate and current ✅
-  - No updates needed - already reflects multi-tool architecture ✅
-
----
-
-## Phase 3B: Tool 1 Frontend Development (Tracking) ✅ COMPLETED (100%)
-
-### Authentication UI ✅ COMPLETED
-
-- [x] Create login page (`app/login/page.tsx`)
-  - Partner number input
-  - PIN input (masked)
-  - Login button
-  - Error message display
-- [ ] Create signup page (if allowing self-signup)
-  - Partner number input
-  - Name input
-  - PIN input (with confirmation)
-  - Submit button
-  - **Note**: Not implemented yet; users created via admin panel
-- [x] Implement authentication context/provider
-  - Store JWT token in localStorage or secure cookie
-  - Provide `login()`, `logout()`, `isAuthenticated()` functions
-  - Provide current user info
-- [x] Create protected route wrapper
-  - Redirect to login if not authenticated
-  - Wrap inventory, history, and admin pages
-- [x] Test login/logout flow
-
-### Inventory/Items UI ✅ COMPLETED
-
-- [x] Create inventory page (`app/tools/tracking/inventory/page.tsx`)
-  - **Three view modes on single page**:
-    - **Categories View** (default/home): 2-column grid of category cards with item counts
-    - **All View**: Full-width list showing all items from all categories
-    - **Category-Filtered View**: Click category card to view items in that category only
-  - View toggle: `[All | Categories]` switching between modes
-  - Mobile-first design with large, touch-friendly rectangles (min 44x44px)
-  - Items display with code count (e.g., "Vanilla Syrup 3x")
-  - "Add Item" functionality accessible in all views
-  - "Remove Item" functionality for each item
-  - Individual code display mechanism (ItemCodesDialog component)
-  - Update API calls to use `/api/tracking/items`
-  - **Enhancement**: Category preselection in Add Item dialog when in filtered view (commit 8960aad)
-- [x] Create "Add Item" two-step flow
-  - **Step 1 - Generate Code Modal/Screen**:
-    - Input: Item name (max 255 characters)
-    - Dropdown: Category selection (validated from predefined list)
-    - **Category auto-preselected when in category-filtered view**
-    - Button: "Generate Code"
-  - **Step 2 - Confirm After Marking**:
-    - Display generated 4-digit code prominently
-    - Prompt: "Write this code on the physical item"
-    - Button: "Confirm & Save" (saves item to database with history entry)
-    - Cancel option available (discards code, doesn't save to database)
-  - Success: Item appears in inventory list immediately
-  - **Known Issue**: [BUG-001] Item saves prematurely in Step 1 (see BUGS.md)
-- [x] Create "Remove Item" confirmation dialog
-  - Show item name and specific code (e.g., "Remove Vanilla Syrup (Code 2847)?")
-  - Buttons: "Cancel" | "Remove"
-  - On confirm: Soft delete (set is_removed=true) and create history entry
-- [x] Implement API calls to backend
-  - GET `/api/tracking/items` - Fetch items on page load
-  - POST `/api/tracking/items` - Add item (Step 2 of two-step flow)
-  - DELETE `/api/tracking/items/<code>` - Remove item by code
-  - Support category filtering via query params
-- [x] Add loading states and error handling
-  - Loading spinners during API calls
-  - Toast notifications for success/error (using Sonner)
-  - Handle network errors gracefully
-- [x] Test complete workflows
-  - Test add item flow (both steps, including cancel)
-  - Test remove item flow (with confirmation)
-  - Test view switching (Categories ↔ All ↔ Category-filtered)
-  - Test on mobile devices (touch targets, responsive grid)
-  - Test category preselection behavior
-
-### History UI ✅ COMPLETED
-
-- [x] Create history page (`app/tools/tracking/history/page.tsx`)
-  - Display recent actions in reverse chronological order
-  - Show: staff name, action, item name, code, timestamp
-  - Implement pagination (client-side, 20 items per page)
-  - Update API calls to use `/api/tracking/history`
-  - Desktop table + mobile card layout
-  - **Navigation**: "Back to Inventory" button added
-- [x] Fetch history data from backend
-- [x] Add filters (action type: All/Add/Remove)
-- [x] Test history display
-- [x] Add navigation between Inventory ↔ History
-
-### Global Admin Panel UI ✅ COMPLETED
-
-- [x] Create admin page (`app/admin/page.tsx`)
-  - **Note**: This is the global admin panel (not tool-specific)
-  - Accessible from dashboard "Admin Panel" card
-  - Require admin role (redirect if not admin via ProtectedRoute)
-  - Display all users in table (desktop) + cards (mobile)
-  - Show partner number, name, role badges, created date
-  - Uses `/api/admin/*` endpoints
-  - Stats cards (Total Users, Admin count)
-- [x] Add "Add User" form/modal (`components/admin/AddUserDialog.tsx`)
-  - Partner number, name, PIN (with confirmation), role selection
-  - Full validation (required fields, 4-digit PIN, PIN match)
-  - Auto-uppercase partner number
-- [x] Add "Remove User" button for each user (`components/admin/DeleteUserDialog.tsx`)
-  - Confirmation dialog with warning
-  - Self-deletion prevention with error message
-- [x] Implement API calls for user management
-- [x] Test admin functionality (production-ready)
-
-### UI/UX Polish ✅ MOSTLY COMPLETED
-
-- [x] Add ShadCN components (Button, Input, Dialog, Card, etc.)
-- [x] Implement consistent styling with TailwindCSS
-- [x] Add loading spinners for async operations
-- [x] Add toast notifications for success/error messages (Sonner library)
-- [x] Ensure mobile responsiveness (test on various screen sizes)
-- [ ] Add keyboard shortcuts for common actions (optional)
-- [ ] Implement dark mode support (optional)
-- **Known Issue**: [BUG-002] No logout button in Header (see BUGS.md)
-
-### API Integration ✅ COMPLETED
-
-- [x] Create API client utility (`lib/api.ts`)
-  - Axios instance with base URL
-  - Automatic JWT token injection in headers
-  - Error handling interceptor
-- [x] **Create category constants file** (`lib/constants.ts`)
-  - Define ITEM_CATEGORIES array (matches backend)
-  - Create ItemCategory type
-  - Create formatCategory utility function (e.g., "coffee_beans" → "Coffee Beans")
-- [x] Create TypeScript types for API responses (`types/index.ts`)
-  - User type
-  - Item type **(include category field)**
-  - HistoryEntry type
-  - ItemCategory type (from constants)
-- [x] Implement all API calls with new namespaced routes
-  - Auth: login, signup, getMe → `/api/auth/*`
-  - **Tracking Items**: getItems, addItem (with category), removeItem → `/api/tracking/items`
-  - **Tracking History**: getHistory → `/api/tracking/history`
-  - Admin: getUsers, addUser, removeUser → `/api/auth/admin/*` or `/api/admin/*`
-
----
-
-## Phase 3C: Naming Consistency Enhancement ✅ COMPLETED (November 8, 2025)
-
-**Started**: November 8, 2025
-**Completed**: November 8, 2025
-**Goal**: Prevent item naming fragmentation through template-enhanced autocomplete without enforcing strict naming rules.
-
-**Context**: Solved the root problem by switching from grouped display to individual item display (unique codes are truth). Autocomplete provides consistency guidance without restricting flexibility.
-
-### Day 1: Simplify Display Logic ✅ COMPLETED (Nov 8, 2025)
-
-- [x] Remove `GroupedItem` type from `frontend/types/index.ts`
-- [x] Refactor `frontend/app/tools/tracking/inventory/page.tsx`
-  - Remove `groupedItems` useMemo logic
-  - Display items individually with unique codes
-  - Add inline "Remove" button per item
-  - Update `filteredItems` to work on Item[] directly
-- [x] Delete `ItemCodesDialog` component (no longer needed)
-- [x] Update category counts logic (count individual items, not groups)
-- [x] Test frontend build (verify no errors)
-- [x] **Commit**: 4c38ae3 - "Refactor: Display items individually (remove grouping logic)"
-
-### Day 2: Backend Autocomplete Infrastructure ✅ COMPLETED (Nov 8, 2025)
-
-- [x] Create database migration `2025110801_add_item_name_suggestions_table.py`
-  - Table: `item_name_suggestions` (id, name, category, created_at, updated_at)
-  - Index: `idx_suggestions_category_name` for fast queries
-  - Seed 49 common Starbucks items (8 syrups, 6 sauces, 5 coffee beans, 4 powders, 6 cups, 4 lids, 5 condiments, 6 cleaning supplies, 5 other)
-- [x] Create `ItemSuggestion` model (`backend/app/models/item_suggestion.py`)
-  - to_dict() method for serialization
-  - Add to models __init__.py
-- [x] Run migration (`flask db upgrade`)
-  - Verified 49 templates seeded successfully
-- [x] Add search endpoint to `backend/app/routes/tools/tracking.py`
-  - Route: `GET /api/tracking/items/search`
-  - Query params: q (search query), category (required), limit (optional, max 15)
-  - Returns combined results from existing items + template suggestions
-  - Existing items include code, templates marked as "template" source
-- [x] **Commit**: b590f42 - "Add backend support for autocomplete with template suggestions"
-
-### Day 3: Frontend Autocomplete Component ✅ COMPLETED (Nov 8, 2025)
-
-- [x] Add `debounce` utility to `frontend/lib/utils.ts` (300ms delay)
-- [x] Add `ItemSuggestion` and `SearchItemNamesResponse` types to `frontend/types/index.ts`
-- [x] Create `ItemNameAutocomplete.tsx` component (`frontend/components/tools/tracking/`)
-  - Props: value, onChange, category, disabled, autoFocus
-  - State: suggestions[], showSuggestions, loading, selectedIndex
-  - Debounced search after 2+ characters
-  - Dropdown with suggestions (min 44px touch targets)
-  - Shows "Code: XXXX" for existing items, "Suggested" badge for templates
-  - Keyboard navigation (arrow keys, Enter to select, Escape to close)
-  - Loading spinner during API calls
-  - Click outside to close
-- [x] Add `searchItemNames()` method to `frontend/lib/api.ts`
-  - `GET /api/tracking/items/search?q=${query}&category=${category}&limit=${limit}`
-  - Returns { suggestions: ItemSuggestion[] }
-- [x] Update `AddItemDialog.tsx` to use `ItemNameAutocomplete`
-  - Replaced `<Input>` with `<ItemNameAutocomplete>`
-  - Passes category prop for category-filtered suggestions
-  - Maintains existing two-step flow
-- [x] Test frontend build (no errors)
-- [x] **Commit**: 491c9b0 - "Add frontend autocomplete component for item names (Phase 3C Day 3)"
-
-### Day 4: Testing & Documentation ✅ COMPLETED (Nov 8, 2025)
-
-- [x] **Backend tests** (`backend/tests/test_items.py` - TestSearchItemNames class)
-  - test_search_with_existing_items: Existing items returned with codes ✅
-  - test_search_with_template_suggestions: Templates returned without codes ✅
-  - test_search_combines_existing_and_templates: Dual-source autocomplete ✅
-  - test_search_min_query_length: 2-character minimum enforced ✅
-  - test_search_requires_category: Category parameter validation ✅
-  - test_search_case_insensitive: PostgreSQL ILIKE working ✅
-  - test_search_excludes_removed_items: Only active items shown ✅
-  - test_search_respects_limit_parameter: Limit parameter honored ✅
-  - test_search_without_auth: JWT authentication required ✅
-  - **All 9 tests passed** (2.05s)
-- [x] **Commit**: 49e4cbc - "Add comprehensive backend tests for autocomplete endpoint"
-- [ ] **Manual testing** (deferred to production usage)
-  - Desktop browsers (Chrome, Firefox, Safari)
-  - Mobile devices (iOS Safari, Android Chrome)
-  - Network latency testing
-  - Touch interaction verification
-- [x] **Update documentation**
-  - TASKS.md: Phase 3C marked complete ✅
-  - PLANNING.md: Tool 1 autocomplete feature documented ✅
-  - Planning/InventoryTracking.md: Autocomplete section added ✅
-
----
-
-## Phase 3D: Technical Debt Resolution ✅ COMPLETED (November 20, 2025)
-
-**Goal**: Address technical debt items [TECH-001] and [TECH-003] to improve code quality and establish testing infrastructure before Tool 2 development.
-
-### Form Validation Migration [TECH-003]
-
-- [x] **Create Zod validation schemas**
-  - `frontend/lib/validations/auth.ts` - Login schema (partner number + PIN validation)
-  - `frontend/lib/validations/tracking.ts` - Add item schema (item name + category)
-  - `frontend/lib/validations/admin.ts` - Add user schema with PIN confirmation
-  - All schemas include automatic trimming and uppercasing where needed
-  - Type-safe with TypeScript inference
-
-- [x] **Migrate forms to react-hook-form + Zod**
-  - Login form (`frontend/app/login/page.tsx`) - Replaced native HTML validation
-  - AddItemDialog (`frontend/components/tools/tracking/AddItemDialog.tsx`) - Maintained two-step flow
-  - AddUserDialog (`frontend/components/admin/AddUserDialog.tsx`) - PIN confirmation validation
-  - All forms now use ShadCN Form components with automatic error messages
-
-- [x] **Benefits achieved**
-  - Type-safe form validation throughout the application
-  - Consistent form patterns for Tool 2 and Tool 3
-  - Better UX with field-level errors and touched states
-  - DRY validation (schemas can be reused in API validation)
-
-### Frontend Testing Infrastructure [TECH-001]
-
-- [x] **Install testing dependencies**
-  - Vitest (fast test runner for Vite/Next.js projects)
-  - @testing-library/react (React component testing)
-  - @testing-library/jest-dom (custom matchers)
-  - @testing-library/user-event (user interaction simulation)
-  - jsdom (browser environment simulation)
-
-- [x] **Configure testing environment**
-  - `frontend/vitest.config.ts` - Vitest configuration with jsdom environment
-  - `frontend/vitest.setup.ts` - Global test setup and cleanup
-  - Added test scripts to package.json: `test`, `test:ui`, `test:coverage`
-
-- [x] **Write validation schema tests**
-  - `frontend/lib/__tests__/validations.test.ts` - 14 tests, all passing
-  - Login schema tests (5 tests): partner number trimming, PIN validation
-  - Add item schema tests (4 tests): item name trimming, category validation
-  - Add user schema tests (5 tests): PIN confirmation, role validation
-  - 100% test pass rate demonstrates infrastructure is working correctly
-
-- [x] **Establish testing patterns**
-  - Auth context test structure created (draft)
-  - Pattern for component testing established
-  - Coverage target: 60-70% for critical paths before production
-
-### Documentation Updates
-
-- [x] **Update BUGS.md**
-  - Moved [TECH-001] and [TECH-003] to "Fixed Bugs Archive"
-  - Documented solutions, benefits, and files changed
-  - Deferred [TECH-002] (error boundaries) to Phase 7
-
-- [x] **Update PLANNING.md**
-  - Added form validation to Tech Stack (react-hook-form + Zod)
-  - Added testing to Tech Stack (Vitest + React Testing Library)
-  - Documented validation schema directory structure
-
-- [x] **Update TASKS.md**
-  - Added Phase 3D to task list
-  - Marked all subtasks as completed
-
-### Summary
-
-**Completed**: November 20, 2025
-
-**Impact**: Code quality and developer experience significantly improved. Testing infrastructure established for confident refactoring and feature development.
-
-**Next Steps**: Proceed to Tool 2 (Milk Count System) with established patterns for forms and testing.
+**📦 Completed Work**: Phases 0-3D (Project Setup through Tool 1 Completion) have been archived to `docs/archive/TASKS_ARCHIVE.md` to keep this file focused on active work.
 
 ---
 
@@ -834,68 +128,340 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ## Phase 6: Tool 3 - RTD&E Counting System
 
-**Status**: Awaiting Tool 2 completion
+**Status**: Ready to begin
 **Detailed Planning**: See `Planning/RTDE.md`
 
-### Backend Development
+### Phase 6A: Admin Dashboard Restructure (PREREQUISITE)
 
-- [ ] Design database schema
-  - rtde_items table (display items with expected quantities)
-  - rtde_pull_lists table (generated pull lists)
-  - Create migration
-- [ ] Create SQLAlchemy models
-  - RTDEItem model
-  - PullList model
-- [ ] Implement API endpoints (`/api/rtde/*`)
-  - GET `/api/rtde/items` - Get all display items
-  - PATCH `/api/rtde/items/:id` - Update item count
-  - POST `/api/rtde/pull-lists` - Generate pull list
-  - GET `/api/rtde/pull-lists/:id` - Get pull list details
-  - PATCH `/api/rtde/pull-lists/:id/items/:item_id` - Mark item as pulled
-  - PUT `/api/rtde/items` - Bulk update items (admin only)
-- [ ] Implement pull list generation logic
-  - Calculate missing = expected - current
-  - Filter items with missing > 0
-  - Create pull list record
-- [ ] Write comprehensive test suite
-  - Item counting
-  - Pull list generation
-  - Item marking as pulled
+**Timeline**: 1-2 days
+**Priority**: Must complete before RTD&E tool backend/frontend
+
+**Goal**: Convert current single-page admin panel into modular dashboard to support tool-specific admin features.
+
+#### Frontend - Admin Dashboard Restructure
+
+- [ ] Modify `/app/admin/page.tsx` to show module cards instead of user table
+  - Create grid layout with ToolCard-style module cards
+  - Add "User Management" card → Routes to `/admin/users`
+  - Add "RTD&E Items & Pars" card → Routes to `/admin/rtde-items`
+  - Add "Milk Count Pars" card (placeholder/disabled) → Routes to `/admin/milk-pars`
+  - Use existing ProtectedRoute wrapper (admin-only access)
+
+- [ ] Create `/app/admin/users/page.tsx`
+  - Move existing user management UI from `/app/admin/page.tsx`
+  - Keep all functionality: user table, AddUserDialog, DeleteUserDialog
+  - Add "Back to Admin Panel" navigation
+  - No changes to backend - uses existing `/api/admin/*` endpoints
+
+- [ ] Create placeholder routes
+  - `/app/admin/rtde-items/page.tsx` - Placeholder for Phase 6B
+  - `/app/admin/milk-pars/page.tsx` - Placeholder with "Coming Soon"
+
+- [ ] Update navigation
+  - Update Header component if it links to admin panel
+  - Update dashboard Admin Panel card description if needed
+
+- [ ] Test admin dashboard navigation
+  - Verify module cards display correctly
+  - Test routing between admin dashboard and user management
+  - Verify admin-only access protection
+  - Test on mobile and desktop layouts
+
+#### Documentation
+
+- [ ] Update PLANNING.md
+  - Document admin dashboard restructure decision
+  - Update admin routes section
+
+- [ ] Update TASKS.md
+  - Mark Phase 6A tasks as completed
+  - Add date completed
+
+- [ ] Git commit
+  - Commit message: "feat: Restructure admin panel into modular dashboard (Phase 6A)"
+  - Push to repository
+
+### Phase 6B: RTD&E Backend Development
+
+**Timeline**: 3-4 days
+**Dependencies**: Phase 6A complete
+
+#### Database Schema
+
+- [ ] Create migration `202511xx_add_rtde_tables.py`
+  - `rtde_items` table (id, name, icon, par_level, display_order, active, timestamps)
+  - `rtde_count_sessions` table (id, user_id, status, started_at, completed_at, expires_at)
+  - `rtde_session_counts` table (id, session_id, item_id, counted_quantity, is_pulled, updated_at)
+  - Add indexes: active+display_order, user_id+status, expires_at, session_id
+  - Add foreign key constraints with CASCADE delete
+
+- [ ] Run migration
+  - Execute `flask db upgrade`
+  - Verify tables created successfully
+  - Verify indexes and constraints
+
+#### Models
+
+- [ ] Create `backend/app/models/tools/rtde.py`
+  - RTDEItem model (to_dict method, validation)
+  - RTDECountSession model (auto-calculate expires_at)
+  - RTDESessionCount model (unique constraint on session+item)
+  - Add relationships (user→sessions, sessions→counts, items→counts)
+  - Import models in `backend/app/models/__init__.py`
+
+#### API Endpoints - Admin Item Management
+
+- [ ] Create `backend/app/routes/tools/rtde.py`
+  - Set up blueprint with `/api/rtde` prefix
+  - Register blueprint in `app/__init__.py`
+
+- [ ] Implement admin item endpoints
+  - GET `/api/rtde/admin/items` - List all items ordered by display_order (admin only)
+  - POST `/api/rtde/admin/items` - Create item (admin only)
+  - PUT `/api/rtde/admin/items/:id` - Update item (admin only)
+  - DELETE `/api/rtde/admin/items/:id` - Delete item (hard/soft based on usage, admin only)
+  - PUT `/api/rtde/admin/items/reorder` - Batch update display_order (admin only)
+
+#### API Endpoints - Session Management
+
+- [ ] Implement session endpoints
+  - GET `/api/rtde/sessions/active` - Check for active session (authenticated)
+  - POST `/api/rtde/sessions/start` - Create or resume session (authenticated)
+  - GET `/api/rtde/sessions/:id` - Get session with all item counts (authenticated, owner only)
+  - PUT `/api/rtde/sessions/:id/count` - Update count for item (authenticated, owner only)
+
+#### API Endpoints - Pull List
+
+- [ ] Implement pull list endpoints
+  - GET `/api/rtde/sessions/:id/pull-list` - Generate pull list (authenticated, owner only)
+  - PUT `/api/rtde/sessions/:id/pull` - Mark item as pulled/unpulled (authenticated, owner only)
+  - POST `/api/rtde/sessions/:id/complete` - Complete and delete session (authenticated, owner only)
+
+#### Background Jobs
+
+- [ ] Create session cleanup script
+  - Script: `backend/app/utils/rtde_cleanup.py`
+  - Delete sessions where `status='in_progress' AND expires_at < NOW()`
+  - Add cron job documentation (run hourly)
+
+#### Backend Testing
+
+- [ ] Write model tests (`backend/tests/test_rtde_models.py`)
+  - Item creation and validation
+  - Session expiration calculation
+  - Cascade deletion behavior
+  - Unique constraint enforcement
+
+- [ ] Write admin endpoint tests (`backend/tests/test_rtde_admin.py`)
+  - CRUD operations for items
+  - Reorder functionality
+  - Authorization checks (admin only)
+  - Validation error handling
+
+- [ ] Write session endpoint tests (`backend/tests/test_rtde_sessions.py`)
+  - Active session check
+  - Start new vs resume session
+  - Session ownership validation
+  - Count updates and retrieval
+  - Session expiration logic
+
+- [ ] Write pull list tests (`backend/tests/test_rtde_pull_list.py`)
+  - Pull list generation (only items with need > 0)
+  - Mark items as pulled/unpulled
+  - Complete session (deletion)
   - Authorization checks
 
-### Frontend Development
+- [ ] Run full test suite
+  - All RTDE tests passing
+  - No regression in existing tests
+  - Coverage target: 80%+ for RTDE code
 
-- [ ] Create routing structure
-  - `/tools/rtde/` - Landing page
-  - `/tools/rtde/count` - Counting screen
-  - `/tools/rtde/pull-list/:id` - Pull list view (BOH)
-  - `/tools/rtde/history` - Past pull lists
-  - `/tools/rtde/admin/items` - Item management (admin only)
-- [ ] Implement Counting screen
-  - List of all display items
-  - +/- buttons for counting (reuse Counter component)
-  - Direct number input for bulk items
-  - "Generate Pull List" button
-- [ ] Implement Pull List view
-  - List of items to pull with quantities
-  - "Mark as Pulled" button per item
-  - Progress indicator
-  - Return to display for restocking
-- [ ] Implement Item Management (admin)
-  - List view of all items
-  - Add/remove/edit items
-  - Set expected quantities
-  - Seasonal updates
-- [ ] Implement Historical Data view
-  - Past pull lists with date filtering
-  - View details for any past pull list
+#### Documentation
 
-### Testing & Deployment
+- [ ] Update backend documentation
+  - Add RTDE models to backend/README.md
+  - Document API endpoints with examples
 
-- [ ] Test complete workflow (count → pull list → mark pulled)
+- [ ] Git commit
+  - Commit message: "feat: Add RTD&E backend (models, API, tests) - Phase 6B"
+  - Push to repository
+
+### Phase 6C: RTD&E Frontend Development
+
+**Timeline**: 4-5 days
+**Dependencies**: Phase 6B complete
+
+#### Admin - Item Management UI
+
+- [ ] Create `/app/admin/rtde-items/page.tsx`
+  - Replace placeholder with full item management UI
+  - List view with all items (sorted by display_order)
+  - Show: drag handle, icon, name, par level, active status, edit button
+  - "Add Item" button (top-right)
+  - Filter toggle: Show active only / Show all
+
+- [ ] Implement drag-and-drop reordering
+  - Install `@dnd-kit/core` and `@dnd-kit/sortable`
+  - Add drag handles to each item row
+  - Real-time reordering in UI
+  - "Save Order" button to persist changes
+  - Call PUT `/api/rtde/admin/items/reorder`
+
+- [ ] Create `components/tools/rtde/AddItemDialog.tsx`
+  - Form fields: name, icon (emoji input), par_level, active toggle
+  - Validation: name required (max 100 chars), icon required, par_level > 0
+  - Use react-hook-form + Zod validation
+  - Call POST `/api/rtde/admin/items`
+
+- [ ] Create `components/tools/rtde/EditItemDialog.tsx`
+  - Pre-populate form with current item values
+  - Same validation as AddItemDialog
+  - Call PUT `/api/rtde/admin/items/:id`
+
+- [ ] Create `components/tools/rtde/DeleteItemDialog.tsx`
+  - Confirmation dialog with item name
+  - Warning if item has been used in sessions
+  - Call DELETE `/api/rtde/admin/items/:id`
+
 - [ ] Test admin item management
-- [ ] Mobile responsiveness testing
-- [ ] Deploy Tool 3 to production
+  - Add items with various emojis
+  - Edit item properties
+  - Drag-and-drop reordering
+  - Delete unused and used items
+  - Toggle active/inactive
+  - Mobile responsiveness
+
+#### Counting Interface
+
+- [ ] Create `/app/tools/rtde/page.tsx` (Landing/Entry Point)
+  - Check for active session via GET `/api/rtde/sessions/active`
+  - If no session → Auto-start new session
+  - If session exists → Show resume/restart dialog
+  - Route to `/tools/rtde/count/:sessionId` after session confirmed
+
+- [ ] Create `components/tools/rtde/ResumeSessionDialog.tsx`
+  - Display session info (started X minutes ago, items counted)
+  - Buttons: "Resume" | "Start Fresh"
+  - Resume → Navigate to counting screen with existing session
+  - Start Fresh → Call POST `/api/rtde/sessions/start` with action="new"
+
+- [ ] Create `/app/tools/rtde/count/[sessionId]/page.tsx`
+  - Fetch session data via GET `/api/rtde/sessions/:id`
+  - One-item-at-a-time display with current item focused
+  - Display: emoji, name, par level, counted quantity, need quantity
+  - Progress indicator: "X/Y items counted"
+  - Navigation: Prev/Next buttons
+  - "Generate Pull List" button (bottom)
+
+- [ ] Create `components/tools/rtde/ItemCounter.tsx`
+  - Large count display in center
+  - +/- buttons (large touch targets, min 44x44px)
+  - Direct number input (tap count to type)
+  - Real-time "Need" calculation (par - counted)
+  - Auto-save on every change (debounced)
+  - Call PUT `/api/rtde/sessions/:id/count`
+
+- [ ] Create `components/tools/rtde/ItemNavigator.tsx`
+  - Desktop: Vertical sidebar with all items
+  - Mobile: Horizontal bottom bar (scrollable)
+  - Show emoji for each item
+  - Highlight current item
+  - Show count badge if counted
+  - Click/tap to jump to item
+  - Responsive breakpoint: 768px
+
+- [ ] Test counting interface
+  - Count items with +/- buttons
+  - Type quantities directly
+  - Navigate with Prev/Next
+  - Quick jump via navigator
+  - Auto-save functionality
+  - Session resume after interruption
+  - Mobile and desktop layouts
+
+#### Pull List Screen
+
+- [ ] Create `/app/tools/rtde/pull-list/[sessionId]/page.tsx`
+  - Fetch pull list via GET `/api/rtde/sessions/:id/pull-list`
+  - Display only items where need_quantity > 0
+  - Show: emoji, name, quantity to pull
+  - Checkbox for each item (mark as pulled)
+  - "Back to Count" button
+  - "Complete" button (confirmation dialog)
+
+- [ ] Create `components/tools/rtde/PullListItem.tsx`
+  - Item display with emoji, name, pull quantity
+  - Checkbox interaction
+  - Visual feedback when checked (checkmark, strikethrough)
+  - Call PUT `/api/rtde/sessions/:id/pull` on toggle
+
+- [ ] Create `components/tools/rtde/CompletePullListDialog.tsx`
+  - Confirmation: "Mark session as complete?"
+  - Warning: "Session data will be deleted"
+  - Buttons: "Cancel" | "Complete"
+  - On confirm: Call POST `/api/rtde/sessions/:id/complete`
+  - Success message with options: "Start New Count" | "Back to Dashboard"
+
+- [ ] Test pull list workflow
+  - Generate pull list from counting screen
+  - Mark items as pulled
+  - Back to count for corrections
+  - Complete session (deletion)
+  - Start new count after completion
+
+#### API Integration
+
+- [ ] Create TypeScript types (`frontend/types/rtde.ts`)
+  - RTDEItem type
+  - RTDECountSession type
+  - RTDESessionCount type
+  - PullListItem type
+  - API response types
+
+- [ ] Add RTDE API methods to `frontend/lib/api.ts`
+  - getActiveSession()
+  - startSession(action: "new" | "resume")
+  - getSession(sessionId: string)
+  - updateItemCount(sessionId: string, itemId: string, quantity: number)
+  - getPullList(sessionId: string)
+  - markItemPulled(sessionId: string, itemId: string, isPulled: boolean)
+  - completeSession(sessionId: string)
+  - Admin methods: getItems(), createItem(), updateItem(), deleteItem(), reorderItems()
+
+#### Dashboard Integration
+
+- [ ] Update dashboard RTD&E card
+  - Remove "disabled" state
+  - Update route to `/tools/rtde`
+  - Test navigation from dashboard
+
+#### End-to-End Testing
+
+- [ ] Test complete workflow
+  - Admin: Add/edit/reorder items
+  - Staff: Start count → Count items → Generate pull list → Mark pulled → Complete
+  - Staff: Resume interrupted session
+  - Session expiration (4-hour limit)
+  - Mobile responsiveness throughout
+  - Cross-browser testing (Chrome, Safari, Firefox)
+
+#### Documentation
+
+- [ ] Update frontend documentation
+  - Add RTDE routes to frontend/README.md
+  - Document component structure
+
+- [ ] Update PLANNING.md
+  - Mark Tool 3 as implemented
+  - Update status to "Complete"
+
+- [ ] Update TASKS.md
+  - Mark Phase 6C tasks as completed
+  - Add completion date
+
+- [ ] Git commit
+  - Commit message: "feat: Add RTD&E frontend (admin, counting, pull list) - Phase 6C"
+  - Push to repository
 
 ---
 
@@ -1037,9 +603,10 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - **PLANNING.md**: Overall multi-tool architecture and decisions
 - **Tool-specific docs**: `Planning/InventoryTracking.md`, `Planning/MilkCount.md`, `Planning/RTDE.md` for detailed features
 - **TASKS.md**: This file - track progress across all phases
+- **TASKS_ARCHIVE.md**: Completed phases (Phase 0-3D) for historical reference
 - **CLAUDE.md**: AI assistant guidelines for maintaining codebase
 
 ---
 
-_Last Updated: November 7, 2025_
-_Version: 2.1.0 - Phase 3B Progress Update & Bug Tracking Integration_
+_Last Updated: November 21, 2025_
+_Version: 3.0.0 - Phase 6 RTDE Tasks Added & Completed Phases Archived_

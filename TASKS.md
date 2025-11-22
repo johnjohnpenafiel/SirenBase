@@ -183,11 +183,12 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Commit message: "feat: Restructure admin panel into modular dashboard (Phase 6A)"
   - Push to repository
 
-### Phase 6B: RTD&E Backend Development (IN PROGRESS - ~85% Complete)
+### Phase 6B: RTD&E Backend Development (✅ COMPLETE)
 
-**Timeline**: 3-4 days
+**Timeline**: 3-4 days (Completed in 1 day)
 **Dependencies**: Phase 6A complete
 **Started**: November 22, 2025
+**Completed**: November 22, 2025
 
 #### Database Schema
 
@@ -247,7 +248,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Delete sessions where `status='in_progress' AND expires_at < NOW()`
   - Documentation for cron job usage included in script
 
-#### Backend Testing (PARTIAL - 40/~65 tests complete)
+#### Backend Testing (✅ COMPLETE - 77/77 tests)
 
 - [x] Write model tests (`backend/tests/test_rtde_models.py`)
   - 17 tests covering item creation, validation, session expiration, cascade deletion, unique constraints
@@ -257,33 +258,29 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - 23 tests covering CRUD operations, reorder, authorization, validation
   - All 23 tests passing ✅
 
-- [ ] Write session endpoint tests (`backend/tests/test_rtde_sessions.py`)
-  - Active session check
-  - Start new vs resume session
-  - Session ownership validation
-  - Count updates and retrieval
-  - Session expiration logic
+- [x] Write session endpoint tests (`backend/tests/test_rtde_sessions.py`)
+  - 20 tests covering active session check, start/resume logic, session ownership, count updates, expiration
+  - All 20 tests passing ✅
 
-- [ ] Write pull list tests (`backend/tests/test_rtde_pull_list.py`)
-  - Pull list generation (only items with need > 0)
-  - Mark items as pulled/unpulled
-  - Complete session (deletion)
-  - Authorization checks
+- [x] Write pull list tests (`backend/tests/test_rtde_pull_list.py`)
+  - 17 tests covering pull list generation, mark pulled/unpulled, complete session, authorization
+  - All 17 tests passing ✅
 
-- [x] Run full test suite (partial)
-  - **115 tests passing** (75 existing + 40 new RTDE tests)
+- [x] Run full test suite
+  - **152 tests passing** (75 existing + 77 new RTDE tests)
   - No regression in existing tests ✅
-  - Current RTDE coverage: Models + Admin endpoints (session/pull list tests pending)
+  - 100% RTDE coverage: Models, Admin endpoints, Session endpoints, Pull list endpoints
 
 #### Documentation
 
-- [ ] Update backend documentation
-  - Add RTDE models to backend/README.md
-  - Document API endpoints with examples
+- [x] Update backend documentation
+  - Updated backend/README.md with RTDE models, API endpoints, test coverage
+  - Updated PLANNING.md to v2.4.0 (Phase 6B Complete)
+  - Updated TASKS.md with completion status
 
-- [ ] Git commit
-  - Commit message: "feat: Add RTD&E backend (models, API, tests) - Phase 6B"
-  - Push to repository
+- [x] Git commit
+  - Commit message: "feat: Complete RTD&E backend with full test coverage - Phase 6B"
+  - All 152 tests passing, 100% RTDE backend coverage
 
 ### Phase 6C: RTD&E Frontend Development
 

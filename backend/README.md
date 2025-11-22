@@ -9,7 +9,7 @@ The SirenBase backend is a Flask-based REST API that serves multiple tools for S
 ### Current Status
 - **Tool 1 (Inventory Tracking)**: ✅ Complete - `/api/tracking/*`
 - **Tool 2 (Milk Count)**: 🚧 Coming Soon - `/api/milk-count/*`
-- **Tool 3 (RTD&E)**: 🚧 Coming Soon - `/api/rtde/*`
+- **Tool 3 (RTD&E)**: ✅ Backend Complete - `/api/rtde/*` (Phase 6B)
 
 ## Tech Stack
 
@@ -18,7 +18,7 @@ The SirenBase backend is a Flask-based REST API that serves multiple tools for S
 - **Authentication**: JWT tokens via Flask-JWT-Extended
 - **Validation**: Marshmallow schemas
 - **Migrations**: Alembic (via Flask-Migrate)
-- **Testing**: Pytest with 66/66 tests passing
+- **Testing**: Pytest with 152/152 tests passing
 
 ## Prerequisites
 
@@ -82,16 +82,19 @@ backend/
 │   ├── models/               # Database models
 │   │   ├── user.py          # Shared user model
 │   │   ├── item.py          # Tool 1: Tracking items
-│   │   └── history.py       # Tool 1: Tracking history
+│   │   ├── history.py       # Tool 1: Tracking history
+│   │   └── rtde.py          # Tool 3: RTD&E models
 │   ├── schemas/              # Marshmallow schemas
 │   ├── routes/               # API blueprints
 │   │   ├── auth.py           # /api/auth/* (shared)
 │   │   ├── admin.py          # /api/admin/* (shared)
 │   │   └── tools/            # Tool-specific routes
-│   │       └── tracking.py   # /api/tracking/* (Tool 1)
+│   │       ├── tracking.py   # /api/tracking/* (Tool 1)
+│   │       └── rtde.py       # /api/rtde/* (Tool 3)
 │   ├── middleware/           # Custom middleware
 │   └── utils/                # Helper functions
-├── tests/                    # Test suite (66 tests)
+│       └── rtde_cleanup.py   # RTD&E session cleanup utility
+├── tests/                    # Test suite (152 tests)
 ├── migrations/               # Database migrations
 ├── seed.py                   # Database seeding script
 └── requirements.txt          # Dependencies
@@ -122,18 +125,30 @@ Each tool operates in its own namespace to ensure isolation and scalability:
 - Count tracking endpoints
 - Par level management
 
-**Tool 3: RTD&E** `/api/rtde/*` (Coming Soon):
-- Item management endpoints
-- Pull list generation
-- Restocking tracking
+**Tool 3: RTD&E** `/api/rtde/*`:
+- Admin Endpoints (item management):
+  - `GET /api/rtde/admin/items` - List RTD&E items (admin only)
+  - `POST /api/rtde/admin/items` - Create item (admin only)
+  - `PUT /api/rtde/admin/items/:id` - Update item (admin only)
+  - `DELETE /api/rtde/admin/items/:id` - Delete item (admin only)
+  - `PUT /api/rtde/admin/items/reorder` - Reorder items (admin only)
+- Session Endpoints (counting workflow):
+  - `GET /api/rtde/sessions/active` - Check for active session
+  - `POST /api/rtde/sessions/start` - Start new or resume session
+  - `GET /api/rtde/sessions/:id` - Get session details with items
+  - `PUT /api/rtde/sessions/:id/count` - Update item count
+- Pull List Endpoints (restocking workflow):
+  - `GET /api/rtde/sessions/:id/pull-list` - Generate pull list
+  - `PUT /api/rtde/sessions/:id/pull` - Mark item as pulled
+  - `POST /api/rtde/sessions/:id/complete` - Complete session
 
 ### Database Table Naming
 
 Tables are prefixed by tool to avoid conflicts:
 - Shared: `users`
-- Tool 1: `tracking_items`, `tracking_history`
+- Tool 1: `tracking_items`, `tracking_history`, `item_suggestions`
 - Tool 2: `milk_count_sessions`, `milk_count_par_levels`, etc.
-- Tool 3: `rtde_items`, `rtde_pull_lists`, etc.
+- Tool 3: `rtde_items`, `rtde_count_sessions`, `rtde_session_counts`
 
 ## Development
 
@@ -153,13 +168,21 @@ pytest --cov=app
 pytest tests/test_items.py
 ```
 
-**Test Coverage**: 66/66 tests passing (100%)
-- 13 model tests
-- 8 utility tests
-- 15 auth tests
-- 12 inventory tests
-- 6 history tests
-- 12 admin tests
+**Test Coverage**: 152/152 tests passing (100%)
+- **Shared Tests** (54 tests):
+  - 13 model tests (User, Item, History)
+  - 8 utility tests
+  - 15 auth tests
+  - 6 history tests
+  - 12 admin tests
+- **Tool 1: Inventory Tracking** (21 tests):
+  - 12 inventory item tests
+  - 9 autocomplete/search tests
+- **Tool 3: RTD&E** (77 tests):
+  - 17 RTDE model tests (RTDEItem, RTDECountSession, RTDESessionCount)
+  - 23 admin endpoint tests
+  - 20 session endpoint tests
+  - 17 pull list endpoint tests
 
 ### Database Migrations
 
@@ -298,6 +321,6 @@ For questions or issues:
 
 ---
 
-**Last Updated**: October 30, 2025
-**Current Phase**: Phase 3A - Multi-Tool Architecture Setup
-**Status**: Backend restructuring complete, Tool 1 functional
+**Last Updated**: November 22, 2025
+**Current Phase**: Phase 6B Complete - RTD&E Backend Infrastructure
+**Status**: Tool 1 complete, Tool 3 backend complete (152 tests passing)

@@ -696,13 +696,38 @@ Located in `backend/app/tools/{tool_name}/`:
 - Admin par level management
 - Testing and deployment
 
-### Phase 6: Tool 3 - RTD&E Counting System (FUTURE)
+### Phase 6: Tool 3 - RTD&E Counting System (IN PROGRESS)
 
 **Timeline**: Weeks 13-16
 
-- RTD&E backend API (items, pull lists)
+#### Phase 6A: Admin Dashboard Restructure (COMPLETED)
+
+**Timeline**: Nov 22, 2025
+**Completed**: Nov 22, 2025
+
+- ✅ Converted admin panel to modular dashboard with module cards
+- ✅ Created `/admin/users` page with existing user management
+- ✅ Created `/admin/rtde-items` placeholder page for Phase 6B
+- ✅ Created `/admin/milk-pars` placeholder page for Tool 2
+- ✅ Created AdminModuleCard component
+- ✅ All pages tested and building successfully
+
+#### Phase 6B: RTD&E Backend Development (NEXT)
+
+**Timeline**: TBD
+
+- RTD&E database schema (rtde_items, rtde_count_sessions, rtde_session_counts)
+- RTD&E backend API (admin endpoints, session management, pull lists)
+- Comprehensive test suite
+- Database migrations
+
+#### Phase 6C: RTD&E Frontend Development (FUTURE)
+
+**Timeline**: TBD
+
 - RTD&E frontend UI (counting, pull list generation)
-- Admin item management
+- Admin item management interface with drag-and-drop
+- Session management and resume/restart logic
 - Testing and deployment
 
 ### Phase 7: Deployment & Production Launch (FUTURE)
@@ -755,6 +780,6 @@ See **TASKS.md** for the detailed, actionable task breakdown organized by tool a
 
 ---
 
-_Last Updated: November 7, 2025_
-_Version: 2.1.0 - Phase 3B Progress Update & Bug Tracking Integration_
+_Last Updated: November 22, 2025_
+_Version: 2.2.0 - Phase 6A Complete (Admin Dashboard Restructure)_
 _Maintainer: Development Team_

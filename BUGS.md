@@ -32,6 +32,129 @@ Add error boundary wrapper in root layout with friendly error message.
 
 ## ✅ Fixed Bugs Archive
 
+### [BUG-007] Session state missing items array causing undefined access error
+
+**Fixed**: 2025-11-22
+**Commit**: (current session)
+**Impact**: High - Application crashes on RTDE count page
+
+**Affected Component**: `frontend/app/tools/rtde/count/[sessionId]/page.tsx:164`
+
+**Description**:
+The session state only stored session metadata, not the items array. The API returns `{ session, items }` but the code only stored `response.session` in state, causing `session.items[currentIndex]` to fail with "Cannot read properties of undefined (reading '0')".
+
+**Root Cause**:
+Type mismatch between API response structure and component state:
+1. API returns `GetRTDESessionResponse { session: RTDESession, items: RTDESessionItem[] }`
+2. Component stored only `response.session` (missing items array)
+3. Component tried to access `session.items[currentIndex]` which was undefined
+
+**Expected Behavior**:
+- State should store both session metadata and items array
+- `session.items` should be accessible throughout component
+- Field names should match API contract (`counted_quantity` not `count`)
+
+**Solution Implemented**:
+1. Created `RTDESessionWithItems` type that extends `RTDESession` with items array
+2. Updated session state to use new type: `useState<RTDESessionWithItems | null>`
+3. Modified `loadSession()` to combine session and items: `{ ...response.session, items: response.items }`
+4. Fixed field name mismatch: `counted_quantity` instead of `count`
+5. Fixed prop names in RTDECountCard: `name` and `icon` instead of `item_name` and `item_icon`
+
+**Files Changed**:
+- `frontend/types/index.ts:175-178` - Added RTDESessionWithItems interface
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:25` - Updated import
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:40` - Updated state type
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:72-76` - Combine session + items in loadSession()
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:103` - Fixed field name to counted_quantity
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:129` - Fixed field name in optimistic update
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:211-214` - Fixed prop names
+
+**Testing**:
+✅ Session loads with items array
+✅ Current item is accessible without undefined errors
+✅ Count updates work correctly with proper field names
+✅ Optimistic UI updates reflect changes immediately
+
+---
+
+### [BUG-006] Next.js params accessed as object instead of Promise in RTDE count page
+
+**Fixed**: 2025-11-22
+**Commit**: (current session)
+**Impact**: Medium - Deprecation warning that will break in future Next.js versions
+
+**Affected Component**: `frontend/app/tools/rtde/count/[sessionId]/page.tsx:35`
+
+**Description**:
+In Next.js 14+, the `params` prop in dynamic route pages is now a Promise that must be unwrapped with `React.use()` before accessing properties. The code accessed `params.sessionId` directly, triggering a deprecation warning.
+
+**Error Message**:
+```
+A param property was accessed directly with `params.sessionId`. `params` is now a Promise
+and should be unwrapped with `React.use()` before accessing properties.
+```
+
+**Solution Implemented**:
+1. Imported `use` from React: `import { use, useState, ... } from 'react'`
+2. Updated CountPageProps interface: `params: Promise<{ sessionId: string }>`
+3. Unwrapped params with React.use(): `const { sessionId } = use(params)`
+4. Added comment for future reference
+
+**Files Changed**:
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:14` - Added `use` to React imports
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:28` - Changed params type to Promise
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:35-36` - Unwrap params with use()
+
+**Testing**:
+✅ No deprecation warnings
+✅ sessionId is correctly extracted from params
+✅ Page renders without errors
+
+---
+
+### [BUG-005] RTD&E admin page not showing inactive items
+
+**Fixed**: 2025-11-22
+**Commit**: (current session)
+**Impact**: Medium - Admin cannot view/manage inactive RTD&E items
+
+**Affected Component**: `frontend/app/admin/rtde-items/page.tsx`, `frontend/lib/api.ts`
+
+**Description**:
+When editing an RTD&E item and setting it to inactive, the item would disappear from the admin list entirely. It wouldn't appear in "Show All Items" or "Show Active Only" mode, making it impossible to re-activate or manage inactive items.
+
+**Root Cause**:
+The backend endpoint `GET /api/rtde/admin/items` by default only returns active items. The frontend's `getRTDEItems()` API call didn't pass the `include_inactive=true` query parameter, so inactive items were filtered out on the backend.
+
+**Expected Behavior**:
+- Admin panel should always show ALL items (active and inactive)
+- Client-side filtering should control what's displayed based on toggle
+- Inactive items should show "Inactive" badge
+- Toggling "Show All Items" / "Show Active Only" should work correctly
+
+**Current Behavior** (before fix):
+- After setting item to inactive, it disappeared from list
+- "Show All Items" toggle had no effect
+- No way to see or re-activate inactive items
+
+**Solution Implemented**:
+1. Updated `apiClient.getRTDEItems()` to accept optional `include_inactive` parameter
+2. Modified admin page to always fetch with `{ include_inactive: true }`
+3. Admin panel now fetches all items and filters client-side
+4. Added clarifying comment in `loadItems()` function
+
+**Files Changed**:
+- `frontend/lib/api.ts:206-211` - Added params option to getRTDEItems()
+- `frontend/app/admin/rtde-items/page.tsx:143-155` - Pass include_inactive: true
+
+**Testing**:
+✅ Edit item and set to inactive → Item remains visible with "Inactive" badge
+✅ "Show All Items" toggle → Shows both active and inactive items
+✅ "Show Active Only" toggle → Shows only active items (filters out inactive)
+
+---
+
 ### [TECH-003] Form validation library migration
 
 **Fixed**: 2025-11-20

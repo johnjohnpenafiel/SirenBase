@@ -151,6 +151,149 @@ export interface ErrorResponse {
 }
 
 // ============================================================================
+// RTD&E Types (Tool 3)
+// ============================================================================
+
+export interface RTDEItem {
+  id: string;
+  name: string;
+  icon: string; // Emoji (🥪, 🥤, etc.)
+  par_level: number;
+  display_order: number;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RTDESession {
+  id: string;
+  started_at: string;
+  expires_at: string;
+  status: 'in_progress' | 'completed' | 'expired';
+}
+
+// Fix [BUG-007]: Extended session data with items array for UI state
+export interface RTDESessionWithItems extends RTDESession {
+  items: RTDESessionItem[];
+}
+
+export interface RTDESessionItem {
+  item_id: string;
+  name: string;
+  icon: string;
+  par_level: number;
+  display_order: number;
+  counted_quantity: number;
+  need_quantity: number; // Calculated: par_level - counted_quantity
+  is_pulled: boolean;
+}
+
+export interface RTDEPullListItem {
+  item_id: string;
+  name: string;
+  icon: string;
+  need_quantity: number;
+  is_pulled: boolean;
+}
+
+// RTD&E Admin API Types
+export interface GetRTDEItemsResponse {
+  items: RTDEItem[];
+}
+
+export interface CreateRTDEItemRequest {
+  name: string;
+  icon: string;
+  par_level: number;
+}
+
+export interface CreateRTDEItemResponse {
+  item: RTDEItem;
+  message: string;
+}
+
+export interface UpdateRTDEItemRequest {
+  name?: string;
+  icon?: string;
+  par_level?: number;
+  active?: boolean;
+}
+
+export interface UpdateRTDEItemResponse {
+  item: RTDEItem;
+  message: string;
+}
+
+export interface DeleteRTDEItemResponse {
+  message: string;
+}
+
+export interface ReorderRTDEItemsRequest {
+  item_orders: Array<{ id: string; display_order: number }>;
+}
+
+export interface ReorderRTDEItemsResponse {
+  message: string;
+}
+
+// RTD&E Session API Types
+export interface RTDEActiveSessionSummary {
+  id: string;
+  started_at: string;
+  expires_at: string;
+  items_counted: number;
+  total_items: number;
+}
+
+export interface GetRTDEActiveSessionResponse {
+  session: RTDEActiveSessionSummary | null;
+}
+
+export interface StartRTDESessionRequest {
+  action?: 'new' | 'resume'; // Optional: defaults to 'new' on backend
+}
+
+export interface StartRTDESessionResponse {
+  session_id: string;
+  expires_at: string;
+}
+
+export interface GetRTDESessionResponse {
+  session: RTDESession;
+  items: RTDESessionItem[];
+}
+
+export interface UpdateRTDECountRequest {
+  item_id: string;
+  counted_quantity: number;
+}
+
+export interface UpdateRTDECountResponse {
+  message: string;
+  counted_quantity: number;
+}
+
+// RTD&E Pull List API Types
+export interface GetRTDEPullListResponse {
+  pull_list: RTDEPullListItem[];
+  total_items: number;
+  items_pulled: number;
+}
+
+export interface MarkRTDEItemPulledRequest {
+  item_id: string;
+  is_pulled: boolean;
+}
+
+export interface MarkRTDEItemPulledResponse {
+  message: string;
+}
+
+export interface CompleteRTDESessionResponse {
+  message: string;
+}
+
+// ============================================================================
 // UI State Types
 // ============================================================================
 

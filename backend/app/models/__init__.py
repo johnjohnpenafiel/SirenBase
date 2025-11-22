@@ -65,6 +65,7 @@ from app.models.user import User, UserRole
 from app.models.item import Item
 from app.models.history import History, HistoryAction
 from app.models.item_suggestion import ItemSuggestion
+from app.models.rtde import RTDEItem, RTDECountSession, RTDESessionCount
 
 __all__ = [
     'User',
@@ -73,4 +74,7 @@ __all__ = [
     'History',
     'HistoryAction',
     'ItemSuggestion',
+    'RTDEItem',
+    'RTDECountSession',
+    'RTDESessionCount',
 ]

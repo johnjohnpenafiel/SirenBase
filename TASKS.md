@@ -183,41 +183,42 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Commit message: "feat: Restructure admin panel into modular dashboard (Phase 6A)"
   - Push to repository
 
-### Phase 6B: RTD&E Backend Development
+### Phase 6B: RTD&E Backend Development (IN PROGRESS - ~85% Complete)
 
 **Timeline**: 3-4 days
 **Dependencies**: Phase 6A complete
+**Started**: November 22, 2025
 
 #### Database Schema
 
-- [ ] Create migration `202511xx_add_rtde_tables.py`
+- [x] Create migration `20251122_add_rtde_tables.py`
   - `rtde_items` table (id, name, icon, par_level, display_order, active, timestamps)
   - `rtde_count_sessions` table (id, user_id, status, started_at, completed_at, expires_at)
   - `rtde_session_counts` table (id, session_id, item_id, counted_quantity, is_pulled, updated_at)
   - Add indexes: active+display_order, user_id+status, expires_at, session_id
   - Add foreign key constraints with CASCADE delete
 
-- [ ] Run migration
-  - Execute `flask db upgrade`
-  - Verify tables created successfully
-  - Verify indexes and constraints
+- [x] Run migration
+  - Executed `flask db upgrade`
+  - Verified tables created successfully
+  - Verified indexes and constraints
 
 #### Models
 
-- [ ] Create `backend/app/models/tools/rtde.py`
+- [x] Create `backend/app/models/rtde.py`
   - RTDEItem model (to_dict method, validation)
-  - RTDECountSession model (auto-calculate expires_at)
+  - RTDECountSession model (auto-calculate expires_at with __init__ override)
   - RTDESessionCount model (unique constraint on session+item)
   - Add relationships (user→sessions, sessions→counts, items→counts)
-  - Import models in `backend/app/models/__init__.py`
+  - Imported models in `backend/app/models/__init__.py`
 
 #### API Endpoints - Admin Item Management
 
-- [ ] Create `backend/app/routes/tools/rtde.py`
+- [x] Create `backend/app/routes/tools/rtde.py`
   - Set up blueprint with `/api/rtde` prefix
-  - Register blueprint in `app/__init__.py`
+  - Registered blueprint in `app/__init__.py`
 
-- [ ] Implement admin item endpoints
+- [x] Implement admin item endpoints
   - GET `/api/rtde/admin/items` - List all items ordered by display_order (admin only)
   - POST `/api/rtde/admin/items` - Create item (admin only)
   - PUT `/api/rtde/admin/items/:id` - Update item (admin only)
@@ -226,7 +227,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 #### API Endpoints - Session Management
 
-- [ ] Implement session endpoints
+- [x] Implement session endpoints
   - GET `/api/rtde/sessions/active` - Check for active session (authenticated)
   - POST `/api/rtde/sessions/start` - Create or resume session (authenticated)
   - GET `/api/rtde/sessions/:id` - Get session with all item counts (authenticated, owner only)
@@ -234,31 +235,27 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 #### API Endpoints - Pull List
 
-- [ ] Implement pull list endpoints
+- [x] Implement pull list endpoints
   - GET `/api/rtde/sessions/:id/pull-list` - Generate pull list (authenticated, owner only)
   - PUT `/api/rtde/sessions/:id/pull` - Mark item as pulled/unpulled (authenticated, owner only)
   - POST `/api/rtde/sessions/:id/complete` - Complete and delete session (authenticated, owner only)
 
 #### Background Jobs
 
-- [ ] Create session cleanup script
+- [x] Create session cleanup script
   - Script: `backend/app/utils/rtde_cleanup.py`
   - Delete sessions where `status='in_progress' AND expires_at < NOW()`
-  - Add cron job documentation (run hourly)
+  - Documentation for cron job usage included in script
 
-#### Backend Testing
+#### Backend Testing (PARTIAL - 40/~65 tests complete)
 
-- [ ] Write model tests (`backend/tests/test_rtde_models.py`)
-  - Item creation and validation
-  - Session expiration calculation
-  - Cascade deletion behavior
-  - Unique constraint enforcement
+- [x] Write model tests (`backend/tests/test_rtde_models.py`)
+  - 17 tests covering item creation, validation, session expiration, cascade deletion, unique constraints
+  - All 17 tests passing ✅
 
-- [ ] Write admin endpoint tests (`backend/tests/test_rtde_admin.py`)
-  - CRUD operations for items
-  - Reorder functionality
-  - Authorization checks (admin only)
-  - Validation error handling
+- [x] Write admin endpoint tests (`backend/tests/test_rtde_admin.py`)
+  - 23 tests covering CRUD operations, reorder, authorization, validation
+  - All 23 tests passing ✅
 
 - [ ] Write session endpoint tests (`backend/tests/test_rtde_sessions.py`)
   - Active session check
@@ -273,10 +270,10 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Complete session (deletion)
   - Authorization checks
 
-- [ ] Run full test suite
-  - All RTDE tests passing
-  - No regression in existing tests
-  - Coverage target: 80%+ for RTDE code
+- [x] Run full test suite (partial)
+  - **115 tests passing** (75 existing + 40 new RTDE tests)
+  - No regression in existing tests ✅
+  - Current RTDE coverage: Models + Admin endpoints (session/pull list tests pending)
 
 #### Documentation
 

@@ -32,6 +32,61 @@ Add error boundary wrapper in root layout with friendly error message.
 
 ## ✅ Fixed Bugs Archive
 
+### [BUG-008] RTDE count adjustment causes loading flash (unnecessary session reload)
+
+**Fixed**: 2025-11-22
+**Commit**: (current session)
+**Impact**: Medium - Poor UX during counting
+
+**Affected Component**: `frontend/app/tools/rtde/count/[sessionId]/page.tsx:106`
+
+**Description**:
+When adjusting an item's count using the +/- buttons, the entire page would briefly flash a "Loading session..." screen before returning to normal. This made the counting experience feel unstable and jarring.
+
+**Root Cause**:
+After saving a count update to the API, the `saveCount()` function called `await loadSession()` to reload the entire session from the backend. This caused:
+1. `setLoading(true)` - triggering the full-page loading screen
+2. API fetch of session data (unnecessary, as local state was already updated)
+3. `setLoading(false)` - returning to normal view
+
+**Expected Behavior**:
+- Adjusting an item's count should be smooth and seamless
+- No loading states should appear during count updates
+- UI should update immediately (optimistic update)
+- Background save should be invisible to the user
+
+**Current Behavior** (before fix):
+- User clicks +/- button
+- Count updates immediately (optimistic update) ✅
+- After 500ms debounce, count saves to API ✅
+- Page shows "Loading session..." flash ❌
+- Page returns to normal after ~200-300ms
+
+**Solution Implemented**:
+Removed the unnecessary `await loadSession()` call from `saveCount()` function:
+1. Optimistic update in `handleCountChange()` already keeps UI in sync
+2. API save happens in background without triggering loading state
+3. Only show "Saving..." indicator, not full page reload
+4. Added comment explaining why session reload is not needed
+
+**Why This Works**:
+- The optimistic update (lines 124-132) already updates the local state immediately
+- The backend save confirms the change but doesn't need to reload all session data
+- If save fails, error toast notifies user and they can retry
+- Session data only needs to load once on page mount
+
+**Files Changed**:
+- `frontend/app/tools/rtde/count/[sessionId]/page.tsx:105-106` - Removed loadSession() call, added explanatory comment
+
+**Testing**:
+✅ Count adjustments are smooth without any flashing
+✅ UI updates immediately when clicking +/- buttons
+✅ "Saving..." indicator shows briefly (bottom of page)
+✅ No full-page loading state appears during counting
+✅ Session data remains consistent with backend
+
+---
+
 ### [BUG-007] Session state missing items array causing undefined access error
 
 **Fixed**: 2025-11-22

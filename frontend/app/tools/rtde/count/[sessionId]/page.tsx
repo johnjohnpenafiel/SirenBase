@@ -102,8 +102,8 @@ export default function RTDECountPage({ params }: CountPageProps) {
             item_id: itemId,
             counted_quantity: count, // Match API contract field name
           });
-          // Optionally reload session to get updated data
-          await loadSession();
+          // Note: No need to reload session - optimistic update in handleCountChange
+          // already keeps UI in sync. Reloading causes unnecessary loading flash.
         } catch (error: any) {
           console.error('Failed to save count:', error);
           toast.error('Failed to save count');

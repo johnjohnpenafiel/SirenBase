@@ -282,154 +282,164 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Commit message: "feat: Complete RTD&E backend with full test coverage - Phase 6B"
   - All 152 tests passing, 100% RTDE backend coverage
 
-### Phase 6C: RTD&E Frontend Development
+### Phase 6C: RTD&E Frontend Development (✅ MOSTLY COMPLETE)
 
-**Timeline**: 4-5 days
+**Timeline**: 4-5 days (Completed in 2 days)
 **Dependencies**: Phase 6B complete
+**Started**: November 22, 2025
+**Status**: Implementation complete, final testing and documentation pending
 
-#### Admin - Item Management UI
+#### Admin - Item Management UI (✅ COMPLETE)
 
-- [ ] Create `/app/admin/rtde-items/page.tsx`
-  - Replace placeholder with full item management UI
+- [x] Create `/app/admin/rtde-items/page.tsx`
+  - Full item management UI with drag-and-drop reordering
   - List view with all items (sorted by display_order)
-  - Show: drag handle, icon, name, par level, active status, edit button
+  - Shows: drag handle, icon, name, par level, active status, edit/delete buttons
   - "Add Item" button (top-right)
-  - Filter toggle: Show active only / Show all
+  - Filter toggle: Show active only / Show all items
 
-- [ ] Implement drag-and-drop reordering
-  - Install `@dnd-kit/core` and `@dnd-kit/sortable`
-  - Add drag handles to each item row
+- [x] Implement drag-and-drop reordering
+  - Installed `@dnd-kit/core` and `@dnd-kit/sortable`
+  - Drag handles on each item row
   - Real-time reordering in UI
   - "Save Order" button to persist changes
-  - Call PUT `/api/rtde/admin/items/reorder`
+  - Calls PUT `/api/rtde/admin/items/reorder`
 
-- [ ] Create `components/tools/rtde/AddItemDialog.tsx`
+- [x] Create `components/admin/rtde/AddRTDEItemDialog.tsx`
   - Form fields: name, icon (emoji input), par_level, active toggle
   - Validation: name required (max 100 chars), icon required, par_level > 0
-  - Use react-hook-form + Zod validation
-  - Call POST `/api/rtde/admin/items`
+  - Uses react-hook-form + Zod validation
+  - Calls POST `/api/rtde/admin/items`
 
-- [ ] Create `components/tools/rtde/EditItemDialog.tsx`
-  - Pre-populate form with current item values
+- [x] Create `components/admin/rtde/EditRTDEItemDialog.tsx`
+  - Pre-populates form with current item values
   - Same validation as AddItemDialog
-  - Call PUT `/api/rtde/admin/items/:id`
+  - Calls PUT `/api/rtde/admin/items/:id`
 
-- [ ] Create `components/tools/rtde/DeleteItemDialog.tsx`
+- [x] Create `components/admin/rtde/DeleteRTDEItemDialog.tsx`
   - Confirmation dialog with item name
   - Warning if item has been used in sessions
-  - Call DELETE `/api/rtde/admin/items/:id`
+  - Calls DELETE `/api/rtde/admin/items/:id`
 
-- [ ] Test admin item management
-  - Add items with various emojis
-  - Edit item properties
-  - Drag-and-drop reordering
-  - Delete unused and used items
-  - Toggle active/inactive
-  - Mobile responsiveness
+- [x] Test admin item management
+  - ✅ Add items with various emojis
+  - ✅ Edit item properties
+  - ✅ Drag-and-drop reordering
+  - ✅ Delete unused and used items
+  - ✅ Toggle active/inactive ([BUG-005] fixed - inactive items now visible)
+  - ✅ Mobile responsiveness
 
-#### Counting Interface
+#### Counting Interface (✅ COMPLETE)
 
-- [ ] Create `/app/tools/rtde/page.tsx` (Landing/Entry Point)
-  - Check for active session via GET `/api/rtde/sessions/active`
-  - If no session → Auto-start new session
-  - If session exists → Show resume/restart dialog
-  - Route to `/tools/rtde/count/:sessionId` after session confirmed
+- [x] Create `/app/tools/rtde/page.tsx` (Landing/Entry Point)
+  - Checks for active session via GET `/api/rtde/sessions/active`
+  - Auto-starts new session if none exists
+  - Shows resume/restart dialog if session exists
+  - Routes to `/tools/rtde/count/:sessionId` after session confirmed
 
-- [ ] Create `components/tools/rtde/ResumeSessionDialog.tsx`
-  - Display session info (started X minutes ago, items counted)
+- [x] Create `components/tools/rtde/ResumeSessionDialog.tsx`
+  - Displays session info (started X minutes ago, items counted)
   - Buttons: "Resume" | "Start Fresh"
-  - Resume → Navigate to counting screen with existing session
-  - Start Fresh → Call POST `/api/rtde/sessions/start` with action="new"
+  - Resume → Navigates to counting screen with existing session
+  - Start Fresh → Calls POST `/api/rtde/sessions/start` with action="new"
 
-- [ ] Create `/app/tools/rtde/count/[sessionId]/page.tsx`
-  - Fetch session data via GET `/api/rtde/sessions/:id`
+- [x] Create `/app/tools/rtde/count/[sessionId]/page.tsx`
+  - Fetches session data via GET `/api/rtde/sessions/:id`
   - One-item-at-a-time display with current item focused
-  - Display: emoji, name, par level, counted quantity, need quantity
+  - Displays: emoji, name, par level, counted quantity, need quantity
   - Progress indicator: "X/Y items counted"
-  - Navigation: Prev/Next buttons
+  - Navigation: Prev/Next buttons + Arrow key support
   - "Generate Pull List" button (bottom)
+  - Fixed [BUG-006]: Next.js params Promise unwrapping
+  - Fixed [BUG-007]: Session state structure with items array
 
-- [ ] Create `components/tools/rtde/ItemCounter.tsx`
+- [x] Create `components/tools/rtde/RTDECountCard.tsx`
   - Large count display in center
-  - +/- buttons (large touch targets, min 44x44px)
+  - +/- buttons (large touch targets, 44x44px+)
   - Direct number input (tap count to type)
   - Real-time "Need" calculation (par - counted)
-  - Auto-save on every change (debounced)
-  - Call PUT `/api/rtde/sessions/:id/count`
+  - Auto-save on every change (debounced 500ms)
+  - Calls PUT `/api/rtde/sessions/:id/count`
 
-- [ ] Create `components/tools/rtde/ItemNavigator.tsx`
-  - Desktop: Vertical sidebar with all items
-  - Mobile: Horizontal bottom bar (scrollable)
-  - Show emoji for each item
-  - Highlight current item
-  - Show count badge if counted
+- [x] Create `components/tools/rtde/RTDENavBar.tsx`
+  - Desktop: Horizontal navigation bar with all items
+  - Mobile: Bottom bar (scrollable)
+  - Shows emoji for each item
+  - Highlights current item
+  - Shows count badge if counted
   - Click/tap to jump to item
   - Responsive breakpoint: 768px
 
-- [ ] Test counting interface
-  - Count items with +/- buttons
-  - Type quantities directly
-  - Navigate with Prev/Next
-  - Quick jump via navigator
-  - Auto-save functionality
-  - Session resume after interruption
-  - Mobile and desktop layouts
+- [x] Test counting interface
+  - ✅ Count items with +/- buttons
+  - ✅ Direct number input by tapping count
+  - ✅ Navigate with Prev/Next buttons
+  - ✅ Arrow key navigation (desktop)
+  - ✅ Quick jump via navigator bar
+  - ✅ Auto-save functionality (debounced)
+  - ✅ Session resume after interruption
+  - ✅ Mobile and desktop layouts
 
-#### Pull List Screen
+#### Pull List Screen (✅ COMPLETE)
 
-- [ ] Create `/app/tools/rtde/pull-list/[sessionId]/page.tsx`
-  - Fetch pull list via GET `/api/rtde/sessions/:id/pull-list`
-  - Display only items where need_quantity > 0
-  - Show: emoji, name, quantity to pull
+- [x] Create `/app/tools/rtde/pull-list/[sessionId]/page.tsx`
+  - Fetches pull list via GET `/api/rtde/sessions/:id/pull-list`
+  - Displays only items where need_quantity > 0
+  - Shows: emoji, name, quantity to pull
   - Checkbox for each item (mark as pulled)
   - "Back to Count" button
-  - "Complete" button (confirmation dialog)
+  - "Complete" button (confirmation dialog with AlertDialog)
+  - Fixed [BUG-006]: Next.js params Promise unwrapping
 
-- [ ] Create `components/tools/rtde/PullListItem.tsx`
+- [x] Create `components/tools/rtde/RTDEPullListItem.tsx`
   - Item display with emoji, name, pull quantity
   - Checkbox interaction
   - Visual feedback when checked (checkmark, strikethrough)
-  - Call PUT `/api/rtde/sessions/:id/pull` on toggle
+  - Calls PUT `/api/rtde/sessions/:id/pull` on toggle
 
-- [ ] Create `components/tools/rtde/CompletePullListDialog.tsx`
+- [x] Complete session dialog implemented
+  - Uses ShadCN AlertDialog component
   - Confirmation: "Mark session as complete?"
   - Warning: "Session data will be deleted"
   - Buttons: "Cancel" | "Complete"
-  - On confirm: Call POST `/api/rtde/sessions/:id/complete`
-  - Success message with options: "Start New Count" | "Back to Dashboard"
+  - On confirm: Calls POST `/api/rtde/sessions/:id/complete`
+  - Success toast with navigation back to dashboard
 
-- [ ] Test pull list workflow
-  - Generate pull list from counting screen
-  - Mark items as pulled
-  - Back to count for corrections
-  - Complete session (deletion)
-  - Start new count after completion
+- [x] Test pull list workflow
+  - ✅ Generate pull list from counting screen
+  - ✅ Mark items as pulled/unpulled
+  - ✅ Back to count for corrections
+  - ✅ Complete session (deletion)
+  - ✅ Success feedback and navigation
 
-#### API Integration
+#### API Integration (✅ COMPLETE)
 
-- [ ] Create TypeScript types (`frontend/types/rtde.ts`)
+- [x] Create TypeScript types (in `frontend/types/index.ts`)
   - RTDEItem type
-  - RTDECountSession type
-  - RTDESessionCount type
-  - PullListItem type
-  - API response types
+  - RTDESession type
+  - RTDESessionWithItems type (added for [BUG-007])
+  - RTDESessionItem type
+  - RTDEPullListItem type
+  - RTDEActiveSessionSummary type
+  - All API request/response types
 
-- [ ] Add RTDE API methods to `frontend/lib/api.ts`
-  - getActiveSession()
-  - startSession(action: "new" | "resume")
-  - getSession(sessionId: string)
-  - updateItemCount(sessionId: string, itemId: string, quantity: number)
-  - getPullList(sessionId: string)
-  - markItemPulled(sessionId: string, itemId: string, isPulled: boolean)
-  - completeSession(sessionId: string)
-  - Admin methods: getItems(), createItem(), updateItem(), deleteItem(), reorderItems()
+- [x] Add RTDE API methods to `frontend/lib/api.ts`
+  - getRTDEActiveSession()
+  - startRTDESession(action: "new" | "resume")
+  - getRTDESession(sessionId: string)
+  - updateRTDECount(sessionId, itemId, quantity)
+  - getRTDEPullList(sessionId)
+  - markRTDEItemPulled(sessionId, itemId, isPulled)
+  - completeRTDESession(sessionId)
+  - Admin methods: getRTDEItems(), createRTDEItem(), updateRTDEItem(), deleteRTDEItem(), reorderRTDEItems()
 
-#### Dashboard Integration
+#### Dashboard Integration (✅ COMPLETE)
 
-- [ ] Update dashboard RTD&E card
-  - Remove "disabled" state
-  - Update route to `/tools/rtde`
-  - Test navigation from dashboard
+- [x] Update dashboard RTD&E card
+  - Removed "disabled" state
+  - Routes to `/tools/rtde`
+  - Card shows as active with primary icon color
+  - ✅ Navigation tested from dashboard
 
 #### End-to-End Testing
 
@@ -449,14 +459,14 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 - [ ] Update PLANNING.md
   - Mark Tool 3 as implemented
-  - Update status to "Complete"
+  - Update version and status to "Complete"
 
 - [ ] Update TASKS.md
   - Mark Phase 6C tasks as completed
   - Add completion date
 
 - [ ] Git commit
-  - Commit message: "feat: Add RTD&E frontend (admin, counting, pull list) - Phase 6C"
+  - Commit message: "feat: Complete RTD&E frontend (admin, counting, pull list) - Phase 6C"
   - Push to repository
 
 ---
@@ -604,5 +614,5 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
-_Last Updated: November 21, 2025_
-_Version: 3.0.0 - Phase 6 RTDE Tasks Added & Completed Phases Archived_
+_Last Updated: November 22, 2025_
+_Version: 3.1.0 - Phase 6C RTD&E Frontend Implementation Complete (Testing & Docs Pending)_

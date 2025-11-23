@@ -55,13 +55,12 @@ export default function DashboardPage() {
                 isDisabled={true}
               />
 
-              {/* Tool 3: RTD&E - Coming Soon */}
+              {/* Tool 3: RTD&E - Active */}
               <ToolCard
                 title="RTD&E Count"
                 description="Display restocking with pull lists"
                 route="/tools/rtde"
-                icon={<Box className="w-12 h-12 text-muted-foreground" />}
-                isDisabled={true}
+                icon={<Box className="w-12 h-12 text-primary" />}
               />
 
               {/* Admin Panel - Admin Only */}

@@ -8,9 +8,9 @@
  * - Accessible with keyboard navigation
  * - Admin badge uses theme accent colors
  */
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 export interface ToolCardProps {
   title: string;
@@ -38,7 +38,7 @@ export function ToolCard({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isDisabled && (e.key === 'Enter' || e.key === ' ')) {
+    if (!isDisabled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       router.push(route);
     }
@@ -50,15 +50,20 @@ export function ToolCard({
       onKeyDown={handleKeyDown}
       tabIndex={isDisabled ? -1 : 0}
       role="button"
-      aria-label={`${title}${isDisabled ? ' (Coming soon)' : ''}`}
+      aria-label={`${title}${isDisabled ? " (Coming soon)" : ""}`}
       aria-disabled={isDisabled}
       className={`
         p-6 border border-border rounded-xl bg-card text-card-foreground transition-all
-        ${isDisabled
-          ? 'opacity-50 cursor-not-allowed'
-          : 'cursor-pointer hover:shadow-lg hover:border-primary hover:scale-102 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+        ${
+          isDisabled
+            ? "opacity-50 cursor-not-allowed"
+            : `cursor-pointer hover:shadow-lg hover:scale-102 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                isAdminOnly
+                  ? "hover:border-amber-500"
+                  : "hover:border-slate-600"
+              }`
         }
-        ${isAdminOnly ? 'border-amber-500 dark:border-amber-600' : ''}
+        
       `}
     >
       {icon && <div className="mb-4">{icon}</div>}
@@ -73,7 +78,7 @@ export function ToolCard({
       </h2>
 
       <p className="text-sm text-muted-foreground">
-        {isDisabled ? 'Coming soon...' : description}
+        {isDisabled ? "Coming soon..." : description}
       </p>
     </div>
   );

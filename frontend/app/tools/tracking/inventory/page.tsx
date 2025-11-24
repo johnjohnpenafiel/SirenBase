@@ -234,7 +234,7 @@ export default function InventoryPage() {
                     <button
                       key={category}
                       onClick={() => handleCategoryClick(category)}
-                      className="p-6 bg-card rounded-xl border-2 border-border hover:border-primary/50 hover:shadow-md transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      className="p-6 bg-card rounded-xl border-[1.5px] border-border hover:border-slate-600 hover:shadow-md transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     >
                       <h3 className="font-semibold text-lg mb-1 text-foreground">
                         {formatCategory(category)}

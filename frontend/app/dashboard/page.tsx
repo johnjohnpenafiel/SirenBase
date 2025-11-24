@@ -16,7 +16,7 @@ import { Header } from "@/components/shared/Header";
 import { Footer } from "@/components/shared/Footer";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { useAuth } from "@/hooks/use-auth";
-import { Package, Milk, Box, ShieldCheck } from "lucide-react";
+import { Package, Milk, ScanEye, ShieldCheck } from "lucide-react";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -60,7 +60,7 @@ export default function DashboardPage() {
                 title="RTD&E Count"
                 description="Display restocking with pull lists"
                 route="/tools/rtde"
-                icon={<Box className="w-12 h-12 text-primary" />}
+                icon={<ScanEye className="w-12 h-12 text-primary" />}
               />
 
               {/* Admin Panel - Admin Only */}

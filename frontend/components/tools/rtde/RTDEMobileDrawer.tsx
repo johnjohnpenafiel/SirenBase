@@ -49,6 +49,11 @@ export function RTDEMobileDrawer({
     // Drawer will auto-close via DrawerClose wrapper
   };
 
+  // Hide drawer in pull phase (not needed during pulling)
+  if (phase === 'pulling') {
+    return null;
+  }
+
   return (
     <div className="md:hidden">
       <Drawer>
@@ -56,7 +61,7 @@ export function RTDEMobileDrawer({
           <Button
             variant="outline"
             size="lg"
-            className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 shadow-lg"
+            className="fixed bottom-20 left-1/2 -translate-x-1/2 z-40 shadow-lg"
           >
             <Menu className="h-5 w-5 mr-2" />
             Item List ({countedCount}/{items.length})

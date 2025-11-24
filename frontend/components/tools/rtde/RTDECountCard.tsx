@@ -38,9 +38,6 @@ export function RTDECountCard({
   const [inputValue, setInputValue] = useState(currentCount.toString());
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Calculate how many items are needed
-  const needed = Math.max(0, parLevel - currentCount);
-
   // Sync input value when currentCount changes externally
   useEffect(() => {
     if (!isEditing) {
@@ -182,24 +179,6 @@ export function RTDECountCard({
         >
           <Plus className="h-6 w-6" />
         </Button>
-      </div>
-
-      {/* Need Calculation */}
-      <div
-        className={cn(
-          'px-4 py-2 rounded-lg font-medium text-center min-w-[120px]',
-          needed > 0
-            ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-100'
-            : 'bg-green-100 dark:bg-green-950 text-green-900 dark:text-green-100'
-        )}
-      >
-        {needed > 0 ? (
-          <>
-            Need: <span className="text-lg font-bold">{needed}</span>
-          </>
-        ) : (
-          <>At Par</>
-        )}
       </div>
 
       {/* Helper Text (mobile only) */}

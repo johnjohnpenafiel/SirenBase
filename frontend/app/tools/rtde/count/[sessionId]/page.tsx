@@ -174,13 +174,13 @@ export default function RTDECountPage({ params }: CountPageProps) {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col md:flex-row h-screen">
-        {/* Navigation Sidebar (Desktop) / Bottom Bar (Mobile) */}
-        <RTDENavBar sessionId={sessionId} />
+      <div className="flex flex-col h-screen">
+        <Header />
+        <div className="flex-1 flex md:flex-row overflow-hidden">
+          {/* Navigation Sidebar (Desktop) / Bottom Bar (Mobile) */}
+          <RTDENavBar sessionId={sessionId} />
 
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <Header />
+          {/* Main Content */}
           <main className="flex-1 flex flex-col overflow-auto">
             {/* Progress Bar */}
             <div className="bg-muted/30 border-b">
@@ -250,8 +250,8 @@ export default function RTDECountPage({ params }: CountPageProps) {
               </div>
             </div>
           </main>
-          <Footer />
         </div>
+        <Footer />
       </div>
     </ProtectedRoute>
   );

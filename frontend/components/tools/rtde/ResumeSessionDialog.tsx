@@ -43,7 +43,7 @@ export function ResumeSessionDialog({
   const router = useRouter();
 
   const handleResume = () => {
-    router.push(`/tools/rtde/count/${sessionId}`);
+    router.push(`/tools/rtde/session/${sessionId}`);
     onOpenChange(false);
   };
 

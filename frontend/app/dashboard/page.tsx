@@ -13,7 +13,6 @@
 
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
-import { Footer } from "@/components/shared/Footer";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { useAuth } from "@/hooks/use-auth";
 import { Package, Milk, ScanEye, ShieldCheck } from "lucide-react";
@@ -82,7 +81,6 @@ export default function DashboardPage() {
             )}
           </div>
         </main>
-        <Footer />
       </div>
     </ProtectedRoute>
   );

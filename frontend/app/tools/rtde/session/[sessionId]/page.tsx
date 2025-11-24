@@ -16,7 +16,6 @@ import { use, useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
 import { RTDECountCard } from '@/components/tools/rtde/RTDECountCard';
 import { RTDESessionSidebar } from '@/components/tools/rtde/RTDESessionSidebar';
 import { RTDEMobileDrawer } from '@/components/tools/rtde/RTDEMobileDrawer';
@@ -369,7 +368,6 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
               <p className="text-muted-foreground">Loading session...</p>
             </div>
           </main>
-          <Footer />
         </div>
       </ProtectedRoute>
     );
@@ -465,15 +463,16 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
             <div className="border-t bg-background">
               <div className="container max-w-4xl mx-auto px-4 py-4">
                 <div className="flex items-center justify-between gap-4">
-                  <Button
-                    variant="outline"
-                    onClick={handlePrevious}
-                    disabled={currentIndex === 0}
-                    className="flex-1 sm:flex-initial"
-                  >
-                    <ChevronLeft className="h-4 w-4 mr-2" />
-                    Previous
-                  </Button>
+                  {currentIndex > 0 && (
+                    <Button
+                      variant="outline"
+                      onClick={handlePrevious}
+                      className="flex-1 sm:flex-initial"
+                    >
+                      <ChevronLeft className="h-4 w-4 mr-2" />
+                      Previous
+                    </Button>
+                  )}
 
                   {saving && (
                     <span className="text-xs text-muted-foreground hidden sm:inline">
@@ -484,7 +483,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
                   {isLastItem ? (
                     <Button
                       onClick={handleStartPull}
-                      className="flex-1 sm:flex-initial"
+                      className="flex-1 sm:flex-initial ml-auto"
                     >
                       Start Pull
                       <ChevronRight className="h-4 w-4 ml-2" />
@@ -493,7 +492,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
                     <Button
                       variant="outline"
                       onClick={handleNext}
-                      className="flex-1 sm:flex-initial"
+                      className="flex-1 sm:flex-initial ml-auto"
                     >
                       Next
                       <ChevronRight className="h-4 w-4 ml-2" />
@@ -656,8 +655,6 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-
-        <Footer />
       </div>
     </ProtectedRoute>
   );

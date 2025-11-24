@@ -10,7 +10,6 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
-import { Footer } from "@/components/shared/Footer";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -97,7 +96,6 @@ export default function HistoryPage() {
               <p className="text-muted-foreground">Loading history...</p>
             </div>
           </main>
-          <Footer />
         </div>
       </ProtectedRoute>
     );
@@ -298,7 +296,6 @@ export default function HistoryPage() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
     </ProtectedRoute>
   );

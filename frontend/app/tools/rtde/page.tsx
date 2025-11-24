@@ -12,7 +12,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
 import { Button } from '@/components/ui/button';
 import { ResumeSessionDialog } from '@/components/tools/rtde/ResumeSessionDialog';
 import { ClipboardList, Loader2, PlayCircle } from 'lucide-react';
@@ -161,7 +160,6 @@ export default function RTDEToolPage() {
             )}
           </div>
         </main>
-        <Footer />
       </div>
 
       {/* Resume Session Dialog */}

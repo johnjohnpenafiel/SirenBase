@@ -27,7 +27,6 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Plus, Edit2, Trash2, GripVertical, Loader2, Package } from 'lucide-react';
 import { AddRTDEItemDialog } from '@/components/admin/rtde/AddRTDEItemDialog';
@@ -319,7 +318,6 @@ export default function RTDEItemsPage() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
 
       {/* Dialogs */}

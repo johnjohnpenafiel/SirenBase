@@ -15,7 +15,6 @@ import { use, useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
 import { RTDECountCard } from '@/components/tools/rtde/RTDECountCard';
 import { RTDENavBar } from '@/components/tools/rtde/RTDENavBar';
 import { Button } from '@/components/ui/button';
@@ -159,7 +158,6 @@ export default function RTDECountPage({ params }: CountPageProps) {
               <p className="text-muted-foreground">Loading session...</p>
             </div>
           </main>
-          <Footer />
         </div>
       </ProtectedRoute>
     );
@@ -251,7 +249,6 @@ export default function RTDECountPage({ params }: CountPageProps) {
             </div>
           </main>
         </div>
-        <Footer />
       </div>
     </ProtectedRoute>
   );

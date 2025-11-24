@@ -18,7 +18,6 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
-import { Footer } from "@/components/shared/Footer";
 import { Button } from "@/components/ui/button";
 import { AddItemDialog } from "@/components/tools/tracking/AddItemDialog";
 import { RemoveItemDialog } from "@/components/tools/tracking/RemoveItemDialog";
@@ -135,7 +134,6 @@ export default function InventoryPage() {
               <p className="text-muted-foreground">Loading inventory...</p>
             </div>
           </main>
-          <Footer />
         </div>
       </ProtectedRoute>
     );
@@ -300,7 +298,6 @@ export default function InventoryPage() {
             </div>
           </div>
         </main>
-        <Footer />
 
         {/* Add Item Dialog */}
         <AddItemDialog

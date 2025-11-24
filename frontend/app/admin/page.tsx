@@ -8,7 +8,6 @@
 
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
 import { AdminModuleCard } from '@/components/admin/AdminModuleCard';
 import { Users, Package, Milk } from 'lucide-react';
 
@@ -58,7 +57,6 @@ export default function AdminPage() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
     </ProtectedRoute>
   );

@@ -14,7 +14,6 @@ import { use, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
 import { RTDEPullListItem } from '@/components/tools/rtde/RTDEPullListItem';
 import { RTDENavBar } from '@/components/tools/rtde/RTDENavBar';
 import { Button } from '@/components/ui/button';
@@ -133,7 +132,6 @@ export default function RTDEPullListPage({ params }: PullListPageProps) {
               <p className="text-muted-foreground">Loading pull list...</p>
             </div>
           </main>
-          <Footer />
         </div>
       </ProtectedRoute>
     );
@@ -257,7 +255,6 @@ export default function RTDEPullListPage({ params }: PullListPageProps) {
             </div>
           </main>
         </div>
-        <Footer />
       </div>
 
       {/* Complete Session Confirmation Dialog */}

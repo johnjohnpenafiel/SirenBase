@@ -10,7 +10,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
-import { Footer } from '@/components/shared/Footer';
 import { Button } from '@/components/ui/button';
 import { AddUserDialog } from '@/components/admin/AddUserDialog';
 import { DeleteUserDialog } from '@/components/admin/DeleteUserDialog';
@@ -75,7 +74,6 @@ export default function UserManagementPage() {
               <p className="text-muted-foreground">Loading users...</p>
             </div>
           </main>
-          <Footer />
         </div>
       </ProtectedRoute>
     );
@@ -227,7 +225,6 @@ export default function UserManagementPage() {
             </div>
           </div>
         </main>
-        <Footer />
 
         {/* Dialogs */}
         <AddUserDialog

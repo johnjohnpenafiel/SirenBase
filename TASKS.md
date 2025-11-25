@@ -142,6 +142,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### Frontend - Admin Dashboard Restructure
 
 - [x] Modify `/app/admin/page.tsx` to show module cards instead of user table
+
   - Create grid layout with ToolCard-style module cards
   - Add "User Management" card → Routes to `/admin/users`
   - Add "RTD&E Items & Pars" card → Routes to `/admin/rtde-items`
@@ -149,16 +150,19 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Use existing ProtectedRoute wrapper (admin-only access)
 
 - [x] Create `/app/admin/users/page.tsx`
+
   - Move existing user management UI from `/app/admin/page.tsx`
   - Keep all functionality: user table, AddUserDialog, DeleteUserDialog
   - Add "Back to Admin Panel" navigation
   - No changes to backend - uses existing `/api/admin/*` endpoints
 
 - [x] Create placeholder routes
+
   - `/app/admin/rtde-items/page.tsx` - Placeholder for Phase 6B
   - `/app/admin/milk-pars/page.tsx` - Placeholder with "Coming Soon"
 
 - [x] Update navigation
+
   - No changes needed - Header component doesn't link to admin panel
   - Dashboard Admin Panel card already has generic description
 
@@ -171,11 +175,13 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### Documentation
 
 - [x] Update PLANNING.md
+
   - Document admin dashboard restructure decision
   - Update admin routes section
   - Updated to Version 2.2.0
 
 - [x] Update TASKS.md
+
   - Mark Phase 6A tasks as completed
   - Add date completed
 
@@ -193,6 +199,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### Database Schema
 
 - [x] Create migration `20251122_add_rtde_tables.py`
+
   - `rtde_items` table (id, name, icon, par_level, display_order, active, timestamps)
   - `rtde_count_sessions` table (id, user_id, status, started_at, completed_at, expires_at)
   - `rtde_session_counts` table (id, session_id, item_id, counted_quantity, is_pulled, updated_at)
@@ -208,7 +215,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 - [x] Create `backend/app/models/rtde.py`
   - RTDEItem model (to_dict method, validation)
-  - RTDECountSession model (auto-calculate expires_at with __init__ override)
+  - RTDECountSession model (auto-calculate expires_at with **init** override)
   - RTDESessionCount model (unique constraint on session+item)
   - Add relationships (user→sessions, sessions→counts, items→counts)
   - Imported models in `backend/app/models/__init__.py`
@@ -216,6 +223,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### API Endpoints - Admin Item Management
 
 - [x] Create `backend/app/routes/tools/rtde.py`
+
   - Set up blueprint with `/api/rtde` prefix
   - Registered blueprint in `app/__init__.py`
 
@@ -251,18 +259,22 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### Backend Testing (✅ COMPLETE - 77/77 tests)
 
 - [x] Write model tests (`backend/tests/test_rtde_models.py`)
+
   - 17 tests covering item creation, validation, session expiration, cascade deletion, unique constraints
   - All 17 tests passing ✅
 
 - [x] Write admin endpoint tests (`backend/tests/test_rtde_admin.py`)
+
   - 23 tests covering CRUD operations, reorder, authorization, validation
   - All 23 tests passing ✅
 
 - [x] Write session endpoint tests (`backend/tests/test_rtde_sessions.py`)
+
   - 20 tests covering active session check, start/resume logic, session ownership, count updates, expiration
   - All 20 tests passing ✅
 
 - [x] Write pull list tests (`backend/tests/test_rtde_pull_list.py`)
+
   - 17 tests covering pull list generation, mark pulled/unpulled, complete session, authorization
   - All 17 tests passing ✅
 
@@ -274,6 +286,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### Documentation
 
 - [x] Update backend documentation
+
   - Updated backend/README.md with RTDE models, API endpoints, test coverage
   - Updated PLANNING.md to v2.4.0 (Phase 6B Complete)
   - Updated TASKS.md with completion status
@@ -293,6 +306,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### Admin - Item Management UI (✅ COMPLETE)
 
 - [x] Create `/app/admin/rtde-items/page.tsx`
+
   - Full item management UI with drag-and-drop reordering
   - List view with all items (sorted by display_order)
   - Shows: drag handle, icon, name, par level, active status, edit/delete buttons
@@ -300,6 +314,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Filter toggle: Show active only / Show all items
 
 - [x] Implement drag-and-drop reordering
+
   - Installed `@dnd-kit/core` and `@dnd-kit/sortable`
   - Drag handles on each item row
   - Real-time reordering in UI
@@ -307,17 +322,20 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Calls PUT `/api/rtde/admin/items/reorder`
 
 - [x] Create `components/admin/rtde/AddRTDEItemDialog.tsx`
+
   - Form fields: name, icon (emoji input), par_level, active toggle
   - Validation: name required (max 100 chars), icon required, par_level > 0
   - Uses react-hook-form + Zod validation
   - Calls POST `/api/rtde/admin/items`
 
 - [x] Create `components/admin/rtde/EditRTDEItemDialog.tsx`
+
   - Pre-populates form with current item values
   - Same validation as AddItemDialog
   - Calls PUT `/api/rtde/admin/items/:id`
 
 - [x] Create `components/admin/rtde/DeleteRTDEItemDialog.tsx`
+
   - Confirmation dialog with item name
   - Warning if item has been used in sessions
   - Calls DELETE `/api/rtde/admin/items/:id`
@@ -333,18 +351,21 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### Counting Interface (✅ COMPLETE)
 
 - [x] Create `/app/tools/rtde/page.tsx` (Landing/Entry Point)
+
   - Checks for active session via GET `/api/rtde/sessions/active`
   - Auto-starts new session if none exists
   - Shows resume/restart dialog if session exists
   - Routes to `/tools/rtde/count/:sessionId` after session confirmed
 
 - [x] Create `components/tools/rtde/ResumeSessionDialog.tsx`
+
   - Displays session info (started X minutes ago, items counted)
   - Buttons: "Resume" | "Start Fresh"
   - Resume → Navigates to counting screen with existing session
   - Start Fresh → Calls POST `/api/rtde/sessions/start` with action="new"
 
 - [x] Create `/app/tools/rtde/count/[sessionId]/page.tsx`
+
   - Fetches session data via GET `/api/rtde/sessions/:id`
   - One-item-at-a-time display with current item focused
   - Displays: emoji, name, par level, counted quantity, need quantity
@@ -355,6 +376,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Fixed [BUG-007]: Session state structure with items array
 
 - [x] Create `components/tools/rtde/RTDECountCard.tsx`
+
   - Large count display in center
   - +/- buttons (large touch targets, 44x44px+)
   - Direct number input (tap count to type)
@@ -363,6 +385,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Calls PUT `/api/rtde/sessions/:id/count`
 
 - [x] Create `components/tools/rtde/RTDENavBar.tsx`
+
   - Desktop: Horizontal navigation bar with all items
   - Mobile: Bottom bar (scrollable)
   - Shows emoji for each item
@@ -384,6 +407,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### Pull List Screen (✅ COMPLETE)
 
 - [x] Create `/app/tools/rtde/pull-list/[sessionId]/page.tsx`
+
   - Fetches pull list via GET `/api/rtde/sessions/:id/pull-list`
   - Displays only items where need_quantity > 0
   - Shows: emoji, name, quantity to pull
@@ -393,12 +417,14 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Fixed [BUG-006]: Next.js params Promise unwrapping
 
 - [x] Create `components/tools/rtde/RTDEPullListItem.tsx`
+
   - Item display with emoji, name, pull quantity
   - Checkbox interaction
   - Visual feedback when checked (checkmark, strikethrough)
   - Calls PUT `/api/rtde/sessions/:id/pull` on toggle
 
 - [x] Complete session dialog implemented
+
   - Uses ShadCN AlertDialog component
   - Confirmation: "Mark session as complete?"
   - Warning: "Session data will be deleted"
@@ -416,6 +442,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### API Integration (✅ COMPLETE)
 
 - [x] Create TypeScript types (in `frontend/types/index.ts`)
+
   - RTDEItem type
   - RTDESession type
   - RTDESessionWithItems type (added for [BUG-007])
@@ -456,20 +483,23 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 #### Documentation (✅ COMPLETE)
 
 - [x] Update frontend documentation
+
   - ✅ Added RTDE routes to frontend/README.md
   - ✅ Documented component structure (RTDECountCard, RTDENavBar, RTDEPullListItem, etc.)
   - ✅ Updated admin routes with modular dashboard structure
 
 - [x] Update PLANNING.md
+
   - ✅ Marked Tool 3 as "100% Complete"
   - ✅ Updated Phase 6C status from "FUTURE" to "✅ COMPLETE"
   - ✅ Updated version to 2.5.0 and last updated date
 
 - [x] Update TASKS.md
+
   - ✅ Marked Phase 6C tasks as completed
   - ✅ Added completion date (November 24, 2025)
 
-- [ ] Git commit
+- [x] Git commit
   - Commit message: "feat: Complete RTD&E frontend (admin, counting, pull list) - Phase 6C"
   - Push to repository
 

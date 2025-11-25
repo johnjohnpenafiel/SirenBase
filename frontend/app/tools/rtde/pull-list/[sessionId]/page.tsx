@@ -150,17 +150,16 @@ export default function RTDEPullListPage({ params }: PullListPageProps) {
             {/* Header Section */}
             <div className="border-b bg-background">
               <div className="container max-w-4xl mx-auto px-4 py-4 md:py-6">
+                <h1 className="text-lg font-medium text-muted-foreground text-center mb-4">
+                  Pull List
+                </h1>
                 <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h1 className="text-2xl md:text-3xl font-bold">Pull List</h1>
-                    <p className="text-muted-foreground mt-1">
-                      Items needed to reach par levels
-                    </p>
-                  </div>
+                  <p className="text-muted-foreground">
+                    Items needed to reach par levels
+                  </p>
                   <Button
                     onClick={() => setShowCompleteDialog(true)}
                     disabled={completing}
-                    size="sm"
                     className="hidden sm:flex"
                   >
                     {completing ? (
@@ -209,8 +208,12 @@ export default function RTDEPullListPage({ params }: PullListPageProps) {
                     <p className="text-sm text-muted-foreground mb-6">
                       No items need to be pulled from BOH.
                     </p>
-                    <Button onClick={() => setShowCompleteDialog(true)}>
-                      <CheckCircle2 className="mr-2 h-4 w-4" />
+                    <Button
+                      onClick={() => setShowCompleteDialog(true)}
+                      size="lg"
+                      className="h-12"
+                    >
+                      <CheckCircle2 className="mr-2 h-5 w-5" />
                       Complete Session
                     </Button>
                   </div>
@@ -231,20 +234,21 @@ export default function RTDEPullListPage({ params }: PullListPageProps) {
 
                 {/* Complete Session Button (Mobile) */}
                 {pullList.length > 0 && (
-                  <div className="mt-6 sm:hidden">
+                  <div className="mt-6 pb-6 sm:hidden">
                     <Button
                       onClick={() => setShowCompleteDialog(true)}
                       disabled={completing}
-                      className="w-full"
+                      size="lg"
+                      className="w-full h-12"
                     >
                       {completing ? (
                         <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                           Completing...
                         </>
                       ) : (
                         <>
-                          <CheckCircle2 className="mr-2 h-4 w-4" />
+                          <CheckCircle2 className="mr-2 h-5 w-5" />
                           Complete Session
                         </>
                       )}

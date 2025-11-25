@@ -32,6 +32,8 @@ interface RTDEMobileDrawerProps {
   phase: RTDESessionPhase;
   onItemClick: (index: number) => void;
   onStartPull: () => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function RTDEMobileDrawer({
@@ -40,13 +42,15 @@ export function RTDEMobileDrawer({
   phase,
   onItemClick,
   onStartPull,
+  open,
+  onOpenChange,
 }: RTDEMobileDrawerProps) {
   const isCountingPhase = phase === 'counting';
   const countedCount = getCountedItemsCount(items);
 
   const handleItemSelect = (index: number) => {
     onItemClick(index);
-    // Drawer will auto-close via DrawerClose wrapper
+    onOpenChange(false); // Close drawer after selection
   };
 
   // Hide drawer in pull phase (not needed during pulling)
@@ -56,29 +60,23 @@ export function RTDEMobileDrawer({
 
   return (
     <div className="md:hidden">
-      <Drawer>
-        <DrawerTrigger asChild>
-          <Button
-            variant="outline"
-            size="lg"
-            className="fixed bottom-20 left-1/2 -translate-x-1/2 z-40 shadow-lg"
-          >
-            <Menu className="h-5 w-5 mr-2" />
-            Item List ({countedCount}/{items.length})
-          </Button>
-        </DrawerTrigger>
-
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>RTDE Items</DrawerTitle>
-            <DrawerDescription>
-              {countedCount} of {items.length} items counted
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent className="bg-background">
+          <DrawerHeader className="border-b bg-background">
+            <DrawerTitle className="text-lg">RTDE Items</DrawerTitle>
+            <DrawerDescription className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
+                <span className="font-bold">{countedCount}</span>
+                <span className="opacity-75">of</span>
+                <span className="font-bold">{items.length}</span>
+              </span>
+              <span className="text-muted-foreground">items counted</span>
             </DrawerDescription>
           </DrawerHeader>
 
           {/* Scrollable item list */}
-          <div className="overflow-y-auto max-h-[60vh] px-4">
-            <div className="space-y-2 pb-4">
+          <div className="overflow-y-auto max-h-[60vh] px-4 bg-background">
+            <div className="space-y-2 py-4">
               {items.map((item, index) => {
                 const isCurrent = index === currentIndex;
                 const counted = isItemCounted(item);
@@ -90,37 +88,66 @@ export function RTDEMobileDrawer({
                       onClick={() => handleItemSelect(index)}
                       disabled={!isCountingPhase}
                       className={cn(
-                        'w-full flex items-center gap-3 p-4 rounded-lg text-left transition-colors',
-                        'hover:bg-accent',
-                        isCurrent && 'bg-primary text-primary-foreground',
-                        !isCountingPhase && 'cursor-not-allowed opacity-60'
+                        'w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-200',
+                        'bg-card border',
+                        'active:scale-[0.98]',
+                        isCurrent && 'bg-primary text-primary-foreground border-primary',
+                        !isCountingPhase && 'cursor-not-allowed opacity-60 active:scale-100'
                       )}
                       aria-label={`${item.name}, ${
                         counted ? `counted: ${countDisplay}` : 'not counted'
                       }`}
                       aria-current={isCurrent ? 'true' : undefined}
                     >
-                      {/* Item emoji icon */}
-                      <span className="text-3xl shrink-0" aria-hidden="true">
-                        {item.icon}
-                      </span>
+                      {/* Item emoji icon with circular background */}
+                      <div
+                        className={cn(
+                          'flex items-center justify-center w-14 h-14 rounded-full shrink-0 transition-colors',
+                          isCurrent
+                            ? 'bg-primary-foreground/20'
+                            : counted
+                            ? 'bg-primary/10'
+                            : 'bg-muted'
+                        )}
+                      >
+                        <span className="text-3xl" aria-hidden="true">
+                          {item.icon}
+                        </span>
+                      </div>
 
                       {/* Item name and count */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium truncate">{item.name}</span>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-semibold truncate">{item.name}</span>
                           {counted && (
-                            <Check
-                              className="h-5 w-5 shrink-0"
-                              aria-label="Counted"
-                            />
+                            <div
+                              className={cn(
+                                'flex items-center justify-center w-6 h-6 rounded-full shrink-0',
+                                isCurrent ? 'bg-primary-foreground/20' : 'bg-primary/20'
+                              )}
+                            >
+                              <Check
+                                className={cn(
+                                  'h-4 w-4 shrink-0',
+                                  isCurrent ? 'text-primary-foreground' : 'text-primary'
+                                )}
+                                aria-label="Counted"
+                              />
+                            </div>
                           )}
                         </div>
-                        <div className="text-sm opacity-90">
-                          Count:{' '}
-                          <span className="font-mono font-semibold">
-                            {countDisplay}
-                          </span>
+                        <div
+                          className={cn(
+                            'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-sm font-medium',
+                            isCurrent
+                              ? 'bg-primary-foreground/20 text-primary-foreground'
+                              : counted
+                              ? 'bg-primary/10 text-primary'
+                              : 'bg-muted text-muted-foreground'
+                          )}
+                        >
+                          <span className="opacity-75 text-xs">Count:</span>
+                          <span className="font-mono font-bold">{countDisplay}</span>
                         </div>
                       </div>
                     </button>
@@ -131,13 +158,14 @@ export function RTDEMobileDrawer({
           </div>
 
           {/* "Start Pull List" button */}
-          <DrawerFooter>
+          <DrawerFooter className="border-t bg-background pb-6 flex items-center justify-center">
             <DrawerClose asChild>
               <Button
-                variant="outline"
+                variant="default"
+                size="lg"
                 onClick={onStartPull}
                 disabled={!isCountingPhase}
-                className="w-full"
+                className="shadow-sm h-12 w-full max-w-md"
               >
                 Start Pull List
               </Button>

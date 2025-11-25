@@ -216,16 +216,17 @@ export default function RTDECountPage({ params }: CountPageProps) {
             </div>
 
             {/* Navigation Arrows */}
-            <div className="border-t bg-background">
-              <div className="container max-w-4xl mx-auto px-4 py-4">
-                <div className="flex items-center justify-between gap-4">
+            <div className="border-t bg-background pb-safe">
+              <div className="container max-w-4xl mx-auto px-4 py-4 md:py-6">
+                <div className="flex items-center justify-between gap-3">
                   <Button
                     variant="outline"
+                    size="lg"
                     onClick={handlePrevious}
                     disabled={currentIndex === 0}
-                    className="flex-1 sm:flex-initial"
+                    className="flex-1 sm:flex-initial h-12 md:h-11"
                   >
-                    <ChevronLeft className="h-4 w-4 mr-2" />
+                    <ChevronLeft className="h-5 w-5 mr-2" />
                     Previous
                   </Button>
 
@@ -237,12 +238,13 @@ export default function RTDECountPage({ params }: CountPageProps) {
 
                   <Button
                     variant="outline"
+                    size="lg"
                     onClick={handleNext}
                     disabled={currentIndex === session.items.length - 1}
-                    className="flex-1 sm:flex-initial"
+                    className="flex-1 sm:flex-initial h-12 md:h-11"
                   >
                     Next
-                    <ChevronRight className="h-4 w-4 ml-2" />
+                    <ChevronRight className="h-5 w-5 ml-2" />
                   </Button>
                 </div>
               </div>

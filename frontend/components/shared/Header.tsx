@@ -39,7 +39,10 @@ export function Header() {
               {/* Dashboard Link - Always visible */}
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm" className="gap-2">
-                  <Home className="h-4 w-4 md:mr-2" />
+                  <Home
+                    strokeWidth={1.6}
+                    className="size-7 mt-3 md:mt-0 md:size-5 md:mr-2"
+                  />
                   <span className="hidden md:inline">Dashboard</span>
                 </Button>
               </Link>
@@ -53,7 +56,10 @@ export function Header() {
                     className="gap-2"
                     aria-label="User menu"
                   >
-                    <User className="h-4 w-4 md:mr-2" />
+                    <User
+                      strokeWidth={1.6}
+                      className="size-7 md:size-5 md:mr-2"
+                    />
                     <span className="hidden md:inline text-sm font-medium">
                       {user?.name}
                     </span>

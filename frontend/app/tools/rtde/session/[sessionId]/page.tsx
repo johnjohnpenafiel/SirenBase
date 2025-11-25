@@ -32,7 +32,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { ChevronLeft, ChevronRight, Loader2, CheckCircle2, Package } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, CheckCircle2, Package, Menu } from 'lucide-react';
 import apiClient from '@/lib/api';
 import { toast } from 'sonner';
 import type { RTDESessionWithPhase, RTDEItem, RTDESessionPhase } from '@/components/tools/rtde/types';
@@ -67,6 +67,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   const [uncountedItems, setUncountedItems] = useState<RTDEItem[]>([]);
   const [completing, setCompleting] = useState(false);
   const [showCompleteDialog, setShowCompleteDialog] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Debounce timer ref
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -410,33 +411,41 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
           {/* Main Content - Counting Phase */}
           {phase === 'counting' && (
-            <main className="flex-1 flex flex-col overflow-hidden">
-            {/* Page Title & Progress */}
-            <div>
-              <div className="container max-w-4xl mx-auto px-4 md:px-8 py-4 md:py-6">
-                <h1 className="text-2xl md:text-3xl font-bold mb-4">
-                  RTDE Display Count
-                </h1>
-
-                {/* Progress Bar */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">
-                      Item {currentIndex + 1} of {sessionData.items.length}
-                    </span>
-                    <span className="font-medium">
-                      {progressPercent}% Complete
-                    </span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-2">
-                    <div
-                      className="bg-primary h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${progressPercent}%` }}
-                      role="progressbar"
-                      aria-valuenow={progressPercent}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
+            <main className="flex-1 flex flex-col overflow-hidden bg-muted/30">
+            {/* Progress Section - Floating Card */}
+            <div className="px-4 md:px-8 pt-4 md:pt-6 pb-2">
+              <div className="container max-w-4xl mx-auto">
+                <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-4 md:py-5">
+                  {/* Progress Bar */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-foreground">
+                          Item {currentIndex + 1}
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          of {sessionData.items.length}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-primary">
+                          {progressPercent}%
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          complete
+                        </span>
+                      </div>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2.5 overflow-hidden">
+                      <div
+                        className="bg-primary h-2.5 rounded-full transition-all duration-500 ease-out"
+                        style={{ width: `${progressPercent}%` }}
+                        role="progressbar"
+                        aria-valuenow={progressPercent}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -444,9 +453,9 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
             {/* Count Card - Scrollable Area */}
             <div className="flex-1 overflow-y-auto">
-              <div className="container max-w-4xl mx-auto px-4 md:px-8 py-6">
-                <div className="flex items-center justify-center min-h-[400px]">
-                  <div className="w-full max-w-md">
+              <div className="container max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12">
+                <div className="flex items-center justify-center">
+                  <div className="w-full max-w-lg">
                     <RTDECountCard
                       itemName={currentItem.name}
                       icon={currentItem.icon}
@@ -460,44 +469,98 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
             </div>
 
             {/* Navigation Buttons - Fixed */}
-            <div className="border-t bg-background">
-              <div className="container max-w-4xl mx-auto px-4 py-4">
-                <div className="flex items-center justify-between gap-4">
+            <div className="border-t bg-background pb-safe">
+              <div className="container max-w-4xl mx-auto px-4 py-4 md:py-6">
+                {/* Desktop Navigation */}
+                <div className="hidden md:flex items-center justify-between gap-3">
                   {currentIndex > 0 && (
                     <Button
                       variant="outline"
+                      size="lg"
                       onClick={handlePrevious}
-                      className="flex-1 sm:flex-initial"
+                      className="flex-1 sm:flex-initial h-11"
                     >
-                      <ChevronLeft className="h-4 w-4 mr-2" />
+                      <ChevronLeft className="h-5 w-5 mr-2" />
                       Previous
                     </Button>
                   )}
 
                   {saving && (
-                    <span className="text-xs text-muted-foreground hidden sm:inline">
+                    <span className="text-xs text-muted-foreground">
                       Saving...
                     </span>
                   )}
 
                   {isLastItem ? (
                     <Button
+                      size="lg"
                       onClick={handleStartPull}
-                      className="flex-1 sm:flex-initial ml-auto"
+                      className="flex-1 sm:flex-initial ml-auto h-11"
                     >
                       Start Pull
-                      <ChevronRight className="h-4 w-4 ml-2" />
+                      <ChevronRight className="h-5 w-5 ml-2" />
                     </Button>
                   ) : (
                     <Button
                       variant="outline"
+                      size="lg"
                       onClick={handleNext}
-                      className="flex-1 sm:flex-initial ml-auto"
+                      className="flex-1 sm:flex-initial ml-auto h-11"
                     >
                       Next
-                      <ChevronRight className="h-4 w-4 ml-2" />
+                      <ChevronRight className="h-5 w-5 ml-2" />
                     </Button>
                   )}
+                </div>
+
+                {/* Mobile Navigation */}
+                <div className="md:hidden space-y-3">
+                  {/* Previous/Next Buttons */}
+                  <div className="flex items-center justify-between gap-3">
+                    {currentIndex > 0 && (
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={handlePrevious}
+                        className="flex-1 h-12"
+                      >
+                        <ChevronLeft className="h-5 w-5 mr-2" />
+                        Previous
+                      </Button>
+                    )}
+
+                    {isLastItem ? (
+                      <Button
+                        size="lg"
+                        onClick={handleStartPull}
+                        className="flex-1 ml-auto h-12"
+                      >
+                        Start Pull
+                        <ChevronRight className="h-5 w-5 ml-2" />
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={handleNext}
+                        className="flex-1 ml-auto h-12"
+                      >
+                        Next
+                        <ChevronRight className="h-5 w-5 ml-2" />
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* View Items Button */}
+                  <Button
+                    variant="default"
+                    size="lg"
+                    onClick={() => setDrawerOpen(true)}
+                    className="w-full h-14 shadow-md border-2 border-primary/20"
+                  >
+                    <Menu className="h-5 w-5 mr-2" />
+                    View All Items ({countedCount}/{sessionData.items.length})
+                  </Button>
                 </div>
               </div>
             </div>
@@ -506,54 +569,66 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
           {/* Main Content - Pulling Phase */}
           {phase === 'pulling' && (
-            <main className="flex-1 flex flex-col overflow-hidden">
-              {/* Page Title & Progress */}
-              <div>
-                <div className="container max-w-4xl mx-auto px-4 md:px-8 py-4 md:py-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h1 className="text-2xl md:text-3xl font-bold">Pull Items</h1>
-                      <p className="text-muted-foreground mt-1">
-                        Items needed to reach par levels
-                      </p>
+            <main className="flex-1 flex flex-col overflow-hidden bg-muted/30">
+              {/* Progress Section - Floating Card */}
+              <div className="px-4 md:px-8 pt-4 md:pt-6 pb-2">
+                <div className="container max-w-4xl mx-auto">
+                  <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-4 md:py-5">
+                    {/* Header with Complete Button */}
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-lg font-semibold text-foreground">
+                        Pull Items from BOH
+                      </h2>
+                      <Button
+                        onClick={() => setShowCompleteDialog(true)}
+                        disabled={completing}
+                        size="sm"
+                        className="hidden sm:flex"
+                      >
+                        {completing ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Completing...
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle2 className="mr-2 h-4 w-4" />
+                            Complete
+                          </>
+                        )}
+                      </Button>
                     </div>
-                    <Button
-                      onClick={() => setShowCompleteDialog(true)}
-                      disabled={completing}
-                      size="sm"
-                      className="hidden sm:flex"
-                    >
-                      {completing ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Completing...
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle2 className="mr-2 h-4 w-4" />
-                          Complete
-                        </>
-                      )}
-                    </Button>
-                  </div>
 
-                  {/* Progress Bar */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        {pulledCount} of {pullList.length} items pulled
-                      </span>
-                      <span className="font-medium">{pullProgress}%</span>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div
-                        className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${pullProgress}%` }}
-                        role="progressbar"
-                        aria-valuenow={pullProgress}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
+                    {/* Progress Bar */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-foreground">
+                            {pulledCount} of {pullList.length}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            items pulled
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold text-green-600">
+                            {pullProgress}%
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            complete
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full bg-muted rounded-full h-2.5 overflow-hidden">
+                        <div
+                          className="bg-green-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                          style={{ width: `${pullProgress}%` }}
+                          role="progressbar"
+                          aria-valuenow={pullProgress}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -561,16 +636,22 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
               {/* Pull List - Scrollable Area */}
               <div className="flex-1 overflow-y-auto">
-                <div className="container max-w-4xl mx-auto px-4 md:px-8 py-6">
+                <div className="container max-w-4xl mx-auto px-4 md:px-8 py-6 md:py-8">
                   {pullList.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                      <Package className="h-16 w-16 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-semibold">All items at par!</h3>
-                      <p className="text-sm text-muted-foreground mb-6">
-                        No items need to be pulled from BOH.
+                    <div className="flex flex-col items-center justify-center py-16 text-center">
+                      <div className="flex items-center justify-center w-24 h-24 rounded-full bg-green-100 dark:bg-green-950 mb-6">
+                        <CheckCircle2 className="h-12 w-12 text-green-600 dark:text-green-400" />
+                      </div>
+                      <h3 className="text-2xl font-bold mb-2">All items at par!</h3>
+                      <p className="text-sm text-muted-foreground mb-8 max-w-md">
+                        No items need to be pulled from BOH. All display items are fully stocked.
                       </p>
-                      <Button onClick={() => setShowCompleteDialog(true)}>
-                        <CheckCircle2 className="mr-2 h-4 w-4" />
+                      <Button
+                        onClick={() => setShowCompleteDialog(true)}
+                        size="lg"
+                        className="h-12 px-8"
+                      >
+                        <CheckCircle2 className="mr-2 h-5 w-5" />
                         Complete Session
                       </Button>
                     </div>
@@ -591,20 +672,21 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
                   {/* Complete Session Button (Mobile) */}
                   {pullList.length > 0 && (
-                    <div className="mt-6 sm:hidden">
+                    <div className="mt-6 pb-6 sm:hidden">
                       <Button
                         onClick={() => setShowCompleteDialog(true)}
                         disabled={completing}
-                        className="w-full"
+                        size="lg"
+                        className="w-full h-12"
                       >
                         {completing ? (
                           <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                             Completing...
                           </>
                         ) : (
                           <>
-                            <CheckCircle2 className="mr-2 h-4 w-4" />
+                            <CheckCircle2 className="mr-2 h-5 w-5" />
                             Complete Session
                           </>
                         )}
@@ -624,6 +706,8 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
           phase={phase}
           onItemClick={jumpToItem}
           onStartPull={handleStartPull}
+          open={drawerOpen}
+          onOpenChange={setDrawerOpen}
         />
 
         {/* Validation Dialog - Uncounted Items */}

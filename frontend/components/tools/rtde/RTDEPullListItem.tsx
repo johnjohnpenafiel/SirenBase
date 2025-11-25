@@ -9,10 +9,10 @@
  * - Strikethrough when marked as pulled
  * - Visual feedback for completion state
  */
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
+import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 interface RTDEPullListItemProps {
   itemName: string;
@@ -35,67 +35,72 @@ export function RTDEPullListItem({
     <button
       onClick={onToggle}
       className={cn(
-        'flex items-center gap-4 w-full p-4 bg-card border border-border rounded-lg transition-all',
-        'hover:shadow-sm active:scale-[0.98]',
-        isPulled && 'bg-muted/50',
+        "flex items-center gap-4 w-full p-4 md:p-5 bg-card border border-border rounded-xl transition-all duration-200",
+        "active:scale-[0.98]",
+        isPulled && "bg-muted/50",
         className
       )}
-      aria-label={`${isPulled ? 'Unmark' : 'Mark'} ${itemName} as pulled (${quantityNeeded} needed)`}
+      aria-label={`${
+        isPulled ? "Unmark" : "Mark"
+      } ${itemName} as pulled (${quantityNeeded} needed)`}
     >
       {/* Custom Checkbox */}
       <div
         className={cn(
-          'flex items-center justify-center h-6 w-6 shrink-0 rounded border-2 transition-colors',
+          "flex items-center justify-center h-7 w-7 md:h-8 md:w-8 shrink-0 rounded-lg border-2 transition-all duration-200",
           isPulled
-            ? 'bg-primary border-primary'
-            : 'border-muted-foreground/30 hover:border-muted-foreground'
+            ? "bg-green-600 border-green-600"
+            : "border-muted-foreground/30"
         )}
         role="checkbox"
         aria-checked={isPulled}
       >
-        {isPulled && <Check className="h-4 w-4 text-primary-foreground" />}
+        {isPulled && <Check className="h-5 w-5 md:h-6 md:w-6 text-white" />}
       </div>
 
-      {/* Item Icon (Emoji) */}
-      <span
+      {/* Item Icon with Background */}
+      <div
         className={cn(
-          'text-3xl shrink-0 transition-opacity',
-          isPulled && 'opacity-40'
+          "flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full shrink-0 transition-all duration-200",
+          isPulled ? "bg-muted opacity-50" : "bg-muted"
         )}
-        aria-hidden="true"
       >
-        {icon}
-      </span>
+        <span className="text-2xl md:text-3xl" aria-hidden="true">
+          {icon}
+        </span>
+      </div>
 
-      {/* Item Details */}
+      {/* Item Name */}
       <div className="flex-1 text-left min-w-0">
         <p
           className={cn(
-            'font-medium text-base transition-all',
-            isPulled && 'line-through text-muted-foreground'
+            "font-semibold text-base md:text-lg transition-all duration-200",
+            isPulled && "line-through text-muted-foreground"
           )}
         >
           {itemName}
         </p>
-        <p
-          className={cn(
-            'text-sm transition-colors',
-            isPulled ? 'text-muted-foreground' : 'text-foreground/70'
-          )}
-        >
-          Qty: <span className="font-semibold">{quantityNeeded}</span>
-        </p>
       </div>
 
-      {/* Visual Indicator (Mobile) */}
-      {isPulled && (
-        <div
-          className="md:hidden flex items-center justify-center h-8 w-8 shrink-0 rounded-full bg-green-100 dark:bg-green-950"
-          aria-hidden="true"
+      {/* Pull Quantity Badge */}
+      <div
+        className={cn(
+          "flex flex-col items-center justify-center gap-1 px-4 py-2 rounded-xl transition-colors duration-200 shrink-0",
+          isPulled ? "bg-muted" : "bg-input/20"
+        )}
+      >
+        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          Pull
+        </span>
+        <span
+          className={cn(
+            "text-2xl md:text-3xl font-bold transition-colors duration-200",
+            isPulled ? "text-muted-foreground" : "text-chart-1"
+          )}
         >
-          <Check className="h-5 w-5 text-green-700 dark:text-green-300" />
-        </div>
-      )}
+          {quantityNeeded}
+        </span>
+      </div>
     </button>
   );
 }

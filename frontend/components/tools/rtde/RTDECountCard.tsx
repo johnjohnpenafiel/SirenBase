@@ -107,41 +107,47 @@ export function RTDECountCard({
   return (
     <div
       className={cn(
-        'flex flex-col items-center gap-4 p-6 bg-card border border-border rounded-xl shadow-sm',
+        'flex flex-col items-center gap-6 p-6 md:p-8 bg-card border border-border rounded-2xl transition-all duration-200',
         className
       )}
     >
-      {/* Emoji Icon */}
-      <div className="text-6xl md:text-7xl select-none" aria-hidden="true">
-        {icon}
+      {/* Emoji Icon with Background */}
+      <div className="flex items-center justify-center w-24 h-24 md:w-28 md:h-28 rounded-full bg-muted">
+        <div className="text-5xl md:text-6xl select-none" aria-hidden="true">
+          {icon}
+        </div>
       </div>
 
       {/* Item Name */}
-      <h2 className="text-xl md:text-2xl font-semibold text-center text-foreground">
+      <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground leading-tight">
         {itemName}
       </h2>
 
       {/* Par Level Info */}
-      <p className="text-sm text-muted-foreground">
-        Par: <span className="font-medium text-foreground">{parLevel}</span>
-      </p>
+      <div className="flex items-center gap-2">
+        <span className="text-sm text-muted-foreground">Par Level:</span>
+        <span className="text-lg font-bold text-foreground">{parLevel}</span>
+      </div>
 
       {/* Count Controls */}
-      <div className="flex items-center gap-4 w-full max-w-xs">
+      <div className="flex items-center gap-4 w-full max-w-sm mt-2">
         {/* Decrement Button */}
         <Button
           onClick={handleDecrement}
           disabled={currentCount === 0}
           variant="outline"
           size="lg"
-          className="h-12 w-12 p-0 shrink-0 touch-none"
+          className={cn(
+            "h-14 w-14 md:h-16 md:w-16 p-0 shrink-0 rounded-xl border-2 transition-all duration-150",
+            "active:scale-95 disabled:opacity-40"
+          )}
           aria-label={`Decrease count for ${itemName}`}
         >
-          <Minus className="h-6 w-6" />
+          <Minus className="h-6 w-6 md:h-7 md:w-7" />
         </Button>
 
         {/* Current Count Display / Input */}
-        <div className="flex-1 flex flex-col items-center gap-1">
+        <div className="flex-1 flex flex-col items-center gap-2">
           {isEditing ? (
             <Input
               ref={inputRef}
@@ -152,20 +158,24 @@ export function RTDECountCard({
               onChange={handleInputChange}
               onBlur={handleInputBlur}
               onKeyDown={handleInputKeyDown}
-              className="h-14 text-3xl font-bold text-center border-2 border-primary"
+              className="h-16 md:h-20 text-4xl md:text-5xl font-bold text-center border-2 border-primary rounded-xl"
               maxLength={3}
               aria-label={`Enter count for ${itemName}`}
             />
           ) : (
             <button
               onClick={handleCountClick}
-              className="h-14 w-full flex items-center justify-center text-3xl font-bold text-foreground hover:bg-muted/50 rounded-md transition-colors"
+              className={cn(
+                "h-16 md:h-20 w-full flex items-center justify-center rounded-xl transition-all duration-150",
+                "text-4xl md:text-5xl font-bold text-foreground",
+                "hover:bg-muted/50 active:scale-95"
+              )}
               aria-label={`Current count: ${currentCount}. Click to edit.`}
             >
               {currentCount}
             </button>
           )}
-          <span className="text-xs text-muted-foreground">Current</span>
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Current Count</span>
         </div>
 
         {/* Increment Button */}
@@ -174,15 +184,18 @@ export function RTDECountCard({
           disabled={currentCount >= 999}
           variant="outline"
           size="lg"
-          className="h-12 w-12 p-0 shrink-0 touch-none"
+          className={cn(
+            "h-14 w-14 md:h-16 md:w-16 p-0 shrink-0 rounded-xl border-2 transition-all duration-150",
+            "active:scale-95 disabled:opacity-40"
+          )}
           aria-label={`Increase count for ${itemName}`}
         >
-          <Plus className="h-6 w-6" />
+          <Plus className="h-6 w-6 md:h-7 md:w-7" />
         </Button>
       </div>
 
-      {/* Helper Text (mobile only) */}
-      <p className="text-xs text-muted-foreground text-center md:hidden">
+      {/* Helper Text */}
+      <p className="text-xs text-muted-foreground text-center mt-2">
         Tap count to type directly
       </p>
     </div>

@@ -8,9 +8,9 @@ The SirenBase frontend is a Next.js 15 application that provides a unified dashb
 
 ### Current Status
 - **Dashboard**: ✅ Complete - Tool selection with role-based visibility
-- **Tool 1 (Inventory Tracking)**: 🚧 In Progress - UI coming soon
+- **Tool 1 (Inventory Tracking)**: ✅ Complete - Full inventory management with autocomplete
 - **Tool 2 (Milk Count)**: 🚧 Coming Soon
-- **Tool 3 (RTD&E)**: 🚧 Coming Soon
+- **Tool 3 (RTD&E)**: ✅ Complete - Counting interface, pull list, and admin management
 
 ## Tech Stack
 
@@ -72,11 +72,19 @@ frontend/
 │   │   └── page.tsx         # Tool selection grid
 │   ├── tools/               # Tool-specific pages
 │   │   ├── tracking/        # Tool 1: Inventory Tracking
-│   │   │   └── page.tsx     # Landing page
+│   │   │   ├── page.tsx           # Landing page
+│   │   │   ├── inventory/         # Inventory view
+│   │   │   └── history/           # History view
 │   │   ├── milk-count/      # Tool 2: Milk Count (coming soon)
-│   │   └── rtde/            # Tool 3: RTD&E (coming soon)
+│   │   └── rtde/            # Tool 3: RTD&E Counting System
+│   │       ├── page.tsx           # Landing/Entry point
+│   │       ├── count/[sessionId]/ # Counting interface
+│   │       └── pull-list/[sessionId]/ # Pull list view
 │   └── admin/               # Global admin panel
-│       └── page.tsx         # Admin landing page
+│       ├── page.tsx         # Admin dashboard with module cards
+│       ├── users/           # User management
+│       ├── rtde-items/      # RTD&E item management
+│       └── milk-pars/       # Milk count par levels (coming soon)
 ├── components/              # React components
 │   ├── shared/              # Cross-tool shared components
 │   │   ├── Header.tsx       # Navigation header
@@ -88,7 +96,11 @@ frontend/
 │       ├── tracking/        # Tool 1 components
 │       ├── tracking-history/# Tool 1 history components
 │       ├── milk-count/      # Tool 2 components (future)
-│       └── rtde/            # Tool 3 components (future)
+│       └── rtde/            # Tool 3 components
+│           ├── RTDECountCard.tsx      # Item counting interface
+│           ├── RTDENavBar.tsx         # Navigation bar for items
+│           ├── RTDEPullListItem.tsx   # Pull list item display
+│           └── ResumeSessionDialog.tsx # Session resume dialog
 ├── hooks/                   # Custom React hooks
 │   └── use-auth.ts          # Authentication hook (minimal mock)
 ├── lib/                     # Utilities and helpers
@@ -110,11 +122,19 @@ The frontend mirrors the backend's multi-tool architecture with clear namespacin
 
 **Tool Routes**:
 - `/tools/tracking/*` → Inventory Tracking pages (Tool 1)
+  - `/tools/tracking/inventory` → Current inventory view
+  - `/tools/tracking/history` → Transaction history
 - `/tools/milk-count/*` → Milk Count pages (Tool 2) - Coming Soon
-- `/tools/rtde/*` → RTD&E pages (Tool 3) - Coming Soon
+- `/tools/rtde/*` → RTD&E Counting System (Tool 3)
+  - `/tools/rtde` → Landing page (auto-start or resume session)
+  - `/tools/rtde/count/[sessionId]` → Counting interface
+  - `/tools/rtde/pull-list/[sessionId]` → Pull list generation
 
 **Admin Routes**:
-- `/admin` → Global admin panel (user management, settings)
+- `/admin` → Admin dashboard with module cards
+- `/admin/users` → User management
+- `/admin/rtde-items` → RTD&E item and par level management
+- `/admin/milk-pars` → Milk count par levels (coming soon)
 
 ### Component Organization
 
@@ -306,6 +326,6 @@ For questions or issues:
 
 ---
 
-**Last Updated**: October 30, 2025
-**Current Phase**: Phase 3A - Multi-Tool Architecture Setup
-**Status**: Dashboard complete, Tool 1 UI in progress
+**Last Updated**: November 24, 2025
+**Current Phase**: Phase 6C Complete - RTD&E Frontend Implementation
+**Status**: Tool 1 (Inventory Tracking) ✅ Complete, Tool 3 (RTD&E) ✅ Complete, Tool 2 (Milk Count) 🚧 Next

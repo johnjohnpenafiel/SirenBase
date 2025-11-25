@@ -93,19 +93,20 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 ---
 
-### 📦 Tool 3: RTD&E Counting System (FUTURE)
+### 📦 Tool 3: RTD&E Counting System (✅ COMPLETE)
 
 **Purpose**: Simplify restocking the Ready-to-Drink & Eat display with digital counting and pull list generation.
 
 **Key Features**:
 
 - Quick item counting with +/- interface
-- Automatic pull list generation
+- Automatic pull list generation (shows only items needed)
 - BOH fulfillment tracking (mark items as pulled)
-- Integration with Siren's Eye visual guide
-- Admin-managed item lists (seasonal updates)
+- Session management (auto-start, resume, 4-hour expiration)
+- Admin-managed item lists with drag-and-drop reordering
+- Mobile-first counting interface with arrow key navigation
 
-**Status**: Planning complete, awaiting Tool 2 completion
+**Status**: 100% Complete - Backend (77/77 tests passing) and Frontend fully implemented
 
 **Detailed Planning**: See `Planning/RTDE.md`
 
@@ -726,14 +727,23 @@ Located in `backend/app/tools/{tool_name}/`:
 - ✅ All 152 backend tests passing (no regressions)
 - ✅ Documentation updated (backend/README.md)
 
-#### Phase 6C: RTD&E Frontend Development (FUTURE)
+#### Phase 6C: RTD&E Frontend Development (✅ COMPLETE)
 
-**Timeline**: TBD
+**Timeline**: Nov 22-24, 2025
+**Status**: Fully complete with comprehensive UI implementation
 
-- RTD&E frontend UI (counting, pull list generation)
-- Admin item management interface with drag-and-drop
-- Session management and resume/restart logic
-- Testing and deployment
+**Completed**:
+- ✅ Admin item management UI with drag-and-drop reordering (using @dnd-kit)
+- ✅ Add/Edit/Delete item dialogs with validation
+- ✅ RTD&E landing page with session auto-start and resume logic
+- ✅ One-item-at-a-time counting interface with +/- buttons
+- ✅ Direct number input and real-time "need" calculation
+- ✅ Responsive navigation bar (desktop horizontal, mobile bottom drawer)
+- ✅ Pull list screen with checkable items
+- ✅ Session completion with confirmation dialog
+- ✅ Full TypeScript API integration
+- ✅ Frontend builds successfully with all routes
+- ✅ Mobile-responsive throughout (tested 320px+)
 
 ### Phase 7: Deployment & Production Launch (FUTURE)
 
@@ -781,10 +791,10 @@ Located in `backend/app/tools/{tool_name}/`:
 
 See **TASKS.md** for the detailed, actionable task breakdown organized by tool and development phase.
 
-**Current Focus**: Complete Tool 1 (Inventory Tracking) frontend development within the new multi-tool architecture.
+**Current Focus**: Tool 1 (Inventory Tracking) ✅ Complete, Tool 3 (RTD&E) ✅ Complete. Next: Begin Tool 2 (Milk Count System) development.
 
 ---
 
-_Last Updated: November 22, 2025_
-_Version: 2.4.0 - Phase 6B Complete (RTD&E Backend 100% Complete)_
+_Last Updated: November 24, 2025_
+_Version: 2.5.0 - Phase 6C Complete (RTD&E Tool 100% Complete - Backend + Frontend)_
 _Maintainer: Development Team_

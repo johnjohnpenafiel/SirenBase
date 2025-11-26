@@ -40,8 +40,8 @@ export function Header() {
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm" className="gap-2">
                   <Home
-                    strokeWidth={1.6}
-                    className="size-7 mt-3 md:mt-0 md:size-5 md:mr-2"
+                    strokeWidth={1.5}
+                    className="size-6 mt-2 md:mt-0 md:size-5 md:mr-2 text-popover-foreground"
                   />
                   <span className="hidden md:inline">Dashboard</span>
                 </Button>
@@ -57,8 +57,8 @@ export function Header() {
                     aria-label="User menu"
                   >
                     <User
-                      strokeWidth={1.6}
-                      className="size-7 md:size-5 md:mr-2"
+                      strokeWidth={1.5}
+                      className="size-6 md:size-5 md:mr-2 text-popover-foreground"
                     />
                     <span className="hidden md:inline text-sm font-medium">
                       {user?.name}

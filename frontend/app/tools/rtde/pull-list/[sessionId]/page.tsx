@@ -146,9 +146,9 @@ export default function RTDEPullListPage({ params }: PullListPageProps) {
           <RTDENavBar sessionId={sessionId} />
 
           {/* Main Content */}
-          <main className="flex-1 flex flex-col overflow-auto">
-            {/* Header Section */}
-            <div className="border-b bg-background">
+          <main className="flex-1 flex flex-col overflow-hidden">
+            {/* Header Section - Fixed */}
+            <div className="border-b border-border/30 bg-background">
               <div className="container max-w-4xl mx-auto px-4 py-4 md:py-6">
                 <h1 className="text-lg font-medium text-muted-foreground text-center mb-4">
                   Pull List
@@ -157,36 +157,27 @@ export default function RTDEPullListPage({ params }: PullListPageProps) {
                   <p className="text-muted-foreground">
                     Items needed to reach par levels
                   </p>
-                  <Button
-                    onClick={() => setShowCompleteDialog(true)}
-                    disabled={completing}
-                    className="hidden sm:flex"
-                  >
-                    {completing ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Completing...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 className="mr-2 h-4 w-4" />
-                        Complete Session
-                      </>
-                    )}
-                  </Button>
                 </div>
 
-                {/* Progress */}
+                {/* Progress - Enhanced with gradient and glow */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">
+                    <span className="text-[0.8125rem] text-muted-foreground font-medium">
                       {pulledCount} of {totalCount} items pulled
                     </span>
-                    <span className="font-medium">{progress}%</span>
+                    <span className="text-[0.8125rem] font-semibold tabular-nums">{progress}%</span>
                   </div>
-                  <div className="w-full bg-muted rounded-full h-2">
+
+                  <div className="relative w-full h-1.5 bg-muted/60 rounded-full overflow-hidden">
+                    {/* Glow effect behind progress */}
                     <div
-                      className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                      className="absolute inset-0 bg-gradient-to-r from-green-600/20 to-green-600/40 blur-sm transition-all duration-500 ease-out"
+                      style={{ width: `${progress}%` }}
+                    />
+
+                    {/* Actual progress bar */}
+                    <div
+                      className="relative h-full bg-gradient-to-r from-green-600 to-green-500 rounded-full transition-all duration-500 ease-out shadow-sm shadow-green-600/30"
                       style={{ width: `${progress}%` }}
                       role="progressbar"
                       aria-valuenow={progress}
@@ -198,20 +189,28 @@ export default function RTDEPullListPage({ params }: PullListPageProps) {
               </div>
             </div>
 
-            {/* Pull List Items */}
-            <div className="flex-1 overflow-auto">
+            {/* Pull List Items - Scrollable */}
+            <div className="flex-1 min-h-0 overflow-y-auto">
               <div className="container max-w-4xl mx-auto px-4 py-6">
                 {pullList.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <Package className="h-16 w-16 text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold">All items at par!</h3>
-                    <p className="text-sm text-muted-foreground mb-6">
-                      No items need to be pulled from BOH.
+                  <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+                    {/* Icon with subtle gradient background */}
+                    <div className="flex items-center justify-center w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
+                      <Package className="h-12 w-12 text-muted-foreground/60" strokeWidth={1.5} />
+                    </div>
+
+                    <h3 className="text-xl font-bold mb-2 text-foreground">
+                      All items at par!
+                    </h3>
+
+                    <p className="text-sm text-muted-foreground mb-8 max-w-xs leading-relaxed">
+                      No items need to be pulled from BOH. Your display is fully stocked.
                     </p>
+
                     <Button
                       onClick={() => setShowCompleteDialog(true)}
                       size="lg"
-                      className="h-12"
+                      className="h-12 px-6 rounded-xl shadow-md"
                     >
                       <CheckCircle2 className="mr-2 h-5 w-5" />
                       Complete Session
@@ -231,30 +230,30 @@ export default function RTDEPullListPage({ params }: PullListPageProps) {
                     ))}
                   </div>
                 )}
+              </div>
+            </div>
 
-                {/* Complete Session Button (Mobile) */}
-                {pullList.length > 0 && (
-                  <div className="mt-6 pb-6 sm:hidden">
-                    <Button
-                      onClick={() => setShowCompleteDialog(true)}
-                      disabled={completing}
-                      size="lg"
-                      className="w-full h-12"
-                    >
-                      {completing ? (
-                        <>
-                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                          Completing...
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle2 className="mr-2 h-5 w-5" />
-                          Complete Session
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                )}
+            {/* Fixed Footer - Complete Session Button */}
+            <div className="shrink-0 border-t border-border/30 bg-background">
+              <div className="container max-w-4xl mx-auto px-4 py-4 md:py-6 pb-20 md:pb-6">
+                <Button
+                  onClick={() => setShowCompleteDialog(true)}
+                  disabled={completing}
+                  size="lg"
+                  className="w-full md:w-auto h-12 px-6 rounded-xl shadow-md"
+                >
+                  {completing ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Completing...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="mr-2 h-5 w-5" />
+                      Complete Session
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
           </main>

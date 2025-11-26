@@ -180,18 +180,29 @@ export default function RTDECountPage({ params }: CountPageProps) {
 
           {/* Main Content */}
           <main className="flex-1 flex flex-col overflow-auto">
-            {/* Progress Bar */}
-            <div className="bg-muted/30 border-b">
-              <div className="container max-w-4xl mx-auto px-4 py-3">
-                <div className="flex items-center justify-between text-sm mb-2">
-                  <span className="text-muted-foreground">
+            {/* Progress Bar - Enhanced with gradient and glow effect */}
+            <div className="bg-muted/30 border-b border-border/30">
+              <div className="container max-w-4xl mx-auto px-6 py-4">
+                <div className="flex items-center justify-between text-sm mb-3">
+                  <span className="text-[0.8125rem] text-muted-foreground font-medium">
                     Item {currentIndex + 1} of {session.items.length}
                   </span>
-                  <span className="font-medium">{progress}% Complete</span>
+                  <span className="text-[0.8125rem] font-semibold tabular-nums">
+                    {progress}% Complete
+                  </span>
                 </div>
-                <div className="w-full bg-muted rounded-full h-2">
+
+                {/* Enhanced progress bar with glow */}
+                <div className="relative w-full h-1.5 bg-muted/60 rounded-full overflow-hidden">
+                  {/* Glow effect behind progress */}
                   <div
-                    className="bg-primary h-2 rounded-full transition-all duration-300"
+                    className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/40 blur-sm transition-all duration-500 ease-out"
+                    style={{ width: `${progress}%` }}
+                  />
+
+                  {/* Actual progress bar */}
+                  <div
+                    className="relative h-full bg-gradient-to-r from-primary to-primary/90 rounded-full transition-all duration-500 ease-out shadow-sm shadow-primary/30"
                     style={{ width: `${progress}%` }}
                     role="progressbar"
                     aria-valuenow={progress}

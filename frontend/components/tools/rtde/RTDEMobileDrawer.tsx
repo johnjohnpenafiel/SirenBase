@@ -67,7 +67,7 @@ export function RTDEMobileDrawer({
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent className="bg-background">
           <DrawerHeader className="border-b bg-background">
-            <DrawerTitle className="text-lg">RTDE Items</DrawerTitle>
+            <DrawerTitle className="text-lg">RTD&E Items</DrawerTitle>
             <DrawerDescription className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
                 <span className="font-bold text-secondary-foreground">

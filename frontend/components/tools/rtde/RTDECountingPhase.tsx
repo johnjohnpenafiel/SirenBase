@@ -89,9 +89,9 @@ export function RTDECountingPhase({
         </div>
       </div>
 
-      {/* Count Card - Scrollable Area */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="container max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12">
+      {/* Count Card - Centered Content */}
+      <div className="flex-1 flex items-center justify-center">
+        <div className="container max-w-4xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-center">
             <div className="w-full max-w-lg">
               <RTDECountCard

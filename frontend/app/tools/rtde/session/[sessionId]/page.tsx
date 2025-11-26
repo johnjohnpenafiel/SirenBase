@@ -235,8 +235,26 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   };
 
   /**
-   * Phase transition: Counting → Pulling
-   * Validates all items counted before proceeding
+   * Phase Transition: Counting → Pulling
+   *
+   * CRITICAL WORKFLOW STEP: Validates all items counted before phase transition.
+   *
+   * Architectural Pattern:
+   * - Phase-based rendering: Same route, different UI based on `phase` state
+   * - Validation gatekeeper: Ensures data integrity before pull list generation
+   * - No backend API call: Phase state is frontend-only (stateless transition)
+   *
+   * Flow:
+   * 1. User clicks "Start Pull" button (last item in counting phase)
+   * 2. Validate all items have countedQuantity !== null
+   * 3a. If valid → setPhase("pulling") → RTDEPullingPhase renders
+   * 3b. If invalid → Show UncountedItemsDialog with 2 options:
+   *     - "Go Back" → handleGoBack() → Jump to first uncounted item
+   *     - "Assign 0 & Continue" → handleAssignZeroAndContinue() → Proceed anyway
+   *
+   * Design Decision:
+   * - Validation before transition prevents pull list showing "Need: X" based on null values
+   * - Gives user choice: Fix missing counts OR treat them as zero
    */
   const handleStartPull = () => {
     if (!sessionData) return;
@@ -255,8 +273,22 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   };
 
   /**
-   * Handle "Assign 0 & Continue" from validation dialog
-   * Assigns 0 to uncounted items and transitions to pull phase
+   * Validation Dialog Recovery: "Assign 0 & Continue"
+   *
+   * User chose to treat uncounted items as "counted zero" and proceed to pull phase.
+   *
+   * State Updates:
+   * 1. Frontend: null → 0 (assignZeroToUncounted utility)
+   * 2. Backend: Batch save 0 values via saveCount (debounced)
+   * 3. Phase transition: "counting" → "pulling"
+   *
+   * Business Logic:
+   * - Uncounted items now treated as "intentionally zero" (not missing data)
+   * - Pull list will calculate needQuantity = parLevel - 0 for these items
+   * - Example: Par=10, Counted=null → Assign 0 → Need=10 (pull all 10)
+   *
+   * Alternative Flow:
+   * - If user clicked "Go Back", they'd jump to first uncounted item instead
    */
   const handleAssignZeroAndContinue = () => {
     if (!sessionData) return;
@@ -297,7 +329,28 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   };
 
   /**
-   * Toggle item pulled status (pulling phase)
+   * Toggle Item Pulled Status (Pulling Phase)
+   *
+   * Marks items as pulled/unpulled in pull list via checkbox interaction.
+   *
+   * Optimistic Update Pattern:
+   * 1. Update local state immediately (instant UI feedback)
+   * 2. Save to backend asynchronously
+   * 3. If backend fails → Revert local state + Show error toast
+   *
+   * Why Optimistic Updates:
+   * - Mobile users expect instant feedback (no loading spinners)
+   * - Network latency shouldn't block UI interactions
+   * - Rare failure case handled gracefully with rollback
+   *
+   * State Management:
+   * - Updates full sessionData.items array (not just pull list)
+   * - Pull list is derived from items via generatePullList()
+   * - Progress recalculated automatically from updated state
+   *
+   * Backend Persistence:
+   * - POST /api/rtde/sessions/:sessionId/mark-pulled
+   * - Stores isPulled flag in rtde_session_items table
    */
   const handleTogglePulled = async (
     itemId: string,
@@ -336,7 +389,30 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   };
 
   /**
-   * Complete session - deletes session and all data (calculator-style)
+   * Complete Session - Calculator-Style Deletion
+   *
+   * Permanently deletes session and all associated data (no history preservation).
+   *
+   * Design Philosophy - "Calculator Style":
+   * - Like a calculator, session data is temporary working memory
+   * - Once complete, data is cleared (not archived)
+   * - Rationale: RTDE is a daily workflow tool, not historical reporting system
+   * - Staff complete session → Start fresh next time
+   *
+   * Deletion Scope:
+   * - Session record (rtde_sessions table)
+   * - All session items (rtde_session_items table - CASCADE delete)
+   * - No undo available after completion
+   *
+   * Confirmation Flow:
+   * - AlertDialog shown before execution (setShowCompleteDialog)
+   * - Warning if not all items pulled (optional safety check)
+   * - User must explicitly click "Complete" to confirm
+   *
+   * Post-Completion:
+   * - Success toast notification
+   * - Navigate to /tools/rtde (landing page)
+   * - User can start new session from scratch
    */
   const handleCompleteSession = async () => {
     try {

@@ -4,19 +4,45 @@
  * Shared types for the RTD&E counting and pulling workflow
  */
 
-// Session phase enum
+/**
+ * Session Phase Type
+ *
+ * Represents the two distinct phases of the RTDE session workflow:
+ * - "counting": User is counting display items one-by-one
+ * - "pulling": User is pulling items from BOH based on needs
+ *
+ * Phase transitions are managed by the session page orchestrator.
+ * UI components (RTDECountingPhase, RTDEPullingPhase) are conditionally
+ * rendered based on this phase state.
+ */
 export type RTDESessionPhase = "counting" | "pulling";
 
-// Enhanced item interface with counted state
+/**
+ * Enhanced RTDE Item Interface
+ *
+ * Represents a single RTD&E display item with counting state.
+ *
+ * KEY DESIGN DECISION - Counting Strategy:
+ * - Backend stores `counted_quantity` as number (defaults to 0)
+ * - Frontend treats 0 as "uncounted" (converts to null)
+ * - This allows distinguishing between "not counted yet" vs "counted as zero"
+ *
+ * Example:
+ * - Item created: backend=0, frontend=null (red dot, not counted)
+ * - User counts as 5: backend=5, frontend=5 (green checkmark)
+ * - User counts as 0: backend=0, frontend=0 (green checkmark, intentionally zero)
+ *
+ * This pattern enables validation before pull phase transition.
+ */
 export interface RTDEItem {
   itemId: string;
-  name: string;
-  icon: string;
-  parLevel: number;
-  displayOrder: number;
-  countedQuantity: number | null; // null = not counted, 0 = counted as zero
-  needQuantity: number;
-  isPulled: boolean;
+  name: string; // Display name (e.g., "Egg & Cheese Sandwich")
+  icon: string; // Emoji icon for visual recognition (e.g., "🥪")
+  parLevel: number; // Target quantity for display
+  displayOrder: number; // Order in counting sequence
+  countedQuantity: number | null; // null = uncounted, 0+ = counted value
+  needQuantity: number; // Calculated: parLevel - countedQuantity
+  isPulled: boolean; // Marked as pulled during pull phase
 }
 
 // Session state interface

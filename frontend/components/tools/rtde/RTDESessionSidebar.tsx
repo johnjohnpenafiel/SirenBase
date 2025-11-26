@@ -10,13 +10,13 @@
  * - "Start Pull List" button at bottom
  * - Independent scrolling (infinity pool pattern)
  */
-'use client';
+"use client";
 
-import { Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import type { RTDEItem, RTDESessionPhase } from './types';
-import { formatCountDisplay, isItemCounted } from './utils';
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { RTDEItem, RTDESessionPhase } from "./types";
+import { formatCountDisplay, isItemCounted } from "./utils";
 
 interface RTDESessionSidebarProps {
   items: RTDEItem[];
@@ -33,7 +33,7 @@ export function RTDESessionSidebar({
   onItemClick,
   onStartPull,
 }: RTDESessionSidebarProps) {
-  const isCountingPhase = phase === 'counting';
+  const isCountingPhase = phase === "counting";
 
   return (
     <aside className="hidden md:flex md:flex-col w-64 lg:w-80 border-r bg-muted/30">
@@ -51,26 +51,28 @@ export function RTDESessionSidebar({
                 onClick={() => onItemClick(index)}
                 disabled={!isCountingPhase}
                 className={cn(
-                  'w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all duration-200',
-                  'bg-card border',
-                  'hover:scale-[1.02]',
-                  isCurrent && 'bg-primary text-primary-foreground scale-[1.02] border-primary',
-                  !isCountingPhase && 'cursor-not-allowed opacity-60 hover:scale-100'
+                  "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all duration-200",
+                  "bg-card border",
+                  "hover:scale-[1.02]",
+                  isCurrent &&
+                    "bg-primary/30 text-primary-foreground scale-[1.02] border-primary/50",
+                  !isCountingPhase &&
+                    "cursor-not-allowed opacity-60 hover:scale-100"
                 )}
                 aria-label={`${item.name}, ${
-                  counted ? `counted: ${countDisplay}` : 'not counted'
+                  counted ? `counted: ${countDisplay}` : "not counted"
                 }`}
-                aria-current={isCurrent ? 'true' : undefined}
+                aria-current={isCurrent ? "true" : undefined}
               >
                 {/* Item emoji icon with circular background */}
                 <div
                   className={cn(
-                    'flex items-center justify-center w-12 h-12 rounded-full shrink-0 transition-colors',
+                    "flex items-center justify-center w-12 h-12 rounded-full shrink-0 transition-colors",
                     isCurrent
-                      ? 'bg-primary-foreground/20'
+                      ? "bg-primary-foreground/10"
                       : counted
-                      ? 'bg-primary/10'
-                      : 'bg-muted'
+                      ? "bg-primary/10"
+                      : "bg-muted"
                   )}
                 >
                   <span className="text-2xl" aria-hidden="true">
@@ -81,18 +83,24 @@ export function RTDESessionSidebar({
                 {/* Item name and count */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-semibold truncate text-sm">{item.name}</span>
+                    <span className="font-semibold truncate text-sm">
+                      {item.name}
+                    </span>
                     {counted && (
                       <div
                         className={cn(
-                          'flex items-center justify-center w-5 h-5 rounded-full shrink-0',
-                          isCurrent ? 'bg-primary-foreground/20' : 'bg-primary/20'
+                          "flex items-center justify-center w-5 h-5 rounded-full shrink-0",
+                          isCurrent
+                            ? "bg-primary-foreground/20"
+                            : "bg-primary/20"
                         )}
                       >
                         <Check
                           className={cn(
-                            'h-3 w-3 shrink-0',
-                            isCurrent ? 'text-primary-foreground' : 'text-primary'
+                            "h-3 w-3 shrink-0",
+                            isCurrent
+                              ? "text-primary-foreground"
+                              : "text-primary-foreground"
                           )}
                           aria-label="Counted"
                         />
@@ -101,12 +109,12 @@ export function RTDESessionSidebar({
                   </div>
                   <div
                     className={cn(
-                      'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium',
+                      "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium",
                       isCurrent
-                        ? 'bg-primary-foreground/20 text-primary-foreground'
+                        ? "bg-primary-foreground/20 text-primary-foreground"
                         : counted
-                        ? 'bg-primary/10 text-primary'
-                        : 'bg-muted text-muted-foreground'
+                        ? "bg-primary/20 text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
                     )}
                   >
                     <span className="opacity-75">Count:</span>

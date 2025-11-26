@@ -9,13 +9,13 @@
  * - Live "Need" calculation (par - current count)
  * - Mobile-optimized with large touch targets
  */
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Minus, Plus } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Minus, Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface RTDECountCardProps {
   itemName: string;
@@ -69,8 +69,8 @@ export function RTDECountCard({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Allow empty string while typing
-    if (value === '') {
-      setInputValue('');
+    if (value === "") {
+      setInputValue("");
       return;
     }
     // Only allow digits
@@ -96,9 +96,9 @@ export function RTDECountCard({
 
   // Handle Enter key (save and exit editing)
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       inputRef.current?.blur();
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       setInputValue(currentCount.toString());
       setIsEditing(false);
     }
@@ -107,13 +107,13 @@ export function RTDECountCard({
   return (
     <div
       className={cn(
-        'flex flex-col items-center gap-6 p-6 md:p-8 bg-card border border-border rounded-2xl transition-all duration-200',
+        "flex flex-col items-center gap-6 p-6 md:p-8 bg-card border border-border rounded-2xl transition-all duration-200",
         className
       )}
     >
       {/* Emoji Icon with Background */}
-      <div className="flex items-center justify-center w-24 h-24 md:w-28 md:h-28 rounded-full bg-muted">
-        <div className="text-5xl md:text-6xl select-none" aria-hidden="true">
+      <div className="flex items-center justify-center w-32 h-32 md:w-28 md:h-28 rounded-full bg-muted">
+        <div className="text-6xl md:text-6xl select-none" aria-hidden="true">
           {icon}
         </div>
       </div>
@@ -175,7 +175,9 @@ export function RTDECountCard({
               {currentCount}
             </button>
           )}
-          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Current Count</span>
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            Current Count
+          </span>
         </div>
 
         {/* Increment Button */}

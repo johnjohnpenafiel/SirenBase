@@ -78,8 +78,7 @@ frontend/
 │   │   ├── milk-count/      # Tool 2: Milk Count (coming soon)
 │   │   └── rtde/            # Tool 3: RTD&E Counting System
 │   │       ├── page.tsx           # Landing/Entry point
-│   │       ├── count/[sessionId]/ # Counting interface
-│   │       └── pull-list/[sessionId]/ # Pull list view
+│   │       └── session/[sessionId]/ # Unified session workflow (counting + pull list)
 │   └── admin/               # Global admin panel
 │       ├── page.tsx         # Admin dashboard with module cards
 │       ├── users/           # User management
@@ -98,9 +97,11 @@ frontend/
 │       ├── milk-count/      # Tool 2 components (future)
 │       └── rtde/            # Tool 3 components
 │           ├── RTDECountCard.tsx      # Item counting interface
-│           ├── RTDENavBar.tsx         # Navigation bar for items
+│           ├── RTDESessionSidebar.tsx # Desktop navigation sidebar
+│           ├── RTDEMobileDrawer.tsx   # Mobile navigation drawer
 │           ├── RTDEPullListItem.tsx   # Pull list item display
-│           └── ResumeSessionDialog.tsx # Session resume dialog
+│           ├── ResumeSessionDialog.tsx # Session resume dialog
+│           └── UncountedItemsDialog.tsx # Validation dialog
 ├── hooks/                   # Custom React hooks
 │   └── use-auth.ts          # Authentication hook (minimal mock)
 ├── lib/                     # Utilities and helpers
@@ -127,8 +128,9 @@ The frontend mirrors the backend's multi-tool architecture with clear namespacin
 - `/tools/milk-count/*` → Milk Count pages (Tool 2) - Coming Soon
 - `/tools/rtde/*` → RTD&E Counting System (Tool 3)
   - `/tools/rtde` → Landing page (auto-start or resume session)
-  - `/tools/rtde/count/[sessionId]` → Counting interface
-  - `/tools/rtde/pull-list/[sessionId]` → Pull list generation
+  - `/tools/rtde/session/[sessionId]` → Unified session workflow with phase-based rendering
+    - Phase 1: Counting interface with sidebar/drawer navigation
+    - Phase 2: Pull list generation and fulfillment tracking
 
 **Admin Routes**:
 - `/admin` → Admin dashboard with module cards

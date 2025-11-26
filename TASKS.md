@@ -503,6 +503,51 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Commit message: "feat: Complete RTD&E frontend (admin, counting, pull list) - Phase 6C"
   - Push to repository
 
+### Phase 6D: RTD&E Code Cleanup (✅ COMPLETE)
+
+**Timeline**: November 25, 2025
+**Completed**: November 25, 2025
+**Status**: ✅ Complete - Dead code removed, documentation updated
+
+**Goal**: Remove orphaned files from RTDE architectural redesign (commit 23904bf) that replaced tab-based navigation with phase-based rendering.
+
+#### Cleanup Tasks (✅ COMPLETE)
+
+- [x] Commit uncommitted styling changes
+  - 6 files with UI improvements (312 insertions, 142 deletions)
+  - Commit message: "UI: Improve RTDE session UI components and styling"
+  - Pushed to remote (commit c1c5a39)
+
+- [x] Delete orphaned files (699 lines total)
+  - `frontend/app/tools/rtde/count/[sessionId]/page.tsx` (268 lines)
+  - `frontend/app/tools/rtde/pull-list/[sessionId]/page.tsx` (284 lines)
+  - `frontend/components/tools/rtde/RTDENavBar.tsx` (147 lines)
+
+- [x] Update documentation
+  - `frontend/README.md` - Updated route structure to reflect unified session workflow
+  - Removed references to deleted count/pull-list routes
+  - Added references to RTDESessionSidebar, RTDEMobileDrawer, UncountedItemsDialog
+
+- [x] Verify no broken references
+  - Searched codebase for imports of deleted components (none found except docs)
+  - Frontend build successful with no errors
+  - All routes working correctly
+
+- [x] Update TASKS.md
+  - Added Phase 6D completion entry
+  - Documented cleanup process
+
+**Architectural Change**:
+- **Before**: Separate routes `/count/[sessionId]` and `/pull-list/[sessionId]` with RTDENavBar tab navigation
+- **After**: Unified route `/session/[sessionId]` with phase-based rendering (`"counting"` | `"pulling"`)
+- **Navigation**: Replaced tabs with RTDESessionSidebar (desktop) and RTDEMobileDrawer (mobile)
+
+**Impact**:
+- Removed 699 lines of dead code (27% of RTDE frontend)
+- Improved codebase maintainability
+- Eliminated confusion about correct implementation
+- Frontend now 100% aligned with current architecture
+
 ---
 
 ## Phase 7: Deployment Preparation

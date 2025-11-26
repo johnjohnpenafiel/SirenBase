@@ -1,13 +1,15 @@
 /**
  * RTD&E Count Card Component
  *
- * Large, touch-friendly card for counting RTD&E items.
+ * Apple-inspired, touch-friendly card for counting RTD&E items.
  * Features:
- * - Large emoji icon and item name
- * - +/- buttons (48px height) for quick counting
+ * - Large emoji icon with subtle depth
+ * - Premium typography with tight tracking
+ * - +/- buttons (64-72px) with gradient backgrounds and smooth feedback
  * - Direct input by clicking count (numeric keyboard on mobile)
- * - Live "Need" calculation (par - current count)
- * - Mobile-optimized with large touch targets
+ * - Refined spacing and generous whitespace
+ * - Subtle shadows and gradients for depth
+ * - Mobile-optimized with large touch targets (44px+)
  */
 "use client";
 
@@ -107,46 +109,62 @@ export function RTDECountCard({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-6 p-6 md:p-8 bg-card border border-border rounded-2xl transition-all duration-200",
+        "flex flex-col items-center gap-6 md:gap-8",
+        "p-6 md:p-10",
+        "bg-gradient-to-br from-card to-card/95",
+        "border border-border/50",
+        "rounded-3xl",
+        "shadow-sm",
+        "transition-all duration-200",
+        "animate-scale-in",
         className
       )}
     >
-      {/* Emoji Icon with Background */}
-      <div className="flex items-center justify-center w-32 h-32 md:w-28 md:h-28 rounded-full bg-muted">
-        <div className="text-6xl md:text-6xl select-none" aria-hidden="true">
+      {/* Emoji Icon with Background - Enhanced with gradient and inner shadow */}
+      <div className="flex items-center justify-center w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
+        <div className="text-[3.5rem] md:text-[4rem] select-none" aria-hidden="true">
           {icon}
         </div>
       </div>
 
-      {/* Item Name */}
-      <h2 className="text-2xl md:text-3xl font-bold text-center text-foreground leading-tight">
+      {/* Item Name - Refined typography with tight tracking, smaller on desktop */}
+      <h2 className="text-[2rem] md:text-[2.25rem] leading-[1.1] tracking-tight font-bold text-center text-foreground max-w-[280px]">
         {itemName}
       </h2>
 
-      {/* Par Level Info */}
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">Par Level:</span>
-        <span className="text-lg font-bold text-foreground">{parLevel}</span>
+      {/* Par Level Info - Refined as subtle pill badge */}
+      <div className="flex items-center gap-2 px-4 py-1.5 bg-muted/40 rounded-full border border-border/30">
+        <span className="text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
+          Par Level
+        </span>
+        <span className="text-base md:text-lg font-bold text-foreground">{parLevel}</span>
       </div>
 
-      {/* Count Controls */}
-      <div className="flex items-center gap-4 w-full max-w-sm mt-2">
-        {/* Decrement Button */}
+      {/* Count Controls - Optimized spacing for desktop fit */}
+      <div className="flex items-center gap-4 md:gap-5 w-full max-w-md mt-2 md:mt-3">
+        {/* Decrement Button - Enhanced with gradient, shadow, and smooth feedback */}
         <Button
           onClick={handleDecrement}
           disabled={currentCount === 0}
           variant="outline"
           size="lg"
           className={cn(
-            "h-14 w-14 md:h-16 md:w-16 p-0 shrink-0 rounded-xl border-2 transition-all duration-150",
-            "active:scale-95 disabled:opacity-40"
+            "h-14 w-14 md:h-16 md:w-16 p-0 shrink-0",
+            "rounded-2xl",
+            "border-2 border-border/40",
+            "bg-gradient-to-b from-background to-muted/20",
+            "shadow-sm",
+            "transition-all duration-150 ease-out",
+            "hover:shadow-md hover:scale-[1.02]",
+            "active:scale-[0.98] active:shadow-sm",
+            "disabled:opacity-30 disabled:hover:scale-100"
           )}
           aria-label={`Decrease count for ${itemName}`}
         >
-          <Minus className="h-6 w-6 md:h-7 md:w-7" />
+          <Minus className="h-6 w-6 md:h-7 md:w-7" strokeWidth={2.5} />
         </Button>
 
-        {/* Current Count Display / Input */}
+        {/* Current Count Display / Input - Optimized size for desktop fit */}
         <div className="flex-1 flex flex-col items-center gap-2">
           {isEditing ? (
             <Input
@@ -158,7 +176,16 @@ export function RTDECountCard({
               onChange={handleInputChange}
               onBlur={handleInputBlur}
               onKeyDown={handleInputKeyDown}
-              className="h-16 md:h-20 text-4xl md:text-5xl font-bold text-center border-2 border-primary rounded-xl"
+              className={cn(
+                "h-18 md:h-20",
+                "text-[3rem] md:text-[3.5rem] leading-none font-bold text-center",
+                "border-2 border-primary/60",
+                "bg-gradient-to-br from-primary/5 to-primary/10",
+                "rounded-2xl",
+                "shadow-lg shadow-primary/10",
+                "ring-4 ring-primary/10",
+                "transition-all duration-200"
+              )}
               maxLength={3}
               aria-label={`Enter count for ${itemName}`}
             />
@@ -166,38 +193,53 @@ export function RTDECountCard({
             <button
               onClick={handleCountClick}
               className={cn(
-                "h-16 md:h-20 w-full flex items-center justify-center rounded-xl transition-all duration-150",
-                "text-4xl md:text-5xl font-bold text-foreground",
-                "hover:bg-muted/50 active:scale-95"
+                "h-18 md:h-20 w-full",
+                "flex items-center justify-center",
+                "rounded-2xl",
+                "text-[3rem] md:text-[3.5rem] leading-none font-bold tabular-nums",
+                "transition-all duration-200 ease-out",
+                "hover:bg-muted/30",
+                "active:scale-[0.97]",
+                "focus-visible:ring-2 focus-visible:ring-primary/50",
+                "relative overflow-hidden",
+                "before:absolute before:inset-0 before:bg-gradient-to-br before:from-muted/0 before:to-muted/30",
+                "before:opacity-0 before:hover:opacity-100 before:transition-opacity before:duration-300"
               )}
               aria-label={`Current count: ${currentCount}. Click to edit.`}
             >
-              {currentCount}
+              <span className="relative z-10">{currentCount}</span>
             </button>
           )}
-          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          <span className="text-[0.6875rem] font-semibold text-muted-foreground uppercase tracking-[0.06em]">
             Current Count
           </span>
         </div>
 
-        {/* Increment Button */}
+        {/* Increment Button - Enhanced with gradient, shadow, and smooth feedback */}
         <Button
           onClick={handleIncrement}
           disabled={currentCount >= 999}
           variant="outline"
           size="lg"
           className={cn(
-            "h-14 w-14 md:h-16 md:w-16 p-0 shrink-0 rounded-xl border-2 transition-all duration-150",
-            "active:scale-95 disabled:opacity-40"
+            "h-14 w-14 md:h-16 md:w-16 p-0 shrink-0",
+            "rounded-2xl",
+            "border-2 border-border/40",
+            "bg-gradient-to-b from-background to-muted/20",
+            "shadow-sm",
+            "transition-all duration-150 ease-out",
+            "hover:shadow-md hover:scale-[1.02]",
+            "active:scale-[0.98] active:shadow-sm",
+            "disabled:opacity-30 disabled:hover:scale-100"
           )}
           aria-label={`Increase count for ${itemName}`}
         >
-          <Plus className="h-6 w-6 md:h-7 md:w-7" />
+          <Plus className="h-6 w-6 md:h-7 md:w-7" strokeWidth={2.5} />
         </Button>
       </div>
 
-      {/* Helper Text */}
-      <p className="text-xs text-muted-foreground text-center mt-2">
+      {/* Helper Text - Refined typography */}
+      <p className="text-[0.8125rem] leading-tight text-muted-foreground text-center mt-1">
         Tap count to type directly
       </p>
     </div>

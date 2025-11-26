@@ -1,12 +1,14 @@
 /**
  * RTD&E Pull List Item Component
  *
- * Checkbox list item for the pull list screen.
+ * Apple-inspired checkbox list item for the pull list screen.
  * Features:
- * - Large checkbox (44px touch target)
- * - Item name with emoji icon
- * - Quantity needed display
- * - Strikethrough when marked as pulled
+ * - Refined checkbox (36-40px) with smooth animation
+ * - Emoji icon with subtle depth and grayscale on completion
+ * - Premium typography with proper tracking
+ * - Quantity badge with gradient background
+ * - Smooth strikethrough animation when marked as pulled
+ * - Hover and press feedback with scale and shadow
  * - Visual feedback for completion state
  */
 "use client";
@@ -35,67 +37,94 @@ export function RTDEPullListItem({
     <button
       onClick={onToggle}
       className={cn(
-        "flex items-center gap-4 w-full p-4 md:p-5 bg-card border border-border rounded-xl transition-all duration-200",
-        "active:scale-[0.98]",
-        isPulled && "bg-muted/50",
+        "group flex items-center gap-4 w-full",
+        "p-5 md:p-6",
+        "bg-gradient-to-br from-card to-card/95",
+        "border border-border/40",
+        "rounded-2xl",
+        "shadow-sm",
+        "transition-all duration-300 ease-out",
+        "hover:shadow-md hover:scale-[1.01]",
+        "active:scale-[0.99]",
+        isPulled && "bg-gradient-to-br from-muted/60 to-muted/40 shadow-none",
         className
       )}
       aria-label={`${
         isPulled ? "Unmark" : "Mark"
       } ${itemName} as pulled (${quantityNeeded} needed)`}
     >
-      {/* Custom Checkbox */}
+      {/* Custom Checkbox - Refined with smooth animation */}
       <div
         className={cn(
-          "flex items-center justify-center h-7 w-7 md:h-8 md:w-8 shrink-0 rounded-lg border-2 transition-all duration-200",
+          "flex items-center justify-center",
+          "h-9 w-9 md:h-10 md:w-10 shrink-0",
+          "rounded-xl",
+          "border-2 transition-all duration-300 ease-out",
           isPulled
-            ? "bg-green-600 border-green-600"
-            : "border-muted-foreground/30"
+            ? "bg-green-600 border-green-600 scale-100"
+            : "border-muted-foreground/25 group-hover:border-muted-foreground/40"
         )}
         role="checkbox"
         aria-checked={isPulled}
       >
-        {isPulled && <Check className="h-5 w-5 md:h-6 md:w-6 text-white" />}
+        <Check
+          className={cn(
+            "h-6 w-6 text-white transition-all duration-200",
+            isPulled ? "scale-100 opacity-100" : "scale-0 opacity-0"
+          )}
+          strokeWidth={3}
+        />
       </div>
 
-      {/* Item Icon with Background */}
+      {/* Item Icon with Background - Enhanced with gradient and depth */}
       <div
         className={cn(
-          "flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full shrink-0 transition-all duration-200",
-          isPulled ? "bg-muted opacity-50" : "bg-muted"
+          "flex items-center justify-center",
+          "w-14 h-14 md:w-16 md:h-16 rounded-2xl shrink-0",
+          "bg-gradient-to-br from-muted/50 to-muted/80",
+          "shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]",
+          "transition-all duration-300",
+          isPulled && "opacity-40 grayscale"
         )}
       >
-        <span className="text-2xl md:text-3xl" aria-hidden="true">
+        <span className="text-[1.75rem] md:text-[2rem]" aria-hidden="true">
           {icon}
         </span>
       </div>
 
-      {/* Item Name */}
+      {/* Item Name - Refined typography */}
       <div className="flex-1 text-left min-w-0">
         <p
           className={cn(
-            "font-semibold text-base md:text-lg transition-all duration-200",
-            isPulled && "line-through text-muted-foreground"
+            "font-semibold text-base md:text-lg",
+            "transition-all duration-300",
+            isPulled && "line-through text-muted-foreground opacity-60"
           )}
         >
           {itemName}
         </p>
       </div>
 
-      {/* Pull Quantity Badge */}
+      {/* Pull Quantity Badge - More refined with gradient */}
       <div
         className={cn(
-          "flex flex-col items-center justify-center gap-1 px-4 py-2 rounded-xl transition-colors duration-200 shrink-0",
-          isPulled ? "bg-muted" : "bg-input/20"
+          "flex flex-col items-center justify-center gap-1.5",
+          "px-5 py-3 min-w-[72px]",
+          "rounded-xl",
+          "transition-colors duration-300",
+          isPulled
+            ? "bg-muted/40"
+            : "bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20"
         )}
       >
-        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+        <span className="text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
           Pull
         </span>
         <span
           className={cn(
-            "text-2xl md:text-3xl font-bold transition-colors duration-200",
-            isPulled ? "text-muted-foreground" : "text-chart-1"
+            "text-[2rem] md:text-[2.25rem] font-bold tabular-nums leading-none",
+            "transition-colors duration-300",
+            isPulled ? "text-muted-foreground" : "text-primary"
           )}
         >
           {quantityNeeded}

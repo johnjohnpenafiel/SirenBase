@@ -182,11 +182,11 @@ A digital counting and restocking tool that:
 
 **Generating Pull List:**
 
-5. After counting all items (or enough items), tap "Generate Pull List"
-6. System calculates needed quantities: `par_level - counted_quantity`
-7. Navigates to Pull List screen
+5. After counting all items (or enough items), tap "Start Pull List"
+6. System validates all items are counted (shows dialog if uncounted items exist)
+7. Page transitions to pulling phase (same route, phase state changes from "counting" to "pulling")
 
-**Pull List Screen:**
+**Pull List Phase:**
 
 ```
 ┌─────────────────────────────────────┐
@@ -201,6 +201,8 @@ A digital counting and restocking tool that:
 │     [Back to Count] [Complete]      │
 └─────────────────────────────────────┘
 ```
+
+**Note**: This is a phase transition within the same page, not a separate route. The page re-renders to show pull list instead of counting interface.
 
 8. Partner goes to BOH and gathers items
 9. Checks boxes as they pull each item (visual confirmation)
@@ -603,19 +605,26 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 
   - Checks for active session via `GET /api/rtde/sessions/active`
   - Shows resume/restart dialog if session exists
-  - Routes to counting interface or starts new session
+  - Routes to session page or starts new session
 
-- **`/tools/rtde/count/:sessionId`** - Counting interface
+- **`/tools/rtde/session/:sessionId`** - Unified session workflow with phase-based rendering
 
-  - One-item-at-a-time focus with adaptive navigation
-  - Prev/Next navigation and quick jump bar
-  - Auto-save on every count change
-  - "Generate Pull List" button when ready
+  - **Phase 1: Counting**
+    - One-item-at-a-time focus with adaptive navigation
+    - Desktop: RTDESessionSidebar (left sidebar with all items)
+    - Mobile: RTDEMobileDrawer (bottom drawer with item list)
+    - Prev/Next navigation and quick jump bar
+    - Auto-save on every count change
+    - "Start Pull List" button transitions to pulling phase
+    - Validates all items counted before transition (shows dialog if uncounted)
 
-- **`/tools/rtde/pull-list/:sessionId`** - Pull list screen
-  - Shows items needing restocking
-  - Checkboxes for marking items as pulled
-  - "Complete" button to finish session
+  - **Phase 2: Pulling**
+    - Shows items needing restocking (need_quantity > 0)
+    - Checkboxes for marking items as pulled
+    - "Back to Count" button returns to counting phase
+    - "Complete" button finishes session (confirmation dialog)
+
+  - **Implementation Note**: Same route, different UI based on `phase` state ("counting" | "pulling")
 
 ---
 

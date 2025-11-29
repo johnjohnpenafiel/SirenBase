@@ -48,6 +48,8 @@ export default function RTDEToolPage() {
   };
 
   // Start new session
+  // NOTE: We don't reset `starting` on success - the button stays in loading state
+  // during navigation for a smooth transition without flashing back to original state
   const handleStartNewSession = async () => {
     try {
       setStarting(true);
@@ -60,8 +62,7 @@ export default function RTDEToolPage() {
         error.message ||
         'Failed to start session. Please try again.';
       toast.error(errorMessage);
-    } finally {
-      setStarting(false);
+      setStarting(false); // Only reset on error so user can retry
     }
   };
 
@@ -142,7 +143,7 @@ export default function RTDEToolPage() {
                   size="lg"
                   onClick={handleStartNewSession}
                   disabled={starting}
-                  className="w-full sm:w-auto px-8"
+                  className="w-full sm:w-auto sm:min-w-[200px] px-8"
                 >
                   {starting ? (
                     <>

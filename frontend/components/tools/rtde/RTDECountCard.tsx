@@ -25,6 +25,7 @@ interface RTDECountCardProps {
   parLevel: number;
   currentCount: number;
   onCountChange: (newCount: number) => void;
+  saving?: boolean;
   className?: string;
 }
 
@@ -34,6 +35,7 @@ export function RTDECountCard({
   parLevel,
   currentCount,
   onCountChange,
+  saving = false,
   className,
 }: RTDECountCardProps) {
   const [isEditing, setIsEditing] = useState(false);
@@ -122,7 +124,10 @@ export function RTDECountCard({
     >
       {/* Emoji Icon with Background - Enhanced with gradient and inner shadow */}
       <div className="flex items-center justify-center w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
-        <div className="text-[3.5rem] md:text-[4rem] select-none" aria-hidden="true">
+        <div
+          className="text-[3.5rem] md:text-[4rem] select-none"
+          aria-hidden="true"
+        >
           {icon}
         </div>
       </div>
@@ -137,7 +142,9 @@ export function RTDECountCard({
         <span className="text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
           Par Level
         </span>
-        <span className="text-base md:text-lg font-bold text-foreground">{parLevel}</span>
+        <span className="text-base md:text-lg font-bold text-foreground">
+          {parLevel}
+        </span>
       </div>
 
       {/* Count Controls - Optimized spacing for desktop fit */}
@@ -238,8 +245,23 @@ export function RTDECountCard({
         </Button>
       </div>
 
+      {/* Saving Indicator - Fixed height container to prevent layout shift */}
+      <div className="h-5 flex items-center justify-center">
+        <span
+          role="status"
+          aria-live="polite"
+          className={cn(
+            "text-sm font-medium text-stone-400",
+            "transition-opacity duration-500 ease-in-out",
+            saving ? "opacity-100" : "opacity-0"
+          )}
+        >
+          Saving...
+        </span>
+      </div>
+
       {/* Helper Text - Refined typography */}
-      <p className="text-[0.8125rem] leading-tight text-muted-foreground text-center mt-1">
+      <p className="text-[0.8125rem] leading-tight text-muted-foreground text-center">
         Tap count to type directly
       </p>
     </div>

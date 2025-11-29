@@ -14,6 +14,7 @@
 import { RTDECountCard } from "./RTDECountCard";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { RTDEItem } from "./types";
 
 interface RTDECountingPhaseProps {
@@ -110,7 +111,7 @@ export function RTDECountingPhase({
       <div className="border-t bg-background pb-safe">
         <div className="container max-w-4xl mx-auto px-4 py-4 md:py-6">
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center justify-between gap-3">
+          <div className="hidden md:flex items-center justify-between gap-3 relative">
             {showPreviousButton && (
               <Button
                 variant="outline"
@@ -123,9 +124,20 @@ export function RTDECountingPhase({
               </Button>
             )}
 
-            {saving && (
-              <span className="text-xs text-muted-foreground">Saving...</span>
-            )}
+            {/* Saving Indicator - Centered overlay with fade animation */}
+            <div
+              role="status"
+              aria-live="polite"
+              className={cn(
+                "absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2",
+                "transition-opacity duration-300 ease-in-out pointer-events-none",
+                saving ? "opacity-100" : "opacity-0"
+              )}
+            >
+              <span className="text-xs text-muted-foreground bg-background/80 backdrop-blur-sm px-2 py-1 rounded-md shadow-sm">
+                Saving...
+              </span>
+            </div>
 
             {isLastItem ? (
               <Button
@@ -150,7 +162,7 @@ export function RTDECountingPhase({
           </div>
 
           {/* Mobile Navigation */}
-          <div className="md:hidden space-y-3">
+          <div className="md:hidden space-y-3 relative pb-8">
             {/* Previous/Next Buttons */}
             <div className="flex items-center justify-between gap-3">
               {showPreviousButton && (
@@ -166,11 +178,7 @@ export function RTDECountingPhase({
               )}
 
               {isLastItem ? (
-                <Button
-                  size="lg"
-                  onClick={onStartPull}
-                  className="flex-1 h-12"
-                >
+                <Button size="lg" onClick={onStartPull} className="flex-1 h-12">
                   Start Pull
                   <ChevronRight className="h-5 w-5 ml-2" />
                 </Button>
@@ -187,17 +195,25 @@ export function RTDECountingPhase({
               )}
             </div>
 
-            {/* Saving Indicator */}
-            {saving && (
-              <p className="text-xs text-center text-muted-foreground">
+            {/* Saving Indicator - Below buttons with fade animation */}
+            <div
+              role="status"
+              aria-live="polite"
+              className={cn(
+                "absolute left-1/2 -translate-x-1/2 -bottom-2",
+                "transition-opacity duration-300 ease-in-out pointer-events-none",
+                saving ? "opacity-100" : "opacity-0"
+              )}
+            >
+              <span className="text-xs text-center text-muted-foreground bg-background/80 backdrop-blur-sm px-3 py-1.5 rounded-md shadow-sm whitespace-nowrap">
                 Saving...
-              </p>
-            )}
+              </span>
+            </div>
 
             {/* Open Drawer Button (Mobile Only) */}
             {onOpenDrawer && (
               <Button
-                variant="outline"
+                variant="default"
                 size="lg"
                 onClick={onOpenDrawer}
                 className="w-full h-12 rounded-2xl border"

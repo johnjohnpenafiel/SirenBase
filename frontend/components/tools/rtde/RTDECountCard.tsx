@@ -251,7 +251,7 @@ export function RTDECountCard({
           role="status"
           aria-live="polite"
           className={cn(
-            "text-sm font-medium text-stone-400",
+            "text-sm font-medium text-neutral-400",
             "transition-opacity duration-500 ease-in-out",
             saving ? "opacity-100" : "opacity-0"
           )}

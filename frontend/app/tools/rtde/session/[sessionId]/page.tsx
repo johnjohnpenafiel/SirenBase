@@ -82,6 +82,10 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
   // Debounce timer ref for auto-save
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  // Track when saving indicator started (for minimum display time)
+  const savingStartTimeRef = useRef<number | null>(null);
+  // Minimum time to show "Saving..." indicator (allows fade animation to complete)
+  const MIN_SAVING_DISPLAY_MS = 800;
 
   // Load session data on mount
   useEffect(() => {
@@ -159,17 +163,25 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
   /**
    * Save count with debouncing (500ms delay)
-   * Prevents excessive API calls during rapid +/- button clicks
+   * Shows "Saving..." immediately, keeps visible through debounce + API call
+   * Uses minimum display time to prevent brief flashes during rapid clicks
    */
   const saveCount = useCallback(
     async (itemId: string, count: number | null) => {
+      // Clear any pending save timer
       if (saveTimerRef.current) {
         clearTimeout(saveTimerRef.current);
       }
 
+      // Show "Saving..." immediately when user starts interaction
+      setSaving(true);
+      if (!savingStartTimeRef.current) {
+        savingStartTimeRef.current = Date.now();
+      }
+
+      // Debounce the actual API call (500ms)
       saveTimerRef.current = setTimeout(async () => {
         try {
-          setSaving(true);
           await apiClient.updateRTDECount(sessionId, {
             item_id: itemId,
             counted_quantity: count ?? 0,
@@ -178,7 +190,15 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
           console.error("Failed to save count:", error);
           toast.error("Failed to save count");
         } finally {
-          setSaving(false);
+          // Ensure minimum display time for smooth fade animation
+          const elapsed =
+            Date.now() - (savingStartTimeRef.current || Date.now());
+          const remaining = Math.max(0, MIN_SAVING_DISPLAY_MS - elapsed);
+
+          setTimeout(() => {
+            setSaving(false);
+            savingStartTimeRef.current = null;
+          }, remaining);
         }
       }, 500);
     },

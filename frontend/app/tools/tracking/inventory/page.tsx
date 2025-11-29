@@ -271,9 +271,16 @@ export default function InventoryPage() {
                             <p className="text-sm text-muted-foreground">
                               {formatCategory(item.category)}
                             </p>
-                            <p className="text-sm font-mono font-bold text-primary mt-1">
-                              Code: {item.code}
-                            </p>
+                            <div className="flex">
+                              <p className="text-sm font-mono font-bold mt-1">
+                                <span className="text-primary-foreground">
+                                  Code:
+                                </span>
+                                <span className="text-primary ml-1">
+                                  {item.code}
+                                </span>
+                              </p>
+                            </div>
                           </div>
                           <Button
                             variant="outline"

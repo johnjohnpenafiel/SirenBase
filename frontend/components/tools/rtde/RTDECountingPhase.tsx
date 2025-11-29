@@ -54,6 +54,11 @@ export function RTDECountingPhase({
       <div className="px-4 md:px-8 pt-4 md:pt-6 pb-2">
         <div className="container max-w-4xl mx-auto">
           <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-4 md:py-5">
+            {/* Title */}
+            <h2 className="text-lg md:text-base font-semibold text-popover-foreground mb-4">
+              Count RTD&E Display
+            </h2>
+
             {/* Progress Bar */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">

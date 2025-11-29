@@ -111,8 +111,8 @@ export function RTDECountCard({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-6 md:gap-8",
-        "p-6 md:p-10",
+        "flex flex-col items-center gap-6 md:gap-5",
+        "p-6 md:p-8",
         "bg-gradient-to-br from-card to-card/95",
         "border border-border/50",
         "rounded-3xl",
@@ -123,17 +123,17 @@ export function RTDECountCard({
       )}
     >
       {/* Emoji Icon with Background - Enhanced with gradient and inner shadow */}
-      <div className="flex items-center justify-center w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
+      <div className="flex items-center justify-center w-24 h-24 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
         <div
-          className="text-[3.5rem] md:text-[4rem] select-none"
+          className="text-[3.5rem] md:text-[3.5rem] select-none"
           aria-hidden="true"
         >
           {icon}
         </div>
       </div>
 
-      {/* Item Name - Refined typography with tight tracking, smaller on desktop */}
-      <h2 className="text-[2rem] md:text-[2.25rem] leading-[1.1] tracking-tight font-bold text-center text-foreground max-w-[280px]">
+      {/* Item Name - Refined typography with tight tracking */}
+      <h2 className="text-[2rem] md:text-[1.875rem] leading-[1.1] tracking-tight font-bold text-center text-foreground max-w-[280px]">
         {itemName}
       </h2>
 
@@ -148,7 +148,7 @@ export function RTDECountCard({
       </div>
 
       {/* Count Controls - Optimized spacing for desktop fit */}
-      <div className="flex items-center gap-4 md:gap-5 w-full max-w-md mt-2 md:mt-3">
+      <div className="flex items-center gap-4 md:gap-4 w-full max-w-md mt-2 md:mt-2">
         {/* Decrement Button - Enhanced with gradient, shadow, and smooth feedback */}
         <Button
           onClick={handleDecrement}
@@ -156,7 +156,7 @@ export function RTDECountCard({
           variant="outline"
           size="lg"
           className={cn(
-            "h-14 w-14 md:h-16 md:w-16 p-0 shrink-0",
+            "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
             "rounded-2xl",
             "border-2 border-border/40",
             "bg-gradient-to-b from-background to-muted/20",
@@ -168,7 +168,7 @@ export function RTDECountCard({
           )}
           aria-label={`Decrease count for ${itemName}`}
         >
-          <Minus className="h-6 w-6 md:h-7 md:w-7" strokeWidth={2.5} />
+          <Minus className="h-6 w-6 md:h-6 md:w-6" strokeWidth={2.5} />
         </Button>
 
         {/* Current Count Display / Input - Optimized size for desktop fit */}
@@ -184,8 +184,8 @@ export function RTDECountCard({
               onBlur={handleInputBlur}
               onKeyDown={handleInputKeyDown}
               className={cn(
-                "h-18 md:h-20",
-                "text-[3rem] md:text-[3.5rem] leading-none font-bold text-center",
+                "h-18 md:h-16",
+                "text-[3rem] md:text-[2.75rem] leading-none font-bold text-center",
                 "border-2 border-primary/60",
                 "bg-gradient-to-br from-primary/5 to-primary/10",
                 "rounded-2xl",
@@ -200,10 +200,10 @@ export function RTDECountCard({
             <button
               onClick={handleCountClick}
               className={cn(
-                "h-18 md:h-20 w-full",
+                "h-18 md:h-16 w-full",
                 "flex items-center justify-center",
                 "rounded-2xl",
-                "text-[3rem] md:text-[3.5rem] leading-none font-bold tabular-nums",
+                "text-[3rem] md:text-[2.75rem] leading-none font-bold tabular-nums",
                 "transition-all duration-200 ease-out",
                 "hover:bg-muted/30",
                 "active:scale-[0.97]",
@@ -229,7 +229,7 @@ export function RTDECountCard({
           variant="outline"
           size="lg"
           className={cn(
-            "h-14 w-14 md:h-16 md:w-16 p-0 shrink-0",
+            "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
             "rounded-2xl",
             "border-2 border-border/40",
             "bg-gradient-to-b from-background to-muted/20",
@@ -241,7 +241,7 @@ export function RTDECountCard({
           )}
           aria-label={`Increase count for ${itemName}`}
         >
-          <Plus className="h-6 w-6 md:h-7 md:w-7" strokeWidth={2.5} />
+          <Plus className="h-6 w-6 md:h-6 md:w-6" strokeWidth={2.5} />
         </Button>
       </div>
 

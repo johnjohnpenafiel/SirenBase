@@ -49,7 +49,7 @@ export function RTDEPullingPhase({
           <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-4 md:py-5">
             {/* Header with Complete Button (Desktop) */}
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-foreground">
+              <h2 className="text-lg md:text-base font-semibold text-popover-foreground">
                 Pull Items from BOH
               </h2>
               <Button
@@ -120,8 +120,8 @@ export function RTDEPullingPhase({
               </div>
               <h3 className="text-2xl font-bold mb-2">All items at par!</h3>
               <p className="text-sm text-muted-foreground mb-8 max-w-md">
-                No items need to be pulled from BOH. All display items are
-                fully stocked.
+                No items need to be pulled from BOH. All display items are fully
+                stocked.
               </p>
               <Button
                 onClick={onComplete}

@@ -37,11 +37,11 @@ export function RTDEPullListItem({
     <button
       onClick={onToggle}
       className={cn(
-        "group flex items-center gap-4 w-full",
-        "p-5 md:p-6",
+        "group flex items-center gap-3 md:gap-4 w-full",
+        "p-3 md:p-6",
         "bg-gradient-to-br from-card to-card/95",
         "border border-border/40",
-        "rounded-2xl",
+        "rounded-xl md:rounded-2xl",
         "shadow-sm",
         "transition-all duration-300 ease-out",
         "hover:shadow-md hover:scale-[1.01]",
@@ -57,8 +57,8 @@ export function RTDEPullListItem({
       <div
         className={cn(
           "flex items-center justify-center",
-          "h-9 w-9 md:h-10 md:w-10 shrink-0",
-          "rounded-xl",
+          "h-7 w-7 md:h-10 md:w-10 shrink-0",
+          "rounded-lg md:rounded-xl",
           "border-2 transition-all duration-300 ease-out",
           isPulled
             ? "bg-green-600 border-green-600 scale-100"
@@ -69,7 +69,7 @@ export function RTDEPullListItem({
       >
         <Check
           className={cn(
-            "h-6 w-6 text-white transition-all duration-200",
+            "h-4 w-4 md:h-6 md:w-6 text-white transition-all duration-200",
             isPulled ? "scale-100 opacity-100" : "scale-0 opacity-0"
           )}
           strokeWidth={3}
@@ -80,14 +80,14 @@ export function RTDEPullListItem({
       <div
         className={cn(
           "flex items-center justify-center",
-          "w-14 h-14 md:w-16 md:h-16 rounded-2xl shrink-0",
+          "w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl shrink-0",
           "bg-gradient-to-br from-muted/50 to-muted/80",
           "shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]",
           "transition-all duration-300",
           isPulled && "opacity-40 grayscale"
         )}
       >
-        <span className="text-[1.75rem] md:text-[2rem]" aria-hidden="true">
+        <span className="text-2xl md:text-[2rem]" aria-hidden="true">
           {icon}
         </span>
       </div>
@@ -108,21 +108,21 @@ export function RTDEPullListItem({
       {/* Pull Quantity Badge - More refined with gradient */}
       <div
         className={cn(
-          "flex flex-col items-center justify-center gap-1.5",
-          "px-5 py-3 min-w-[72px]",
-          "rounded-xl",
+          "flex flex-col items-center justify-center gap-0.5 md:gap-1.5",
+          "px-3 py-2 md:px-5 md:py-3 min-w-[60px] md:min-w-[72px]",
+          "rounded-lg md:rounded-xl",
           "transition-colors duration-300",
           isPulled
             ? "bg-muted/40"
             : "bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20"
         )}
       >
-        <span className="text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
+        <span className="text-[0.625rem] md:text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
           Pull
         </span>
         <span
           className={cn(
-            "text-[2rem] md:text-[2.25rem] font-bold tabular-nums leading-none",
+            "text-2xl md:text-[2.25rem] font-bold tabular-nums leading-none",
             "transition-colors duration-300",
             isPulled ? "text-muted-foreground" : "text-primary"
           )}

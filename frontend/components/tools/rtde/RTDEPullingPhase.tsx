@@ -49,7 +49,7 @@ export function RTDEPullingPhase({
           <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-4 md:py-5">
             {/* Header with Complete Button (Desktop) */}
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg md:text-base font-semibold text-popover-foreground">
+              <h2 className="text-base font-semibold text-popover-foreground">
                 Pull Items from BOH
               </h2>
               <Button
@@ -157,49 +157,34 @@ export function RTDEPullingPhase({
               ))}
             </div>
           )}
-
-          {/* Complete Session Button (Mobile - below list) */}
-          {hasItemsToPull && (
-            <div className="sm:hidden mt-6">
-              <Button
-                onClick={onComplete}
-                disabled={completing}
-                size="lg"
-                className="w-full h-12"
-              >
-                {completing ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Completing...
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 className="mr-2 h-5 w-5" />
-                    Complete Session
-                  </>
-                )}
-              </Button>
-            </div>
-          )}
-
-          {/* Back to Count Button (Future Enhancement) */}
-          {/* Uncomment when "Back to Count" feature is needed
-          {onBackToCount && (
-            <div className="mt-6">
-              <Button
-                variant="outline"
-                onClick={onBackToCount}
-                size="lg"
-                className="w-full h-12"
-              >
-                <ChevronLeft className="mr-2 h-5 w-5" />
-                Back to Count
-              </Button>
-            </div>
-          )}
-          */}
         </div>
       </div>
+
+      {/* Complete Session Button - Mobile Footer (always visible at bottom) */}
+      {hasItemsToPull && (
+        <div className="sm:hidden px-4 pt-4 pb-8 bg-background border-t border-border shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+          <div className="container max-w-4xl mx-auto">
+            <Button
+              onClick={onComplete}
+              disabled={completing}
+              size="lg"
+              className="w-full h-12"
+            >
+              {completing ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Completing...
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="mr-2 h-5 w-5" />
+                  Complete Session
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

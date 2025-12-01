@@ -284,7 +284,6 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
     if (validation.allCounted) {
       // All items counted - proceed to pull phase
       setPhase("pulling");
-      toast.success("Ready to pull items!");
     } else {
       // Show validation dialog with uncounted items
       setUncountedItems(validation.uncountedItems);
@@ -328,7 +327,6 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
     setShowValidationDialog(false);
     setUncountedItems([]);
     setPhase("pulling");
-    toast.success("Ready to pull items!");
   };
 
   /**
@@ -430,7 +428,6 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
    * - User must explicitly click "Complete" to confirm
    *
    * Post-Completion:
-   * - Success toast notification
    * - Navigate to /tools/rtde (landing page)
    * - User can start new session from scratch
    */
@@ -438,7 +435,6 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
     try {
       setCompleting(true);
       await apiClient.completeRTDESession(sessionId);
-      toast.success("Session completed successfully!");
       router.push("/tools/rtde");
     } catch (error: any) {
       const errorMessage =

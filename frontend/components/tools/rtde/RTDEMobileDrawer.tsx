@@ -179,11 +179,10 @@ export function RTDEMobileDrawer({
           <DrawerFooter className="border-t bg-background pb-6 flex items-center justify-center">
             <DrawerClose asChild>
               <Button
-                variant="default"
                 size="lg"
                 onClick={onStartPull}
                 disabled={!isCountingPhase}
-                className="shadow-sm h-12 w-full max-w-md"
+                className="h-12 w-full max-w-md"
               >
                 Start Pull List
               </Button>

@@ -55,8 +55,8 @@ export function RTDECountingPhase({
         <div className="container max-w-4xl mx-auto">
           <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-4 md:py-5">
             {/* Title */}
-            <h2 className="text-lg md:text-base font-semibold text-popover-foreground mb-4">
-              Count RTD&E Display
+            <h2 className="text-base font-semibold text-popover-foreground mb-4">
+              RTD&E Item Count
             </h2>
 
             {/* Progress Bar */}
@@ -95,7 +95,7 @@ export function RTDECountingPhase({
       </div>
 
       {/* Count Card - Centered Content */}
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex flex-col items-center justify-center">
         <div className="container max-w-4xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-center">
             <div className="w-full max-w-lg">
@@ -110,11 +110,20 @@ export function RTDECountingPhase({
             </div>
           </div>
         </div>
+
+        {/* Items List Button - Mobile Only, between card and bottom bar */}
+        {onOpenDrawer && (
+          <div className="md:hidden mt-6">
+            <Button size="lg" onClick={onOpenDrawer}>
+              Items list
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Navigation Buttons - Fixed */}
       <div className="border-t bg-background pb-safe">
-        <div className="container max-w-4xl mx-auto px-4 py-4 md:py-6">
+        <div className="container max-w-4xl mx-auto px-4 pt-4 pb-8 md:py-6">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-between gap-3">
             {showPreviousButton && (
@@ -152,48 +161,33 @@ export function RTDECountingPhase({
           </div>
 
           {/* Mobile Navigation */}
-          <div className="md:hidden space-y-3">
-            {/* Previous/Next Buttons */}
-            <div className="flex items-center justify-between gap-3">
-              {showPreviousButton && (
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={onPrevious}
-                  className="flex-1 h-12"
-                >
-                  <ChevronLeft className="h-5 w-5 mr-2" />
-                  Previous
-                </Button>
-              )}
-
-              {isLastItem ? (
-                <Button size="lg" onClick={onStartPull} className="flex-1 h-12">
-                  Start Pull
-                  <ChevronRight className="h-5 w-5 ml-2" />
-                </Button>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={onNext}
-                  className="flex-1 h-12"
-                >
-                  Next
-                  <ChevronRight className="h-5 w-5 ml-2" />
-                </Button>
-              )}
-            </div>
-
-            {/* Open Drawer Button (Mobile Only) */}
-            {onOpenDrawer && (
+          <div className="md:hidden flex items-center justify-between gap-3">
+            {showPreviousButton && (
               <Button
-                variant="default"
+                variant="outline"
                 size="lg"
-                onClick={onOpenDrawer}
-                className="w-full h-12 rounded-2xl border"
+                onClick={onPrevious}
+                className="flex-1 h-12"
               >
-                Items list
+                <ChevronLeft className="h-5 w-5 mr-2" />
+                Previous
+              </Button>
+            )}
+
+            {isLastItem ? (
+              <Button size="lg" onClick={onStartPull} className="flex-1 h-12">
+                Start Pull
+                <ChevronRight className="h-5 w-5 ml-2" />
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={onNext}
+                className="flex-1 h-12"
+              >
+                Next
+                <ChevronRight className="h-5 w-5 ml-2" />
               </Button>
             )}
           </div>

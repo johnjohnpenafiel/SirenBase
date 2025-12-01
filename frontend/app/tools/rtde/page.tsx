@@ -54,7 +54,6 @@ export default function RTDEToolPage() {
     try {
       setStarting(true);
       const response = await apiClient.startRTDESession({});
-      toast.success('Session started! Let\'s count.');
       router.push(`/tools/rtde/session/${response.session_id}`);
     } catch (error: any) {
       const errorMessage =

@@ -130,13 +130,12 @@ export function RTDESessionSidebar({
       {/* Fixed "Start Pull List" button */}
       <div className="border-t bg-background px-4 py-4 md:py-6">
         <Button
-          variant="default"
           size="lg"
           onClick={onStartPull}
           disabled={!isCountingPhase}
-          className="w-full shadow-sm h-12 md:h-11"
+          className="w-full h-12 md:h-11"
         >
-          Start Pull List
+          Start Pull
         </Button>
       </div>
     </aside>

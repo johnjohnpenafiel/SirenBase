@@ -112,10 +112,9 @@ export function ResumeSessionDialog({
           </div>
         </div>
 
-        <DialogFooter className="gap-2 sm:gap-0">
+        <DialogFooter className="gap-3">
           <Button
             type="button"
-            variant="secondary"
             onClick={handleResume}
             className="flex-1 sm:flex-initial"
           >
@@ -123,7 +122,6 @@ export function ResumeSessionDialog({
           </Button>
           <Button
             type="button"
-            variant="outline"
             onClick={handleStartFresh}
             className="flex-1 sm:flex-initial"
           >

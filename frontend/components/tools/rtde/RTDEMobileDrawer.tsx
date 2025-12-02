@@ -10,7 +10,7 @@
  */
 "use client";
 
-import { Check, Menu } from "lucide-react";
+// Check icon removed - using green dot indicator instead
 import {
   Drawer,
   DrawerClose,
@@ -96,30 +96,18 @@ export function RTDEMobileDrawer({
                       onClick={() => handleItemSelect(index)}
                       disabled={!isCountingPhase}
                       className={cn(
-                        "w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-200",
-                        "bg-card border",
-                        "active:scale-[0.98]",
-                        isCurrent &&
-                          "bg-primary/30 text-primary-foreground border-primary/50",
-                        !isCountingPhase &&
-                          "cursor-not-allowed opacity-60 active:scale-100"
+                        "w-full flex items-center gap-4 p-4 rounded-lg text-left transition-colors duration-150",
+                        "active:bg-muted/40",
+                        isCurrent && "bg-muted/50",
+                        !isCountingPhase && "cursor-not-allowed opacity-60"
                       )}
                       aria-label={`${item.name}, ${
                         counted ? `counted: ${countDisplay}` : "not counted"
                       }`}
                       aria-current={isCurrent ? "true" : undefined}
                     >
-                      {/* Item emoji icon with circular background */}
-                      <div
-                        className={cn(
-                          "flex items-center justify-center w-14 h-14 rounded-full shrink-0 transition-colors",
-                          isCurrent
-                            ? "bg-primary-foreground/20"
-                            : counted
-                            ? "bg-primary/10"
-                            : "bg-muted"
-                        )}
-                      >
+                      {/* Item emoji icon with rounded square background */}
+                      <div className="flex items-center justify-center w-14 h-14 rounded-md bg-muted shrink-0">
                         <span className="text-3xl" aria-hidden="true">
                           {item.icon}
                         </span>
@@ -127,46 +115,20 @@ export function RTDEMobileDrawer({
 
                       {/* Item name and count */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-2 mb-1">
                           <span className="font-semibold truncate">
                             {item.name}
                           </span>
                           {counted && (
                             <div
-                              className={cn(
-                                "flex items-center justify-center w-6 h-6 rounded-full shrink-0",
-                                isCurrent
-                                  ? "bg-primary-foreground/20"
-                                  : "bg-primary/20"
-                              )}
-                            >
-                              <Check
-                                className={cn(
-                                  "h-4 w-4 shrink-0",
-                                  isCurrent
-                                    ? "text-primary-foreground"
-                                    : "text-primary-foreground"
-                                )}
-                                aria-label="Counted"
-                              />
-                            </div>
+                              className="w-2 h-2 rounded-full bg-primary shrink-0"
+                              aria-label="Counted"
+                            />
                           )}
                         </div>
-                        <div
-                          className={cn(
-                            "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-sm font-medium",
-                            isCurrent
-                              ? "bg-primary-foreground/20 text-primary-foreground"
-                              : counted
-                              ? "bg-primary/20 text-primary-foreground"
-                              : "bg-muted text-muted-foreground"
-                          )}
-                        >
-                          <span className="opacity-75 text-xs">Count:</span>
-                          <span className="font-mono font-bold">
-                            {countDisplay}
-                          </span>
-                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {countDisplay}
+                        </span>
                       </div>
                     </button>
                   </DrawerClose>

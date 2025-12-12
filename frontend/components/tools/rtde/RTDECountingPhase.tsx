@@ -51,16 +51,16 @@ export function RTDECountingPhase({
   return (
     <main className="flex-1 flex flex-col overflow-hidden bg-muted/30">
       {/* Progress Section - Floating Card */}
-      <div className="px-4 md:px-8 pt-4 md:pt-6 pb-2">
+      <div className="px-4 md:px-8 pt-3 md:pt-6 pb-2">
         <div className="container max-w-4xl mx-auto">
-          <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-4 md:py-5">
+          <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-3 md:py-5">
             {/* Title */}
-            <h2 className="text-base font-semibold text-popover-foreground mb-4">
-              RTD&E Item Count
+            <h2 className="text-sm font-semibold text-popover-foreground mb-3 md:mb-4">
+              Phase Count
             </h2>
 
             {/* Progress Bar */}
-            <div className="space-y-3">
+            <div className="space-y-2 md:space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-foreground">
@@ -79,9 +79,9 @@ export function RTDECountingPhase({
                   </span>
                 </div>
               </div>
-              <div className="w-full bg-muted rounded-full h-2.5 overflow-hidden">
+              <div className="w-full bg-muted rounded-full h-2 md:h-2.5 overflow-hidden">
                 <div
-                  className="bg-primary h-2.5 rounded-full transition-all duration-500 ease-out"
+                  className="bg-primary h-2 md:h-2.5 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${progressPercent}%` }}
                   role="progressbar"
                   aria-valuenow={progressPercent}
@@ -95,7 +95,7 @@ export function RTDECountingPhase({
       </div>
 
       {/* Count Card - Centered Content */}
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center justify-center py-2 md:py-4">
         <div className="container max-w-4xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-center">
             <div className="w-full max-w-lg">
@@ -110,20 +110,20 @@ export function RTDECountingPhase({
             </div>
           </div>
         </div>
-
-        {/* Items List Button - Mobile Only, between card and bottom bar */}
-        {onOpenDrawer && (
-          <div className="md:hidden mt-6">
-            <Button size="lg" onClick={onOpenDrawer}>
-              Items list
-            </Button>
-          </div>
-        )}
       </div>
+
+      {/* Items List Button - Mobile Only */}
+      {onOpenDrawer && (
+        <div className="md:hidden flex justify-center pb-4">
+          <Button size="lg" onClick={onOpenDrawer}>
+            Items list
+          </Button>
+        </div>
+      )}
 
       {/* Navigation Buttons - Fixed */}
       <div className="border-t bg-background pb-safe">
-        <div className="container max-w-4xl mx-auto px-4 pt-4 pb-8 md:py-6">
+        <div className="container max-w-4xl mx-auto px-4 pt-3 pb-6 md:py-6">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-between gap-3">
             {showPreviousButton && (

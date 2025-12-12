@@ -37,9 +37,16 @@ export function RTDESessionSidebar({
 
   return (
     <aside className="hidden md:flex md:flex-col w-64 lg:w-80 border-r bg-muted/30">
+      {/* Fixed title header */}
+      <div className="px-4 py-3 border-b bg-muted/30">
+        <h2 className="text-sm font-semibold text-popover-foreground">
+          RTD&E Items
+        </h2>
+      </div>
+
       {/* Scrollable item list */}
       <div className="flex-1 overflow-y-auto">
-        <div className="mt-3 p-3 space-y-2">
+        <div className="p-3 space-y-2">
           {items.map((item, index) => {
             const isCurrent = index === currentIndex;
             const counted = isItemCounted(item);

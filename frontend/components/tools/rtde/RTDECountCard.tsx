@@ -111,8 +111,8 @@ export function RTDECountCard({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-6 md:gap-5",
-        "p-6 md:p-8",
+        "flex flex-col items-center gap-4 md:gap-5",
+        "p-5 md:p-8",
         "bg-gradient-to-br from-card to-card/95",
         "border border-border/50",
         "rounded-3xl",
@@ -123,9 +123,9 @@ export function RTDECountCard({
       )}
     >
       {/* Emoji Icon with Background - Enhanced with gradient and inner shadow */}
-      <div className="flex items-center justify-center w-24 h-24 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
+      <div className="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
         <div
-          className="text-[3.5rem] md:text-[3.5rem] select-none"
+          className="text-[3rem] md:text-[3.5rem] select-none"
           aria-hidden="true"
         >
           {icon}
@@ -133,22 +133,22 @@ export function RTDECountCard({
       </div>
 
       {/* Item Name - Refined typography with tight tracking */}
-      <h2 className="text-[2rem] md:text-[1.875rem] leading-[1.1] tracking-tight font-bold text-center text-foreground max-w-[280px]">
+      <h2 className="text-[1.75rem] md:text-[1.875rem] leading-[1.1] tracking-tight font-bold text-center text-foreground max-w-[280px]">
         {itemName}
       </h2>
 
       {/* Par Level Info - Refined as subtle pill badge */}
-      <div className="flex items-center gap-2 px-4 py-1.5 bg-muted/40 rounded-full border border-border/30">
-        <span className="text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
+      <div className="flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-muted/40 rounded-full border border-border/30">
+        <span className="text-[0.625rem] md:text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
           Par Level
         </span>
-        <span className="text-base md:text-lg font-bold text-foreground">
+        <span className="text-sm md:text-lg font-bold text-foreground">
           {parLevel}
         </span>
       </div>
 
-      {/* Count Controls - Optimized spacing for desktop fit */}
-      <div className="flex items-center gap-4 md:gap-4 w-full max-w-md mt-2 md:mt-2">
+      {/* Count Controls - Optimized spacing for mobile fit */}
+      <div className="flex items-center gap-3 md:gap-4 w-full max-w-md mt-1 md:mt-2">
         {/* Decrement Button - Enhanced with gradient, shadow, and smooth feedback */}
         <Button
           onClick={handleDecrement}
@@ -171,8 +171,8 @@ export function RTDECountCard({
           <Minus className="h-6 w-6 md:h-6 md:w-6" strokeWidth={2.5} />
         </Button>
 
-        {/* Current Count Display / Input - Optimized size for desktop fit */}
-        <div className="flex-1 flex flex-col items-center gap-2">
+        {/* Current Count Display / Input - Optimized size for mobile fit */}
+        <div className="flex-1 flex flex-col items-center gap-1.5 md:gap-2">
           {isEditing ? (
             <Input
               ref={inputRef}
@@ -184,8 +184,8 @@ export function RTDECountCard({
               onBlur={handleInputBlur}
               onKeyDown={handleInputKeyDown}
               className={cn(
-                "h-18 md:h-16",
-                "text-[3rem] md:text-[2.75rem] leading-none font-bold text-center",
+                "h-14 md:h-16",
+                "text-[2.5rem] md:text-[2.75rem] leading-none font-bold text-center",
                 "border-2 border-primary/60",
                 "bg-gradient-to-br from-primary/5 to-primary/10",
                 "rounded-2xl",
@@ -200,10 +200,10 @@ export function RTDECountCard({
             <button
               onClick={handleCountClick}
               className={cn(
-                "h-18 md:h-16 w-full",
+                "h-14 md:h-16 w-full",
                 "flex items-center justify-center",
                 "rounded-2xl",
-                "text-[3rem] md:text-[2.75rem] leading-none font-bold tabular-nums",
+                "text-[2.5rem] md:text-[2.75rem] leading-none font-bold tabular-nums",
                 "transition-all duration-200 ease-out",
                 "hover:bg-muted/30",
                 "active:scale-[0.97]",
@@ -217,7 +217,7 @@ export function RTDECountCard({
               <span className="relative z-10">{currentCount}</span>
             </button>
           )}
-          <span className="text-[0.6875rem] font-semibold text-muted-foreground uppercase tracking-[0.06em]">
+          <span className="text-[0.625rem] md:text-[0.6875rem] font-semibold text-muted-foreground uppercase tracking-[0.06em]">
             Current Count
           </span>
         </div>
@@ -246,12 +246,12 @@ export function RTDECountCard({
       </div>
 
       {/* Saving Indicator - Fixed height container to prevent layout shift */}
-      <div className="h-5 flex items-center justify-center">
+      <div className="h-4 md:h-5 flex items-center justify-center">
         <span
           role="status"
           aria-live="polite"
           className={cn(
-            "text-sm font-medium text-neutral-400",
+            "text-xs md:text-sm font-medium text-neutral-400",
             "transition-opacity duration-500 ease-in-out",
             saving ? "opacity-100" : "opacity-0"
           )}
@@ -261,7 +261,7 @@ export function RTDECountCard({
       </div>
 
       {/* Helper Text - Refined typography */}
-      <p className="text-[0.8125rem] leading-tight text-muted-foreground text-center">
+      <p className="text-xs md:text-[0.8125rem] leading-tight text-muted-foreground text-center">
         Tap count to type directly
       </p>
     </div>

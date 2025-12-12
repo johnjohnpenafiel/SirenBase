@@ -116,7 +116,7 @@ export function RTDEMobileDrawer({
                       {/* Item name and count */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-semibold truncate">
+                          <span className="font-medium truncate">
                             {item.name}
                           </span>
                           {counted && (

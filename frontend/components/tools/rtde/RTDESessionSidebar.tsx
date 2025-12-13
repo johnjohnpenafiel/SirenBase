@@ -2,7 +2,7 @@
  * RTDE Session Sidebar - Desktop Navigation
  *
  * Desktop sidebar showing all items with:
- * - Item name with green dot indicator (if counted)
+ * - Item name with checkmark indicator (if counted)
  * - Count number or "-" (if uncounted)
  * - Click to jump to item
  * - Subtle background highlight on current item
@@ -12,7 +12,7 @@
  */
 "use client";
 
-// Check icon removed - using green dot indicator instead
+import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { RTDEItem, RTDESessionPhase } from "./types";
@@ -83,9 +83,11 @@ export function RTDESessionSidebar({
                     </span>
                     {counted && (
                       <div
-                        className="w-2 h-2 rounded-full bg-primary shrink-0"
+                        className="flex items-center justify-center w-4 h-4 rounded-full bg-primary shrink-0"
                         aria-label="Counted"
-                      />
+                      >
+                        <Check className="w-2.5 h-2.5 text-primary-foreground" />
+                      </div>
                     )}
                   </div>
                   <span className="text-sm text-muted-foreground">

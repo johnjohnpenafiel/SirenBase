@@ -550,52 +550,134 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
-## Phase 7: Deployment Preparation
+## Phase 7: Deployment & Production Launch
 
-### Backend Deployment
+**Status**: In Progress
+**Strategy**: Quick Deploy → Add Infrastructure → Migrate to AWS
+**Reference**: See `Planning/Deployment.md` for detailed instructions and learning content
 
-- [ ] Create production configuration
-  - Set `FLASK_ENV=production`
-  - Use strong `JWT_SECRET_KEY`
-  - Configure production database URL (AWS RDS)
-- [ ] Set up AWS Elastic Beanstalk
-  - Create application
-  - Create environment
-  - Configure environment variables
-- [ ] Create `.ebextensions` config for AWS (if needed)
-- [ ] Deploy backend to AWS Elastic Beanstalk
-- [ ] Test production API endpoints
+### Phase 7A: Quick Deploy (Vercel + Render + Neon)
 
-### Frontend Deployment
+**Goal**: Get app live for real-world testing at Starbucks store
+**Cost**: $7/month (Render Starter tier)
 
-- [ ] Update `NEXT_PUBLIC_API_URL` to production backend URL
-- [ ] Deploy to Vercel
-  - Connect GitHub repository
-  - Configure environment variables
-  - Deploy
-- [ ] Test production frontend
+#### Database Setup - Neon.tech
+- [ ] Create Neon.tech account (GitHub login)
+- [ ] Create project "sirenbase-prod"
+- [ ] Copy PostgreSQL connection string
+- [ ] Test connection locally (optional verification)
 
-### Database Setup
+#### Backend Deployment - Render.com
+- [ ] Create Render.com account
+- [ ] Create new Web Service from GitHub repo
+- [ ] Configure service settings:
+  - Root Directory: `backend`
+  - Build Command: `pip install -r requirements.txt`
+  - Start Command: `gunicorn "app:create_app()" --bind 0.0.0.0:$PORT`
+  - Instance Type: Starter ($7/month)
+- [ ] Add environment variables:
+  - `FLASK_ENV=production`
+  - `DATABASE_URL` (Neon connection string)
+  - `SECRET_KEY` (generate secure random string)
+  - `JWT_SECRET_KEY` (generate secure random string)
+  - `CORS_ORIGINS` (Vercel URL - update after frontend deploy)
+- [ ] Add `gunicorn` to `requirements.txt`
+- [ ] Deploy and verify build succeeds
 
-- [ ] Create AWS RDS PostgreSQL instance
-  - Choose appropriate instance size
-  - Enable automated backups
-  - Configure security groups (allow Elastic Beanstalk access)
-- [ ] Run migrations on production database
-  ```bash
-  alembic upgrade head
-  ```
-- [ ] Seed production database with admin user
+#### Database Migration
+- [ ] Run migrations via Render Shell: `flask db upgrade`
+- [ ] Seed admin user: `python -c "from app.seeds import seed_admin; seed_admin()"`
+- [ ] Verify database tables created
 
-### Post-Deployment
+#### Frontend Deployment - Vercel
+- [ ] Create Vercel account (GitHub login)
+- [ ] Import GitHub repository
+- [ ] Configure settings:
+  - Framework: Next.js
+  - Root Directory: `frontend`
+- [ ] Add environment variable:
+  - `NEXT_PUBLIC_API_URL=https://sirenbase-api.onrender.com/api`
+- [ ] Deploy and note Vercel URL
 
-- [ ] Test complete production workflow
-- [ ] Set up monitoring and logging
-  - AWS CloudWatch for backend
-  - Vercel Analytics for frontend
-- [ ] Set up error tracking (Sentry, optional)
-- [ ] Create backup and restore procedures
-- [ ] Document deployment process
+#### Final Configuration
+- [ ] Update Render `CORS_ORIGINS` with Vercel URL
+- [ ] Trigger Render redeploy
+- [ ] Test login flow end-to-end
+- [ ] Test all Tool 1 (Inventory Tracking) features
+- [ ] Test all Tool 3 (RTD&E) features
+- [ ] Real-world testing at Starbucks store
+
+### Phase 7B: Infrastructure (Docker + CI/CD + Staging)
+
+**Goal**: Add portfolio-value infrastructure and professional deployment practices
+**Learning**: See `Planning/Deployment.md` for conceptual explanations
+
+#### Docker Containerization
+- [ ] Learn Docker concepts (reference: Planning/Deployment.md)
+- [ ] Create `backend/Dockerfile`
+- [ ] Create `backend/.dockerignore`
+- [ ] Test Docker build locally: `docker build -t sirenbase-api .`
+- [ ] Test container runs: `docker run -p 5000:5000 sirenbase-api`
+- [ ] Update Render to use Docker deployment (optional)
+
+#### CI/CD Pipeline - GitHub Actions
+- [ ] Learn CI/CD concepts (reference: Planning/Deployment.md)
+- [ ] Create `.github/workflows/ci.yml`
+- [ ] Configure backend tests job (pytest)
+- [ ] Configure frontend tests job (vitest)
+- [ ] Get Render deploy hook URL
+- [ ] Add `RENDER_DEPLOY_HOOK` to GitHub Secrets
+- [ ] Configure deploy job (only on main, after tests pass)
+- [ ] Test pipeline with a push to main
+- [ ] Verify tests run and deployment triggers
+
+#### Staging Environment
+- [ ] Learn about environments (reference: Planning/Deployment.md)
+- [ ] Create Neon database: `sirenbase-staging`
+- [ ] Create Render service: `sirenbase-api-staging`
+- [ ] Create Vercel project: `sirenbase-staging`
+- [ ] Configure staging environment variables
+- [ ] Update GitHub Actions for staging deploys (on PR merge)
+- [ ] Document environment differences
+
+### Phase 7C: AWS Migration (Future - Free Tier)
+
+**Goal**: Migrate to AWS for resume value and 12-month free tier
+**Timing**: When ready (after Phase 7A/7B stable)
+**Cost**: $0/month for first 12 months
+
+#### AWS Account Setup
+- [ ] Create AWS account
+- [ ] Enable free tier monitoring/alerts
+- [ ] Set up IAM user for CLI access
+- [ ] Configure AWS CLI locally
+
+#### Database Migration - AWS RDS
+- [ ] Create RDS PostgreSQL instance (db.t3.micro - free tier)
+- [ ] Configure security groups (allow Elastic Beanstalk access)
+- [ ] Export Neon data: `pg_dump`
+- [ ] Import to RDS: `psql`
+- [ ] Verify data migration successful
+
+#### Backend Migration - Elastic Beanstalk
+- [ ] Install EB CLI: `pip install awsebcli`
+- [ ] Initialize: `eb init -p docker sirenbase-api`
+- [ ] Create environment: `eb create sirenbase-prod`
+- [ ] Configure environment variables in EB console
+- [ ] Deploy: `eb deploy`
+- [ ] Verify API endpoints working
+
+#### Frontend Update
+- [ ] Update Vercel `NEXT_PUBLIC_API_URL` to EB URL
+- [ ] Redeploy Vercel
+- [ ] Test end-to-end with AWS backend
+
+#### Post-Migration
+- [ ] Verify all features working
+- [ ] Set up CloudWatch monitoring
+- [ ] Configure RDS automated backups
+- [ ] Update documentation with AWS architecture
+- [ ] Cancel Render subscription
 
 ---
 

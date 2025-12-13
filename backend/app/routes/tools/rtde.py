@@ -4,11 +4,9 @@ RTD&E System routes for managing display items and counting sessions.
 This module provides API endpoints for Tool 3: RTD&E Counting System
 All routes are namespaced under /api/rtde/*
 """
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from marshmallow import ValidationError
-from sqlalchemy import and_
 from sqlalchemy.orm import joinedload
 
 from app.models.rtde import RTDEItem, RTDECountSession, RTDESessionCount

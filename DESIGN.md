@@ -1529,11 +1529,12 @@ Use this checklist when implementing new UI:
 
 ---
 
-**Last Updated**: November 9, 2025
-**Version**: 1.4.0
+**Last Updated**: December 12, 2025
+**Version**: 3.3.0
 **Maintainer**: Development Team
 
 **Change Log**:
+- **v3.3.0** (Dec 12, 2025): Version sync with project-wide cleanup. No design changes.
 - **v1.4.0** (Nov 9, 2025): **MAJOR UPDATE**: Completely rewrote scrolling behavior section with "infinity pool" in-place scrolling pattern. ONLY data lists scroll while all controls remain fixed and visible. Removed borders between fixed/scrollable sections for seamless visual flow. Added 3 complete real-world examples (Inventory, History, Admin). Updated implementation rules, common patterns table, and what NOT to do section. This is now the STANDARD pattern for all pages.
 - **v1.3.0** (Nov 8, 2025): Added "Adaptive and Purposeful Interface Behavior" philosophy with comprehensive viewport adaptation framework. Includes desktop/mobile prioritization guidelines, functional consistency principles, information hierarchy table (P1-P4), 4 adaptive component patterns, and responsive testing checklist. Emphasizes clarity, adaptability, and intent across all screen sizes.
 - **v1.2.0** (Nov 8, 2025): Added comprehensive scrolling behavior guidelines for app-like experience. Added 6th core principle: "App-Like Behavior". Includes implementation patterns, code examples, mobile optimization, and common patterns table. Emphasizes contained scrolling over full-page scrolling.

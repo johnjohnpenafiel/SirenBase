@@ -1,25 +1,12 @@
 import type { Metadata } from "next";
-import { Montserrat, Merriweather, Source_Code_Pro } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import { AuthProvider } from "@/contexts/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-// Nature theme fonts
+// Primary sans-serif font
 const montserrat = Montserrat({
   variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const merriweather = Merriweather({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
-  display: "swap",
-});
-
-const sourceCodePro = Source_Code_Pro({
-  variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -36,9 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.variable} ${merriweather.variable} ${sourceCodePro.variable} antialiased`}
-      >
+      <body className={`${montserrat.variable} antialiased`}>
         <AuthProvider>
           {children}
           <Toaster />

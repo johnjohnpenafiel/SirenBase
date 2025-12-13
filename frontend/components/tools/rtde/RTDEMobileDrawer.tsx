@@ -4,13 +4,13 @@
  * Mobile bottom drawer showing all items with:
  * - Swipe up to open, swipe down to close
  * - Tap handle/button to toggle
- * - Item list (same format as desktop sidebar)
+ * - Item list with checkmark indicator (if counted)
  * - Tap item to select and auto-close drawer
  * - "Start Pull List" button at bottom
  */
 "use client";
 
-// Check icon removed - using green dot indicator instead
+import { Check } from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -121,9 +121,11 @@ export function RTDEMobileDrawer({
                           </span>
                           {counted && (
                             <div
-                              className="w-2 h-2 rounded-full bg-primary shrink-0"
+                              className="flex items-center justify-center w-4 h-4 rounded-full bg-primary shrink-0"
                               aria-label="Counted"
-                            />
+                            >
+                              <Check className="w-2.5 h-2.5 text-primary-foreground" />
+                            </div>
                           )}
                         </div>
                         <span className="text-sm text-muted-foreground">

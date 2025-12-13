@@ -579,6 +579,6 @@ Before submitting PR, verify:
 
 ---
 
-**Last Updated**: October 2025  
-**Version**: 1.0.0  
+**Last Updated**: December 2025
+**Version**: 3.3.0
 **For**: SirenBase Frontend Team

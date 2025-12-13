@@ -23,11 +23,9 @@ import { AddItemDialog } from "@/components/tools/tracking/AddItemDialog";
 import { RemoveItemDialog } from "@/components/tools/tracking/RemoveItemDialog";
 import apiClient from "@/lib/api";
 import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
-import type { Item, ItemCategory } from "@/types";
+import type { Item, ItemCategory, ViewMode } from "@/types";
 import { toast } from "sonner";
 import { ArrowLeft, Plus, History, Trash2, Loader2 } from "lucide-react";
-
-type ViewMode = "categories" | "all" | "filtered";
 
 export default function InventoryPage() {
   const router = useRouter();

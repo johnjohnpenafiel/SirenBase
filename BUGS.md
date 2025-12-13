@@ -437,5 +437,6 @@ Ideas for how to fix
 
 ---
 
-_Last Updated: 2025-11-20_ (TECH-001 and TECH-003 completed)
+_Last Updated: 2025-12-12_ (Pre-deployment cleanup complete)
+_Version: 3.3.0_
 _Maintainer: Development Team_

@@ -298,9 +298,3 @@ export interface CompleteRTDESessionResponse {
 // ============================================================================
 
 export type ViewMode = 'categories' | 'all' | 'filtered';
-
-export interface AuthState {
-  user: User | null;
-  loading: boolean;
-  isAuthenticated: boolean;
-}

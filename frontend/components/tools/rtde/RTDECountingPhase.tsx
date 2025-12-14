@@ -112,14 +112,37 @@ export function RTDECountingPhase({
         </div>
       </div>
 
-      {/* Items List Button - Mobile Only */}
-      {onOpenDrawer && (
-        <div className="md:hidden flex justify-center pb-4">
-          <Button size="lg" onClick={onOpenDrawer}>
-            Items list
+      {/* Mobile Navigation - Above Bottom Bar */}
+      <div className="md:hidden flex justify-center gap-3 px-4 pb-4">
+        {showPreviousButton && (
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={onPrevious}
+            className="flex-1 h-12"
+          >
+            <ChevronLeft className="h-5 w-5 mr-2" />
+            Previous
           </Button>
-        </div>
-      )}
+        )}
+
+        {isLastItem ? (
+          <Button size="lg" onClick={onStartPull} className="flex-1 h-12">
+            Start Pull
+            <ChevronRight className="h-5 w-5 ml-2" />
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={onNext}
+            className="flex-1 h-12"
+          >
+            Next
+            <ChevronRight className="h-5 w-5 ml-2" />
+          </Button>
+        )}
+      </div>
 
       {/* Navigation Buttons - Fixed */}
       <div className="border-t bg-background pb-safe">
@@ -160,37 +183,18 @@ export function RTDECountingPhase({
             )}
           </div>
 
-          {/* Mobile Navigation */}
-          <div className="md:hidden flex items-center justify-between gap-3">
-            {showPreviousButton && (
+          {/* Mobile - Items List Button */}
+          {onOpenDrawer && (
+            <div className="md:hidden flex justify-center">
               <Button
-                variant="outline"
                 size="lg"
-                onClick={onPrevious}
-                className="flex-1 h-12"
+                onClick={onOpenDrawer}
+                className="h-12 w-full max-w-md"
               >
-                <ChevronLeft className="h-5 w-5 mr-2" />
-                Previous
+                Items list
               </Button>
-            )}
-
-            {isLastItem ? (
-              <Button size="lg" onClick={onStartPull} className="flex-1 h-12">
-                Start Pull
-                <ChevronRight className="h-5 w-5 ml-2" />
-              </Button>
-            ) : (
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={onNext}
-                className="flex-1 h-12"
-              >
-                Next
-                <ChevronRight className="h-5 w-5 ml-2" />
-              </Button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </main>

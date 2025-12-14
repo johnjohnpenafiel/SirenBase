@@ -148,7 +148,7 @@ export function RTDEMobileDrawer({
                 disabled={!isCountingPhase}
                 className="h-12 w-full max-w-md"
               >
-                Start Pull List
+                Start Pull
               </Button>
             </DrawerClose>
           </DrawerFooter>

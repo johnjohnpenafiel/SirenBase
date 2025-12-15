@@ -4,7 +4,7 @@
  * Reusable card for displaying admin modules on the admin dashboard.
  * Similar to ToolCard but designed for administrative functions.
  * Follows DESIGN.md guidelines:
- * - Uses Nature theme color tokens
+ * - Uses design system color tokens
  * - Hover effects with theme colors
  * - Accessible with keyboard navigation
  */

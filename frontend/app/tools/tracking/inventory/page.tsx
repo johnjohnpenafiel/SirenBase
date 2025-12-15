@@ -7,8 +7,8 @@
  * - Filtered: Items filtered by selected category (individual display)
  *
  * Follows DESIGN.md guidelines:
- * - App-like scrolling (h-screen layout with overflow-y-auto)
- * - Nature theme color tokens throughout
+ * - App-like scrolling (h-dvh layout with overflow-y-auto)
+ * - Design system color tokens throughout
  * - Adaptive buttons (icon-only on mobile)
  * - Responsive grid layouts
  */

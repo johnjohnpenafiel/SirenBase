@@ -3,7 +3,7 @@
  *
  * Reusable card for displaying tools on the dashboard.
  * Follows DESIGN.md guidelines:
- * - Uses Nature theme color tokens
+ * - Uses design system color tokens
  * - Hover effects with theme colors
  * - Accessible with keyboard navigation
  * - Admin badge uses theme accent colors

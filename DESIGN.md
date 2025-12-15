@@ -26,6 +26,48 @@ This document defines the visual design language, UI patterns, and interaction g
 - **Progressive Disclosure**: Show what's needed now, hide complexity
 - **Forgiving Interactions**: Easy undo, clear confirmations, safe defaults
 
+### Design DNA: Foundational Truths
+
+These are the non-negotiable principles that define SirenBase's interface philosophy. They represent the "why" behind every design decision and should guide all future UI work.
+
+#### 1. The Interface Serves the User, Never the Reverse
+
+The user should never fight the interface. If a button scrolls out of view, if content gets hidden behind a browser toolbar, if an action becomes unreachable — the design has failed. The interface must anticipate and prevent these frustrations before they occur.
+
+**This means**: Critical actions are always visible and accessible. The layout accommodates the user's context (device, orientation, browser chrome) rather than demanding the user accommodate the layout.
+
+#### 2. Design for Reality, Not Theory
+
+Theoretical measurements lie. `100vh` claims to be "full viewport height" but ignores mobile browser toolbars. A design that looks perfect in a simulator may fail on a real device. The only truth is what users actually experience.
+
+**This means**: Use dynamic viewport units (`dvh`) that respond to actual available space. Test on real devices, not just browser dev tools. Account for safe areas, notches, and browser UI that consume real screen space.
+
+#### 3. Content Must Earn Its Space
+
+Every pixel of vertical space is precious on mobile. Content that works with "Avocado" must also work with "Grilled Cheese Sandwich." If one edge case breaks the layout, the layout isn't done.
+
+**This means**: Design for the longest reasonable content first, then ensure shorter content looks good. Use responsive spacing that compresses gracefully under pressure. Test with real-world data variations, not just ideal examples.
+
+#### 4. Platform Constraints Are Design Partners
+
+Safe areas, browser toolbars, and device variations aren't obstacles to fight — they're constraints to embrace. The best mobile experiences work *with* the platform, creating interfaces that feel native rather than forced.
+
+**This means**: Respect `safe-area-inset-*` boundaries. Account for browser chrome in viewport calculations. Design touch targets that feel natural on each platform. The goal is harmony with the device, not domination over it.
+
+#### 5. Density Adapts, Functionality Doesn't
+
+When space is limited, reduce spacing and visual weight — never remove functionality. A compact layout with tighter gaps maintains usability; a layout that hides critical buttons breaks it.
+
+**This means**: Mobile layouts may be denser than desktop, but they're never incomplete. Compress padding, reduce icon sizes, tighten gaps — but keep every action accessible. The user can do everything on mobile that they can on desktop.
+
+#### 6. Scroll Intentionally, Never Accidentally
+
+Scrolling should be a deliberate user action within clearly defined regions (lists, content areas), never an unexpected consequence of the layout. If the entire interface shifts when the user doesn't expect it, the experience feels broken.
+
+**This means**: Use `overflow-hidden` on layout containers to prevent unintended scrolling. Define explicit scroll regions for content that may exceed viewport. Fixed elements (headers, action buttons) must remain anchored regardless of content scroll.
+
+---
+
 ### Adaptive and Purposeful Interface Behavior
 
 **Core Principle**: SirenBase's interface design follows three foundational priorities: **clarity**, **adaptability**, and **intent**.
@@ -1529,11 +1571,12 @@ Use this checklist when implementing new UI:
 
 ---
 
-**Last Updated**: December 12, 2025
-**Version**: 3.3.0
+**Last Updated**: December 14, 2025
+**Version**: 3.4.0
 **Maintainer**: Development Team
 
 **Change Log**:
+- **v3.4.0** (Dec 14, 2025): Added "Design DNA: Foundational Truths" section — six non-negotiable principles that define the interface philosophy. Extracted from mobile viewport fixes: (1) Interface serves user, never reverse (2) Design for reality, not theory (3) Content must earn its space (4) Platform constraints are design partners (5) Density adapts, functionality doesn't (6) Scroll intentionally, never accidentally. These principles capture the "why" behind design decisions for all future UI work.
 - **v3.3.0** (Dec 12, 2025): Version sync with project-wide cleanup. No design changes.
 - **v1.4.0** (Nov 9, 2025): **MAJOR UPDATE**: Completely rewrote scrolling behavior section with "infinity pool" in-place scrolling pattern. ONLY data lists scroll while all controls remain fixed and visible. Removed borders between fixed/scrollable sections for seamless visual flow. Added 3 complete real-world examples (Inventory, History, Admin). Updated implementation rules, common patterns table, and what NOT to do section. This is now the STANDARD pattern for all pages.
 - **v1.3.0** (Nov 8, 2025): Added "Adaptive and Purposeful Interface Behavior" philosophy with comprehensive viewport adaptation framework. Includes desktop/mobile prioritization guidelines, functional consistency principles, information hierarchy table (P1-P4), 4 adaptive component patterns, and responsive testing checklist. Emphasizes clarity, adaptability, and intent across all screen sizes.

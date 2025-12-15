@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -39,6 +40,11 @@ export default function HistoryPage() {
     "all"
   );
   const [currentPage, setCurrentPage] = useState(1);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setIsScrolled(e.currentTarget.scrollTop > 16);
+  };
 
   useEffect(() => {
     fetchHistory();
@@ -88,7 +94,7 @@ export default function HistoryPage() {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-dvh">
           <Header />
           <main className="flex-1 flex items-center justify-center">
             <div className="text-center">
@@ -103,11 +109,18 @@ export default function HistoryPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-dvh">
         <Header />
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Fixed Header Section */}
-          <div>
+          <div
+            className={cn(
+              "relative z-10 transition-all duration-300 ease-out",
+              isScrolled
+                ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
+                : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
+            )}
+          >
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <Button
                 variant="ghost"
@@ -154,8 +167,8 @@ export default function HistoryPage() {
           </div>
 
           {/* Scrollable Content Area - ONLY this scrolls */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+          <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
               {paginatedHistory.length === 0 ? (
               <div className="text-center py-12 bg-card rounded-xl border border-border">
                 <p className="text-muted-foreground">

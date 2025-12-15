@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { AddUserDialog } from '@/components/admin/AddUserDialog';
 import { DeleteUserDialog } from '@/components/admin/DeleteUserDialog';
 import apiClient from '@/lib/api';
+import { cn } from '@/lib/utils';
 import type { User } from '@/types';
 import { toast } from 'sonner';
 import { Plus, UserCheck, Shield, Loader2, ArrowLeft } from 'lucide-react';
@@ -24,6 +25,11 @@ export default function UserManagementPage() {
   const [loading, setLoading] = useState(true);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setIsScrolled(e.currentTarget.scrollTop > 16);
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -66,7 +72,7 @@ export default function UserManagementPage() {
   if (loading) {
     return (
       <ProtectedRoute requireAdmin>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-dvh">
           <Header />
           <main className="flex-1 flex items-center justify-center">
             <div className="text-center">
@@ -81,11 +87,18 @@ export default function UserManagementPage() {
 
   return (
     <ProtectedRoute requireAdmin>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-dvh">
         <Header />
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Fixed Header Section */}
-          <div>
+          <div
+            className={cn(
+              "relative z-10 transition-all duration-300 ease-out",
+              isScrolled
+                ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
+                : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
+            )}
+          >
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <Button
                 variant="ghost"
@@ -107,8 +120,8 @@ export default function UserManagementPage() {
           </div>
 
           {/* Scrollable Content Area - ONLY this scrolls */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+          <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
               {/* Users Table */}
             <div className="bg-card rounded-xl border border-border overflow-hidden">
               {/* Desktop Table */}

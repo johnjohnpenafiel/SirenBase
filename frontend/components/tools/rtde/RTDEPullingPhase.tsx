@@ -11,8 +11,10 @@
  */
 "use client";
 
+import { useState } from "react";
 import { RTDEPullListItem } from "./RTDEPullListItem";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import type { RTDEPullItem } from "./types";
 
@@ -40,11 +42,23 @@ export function RTDEPullingPhase({
   onComplete,
 }: RTDEPullingPhaseProps) {
   const hasItemsToPull = pullList.length > 0;
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setIsScrolled(e.currentTarget.scrollTop > 16);
+  };
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden bg-muted/30">
-      {/* Progress Section - Floating Card */}
-      <div className="px-4 md:px-8 pt-4 md:pt-6 pb-2">
+      {/* Progress Section - Floating Card with Scroll Shadow */}
+      <div
+        className={cn(
+          "relative z-10 transition-all duration-300 ease-out px-4 md:px-8 pt-4 md:pt-6 pb-2",
+          isScrolled
+            ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
+            : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
+        )}
+      >
         <div className="container max-w-4xl mx-auto">
           <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-4 md:py-5">
             {/* Header with Complete Button (Desktop) */}
@@ -110,8 +124,8 @@ export function RTDEPullingPhase({
       </div>
 
       {/* Pull List - Scrollable Area */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="container max-w-4xl mx-auto px-4 md:px-8 py-6 md:py-8">
+      <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+        <div className="container max-w-4xl mx-auto px-4 md:px-8 pt-2 pb-6 md:pb-8">
           {!hasItemsToPull ? (
             // Empty State - All items at par
             <div className="flex flex-col items-center justify-center py-16 text-center">

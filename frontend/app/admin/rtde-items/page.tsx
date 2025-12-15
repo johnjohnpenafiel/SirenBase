@@ -28,6 +28,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { ArrowLeft, Plus, Edit2, Trash2, GripVertical, Loader2, Package } from 'lucide-react';
 import { AddRTDEItemDialog } from '@/components/admin/rtde/AddRTDEItemDialog';
 import { EditRTDEItemDialog } from '@/components/admin/rtde/EditRTDEItemDialog';
@@ -120,12 +121,17 @@ export default function RTDEItemsPage() {
   const [saving, setSaving] = useState(false);
   const [hasReordered, setHasReordered] = useState(false);
   const [showActiveOnly, setShowActiveOnly] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Dialog states
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<RTDEItem | null>(null);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setIsScrolled(e.currentTarget.scrollTop > 16);
+  };
 
   // Drag and drop sensors
   const sensors = useSensors(
@@ -220,11 +226,18 @@ export default function RTDEItemsPage() {
 
   return (
     <ProtectedRoute requireAdmin>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-dvh">
         <Header />
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Fixed Controls Section */}
-          <div>
+          <div
+            className={cn(
+              "relative z-10 transition-all duration-300 ease-out",
+              isScrolled
+                ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
+                : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
+            )}
+          >
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <Button
                 variant="ghost"
@@ -272,8 +285,8 @@ export default function RTDEItemsPage() {
           </div>
 
           {/* Scrollable Items List */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+          <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
               {loading ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />

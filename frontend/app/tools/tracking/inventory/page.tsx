@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { AddItemDialog } from "@/components/tools/tracking/AddItemDialog";
 import { RemoveItemDialog } from "@/components/tools/tracking/RemoveItemDialog";
 import apiClient from "@/lib/api";
+import { cn } from "@/lib/utils";
 import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
 import type { Item, ItemCategory, ViewMode } from "@/types";
 import { toast } from "sonner";
@@ -39,6 +40,11 @@ export default function InventoryPage() {
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
   const [itemToRemove, setItemToRemove] = useState<Item | null>(null);
   const [removingCode, setRemovingCode] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setIsScrolled(e.currentTarget.scrollTop > 16);
+  };
 
   // Fetch items on mount
   useEffect(() => {
@@ -124,7 +130,7 @@ export default function InventoryPage() {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-dvh">
           <Header />
           <main className="flex-1 flex items-center justify-center">
             <div className="text-center">
@@ -139,11 +145,18 @@ export default function InventoryPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-dvh">
         <Header />
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Fixed Header Section */}
-          <div>
+          <div
+            className={cn(
+              "relative z-10 transition-all duration-300 ease-out",
+              isScrolled
+                ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
+                : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
+            )}
+          >
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
@@ -221,8 +234,8 @@ export default function InventoryPage() {
           </div>
 
           {/* Scrollable Content Area - ONLY this scrolls */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+          <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
               {/* Categories View */}
               {viewMode === "categories" && (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

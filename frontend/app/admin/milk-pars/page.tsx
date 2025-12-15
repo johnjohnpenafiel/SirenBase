@@ -6,22 +6,36 @@
  */
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { ArrowLeft, Milk } from 'lucide-react';
 
 export default function MilkParsPage() {
   const router = useRouter();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setIsScrolled(e.currentTarget.scrollTop > 16);
+  };
 
   return (
     <ProtectedRoute requireAdmin>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-dvh">
         <Header />
         <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Header Section */}
-          <div>
+          {/* Fixed Header Section */}
+          <div
+            className={cn(
+              "relative z-10 transition-all duration-300 ease-out",
+              isScrolled
+                ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
+                : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
+            )}
+          >
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
               <Button
                 variant="ghost"
@@ -40,9 +54,9 @@ export default function MilkParsPage() {
             </div>
           </div>
 
-          {/* Placeholder Content */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
+          {/* Scrollable Content Area */}
+          <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+            <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
               <div className="bg-card border border-border rounded-xl p-12 text-center">
                 <Milk className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                 <h2 className="text-xl font-semibold text-foreground mb-2">

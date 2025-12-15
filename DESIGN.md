@@ -1225,26 +1225,87 @@ return (
 
 #### Dynamic Scroll Shadow
 
-The fixed header section gains a subtle shadow when content scrolls beneath it, creating the visual effect of content sliding "under" the header rather than a harsh cut-off.
+**This is the standard pattern for ALL pages with fixed headers and scrollable content.**
 
-**Implementation**:
-1. Add `useState` to track scroll state: `const [isScrolled, setIsScrolled] = useState(false)`
-2. Add scroll handler with **16px threshold**: `setIsScrolled(e.currentTarget.scrollTop > 16)`
-3. Apply conditional shadow to fixed section using `cn()`:
-   ```tsx
-   className={cn(
-     "relative z-10 transition-all duration-300 ease-out",
-     isScrolled
-       ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
-       : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
-   )}
-   ```
-   **Note**: Both states need explicit shadow values for smooth CSS transition between them.
-4. Add `pt-2` to scrollable content for breathing room
+The fixed header section gains a subtle shadow when content scrolls beneath it, creating the visual effect of content sliding "under" the header rather than a harsh cut-off. This replaces the older pattern of using `border-b` separators.
 
-**Why 16px threshold?** Prevents shadow from appearing on accidental touches or micro-scrolls. The shadow only appears after intentional scrolling, creating a more polished feel.
+##### When to Use
 
-**Shadow values**: `0_4px_12px_-2px_rgba(0,0,0,0.08)` creates a subtle downward shadow that's visible but not harsh.
+Apply this pattern to any page where:
+- A title, toolbar, or filter section remains fixed at the top
+- Content below scrolls independently
+- There's a visual boundary between fixed and scrollable areas
+
+**Examples**: Dashboard, Admin pages, Inventory tracking, History pages, any tool with a scrollable list/grid.
+
+##### Visual Specifications
+
+| Property | Value | Rationale |
+|----------|-------|-----------|
+| **Activation threshold** | 16px scroll | Prevents accidental activation from micro-scrolls or touches |
+| **Transition duration** | 300ms | Smooth fade-in without feeling sluggish |
+| **Transition easing** | ease-out | Decelerating curve feels natural and polished |
+| **Shadow (active)** | `0 4px 12px -2px rgba(0,0,0,0.08)` | Subtle downward shadow, visible but not harsh |
+| **Shadow (inactive)** | `0 0 0 0 rgba(0,0,0,0)` | Explicit zero values required for CSS transition |
+| **Content breathing room** | `pt-2` (8px) | Small gap prevents content from touching header |
+
+##### Technical Implementation
+
+**Required imports:**
+```tsx
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+```
+
+**State and handler:**
+```tsx
+const [isScrolled, setIsScrolled] = useState(false);
+
+const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  // 16px threshold - shadow appears after intentional scroll, not accidental touch
+  setIsScrolled(e.currentTarget.scrollTop > 16);
+};
+```
+
+**Fixed header with conditional shadow:**
+```tsx
+<div
+  className={cn(
+    "relative z-10 transition-all duration-300 ease-out",
+    isScrolled
+      ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
+      : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
+  )}
+>
+  {/* Fixed content: title, buttons, filters */}
+</div>
+```
+
+**Scrollable area with handler:**
+```tsx
+<div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+  <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
+    {/* Scrollable content */}
+  </div>
+</div>
+```
+
+**Critical notes:**
+- Both shadow states MUST have explicit values for CSS transition to work
+- Using `transition-shadow` alone doesn't work; use `transition-all`
+- The `z-10` ensures shadow renders above scrollable content
+- Don't use `border-b` — the shadow provides a cleaner visual separation
+
+##### Pages Using This Pattern
+
+Track implementation status:
+- [x] Dashboard (`app/dashboard/page.tsx`)
+- [ ] Admin Users (`app/admin/users/page.tsx`)
+- [ ] Admin Milk Pars (`app/admin/milk-pars/page.tsx`)
+- [ ] Admin RTDE Items (`app/admin/rtde-items/page.tsx`)
+- [ ] Inventory Tracking (`app/tools/tracking/inventory/page.tsx`)
+- [ ] Inventory History (`app/tools/tracking/history/page.tsx`)
+- [ ] RTDE Tool (various phases)
 
 #### Implementation Rules
 
@@ -1274,7 +1335,10 @@ The `pb-safe` utility adds `padding-bottom: env(safe-area-inset-bottom)` to resp
 | Full-page layout | `h-dvh` on root container |
 | Fixed header/footer | Outside the scrollable area |
 | Scrollable content | `flex-1 overflow-y-auto` with `onScroll` handler |
-| Scroll shadow | `shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]` when `isScrolled` |
+| Scroll shadow (active) | `shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]` |
+| Scroll shadow (inactive) | `shadow-[0_0px_0px_0px_rgba(0,0,0,0)]` |
+| Scroll shadow transition | `transition-all duration-300 ease-out` |
+| Scroll threshold | `scrollTop > 16` (16px before activation) |
 | Modal body | `max-h-[80vh] overflow-y-auto` |
 | Safe area padding | `pb-safe` utility class |
 
@@ -1452,10 +1516,17 @@ Use this checklist when implementing new UI:
 ---
 
 **Last Updated**: December 14, 2025
-**Version**: 3.5.0
+**Version**: 3.5.1
 **Maintainer**: Development Team
 
 **Change Log**:
+- **v3.5.1** (Dec 14, 2025): **Dynamic Scroll Shadow Pattern** — Expanded documentation for the scroll shadow pattern as the standard for all scrollable sections:
+  - Added "When to Use" guidelines for applying the pattern
+  - Added Visual Specifications table with timing, threshold, and shadow values
+  - Added complete Technical Implementation section with code snippets
+  - Added "Pages Using This Pattern" checklist for tracking implementation
+  - Updated Quick Reference table with detailed scroll shadow entries
+  - This pattern replaces `border-b` separators for cleaner visual boundaries
 - **v3.5.0** (Dec 14, 2025): **MAJOR AUDIT & CORRECTIONS** — Fixed documentation to match actual codebase implementation:
   - **Color System**: Corrected from "Nature Theme" to actual Supabase-inspired mint/teal palette. Updated all OKLCH values to match `globals.css`.
   - **Typography**: Fixed font stack documentation. Removed claims about Merriweather and Source Code Pro (never implemented). Documented actual fonts: Montserrat (loaded via next/font), system serif, system monospace.

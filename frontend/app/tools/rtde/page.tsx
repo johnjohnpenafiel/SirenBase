@@ -85,21 +85,22 @@ export default function RTDEToolPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-dvh">
         <Header />
-        <main className="flex-1 flex items-center justify-center overflow-auto">
-          <div className="container max-w-2xl mx-auto px-4 py-12 text-center">
+        <main className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 flex items-center justify-center overflow-y-auto">
+            <div className="container max-w-2xl mx-auto px-4 py-6 md:py-12 text-center">
             {loading ? (
               <div className="flex flex-col items-center gap-4">
                 <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
                 <p className="text-muted-foreground">Loading...</p>
               </div>
             ) : (
-              <div className="space-y-8">
+              <div className="space-y-4 md:space-y-8">
                 {/* Icon */}
                 <div className="flex justify-center">
-                  <div className="rounded-full bg-primary/10 p-6">
-                    <ClipboardList className="h-16 w-16 text-primary" />
+                  <div className="rounded-full bg-primary/10 p-4 md:p-6">
+                    <ClipboardList className="h-12 w-12 md:h-16 md:w-16 text-primary" />
                   </div>
                 </div>
 
@@ -115,9 +116,9 @@ export default function RTDEToolPage() {
                 </div>
 
                 {/* How It Works */}
-                <div className="bg-muted/50 rounded-lg p-6 text-left space-y-3">
-                  <h2 className="font-semibold text-lg">How it works:</h2>
-                  <ol className="space-y-2 text-sm text-muted-foreground">
+                <div className="bg-muted/50 rounded-lg p-4 md:p-6 text-left space-y-2 md:space-y-3">
+                  <h2 className="font-semibold text-base md:text-lg">How it works:</h2>
+                  <ol className="space-y-1.5 md:space-y-2 text-sm text-muted-foreground">
                     <li className="flex gap-3">
                       <span className="shrink-0 font-bold text-foreground">1.</span>
                       <span>Count each item on the RTD&E display using the counting interface</span>
@@ -158,6 +159,7 @@ export default function RTDEToolPage() {
                 </Button>
               </div>
             )}
+            </div>
           </div>
         </main>
       </div>

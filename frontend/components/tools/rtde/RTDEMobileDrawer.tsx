@@ -140,7 +140,7 @@ export function RTDEMobileDrawer({
           </div>
 
           {/* "Start Pull List" button */}
-          <DrawerFooter className="border-t bg-background pb-6 flex items-center justify-center">
+          <DrawerFooter className="border-t bg-background pb-4 pb-safe flex items-center justify-center">
             <DrawerClose asChild>
               <Button
                 size="lg"

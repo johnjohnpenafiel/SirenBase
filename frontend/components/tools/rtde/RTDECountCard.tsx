@@ -111,8 +111,8 @@ export function RTDECountCard({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-4 md:gap-5",
-        "p-5 md:p-8",
+        "flex flex-col items-center gap-3 md:gap-5",
+        "p-4 md:p-8",
         "bg-gradient-to-br from-card to-card/95",
         "border border-border/50",
         "rounded-3xl",
@@ -123,9 +123,9 @@ export function RTDECountCard({
       )}
     >
       {/* Emoji Icon with Background - Enhanced with gradient and inner shadow */}
-      <div className="flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
+      <div className="flex items-center justify-center w-16 h-16 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
         <div
-          className="text-[3rem] md:text-[3.5rem] select-none"
+          className="text-[2.5rem] md:text-[3.5rem] select-none"
           aria-hidden="true"
         >
           {icon}

@@ -132,18 +132,8 @@ export function RTDECountCard({
         </div>
       </div>
 
-      {/* Item Name - Dynamic sizing based on length to prevent overflow */}
-      <h2
-        className={cn(
-          "leading-[1.1] tracking-tight font-bold text-center text-foreground",
-          // Dynamic font sizing: shorter names get larger text
-          itemName.length <= 12
-            ? "text-[1.75rem] md:text-[1.875rem]"
-            : itemName.length <= 20
-              ? "text-2xl md:text-[1.75rem]"
-              : "text-xl md:text-2xl"
-        )}
-      >
+      {/* Item Name - Refined typography with tight tracking */}
+      <h2 className="text-[1.75rem] md:text-[1.875rem] leading-[1.1] tracking-tight font-bold text-center text-foreground max-w-[280px]">
         {itemName}
       </h2>
 

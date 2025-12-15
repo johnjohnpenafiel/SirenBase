@@ -1183,36 +1183,75 @@ a:focus-visible {
 #### Standard Page Structure
 
 ```tsx
-<div className="flex flex-col h-dvh">
-  <Header />
+const [isScrolled, setIsScrolled] = useState(false);
 
-  <main className="flex-1 flex flex-col overflow-hidden">
-    {/* Fixed Controls - NO border-b! */}
-    <div>
-      <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
-        <h1>Page Title</h1>
-        <div>{/* Action buttons, filters */}</div>
+const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  // 16px threshold - shadow appears after intentional scroll, not accidental touch
+  setIsScrolled(e.currentTarget.scrollTop > 16);
+};
+
+return (
+  <div className="flex flex-col h-dvh">
+    <Header />
+
+    <main className="flex-1 flex flex-col overflow-hidden">
+      {/* Fixed Controls - Shadow fades in when content scrolls beneath */}
+      <div
+        className={cn(
+          "relative z-10 transition-all duration-300 ease-out",
+          isScrolled
+            ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
+            : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
+        )}
+      >
+        <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
+          <h1>Page Title</h1>
+          <div>{/* Action buttons, filters */}</div>
+        </div>
       </div>
-    </div>
 
-    {/* Scrollable Data - ONLY this scrolls */}
-    <div className="flex-1 overflow-y-auto">
-      <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
-        {/* Grid, list, table content */}
+      {/* Scrollable Data - ONLY this scrolls */}
+      <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+        <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
+          {/* Grid, list, table content */}
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
 
-  <Footer />
-</div>
+    <Footer />
+  </div>
+);
 ```
+
+#### Dynamic Scroll Shadow
+
+The fixed header section gains a subtle shadow when content scrolls beneath it, creating the visual effect of content sliding "under" the header rather than a harsh cut-off.
+
+**Implementation**:
+1. Add `useState` to track scroll state: `const [isScrolled, setIsScrolled] = useState(false)`
+2. Add scroll handler with **16px threshold**: `setIsScrolled(e.currentTarget.scrollTop > 16)`
+3. Apply conditional shadow to fixed section using `cn()`:
+   ```tsx
+   className={cn(
+     "relative z-10 transition-all duration-300 ease-out",
+     isScrolled
+       ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
+       : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
+   )}
+   ```
+   **Note**: Both states need explicit shadow values for smooth CSS transition between them.
+4. Add `pt-2` to scrollable content for breathing room
+
+**Why 16px threshold?** Prevents shadow from appearing on accidental touches or micro-scrolls. The shadow only appears after intentional scrolling, creating a more polished feel.
+
+**Shadow values**: `0_4px_12px_-2px_rgba(0,0,0,0.08)` creates a subtle downward shadow that's visible but not harsh.
 
 #### Implementation Rules
 
 1. **Root container**: `flex flex-col h-dvh`
 2. **Main element**: `flex-1 flex flex-col overflow-hidden`
-3. **Fixed controls**: Plain `<div>` wrapper (no border-b for seamless flow)
-4. **Scrollable area**: `flex-1 overflow-y-auto`
+3. **Fixed controls**: `relative z-10` with conditional scroll shadow
+4. **Scrollable area**: `flex-1 overflow-y-auto` with `onScroll` handler
 
 #### Mobile-Specific Requirements
 
@@ -1234,7 +1273,8 @@ The `pb-safe` utility adds `padding-bottom: env(safe-area-inset-bottom)` to resp
 |---------|----------------|
 | Full-page layout | `h-dvh` on root container |
 | Fixed header/footer | Outside the scrollable area |
-| Scrollable content | `flex-1 overflow-y-auto` |
+| Scrollable content | `flex-1 overflow-y-auto` with `onScroll` handler |
+| Scroll shadow | `shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]` when `isScrolled` |
 | Modal body | `max-h-[80vh] overflow-y-auto` |
 | Safe area padding | `pb-safe` utility class |
 

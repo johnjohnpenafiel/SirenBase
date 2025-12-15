@@ -452,7 +452,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-dvh">
           <Header />
           <main className="flex-1 flex items-center justify-center">
             <div className="flex flex-col items-center gap-4">
@@ -487,7 +487,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-dvh">
         <Header />
 
         {/* Layout with Sidebar (Desktop) */}

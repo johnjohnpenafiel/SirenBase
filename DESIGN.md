@@ -267,98 +267,103 @@ This principle ensures that SirenBase remains intuitive and functional across de
 
 ### Color System
 
-**Foundation**: We use the **Nature Theme** from ShadCN UI - a green/nature-inspired color palette with OKLCH values for better perceptual uniformity.
+**Foundation**: We use a **Supabase-inspired mint/teal palette** with OKLCH values for better perceptual uniformity. The palette features clean neutral backgrounds with a vibrant mint/teal primary color.
 
 **Design Decision**: All tools share the same color palette for consistency. No tool-specific accent colors.
 
 #### Light Mode (Default)
 
 ```css
-/* Base Colors - Warm cream backgrounds */
---background: oklch(0.9711 0.0074 80.7211)   /* Cream white */
---foreground: oklch(0.3000 0.0358 30.2042)   /* Dark olive */
+/* Base Colors - Clean neutral backgrounds */
+--background: oklch(0.9911 0 0);             /* Near-white */
+--foreground: oklch(0.2046 0 0);             /* Dark gray */
 
 /* Surfaces */
---card: oklch(0.9711 0.0074 80.7211)         /* Cream white */
---card-foreground: oklch(0.3000 0.0358 30.2042)
---popover: oklch(0.9711 0.0074 80.7211)
+--card: oklch(0.9911 0 0);                   /* Near-white */
+--card-foreground: oklch(0.2046 0 0);
+--popover: oklch(0.9911 0 0);
+--popover-foreground: oklch(0.4386 0 0);     /* Medium gray */
 
-/* Interactive Elements - Green primary color */
---primary: oklch(0.5234 0.1347 144.1672)     /* Medium green */
---primary-foreground: oklch(1.0000 0 0)      /* White */
---secondary: oklch(0.9571 0.0210 147.6360)   /* Very light green */
---secondary-foreground: oklch(0.4254 0.1159 144.3078)
+/* Interactive Elements - Mint/teal primary */
+--primary: oklch(0.8348 0.1302 160.9080);    /* Vibrant mint */
+--primary-foreground: oklch(0.2626 0.0147 166.4589);  /* Dark teal */
+--secondary: oklch(0.9940 0 0);              /* Off-white */
+--secondary-foreground: oklch(0.2046 0 0);
 
 /* States */
---muted: oklch(0.9370 0.0142 74.4218)        /* Light tan */
---muted-foreground: oklch(0.4495 0.0486 39.2110)
---accent: oklch(0.8952 0.0504 146.0366)      /* Light green accent */
---accent-foreground: oklch(0.4254 0.1159 144.3078)
---destructive: oklch(0.5386 0.1937 26.7249)  /* Red-orange */
+--muted: oklch(0.9461 0 0);                  /* Light gray */
+--muted-foreground: oklch(0.2435 0 0);       /* Dark gray */
+--accent: oklch(0.9461 0 0);                 /* Light gray */
+--accent-foreground: oklch(0.2435 0 0);
+--destructive: oklch(0.5523 0.1927 32.7272); /* Red */
+--destructive-foreground: oklch(0.9934 0.0032 17.2118);
 
 /* Borders & Inputs */
---border: oklch(0.8805 0.0208 74.6428)       /* Light tan border */
---input: oklch(0.8805 0.0208 74.6428)
---ring: oklch(0.5234 0.1347 144.1672)        /* Green focus ring */
+--border: oklch(0.9037 0 0);                 /* Subtle gray border */
+--input: oklch(0.9731 0 0);                  /* Light input background */
+--ring: oklch(0.8348 0.1302 160.9080);       /* Mint focus ring */
 ```
 
 #### Dark Mode
 
 ```css
-/* Base Colors - Dark green backgrounds */
---background: oklch(0.2683 0.0279 150.7681)  /* Dark green-gray */
---foreground: oklch(0.9423 0.0097 72.6595)   /* Off-white */
---card: oklch(0.3327 0.0271 146.9867)        /* Slightly lighter green */
---card-foreground: oklch(0.9423 0.0097 72.6595)
+/* Base Colors - Dark neutral backgrounds */
+--background: oklch(0.1822 0 0);             /* Near-black */
+--foreground: oklch(0.9288 0.0126 255.5078); /* Off-white with slight blue */
+--card: oklch(0.2046 0 0);                   /* Dark gray */
+--card-foreground: oklch(0.9288 0.0126 255.5078);
+--popover: oklch(0.2603 0 0);
+--popover-foreground: oklch(0.7348 0 0);
 
 /* Interactive Elements */
---primary: oklch(0.6731 0.1624 144.2083)     /* Bright green */
---primary-foreground: oklch(0.2157 0.0453 145.7256)  /* Dark green */
---secondary: oklch(0.3942 0.0265 142.9926)
---secondary-foreground: oklch(0.8970 0.0166 142.5518)
+--primary: oklch(0.4365 0.1044 156.7556);    /* Deep teal */
+--primary-foreground: oklch(0.9213 0.0135 167.1556);  /* Light mint */
+--secondary: oklch(0.2603 0 0);
+--secondary-foreground: oklch(0.9851 0 0);
 
 /* States */
---muted: oklch(0.2926 0.0212 147.7496)
---muted-foreground: oklch(0.8579 0.0174 76.0955)
---accent: oklch(0.5752 0.1446 144.1813)
---accent-foreground: oklch(0.9423 0.0097 72.6595)
---destructive: oklch(0.5386 0.1937 26.7249)
+--muted: oklch(0.2393 0 0);
+--muted-foreground: oklch(0.7122 0 0);
+--accent: oklch(0.3132 0 0);
+--accent-foreground: oklch(0.9851 0 0);
+--destructive: oklch(0.3123 0.0852 29.7877);
+--destructive-foreground: oklch(0.9368 0.0045 34.3092);
 
 /* Borders & Inputs */
---border: oklch(0.3942 0.0265 142.9926)
---input: oklch(0.3942 0.0265 142.9926)
---ring: oklch(0.6731 0.1624 144.2083)
+--border: oklch(0.2809 0 0);
+--input: oklch(0.2603 0 0);
+--ring: oklch(0.8003 0.1821 151.7110);
 ```
 
-#### Chart Colors (for future data visualization)
+#### Chart Colors (for data visualization)
 
 ```css
-/* Light Mode */
---chart-1: oklch(0.6731 0.1624 144.2083)  /* Bright green */
---chart-2: oklch(0.5752 0.1446 144.1813)  /* Medium green */
---chart-3: oklch(0.5234 0.1347 144.1672)  /* Primary green */
---chart-4: oklch(0.4254 0.1159 144.3078)  /* Dark green */
---chart-5: oklch(0.2157 0.0453 145.7256)  /* Very dark green */
+/* Light Mode - Diverse color palette */
+--chart-1: oklch(0.8348 0.1302 160.9080);  /* Mint (primary) */
+--chart-2: oklch(0.6231 0.1880 259.8145);  /* Blue */
+--chart-3: oklch(0.6056 0.2189 292.7172);  /* Purple */
+--chart-4: oklch(0.7686 0.1647 70.0804);   /* Orange */
+--chart-5: oklch(0.6959 0.1491 162.4796);  /* Teal */
 
 /* Dark Mode */
---chart-1: oklch(0.7660 0.1179 145.2950)
---chart-2: oklch(0.7185 0.1417 144.8887)
---chart-3: oklch(0.6731 0.1624 144.2083)
---chart-4: oklch(0.6291 0.1543 144.2031)
---chart-5: oklch(0.5752 0.1446 144.1813)
+--chart-1: oklch(0.8003 0.1821 151.7110);
+--chart-2: oklch(0.7137 0.1434 254.6240);
+--chart-3: oklch(0.7090 0.1592 293.5412);
+--chart-4: oklch(0.8369 0.1644 84.4286);
+--chart-5: oklch(0.7845 0.1325 181.9120);
 ```
 
 ### Typography
 
-**Font Stack**: Nature theme uses **Montserrat** (sans-serif), **Merriweather** (serif), and **Source Code Pro** (monospace)
+**Font Stack**: We use **Montserrat** as the primary UI font, loaded via Next.js font optimization. System defaults are used for serif and monospace to minimize bundle size.
 
 ```css
---font-sans: Montserrat, sans-serif        /* Primary UI font */
---font-serif: Merriweather, serif          /* Optional for headings */
---font-mono: Source Code Pro, monospace    /* Code, item codes */
+--font-sans: Montserrat, sans-serif        /* Primary UI font (loaded via next/font) */
+--font-serif: ui-serif, Georgia, serif     /* System serif (rarely used) */
+--font-mono: monospace                     /* System monospace (item codes) */
 ```
 
-**Note**: These fonts need to be imported. Add to your HTML or use Next.js font optimization.
+**Implementation Note**: Montserrat is imported in `app/layout.tsx` using `next/font/google` for optimal loading performance. Serif and monospace fonts use system defaults since they're rarely needed in this UI-focused application.
 
 #### Font Sizes (Mobile-First)
 
@@ -543,8 +548,8 @@ Mobile-first responsive design:
 
 - **Background**: `bg-card` (white in light mode, dark gray in dark mode)
 - **Border**: `border border-border` (subtle gray)
-- **Rounding**: `rounded-xl` (14px) for large cards, `rounded-lg` (10px) for small cards
-- **Shadow**: `shadow-md` (default), `shadow-none` for flat designs
+- **Rounding**: `rounded-xl` (12px) for large cards, `rounded-lg` (8px) for small cards
+- **Shadow**: `shadow-none` by default with `hover:shadow-md` for interactive cards
 - **Padding**:
   - `CardHeader`: `p-6` (24px)
   - `CardContent`: `px-6 py-4` (24px horizontal, 16px vertical)
@@ -553,20 +558,19 @@ Mobile-first responsive design:
 #### Tool-Specific Card Patterns
 
 **Dashboard Tool Cards**:
-- Large, clickable cards
+- Large, clickable cards with `hover:shadow-md` transition
 - Icon at top (48x48px)
 - Tool name (text-2xl, semibold)
 - Brief description (text-sm, muted)
 - Subtle hover effect (scale 1.02, shadow increase)
 
 **Inventory Item Cards**:
-- Compact horizontal layout
-- Left: Item name + category badge
-- Right: Item code (monospace) + remove button
-- No shadow, border only
+- Compact layout with border emphasis
+- `border-[1.5px] border-border hover:border-slate-600 hover:shadow-md`
+- No shadow at rest, shadow on hover
 
 **Milk Count Section Cards**:
-- Rounded corners, shadow-md
+- Rounded corners with border
 - Section header (FOH/BOH)
 - Grid of milk types with input fields
 - Summary row at bottom
@@ -1148,270 +1152,106 @@ a:focus-visible {
 </div>
 ```
 
+### Viewport Height Units (CRITICAL for Mobile)
+
+**⚠️ ALWAYS use `h-dvh` instead of `h-screen` for full-viewport layouts.**
+
+| Unit | CSS Equivalent | Mobile Behavior | When to Use |
+|------|----------------|-----------------|-------------|
+| `h-screen` | `100vh` | ❌ Includes browser toolbar height - content gets cut off | **Never** for app layouts |
+| `h-dvh` | `100dvh` | ✅ Adjusts to actual visible area as browser chrome hides/shows | **Always** for full-page layouts |
+
+**Why This Matters**: On mobile browsers, `100vh` includes the address bar height, causing content to be hidden behind it. `100dvh` (dynamic viewport height) responds to the actual visible area, ensuring buttons and content remain accessible.
+
+```tsx
+// ❌ WRONG - Content will be cut off on mobile
+<div className="flex flex-col h-screen">
+
+// ✅ CORRECT - Respects mobile browser chrome
+<div className="flex flex-col h-dvh">
+```
+
 ### Scrolling Behavior (App-Like Experience)
 
-**Design Guideline**: Use **in-place list scrolling** with the "infinity pool" effect. ONLY the data list/grid scrolls, while all controls (title, buttons, filters) remain fixed and visible.
+**Design Guideline**: Use **in-place list scrolling** where ONLY the data list/grid scrolls, while controls (title, buttons, filters) remain fixed and visible.
 
-**Why**:
-- Creates a focused, app-like experience with stable navigation
+**Key Benefits**:
 - Controls always accessible without scrolling back up
-- Seamless visual flow without borders creates a polished, modern aesthetic
 - Mobile-friendly: action buttons never scroll out of reach
+- App-like experience with stable navigation
 
-**The "Infinity Pool" Effect**: No visual border between fixed controls and scrollable content. The list appears to flow seamlessly from the controls, creating the illusion of infinite content that extends naturally from the interface.
+#### Standard Page Structure
 
-#### Implementation Pattern (STANDARD FOR ALL PAGES)
-
-**Structure Overview**:
 ```tsx
-<div className="flex flex-col h-screen">
-  {/* Global Header - Fixed */}
+<div className="flex flex-col h-dvh">
   <Header />
 
-  {/* Main Content - Uses flex-col with overflow-hidden */}
   <main className="flex-1 flex flex-col overflow-hidden">
-
-    {/* Fixed Controls Section - NO BORDER! */}
+    {/* Fixed Controls - NO border-b! */}
     <div>
       <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
-        {/* Title, buttons, filters, toggles - ALL FIXED */}
         <h1>Page Title</h1>
-        <div>{/* Action buttons */}</div>
-        <div>{/* Filters or view toggles */}</div>
+        <div>{/* Action buttons, filters */}</div>
       </div>
     </div>
 
-    {/* Scrollable Data Area - ONLY THIS SCROLLS */}
+    {/* Scrollable Data - ONLY this scrolls */}
     <div className="flex-1 overflow-y-auto">
       <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
-        {/* Categories grid, items list, table, etc. */}
-        {/* This is the ONLY part that scrolls */}
+        {/* Grid, list, table content */}
       </div>
     </div>
-
   </main>
 
-  {/* Footer - Fixed */}
   <Footer />
 </div>
 ```
 
-#### Key Implementation Rules
+#### Implementation Rules
 
-**1. Main Element Structure**:
-- Use `flex-1 flex flex-col overflow-hidden` on `<main>`
-- This creates a flex container that prevents the entire main from scrolling
+1. **Root container**: `flex flex-col h-dvh`
+2. **Main element**: `flex-1 flex flex-col overflow-hidden`
+3. **Fixed controls**: Plain `<div>` wrapper (no border-b for seamless flow)
+4. **Scrollable area**: `flex-1 overflow-y-auto`
 
-**2. Fixed Controls Section**:
-- Wrap in a plain `<div>` (no border-b!)
-- Contains: page title, action buttons, filters, view toggles
-- Uses container for max-width but NO padding-bottom (seamless transition)
-
-**3. Scrollable List Section**:
-- Use `flex-1 overflow-y-auto` to make it scrollable
-- Contains: data grid/list, pagination, empty states
-- Nested container with py-6 for proper spacing
-
-**4. No Borders Between Sections**:
-- ❌ DO NOT use `border-b border-border` on fixed section
-- ✅ Let content flow seamlessly (infinity pool effect)
-
-#### Real-World Examples
-
-**Example 1: Inventory Page**:
-```tsx
-export default function InventoryPage() {
-  return (
-    <ProtectedRoute>
-      <div className="flex flex-col h-screen">
-        <Header />
-        <main className="flex-1 flex flex-col overflow-hidden">
-
-          {/* Fixed Controls - Title + Buttons + Toggles */}
-          <div>
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
-              <div className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl md:text-3xl font-bold">
-                  Inventory Tracking
-                </h1>
-                <div className="flex gap-2">
-                  <Button variant="outline">
-                    <History className="h-4 w-4 md:mr-2" />
-                    <span className="hidden md:inline">History</span>
-                  </Button>
-                  <Button>
-                    <Plus className="h-4 w-4 md:mr-2" />
-                    <span className="hidden md:inline">Add Item</span>
-                  </Button>
-                </div>
-              </div>
-
-              {/* View Toggle Buttons */}
-              <div className="flex gap-2">
-                <Button variant="outline">All Items</Button>
-                <Button variant="outline">Categories</Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Scrollable List - ONLY THIS SCROLLS */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
-              {/* Categories grid or Items list */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {categories.map(cat => (
-                  <CategoryCard key={cat.id} {...cat} />
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </main>
-        <Footer />
-      </div>
-    </ProtectedRoute>
-  );
-}
-```
-
-**Example 2: History Page**:
-```tsx
-export default function HistoryPage() {
-  return (
-    <ProtectedRoute>
-      <div className="flex flex-col h-screen">
-        <Header />
-        <main className="flex-1 flex flex-col overflow-hidden">
-
-          {/* Fixed Controls - Title + Back Button + Filters */}
-          <div>
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
-              <Button variant="ghost" onClick={() => router.back()}>
-                <ArrowLeft className="h-4 w-4 md:mr-2" />
-                <span className="hidden md:inline">Back</span>
-              </Button>
-              <h1 className="text-2xl font-bold mb-2">Audit History</h1>
-
-              {/* Filter dropdown */}
-              <Select value={filter} onValueChange={setFilter}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Actions</SelectItem>
-                  <SelectItem value="add">Add Only</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {/* Scrollable Table - ONLY THIS SCROLLS */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
-              {/* History table and pagination */}
-              <table className="w-full">
-                {/* Table content */}
-              </table>
-
-              {/* Pagination also scrolls with table */}
-              <div className="flex justify-between mt-6">
-                <Button variant="outline">Previous</Button>
-                <Button variant="outline">Next</Button>
-              </div>
-            </div>
-          </div>
-
-        </main>
-        <Footer />
-      </div>
-    </ProtectedRoute>
-  );
-}
-```
-
-**Example 3: Admin Page**:
-```tsx
-export default function AdminPage() {
-  return (
-    <ProtectedRoute requireAdmin>
-      <div className="flex flex-col h-screen">
-        <Header />
-        <main className="flex-1 flex flex-col overflow-hidden">
-
-          {/* Fixed Controls - Title + Add Button */}
-          <div>
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
-              <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold">Admin Panel</h1>
-                <Button onClick={() => setAddDialogOpen(true)}>
-                  <Plus className="h-4 w-4 md:mr-2" />
-                  <span className="hidden md:inline">Add User</span>
-                </Button>
-              </div>
-              <p className="text-muted-foreground">Manage user accounts</p>
-            </div>
-          </div>
-
-          {/* Scrollable Table - ONLY THIS SCROLLS */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-6">
-              {/* Users table */}
-              <table className="w-full">
-                {/* Table content */}
-              </table>
-            </div>
-          </div>
-
-        </main>
-        <Footer />
-      </div>
-    </ProtectedRoute>
-  );
-}
-```
-
-#### Mobile-Specific Scrolling
-
-**Touch Optimization**:
-```css
-/* Enable momentum scrolling on iOS */
-.overflow-y-auto {
-  -webkit-overflow-scrolling: touch;
-}
-```
+#### Mobile-Specific Requirements
 
 **Safe Area Insets** (for notched devices):
 ```tsx
-<div className="h-screen pb-safe">
-  {/* Content respects iOS safe areas */}
+// Bottom navigation or fixed buttons
+<div className="pb-4 pb-safe">
+  <Button>Action</Button>
 </div>
 ```
 
-#### Quick Reference: Common Patterns
+The `pb-safe` utility adds `padding-bottom: env(safe-area-inset-bottom)` to respect iOS safe areas.
 
-| Pattern | Use Case | Implementation |
-|---------|----------|----------------|
-| **In-place list scrolling** | All tool pages (standard) | Fixed controls + `flex-1 overflow-y-auto` list container |
-| **Modal with scrollable body** | Long forms, dialogs | `max-h-[80vh] overflow-y-auto` inside DialogContent |
-| **Scrollable data table** | History, admin tables | Table inside `flex-1 overflow-y-auto` container |
-| **Scrollable grid** | Categories, tool cards | Grid inside `flex-1 overflow-y-auto` container |
+**Touch Optimization**: Already configured in `globals.css` with `-webkit-overflow-scrolling: touch`.
+
+#### Quick Reference
+
+| Pattern | Implementation |
+|---------|----------------|
+| Full-page layout | `h-dvh` on root container |
+| Fixed header/footer | Outside the scrollable area |
+| Scrollable content | `flex-1 overflow-y-auto` |
+| Modal body | `max-h-[80vh] overflow-y-auto` |
+| Safe area padding | `pb-safe` utility class |
 
 #### What NOT to Do
 
 ❌ **Avoid**:
+- Using `h-screen` for full-viewport layouts (use `h-dvh`)
 - Full-page scrolling where controls scroll out of view
-- Adding `border-b border-border` between fixed controls and scrollable content (breaks infinity pool effect)
-- Multiple nested scrollable containers (confusing UX)
+- Adding `border-b` between fixed controls and scrollable content
+- Multiple nested scrollable containers
 - Making the entire `<main>` scrollable instead of just the data section
-- Horizontal scrolling (except for carousels)
-- Scroll hijacking or custom scroll behavior
 
 ✅ **Do**:
-- Always use the standard in-place scrolling pattern (fixed controls + scrollable list)
-- Keep all action buttons and filters fixed (always visible)
-- Use seamless transitions (no borders between sections)
-- Test on mobile devices for momentum scrolling
-- Ensure touch targets meet 44x44px minimum
+- Use `h-dvh` for all full-viewport layouts
+- Keep action buttons and filters fixed (always visible)
+- Use `pb-safe` on bottom-fixed elements
+- Test on real mobile devices (not just browser dev tools)
 
 ---
 
@@ -1572,14 +1412,21 @@ Use this checklist when implementing new UI:
 ---
 
 **Last Updated**: December 14, 2025
-**Version**: 3.4.0
+**Version**: 3.5.0
 **Maintainer**: Development Team
 
 **Change Log**:
-- **v3.4.0** (Dec 14, 2025): Added "Design DNA: Foundational Truths" section — six non-negotiable principles that define the interface philosophy. Extracted from mobile viewport fixes: (1) Interface serves user, never reverse (2) Design for reality, not theory (3) Content must earn its space (4) Platform constraints are design partners (5) Density adapts, functionality doesn't (6) Scroll intentionally, never accidentally. These principles capture the "why" behind design decisions for all future UI work.
+- **v3.5.0** (Dec 14, 2025): **MAJOR AUDIT & CORRECTIONS** — Fixed documentation to match actual codebase implementation:
+  - **Color System**: Corrected from "Nature Theme" to actual Supabase-inspired mint/teal palette. Updated all OKLCH values to match `globals.css`.
+  - **Typography**: Fixed font stack documentation. Removed claims about Merriweather and Source Code Pro (never implemented). Documented actual fonts: Montserrat (loaded via next/font), system serif, system monospace.
+  - **Viewport Height**: Added critical "Viewport Height Units" section. **ALWAYS use `h-dvh` instead of `h-screen`** for mobile-safe layouts. Added comparison table explaining why `100vh` fails on mobile.
+  - **Scrolling Section**: Condensed from 264 lines to ~100 lines. Removed redundant examples. Updated all code examples to use `h-dvh`.
+  - **Card Shadows**: Changed default from `shadow-md` to `shadow-none` with `hover:shadow-md` to match actual implementation.
+  - Removed outdated "Nature theme" references from 5 component files.
+- **v3.4.0** (Dec 14, 2025): Added "Design DNA: Foundational Truths" section — six non-negotiable principles that define the interface philosophy. Extracted from mobile viewport fixes: (1) Interface serves user, never reverse (2) Design for reality, not theory (3) Content must earn its space (4) Platform constraints are design partners (5) Density adapts, functionality doesn't (6) Scroll intentionally, never accidentally.
 - **v3.3.0** (Dec 12, 2025): Version sync with project-wide cleanup. No design changes.
-- **v1.4.0** (Nov 9, 2025): **MAJOR UPDATE**: Completely rewrote scrolling behavior section with "infinity pool" in-place scrolling pattern. ONLY data lists scroll while all controls remain fixed and visible. Removed borders between fixed/scrollable sections for seamless visual flow. Added 3 complete real-world examples (Inventory, History, Admin). Updated implementation rules, common patterns table, and what NOT to do section. This is now the STANDARD pattern for all pages.
-- **v1.3.0** (Nov 8, 2025): Added "Adaptive and Purposeful Interface Behavior" philosophy with comprehensive viewport adaptation framework. Includes desktop/mobile prioritization guidelines, functional consistency principles, information hierarchy table (P1-P4), 4 adaptive component patterns, and responsive testing checklist. Emphasizes clarity, adaptability, and intent across all screen sizes.
-- **v1.2.0** (Nov 8, 2025): Added comprehensive scrolling behavior guidelines for app-like experience. Added 6th core principle: "App-Like Behavior". Includes implementation patterns, code examples, mobile optimization, and common patterns table. Emphasizes contained scrolling over full-page scrolling.
-- **v1.1.0** (Nov 8, 2025): Updated to use Nature theme from tweakcn.com. Removed tool-specific accent colors for consistent green/nature palette across all tools. Updated font stack to Montserrat/Merriweather/Source Code Pro. Changed base radius from 10px to 8px.
-- **v1.0.0** (Nov 8, 2025): Initial design system documentation created based on existing ShadCN UI setup, mobile-first principles, and multi-tool architecture.
+- **v1.4.0** (Nov 9, 2025): Completely rewrote scrolling behavior section with "infinity pool" in-place scrolling pattern.
+- **v1.3.0** (Nov 8, 2025): Added "Adaptive and Purposeful Interface Behavior" philosophy with viewport adaptation framework.
+- **v1.2.0** (Nov 8, 2025): Added scrolling behavior guidelines. Added 6th core principle: "App-Like Behavior".
+- **v1.1.0** (Nov 8, 2025): Initial theme setup with ShadCN. Changed base radius from 10px to 8px.
+- **v1.0.0** (Nov 8, 2025): Initial design system documentation.

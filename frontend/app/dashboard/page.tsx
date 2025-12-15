@@ -5,8 +5,8 @@
  * Shows admin panel card only for admin role users.
  *
  * Follows DESIGN.md guidelines:
- * - App-like scrolling (h-screen layout with overflow-y-auto)
- * - Nature theme color tokens
+ * - App-like scrolling (h-dvh layout with overflow-y-auto)
+ * - Design system color tokens
  * - Responsive grid (1/2/3 columns)
  */
 "use client";

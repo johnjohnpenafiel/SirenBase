@@ -6,7 +6,7 @@
  * - Desktop: Dashboard button + User icon with name → dropdown with Logout
  * - Mobile: Dashboard icon + User icon only → dropdown with Logout
  * - Sticky positioning with backdrop blur for app-like feel
- * - Uses Nature theme color tokens
+ * - Uses design system color tokens
  */
 "use client";
 

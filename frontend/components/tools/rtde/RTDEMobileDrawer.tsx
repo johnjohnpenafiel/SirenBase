@@ -113,8 +113,13 @@ export function RTDEMobileDrawer({
                         </span>
                       </div>
 
-                      {/* Item name and count */}
+                      {/* Brand, Item name and count */}
                       <div className="flex-1 min-w-0">
+                        {item.brand && (
+                          <span className="text-xs text-gray-500 truncate block">
+                            {item.brand}
+                          </span>
+                        )}
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-medium truncate">
                             {item.name}

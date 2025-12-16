@@ -81,6 +81,9 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
 
       {/* Item Info */}
       <div className="flex-1 min-w-0">
+        {item.brand && (
+          <p className="text-xs text-gray-500 truncate">{item.brand}</p>
+        )}
         <p className="font-medium truncate">{item.name}</p>
         <p className="text-sm text-muted-foreground">
           Par: {item.par_level}

@@ -100,6 +100,7 @@ export function generatePullList(items: RTDEItem[]): RTDEPullItem[] {
     .map((item) => ({
       itemId: item.itemId,
       name: item.name,
+      brand: item.brand,
       icon: item.icon,
       needQuantity: item.needQuantity,
       isPulled: item.isPulled,

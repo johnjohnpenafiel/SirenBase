@@ -101,6 +101,7 @@ export function RTDECountingPhase({
             <div className="w-full max-w-lg">
               <RTDECountCard
                 itemName={currentItem.name}
+                brand={currentItem.brand}
                 icon={currentItem.icon}
                 parLevel={currentItem.parLevel}
                 currentCount={currentItem.countedQuantity ?? 0}

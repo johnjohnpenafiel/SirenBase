@@ -157,6 +157,7 @@ export interface ErrorResponse {
 export interface RTDEItem {
   id: string;
   name: string;
+  brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
   icon: string; // Emoji (🥪, 🥤, etc.)
   par_level: number;
   display_order: number;
@@ -180,6 +181,7 @@ export interface RTDESessionWithItems extends RTDESession {
 export interface RTDESessionItem {
   item_id: string;
   name: string;
+  brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
   icon: string;
   par_level: number;
   display_order: number;
@@ -191,6 +193,7 @@ export interface RTDESessionItem {
 export interface RTDEPullListItem {
   item_id: string;
   name: string;
+  brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
   icon: string;
   need_quantity: number;
   is_pulled: boolean;
@@ -203,6 +206,7 @@ export interface GetRTDEItemsResponse {
 
 export interface CreateRTDEItemRequest {
   name: string;
+  brand?: string;
   icon: string;
   par_level: number;
 }
@@ -214,6 +218,7 @@ export interface CreateRTDEItemResponse {
 
 export interface UpdateRTDEItemRequest {
   name?: string;
+  brand?: string | null;
   icon?: string;
   par_level?: number;
   active?: boolean;

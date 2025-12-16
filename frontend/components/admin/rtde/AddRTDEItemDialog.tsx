@@ -48,6 +48,7 @@ export function AddRTDEItemDialog({
     resolver: zodResolver(rtdeItemSchema),
     defaultValues: {
       name: '',
+      brand: '',
       icon: '',
       par_level: 0,
     },
@@ -63,6 +64,7 @@ export function AddRTDEItemDialog({
     try {
       await apiClient.createRTDEItem({
         name: data.name,
+        brand: data.brand || undefined,
         icon: data.icon,
         par_level: data.par_level,
       });
@@ -107,6 +109,28 @@ export function AddRTDEItemDialog({
                   </FormControl>
                   <FormDescription>
                     The display name for this RTD&E item
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Brand (Optional) */}
+            <FormField
+              control={form.control}
+              name="brand"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Brand (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Evolution"
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Brand name displayed above the item name
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

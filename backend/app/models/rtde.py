@@ -26,6 +26,7 @@ class RTDEItem(db.Model):
     Attributes:
         id: UUID primary key
         name: Item name (e.g., "Egg & Cheese Sandwich")
+        brand: Brand name (e.g., "Evolution") - optional, displayed above item name
         icon: Emoji icon for visual recognition (e.g., "🥪")
         par_level: Target quantity for display
         display_order: Position in counting sequence (1, 2, 3...)
@@ -45,6 +46,7 @@ class RTDEItem(db.Model):
 
     # Item details
     name: Mapped[str] = mapped_column(String(100), nullable=False)
+    brand: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     icon: Mapped[str] = mapped_column(String(10), nullable=False)
     par_level: Mapped[int] = mapped_column(Integer, nullable=False)
     display_order: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -80,6 +82,7 @@ class RTDEItem(db.Model):
         return {
             'id': self.id,
             'name': self.name,
+            'brand': self.brand,
             'icon': self.icon,
             'par_level': self.par_level,
             'display_order': self.display_order,
@@ -91,7 +94,8 @@ class RTDEItem(db.Model):
     def __repr__(self) -> str:
         """String representation for debugging."""
         status = "ACTIVE" if self.active else "INACTIVE"
-        return f'<RTDEItem {self.icon} {self.name} - Par: {self.par_level} ({status})>'
+        brand_str = f"{self.brand} " if self.brand else ""
+        return f'<RTDEItem {self.icon} {brand_str}{self.name} - Par: {self.par_level} ({status})>'
 
 
 class RTDECountSession(db.Model):

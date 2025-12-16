@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 
 interface RTDECountCardProps {
   itemName: string;
+  brand?: string | null; // Brand name displayed above item name
   icon: string; // Emoji
   parLevel: number;
   currentCount: number;
@@ -31,6 +32,7 @@ interface RTDECountCardProps {
 
 export function RTDECountCard({
   itemName,
+  brand,
   icon,
   parLevel,
   currentCount,
@@ -132,10 +134,17 @@ export function RTDECountCard({
         </div>
       </div>
 
-      {/* Item Name - Refined typography with tight tracking */}
-      <h2 className="text-[1.75rem] md:text-[1.875rem] leading-[1.1] tracking-tight font-bold text-center text-foreground max-w-[280px]">
-        {itemName}
-      </h2>
+      {/* Brand & Item Name - Brand displayed as secondary info above item name */}
+      <div className="flex flex-col items-center gap-0.5">
+        {brand && (
+          <span className="text-xs md:text-sm font-medium text-gray-500 text-center">
+            {brand}
+          </span>
+        )}
+        <h2 className="text-[1.75rem] md:text-[1.875rem] leading-[1.1] tracking-tight font-bold text-center text-foreground max-w-[280px]">
+          {itemName}
+        </h2>
+      </div>
 
       {/* Par Level Info - Refined as subtle pill badge */}
       <div className="flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-muted/40 rounded-full border border-border/30">

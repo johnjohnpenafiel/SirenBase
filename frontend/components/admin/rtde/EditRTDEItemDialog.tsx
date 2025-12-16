@@ -35,6 +35,7 @@ import apiClient from '@/lib/api';
 import { toast } from 'sonner';
 import { editRTDEItemSchema, type EditRTDEItemFormData } from '@/lib/validations/rtde';
 import type { RTDEItem } from '@/types';
+import { RTDEItemImage } from '@/components/tools/rtde/RTDEItemImage';
 
 interface EditRTDEItemDialogProps {
   open: boolean;
@@ -66,7 +67,7 @@ export function EditRTDEItemDialog({
       form.reset({
         name: item.name,
         brand: item.brand || '',
-        icon: item.icon,
+        icon: item.icon || '',
         par_level: item.par_level,
         active: item.active,
       });
@@ -86,7 +87,7 @@ export function EditRTDEItemDialog({
       await apiClient.updateRTDEItem(item.id, {
         name: data.name,
         brand: data.brand || null,
-        icon: data.icon,
+        icon: data.icon || null,
         par_level: data.par_level,
         active: data.active,
       });
@@ -109,12 +110,35 @@ export function EditRTDEItemDialog({
         <DialogHeader>
           <DialogTitle>Edit RTD&E Item</DialogTitle>
           <DialogDescription>
-            Update item details, par level, or active status.
+            Update item details, par level, or active status. Product images are
+            managed by engineering.
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* Current Image Preview (Read-only) */}
+            {item && (
+              <div className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
+                <RTDEItemImage
+                  imageFilename={item.image_filename}
+                  icon={item.icon}
+                  size="md"
+                  alt={`${item.brand ? `${item.brand} ` : ''}${item.name}`}
+                />
+                <div className="flex-1 min-w-0">
+                  <Label className="text-sm font-medium">Current Display</Label>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {item.image_filename
+                      ? `Image: ${item.image_filename}`
+                      : item.icon
+                        ? `Emoji: ${item.icon}`
+                        : 'Placeholder icon'}
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Item Name */}
             <FormField
               control={form.control}
@@ -156,13 +180,13 @@ export function EditRTDEItemDialog({
               )}
             />
 
-            {/* Icon/Emoji */}
+            {/* Icon/Emoji (Optional) */}
             <FormField
               control={form.control}
               name="icon"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Icon/Emoji</FormLabel>
+                  <FormLabel>Icon/Emoji (Optional)</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="🥪"
@@ -171,6 +195,9 @@ export function EditRTDEItemDialog({
                       maxLength={10}
                     />
                   </FormControl>
+                  <FormDescription>
+                    Optional emoji fallback if no product image exists
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

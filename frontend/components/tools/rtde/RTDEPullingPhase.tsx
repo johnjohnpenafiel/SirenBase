@@ -164,6 +164,7 @@ export function RTDEPullingPhase({
                   key={item.itemId}
                   itemName={item.name}
                   brand={item.brand}
+                  imageFilename={item.imageFilename}
                   icon={item.icon}
                   quantityNeeded={item.needQuantity}
                   isPulled={item.isPulled}

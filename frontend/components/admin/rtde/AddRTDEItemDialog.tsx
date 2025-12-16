@@ -87,7 +87,8 @@ export function AddRTDEItemDialog({
         <DialogHeader>
           <DialogTitle>Add RTD&E Item</DialogTitle>
           <DialogDescription>
-            Create a new item for the RTD&E display with par level and icon.
+            Create a new item for the RTD&E display. Product images are managed
+            by engineering.
           </DialogDescription>
         </DialogHeader>
 
@@ -137,13 +138,13 @@ export function AddRTDEItemDialog({
               )}
             />
 
-            {/* Icon/Emoji */}
+            {/* Icon/Emoji (Optional) */}
             <FormField
               control={form.control}
               name="icon"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Icon/Emoji</FormLabel>
+                  <FormLabel>Icon/Emoji (Optional)</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="🥪"
@@ -153,7 +154,7 @@ export function AddRTDEItemDialog({
                     />
                   </FormControl>
                   <FormDescription>
-                    Emoji icon to represent this item (e.g., 🥪, 🥤, 💧)
+                    Optional emoji fallback if no product image exists
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

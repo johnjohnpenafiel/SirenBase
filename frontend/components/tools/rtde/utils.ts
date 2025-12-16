@@ -101,6 +101,7 @@ export function generatePullList(items: RTDEItem[]): RTDEPullItem[] {
       itemId: item.itemId,
       name: item.name,
       brand: item.brand,
+      imageFilename: item.imageFilename,
       icon: item.icon,
       needQuantity: item.needQuantity,
       isPulled: item.isPulled,

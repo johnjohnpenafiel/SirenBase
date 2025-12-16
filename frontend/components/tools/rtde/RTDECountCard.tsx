@@ -3,7 +3,7 @@
  *
  * Apple-inspired, touch-friendly card for counting RTD&E items.
  * Features:
- * - Large emoji icon with subtle depth
+ * - Product image with emoji/placeholder fallback
  * - Premium typography with tight tracking
  * - +/- buttons (64-72px) with gradient backgrounds and smooth feedback
  * - Direct input by clicking count (numeric keyboard on mobile)
@@ -18,11 +18,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { RTDEItemImage } from "./RTDEItemImage";
 
 interface RTDECountCardProps {
   itemName: string;
   brand?: string | null; // Brand name displayed above item name
-  icon: string; // Emoji
+  imageFilename?: string | null; // Product image filename
+  icon?: string | null; // Emoji fallback
   parLevel: number;
   currentCount: number;
   onCountChange: (newCount: number) => void;
@@ -34,6 +36,7 @@ interface RTDECountCardProps {
 export function RTDECountCard({
   itemName,
   brand,
+  imageFilename,
   icon,
   parLevel,
   currentCount,
@@ -121,8 +124,8 @@ export function RTDECountCard({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-3 md:gap-5",
-        "p-4 md:p-8",
+        "flex flex-col items-center gap-2 md:gap-4",
+        "p-4 md:p-6",
         "bg-gradient-to-br from-card to-card/95",
         "border border-border/50",
         "rounded-3xl",
@@ -132,15 +135,13 @@ export function RTDECountCard({
         className
       )}
     >
-      {/* Emoji Icon with Background - Enhanced with gradient and inner shadow */}
-      <div className="flex items-center justify-center w-16 h-16 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-muted/50 to-muted shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]">
-        <div
-          className="text-[2.5rem] md:text-[3.5rem] select-none"
-          aria-hidden="true"
-        >
-          {icon}
-        </div>
-      </div>
+      {/* Product Image / Emoji / Placeholder - with fallback hierarchy */}
+      <RTDEItemImage
+        imageFilename={imageFilename}
+        icon={icon}
+        size="lg"
+        alt={`${brand ? `${brand} ` : ""}${itemName}`}
+      />
 
       {/* Brand & Item Name - Brand displayed as secondary info above item name */}
       <div className="flex flex-col items-center gap-0.5">
@@ -149,7 +150,7 @@ export function RTDECountCard({
             {brand}
           </span>
         )}
-        <h2 className="text-[1.75rem] md:text-[1.875rem] leading-[1.1] tracking-tight font-bold text-center text-foreground max-w-[280px]">
+        <h2 className="text-xl md:text-2xl leading-[1.15] tracking-tight font-bold text-center text-foreground max-w-[280px]">
           {itemName}
         </h2>
       </div>

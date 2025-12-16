@@ -8,7 +8,8 @@ import { z } from 'zod';
 /**
  * Add/Edit RTD&E Item Form Schema
  *
- * Validates item name, brand (optional), icon (emoji), and par level for RTD&E items.
+ * Validates item name, brand (optional), icon (optional emoji), and par level for RTD&E items.
+ * Note: image_filename is managed by engineering and not editable via admin UI.
  */
 export const rtdeItemSchema = z.object({
   name: z
@@ -27,10 +28,10 @@ export const rtdeItemSchema = z.object({
 
   icon: z
     .string()
-    .min(1, 'Icon/emoji is required')
     .max(10, 'Icon must be 10 characters or less')
     .trim()
-    .min(1, 'Icon cannot be empty after trimming'),
+    .optional()
+    .transform((val) => (val === '' ? undefined : val)),
 
   par_level: z
     .number({

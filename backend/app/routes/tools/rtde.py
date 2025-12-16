@@ -77,7 +77,8 @@ def create_item():
         {
             "name": "Egg & Cheese Sandwich",
             "brand": "Evolution",  // optional
-            "icon": "🥪",
+            "image_filename": "egg-cheese.jpeg",  // optional, managed by engineering
+            "icon": "🥪",  // optional
             "par_level": 8
         }
 
@@ -95,21 +96,21 @@ def create_item():
     if not data.get('name') or not data.get('name').strip():
         return jsonify({"error": {"name": ["Item name is required"]}}), 400
 
-    if not data.get('icon') or not data.get('icon').strip():
-        return jsonify({"error": {"icon": ["Icon is required"]}}), 400
-
     if 'par_level' not in data or not isinstance(data['par_level'], int) or data['par_level'] < 1:
         return jsonify({"error": {"par_level": ["Par level must be a positive integer"]}}), 400
 
     # Validate string lengths
     name = data['name'].strip()
-    icon = data['icon'].strip()
 
     if len(name) > 100:
         return jsonify({"error": {"name": ["Name too long (max 100 characters)"]}}), 400
 
-    if len(icon) > 10:
-        return jsonify({"error": {"icon": ["Icon too long (max 10 characters)"]}}), 400
+    # Handle optional icon field (now optional - images can be used instead)
+    icon = None
+    if data.get('icon') and data.get('icon').strip():
+        icon = data['icon'].strip()
+        if len(icon) > 10:
+            return jsonify({"error": {"icon": ["Icon too long (max 10 characters)"]}}), 400
 
     # Handle optional brand field
     brand = None
@@ -117,6 +118,13 @@ def create_item():
         brand = data['brand'].strip()
         if len(brand) > 50:
             return jsonify({"error": {"brand": ["Brand too long (max 50 characters)"]}}), 400
+
+    # Handle optional image_filename field (managed by engineering)
+    image_filename = None
+    if data.get('image_filename') and data.get('image_filename').strip():
+        image_filename = data['image_filename'].strip()
+        if len(image_filename) > 100:
+            return jsonify({"error": {"image_filename": ["Image filename too long (max 100 characters)"]}}), 400
 
     try:
         # Get max display_order and add 1 (auto-append to end)
@@ -126,6 +134,7 @@ def create_item():
         item = RTDEItem(
             name=name,
             brand=brand,
+            image_filename=image_filename,
             icon=icon,
             par_level=data['par_level'],
             display_order=max_order + 1,
@@ -159,7 +168,8 @@ def update_item(item_id: str):
         {
             "name": "Egg & Cheese Sandwich",
             "brand": "Evolution",  // optional, can be null to clear
-            "icon": "🥪",
+            "image_filename": "egg-cheese.jpeg",  // optional, can be null to clear
+            "icon": "🥪",  // optional, can be null to clear
             "par_level": 10,
             "active": true
         }
@@ -200,13 +210,25 @@ def update_item(item_id: str):
                     return jsonify({"error": {"brand": ["Brand too long (max 50 characters)"]}}), 400
                 item.brand = brand if brand else None
 
+        # Handle image_filename field (can be set, updated, or cleared)
+        if 'image_filename' in data:
+            if data['image_filename'] is None or data['image_filename'] == '':
+                item.image_filename = None
+            else:
+                image_filename = data['image_filename'].strip()
+                if len(image_filename) > 100:
+                    return jsonify({"error": {"image_filename": ["Image filename too long (max 100 characters)"]}}), 400
+                item.image_filename = image_filename if image_filename else None
+
+        # Handle icon field (can be set, updated, or cleared - now optional)
         if 'icon' in data:
-            icon = data['icon'].strip()
-            if not icon:
-                return jsonify({"error": {"icon": ["Icon cannot be empty"]}}), 400
-            if len(icon) > 10:
-                return jsonify({"error": {"icon": ["Icon too long (max 10 characters)"]}}), 400
-            item.icon = icon
+            if data['icon'] is None or data['icon'] == '':
+                item.icon = None
+            else:
+                icon = data['icon'].strip()
+                if len(icon) > 10:
+                    return jsonify({"error": {"icon": ["Icon too long (max 10 characters)"]}}), 400
+                item.icon = icon if icon else None
 
         if 'par_level' in data:
             par_level = data['par_level']
@@ -528,6 +550,7 @@ def get_session(session_id: str):
             "item_id": item.id,
             "name": item.name,
             "brand": item.brand,
+            "image_filename": item.image_filename,
             "icon": item.icon,
             "par_level": item.par_level,
             "display_order": item.display_order,
@@ -679,6 +702,7 @@ def get_pull_list(session_id: str):
                 "item_id": item.id,
                 "name": item.name,
                 "brand": item.brand,
+                "image_filename": item.image_filename,
                 "icon": item.icon,
                 "need_quantity": need_quantity,
                 "is_pulled": count.is_pulled if count else False

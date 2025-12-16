@@ -102,6 +102,7 @@ export function RTDECountingPhase({
               <RTDECountCard
                 itemName={currentItem.name}
                 brand={currentItem.brand}
+                imageFilename={currentItem.imageFilename}
                 icon={currentItem.icon}
                 parLevel={currentItem.parLevel}
                 currentCount={currentItem.countedQuantity ?? 0}

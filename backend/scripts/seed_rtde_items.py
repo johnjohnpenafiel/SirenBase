@@ -1,10 +1,7 @@
 """
 Seed script for RTD&E items with product images.
 
-This script populates the database with 17 RTD&E items:
-- 5 items with product images
-- 7 items with emoji fallback
-- 5 items with placeholder fallback (no image, no emoji)
+This script populates the database with 20 RTD&E items, all with product images.
 
 Usage:
     cd backend
@@ -23,9 +20,9 @@ from app.extensions import db
 from app.models.rtde import RTDEItem
 
 
-# Define all 17 RTD&E items
+# Define all 20 RTD&E items - all with product images
 RTDE_ITEMS = [
-    # Items WITH product images (5 items)
+    # Waters
     {
         "brand": "Ethos",
         "name": "Water",
@@ -33,6 +30,8 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 8,
     },
+
+    # Sparkling Waters
     {
         "brand": "Spindrift",
         "name": "Lemon Sparkling Water",
@@ -47,6 +46,8 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 6,
     },
+
+    # Nutrition Shakes
     {
         "brand": "Koia",
         "name": "Cacao Bean Nutrition Shake",
@@ -62,90 +63,121 @@ RTDE_ITEMS = [
         "par_level": 4,
     },
 
-    # Items WITH emojis - no image yet (7 items)
+    # Milk
     {
         "brand": "Horizon Organic",
         "name": "Lowfat Chocolate Milk",
-        "image_filename": None,
-        "icon": "🍫",
+        "image_filename": "horizon-chocolate-milk.jpeg",
+        "icon": None,
         "par_level": 6,
     },
     {
         "brand": "Horizon Organic",
         "name": "Lowfat Milk",
-        "image_filename": None,
-        "icon": "🥛",
+        "image_filename": "horizon-milk.jpeg",
+        "icon": None,
         "par_level": 6,
     },
+
+    # Juices
     {
         "brand": "Evolution Fresh",
         "name": "Pure Orange",
-        "image_filename": None,
-        "icon": "🍊",
+        "image_filename": "evolution-pure-orange.jpeg",
+        "icon": None,
         "par_level": 4,
     },
     {
         "brand": "Tree Top",
         "name": "Organic Apple Juice",
-        "image_filename": None,
-        "icon": "🍎",
+        "image_filename": "treetop-apple-juice.jpeg",
+        "icon": None,
         "par_level": 6,
-    },
-    {
-        "brand": "Olipop",
-        "name": "Classic Root Beer",
-        "image_filename": None,
-        "icon": "🥤",
-        "par_level": 4,
-    },
-    {
-        "brand": "Olipop",
-        "name": "Classic Grape",
-        "image_filename": None,
-        "icon": "🍇",
-        "par_level": 4,
-    },
-    {
-        "brand": "Starbucks",
-        "name": "Iced Energy Tropical Peach",
-        "image_filename": None,
-        "icon": "🍑",
-        "par_level": 4,
-    },
-
-    # Items with PLACEHOLDER fallback - no image, no emoji (5 items)
-    {
-        "brand": "Sol-ti",
-        "name": "GINGER SuperShot",
-        "image_filename": None,
-        "icon": None,
-        "par_level": 4,
-    },
-    {
-        "brand": "Sol-ti",
-        "name": "TURMERIC SuperShot",
-        "image_filename": None,
-        "icon": None,
-        "par_level": 4,
     },
     {
         "brand": "Evolution Fresh",
         "name": "Organic Defense Up",
-        "image_filename": None,
+        "image_filename": "evolution-defense-up.jpeg",
         "icon": None,
         "par_level": 4,
     },
     {
         "brand": "Evolution Fresh",
         "name": "Organic Super Fruit Greens",
-        "image_filename": None,
+        "image_filename": "evolution-super-fruit-greens.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+
+    # Sodas
+    {
+        "brand": "Olipop",
+        "name": "Classic Root Beer",
+        "image_filename": "olipop-root-beer.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    {
+        "brand": "Olipop",
+        "name": "Classic Grape",
+        "image_filename": "olipop-grape.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+
+    # Energy Drinks
+    {
+        "brand": "Starbucks",
+        "name": "Iced Energy Tropical Peach",
+        "image_filename": "starbucks-energy-tropical-peach.jpeg",
         "icon": None,
         "par_level": 4,
     },
     {
         "brand": "Starbucks",
         "name": "Iced Energy Blueberry Lemonade",
-        "image_filename": None,
+        "image_filename": "starbucks-energy-blueberry-lemonade.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+
+    # Wellness Shots
+    {
+        "brand": "Sol-ti",
+        "name": "GINGER SuperShot",
+        "image_filename": "solti-ginger-supershot.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    {
+        "brand": "Sol-ti",
+        "name": "TURMERIC SuperShot",
+        "image_filename": "solti-turmeric-supershot.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+
+    # Protein/Snack Bars
+    {
+        "brand": "Perfect Bar",
+        "name": "Dark Chocolate Chip Peanut Butter",
+        "image_filename": "perfect-bar-dark-chocolate-peanut-butter.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    {
+        "brand": "Perfect Bar",
+        "name": "Peanut Butter",
+        "image_filename": "perfect-bar-peanut-butter.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+
+    # Spreads
+    {
+        "brand": "Starbucks",
+        "name": "Avocado Spread",
+        "image_filename": "starbucks-avocado-spread.jpeg",
         "icon": None,
         "par_level": 4,
     },
@@ -179,31 +211,13 @@ def seed_rtde_items():
             )
             db.session.add(item)
 
-            # Determine display type
-            if item_data["image_filename"]:
-                display_type = f"📷 {item_data['image_filename']}"
-            elif item_data["icon"]:
-                display_type = f"😀 {item_data['icon']}"
-            else:
-                display_type = "🫙 placeholder"
-
-            print(f"  {i:2}. {item_data['brand']} - {item_data['name']} [{display_type}]")
+            print(f"  {i:2}. {item_data['brand']} - {item_data['name']} [{item_data['image_filename']}]")
 
         db.session.commit()
 
         # Verify
         final_count = RTDEItem.query.count()
         print(f"\n✅ Successfully seeded {final_count} RTD&E items!")
-
-        # Summary
-        with_images = sum(1 for i in RTDE_ITEMS if i["image_filename"])
-        with_emoji = sum(1 for i in RTDE_ITEMS if i["icon"] and not i["image_filename"])
-        with_placeholder = sum(1 for i in RTDE_ITEMS if not i["image_filename"] and not i["icon"])
-
-        print(f"\nSummary:")
-        print(f"  - With images: {with_images}")
-        print(f"  - With emoji: {with_emoji}")
-        print(f"  - With placeholder: {with_placeholder}")
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@ import { Check } from "lucide-react";
 
 interface RTDEPullListItemProps {
   itemName: string;
+  brand?: string | null; // Brand name displayed above item name
   icon: string; // Emoji
   quantityNeeded: number;
   isPulled: boolean;
@@ -27,6 +28,7 @@ interface RTDEPullListItemProps {
 
 export function RTDEPullListItem({
   itemName,
+  brand,
   icon,
   quantityNeeded,
   isPulled,
@@ -92,8 +94,19 @@ export function RTDEPullListItem({
         </span>
       </div>
 
-      {/* Item Name - Refined typography */}
+      {/* Brand & Item Name - Refined typography */}
       <div className="flex-1 text-left min-w-0">
+        {brand && (
+          <p
+            className={cn(
+              "text-xs text-gray-500",
+              "transition-all duration-300",
+              isPulled && "opacity-60"
+            )}
+          >
+            {brand}
+          </p>
+        )}
         <p
           className={cn(
             "font-semibold text-base md:text-lg",

@@ -53,6 +53,7 @@ export function EditRTDEItemDialog({
     resolver: zodResolver(editRTDEItemSchema),
     defaultValues: {
       name: '',
+      brand: '',
       icon: '',
       par_level: 0,
       active: true,
@@ -64,6 +65,7 @@ export function EditRTDEItemDialog({
     if (item) {
       form.reset({
         name: item.name,
+        brand: item.brand || '',
         icon: item.icon,
         par_level: item.par_level,
         active: item.active,
@@ -83,6 +85,7 @@ export function EditRTDEItemDialog({
     try {
       await apiClient.updateRTDEItem(item.id, {
         name: data.name,
+        brand: data.brand || null,
         icon: data.icon,
         par_level: data.par_level,
         active: data.active,
@@ -126,6 +129,28 @@ export function EditRTDEItemDialog({
                       disabled={form.formState.isSubmitting}
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Brand (Optional) */}
+            <FormField
+              control={form.control}
+              name="brand"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Brand (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Evolution"
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Brand name displayed above the item name
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

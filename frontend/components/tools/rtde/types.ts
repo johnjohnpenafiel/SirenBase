@@ -37,6 +37,7 @@ export type RTDESessionPhase = "counting" | "pulling";
 export interface RTDEItem {
   itemId: string;
   name: string; // Display name (e.g., "Egg & Cheese Sandwich")
+  brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
   icon: string; // Emoji icon for visual recognition (e.g., "🥪")
   parLevel: number; // Target quantity for display
   displayOrder: number; // Order in counting sequence
@@ -70,6 +71,7 @@ export interface ValidationResult {
 export interface RTDEPullItem {
   itemId: string;
   name: string;
+  brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
   icon: string;
   needQuantity: number;
   isPulled: boolean;

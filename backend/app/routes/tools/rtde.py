@@ -76,6 +76,7 @@ def create_item():
     Request JSON:
         {
             "name": "Egg & Cheese Sandwich",
+            "brand": "Evolution",  // optional
             "icon": "🥪",
             "par_level": 8
         }
@@ -110,6 +111,13 @@ def create_item():
     if len(icon) > 10:
         return jsonify({"error": {"icon": ["Icon too long (max 10 characters)"]}}), 400
 
+    # Handle optional brand field
+    brand = None
+    if data.get('brand') and data.get('brand').strip():
+        brand = data['brand'].strip()
+        if len(brand) > 50:
+            return jsonify({"error": {"brand": ["Brand too long (max 50 characters)"]}}), 400
+
     try:
         # Get max display_order and add 1 (auto-append to end)
         max_order = db.session.query(db.func.max(RTDEItem.display_order)).scalar() or 0
@@ -117,6 +125,7 @@ def create_item():
         # Create new item
         item = RTDEItem(
             name=name,
+            brand=brand,
             icon=icon,
             par_level=data['par_level'],
             display_order=max_order + 1,
@@ -149,6 +158,7 @@ def update_item(item_id: str):
     Request JSON:
         {
             "name": "Egg & Cheese Sandwich",
+            "brand": "Evolution",  // optional, can be null to clear
             "icon": "🥪",
             "par_level": 10,
             "active": true
@@ -179,6 +189,16 @@ def update_item(item_id: str):
             if len(name) > 100:
                 return jsonify({"error": {"name": ["Name too long (max 100 characters)"]}}), 400
             item.name = name
+
+        # Handle brand field (can be set, updated, or cleared)
+        if 'brand' in data:
+            if data['brand'] is None or data['brand'] == '':
+                item.brand = None
+            else:
+                brand = data['brand'].strip()
+                if len(brand) > 50:
+                    return jsonify({"error": {"brand": ["Brand too long (max 50 characters)"]}}), 400
+                item.brand = brand if brand else None
 
         if 'icon' in data:
             icon = data['icon'].strip()
@@ -507,6 +527,7 @@ def get_session(session_id: str):
         items_data.append({
             "item_id": item.id,
             "name": item.name,
+            "brand": item.brand,
             "icon": item.icon,
             "par_level": item.par_level,
             "display_order": item.display_order,
@@ -657,6 +678,7 @@ def get_pull_list(session_id: str):
             pull_list.append({
                 "item_id": item.id,
                 "name": item.name,
+                "brand": item.brand,
                 "icon": item.icon,
                 "need_quantity": need_quantity,
                 "is_pulled": count.is_pulled if count else False

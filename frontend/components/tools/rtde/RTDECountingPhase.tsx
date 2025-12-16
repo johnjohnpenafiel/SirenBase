@@ -106,6 +106,7 @@ export function RTDECountingPhase({
                 parLevel={currentItem.parLevel}
                 currentCount={currentItem.countedQuantity ?? 0}
                 onCountChange={onCountChange}
+                onNext={onNext}
                 saving={saving}
               />
             </div>

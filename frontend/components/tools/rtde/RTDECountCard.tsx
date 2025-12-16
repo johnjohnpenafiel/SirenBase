@@ -26,6 +26,7 @@ interface RTDECountCardProps {
   parLevel: number;
   currentCount: number;
   onCountChange: (newCount: number) => void;
+  onNext?: () => void; // Optional callback to advance to next item
   saving?: boolean;
   className?: string;
 }
@@ -37,6 +38,7 @@ export function RTDECountCard({
   parLevel,
   currentCount,
   onCountChange,
+  onNext,
   saving = false,
   className,
 }: RTDECountCardProps) {
@@ -61,6 +63,12 @@ export function RTDECountCard({
   const handleDecrement = () => {
     const newCount = Math.max(currentCount - 1, 0); // Min 0
     onCountChange(newCount);
+  };
+
+  // Quick-fill: Set count to par level and advance to next item
+  const handleQuickFill = () => {
+    onCountChange(parLevel);
+    onNext?.();
   };
 
   // Enable direct editing mode
@@ -146,15 +154,19 @@ export function RTDECountCard({
         </h2>
       </div>
 
-      {/* Par Level Info - Refined as subtle pill badge */}
-      <div className="flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-muted/40 rounded-full border border-border/30">
+      {/* Par Level Info - Clickable quick-fill button */}
+      <button
+        onClick={handleQuickFill}
+        className="flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-muted/40 rounded-full border border-border/30 cursor-pointer hover:bg-muted/60 transition-colors duration-150"
+        aria-label={`Set count to par level ${parLevel} and go to next item`}
+      >
         <span className="text-[0.625rem] md:text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
           Par Level
         </span>
         <span className="text-sm md:text-lg font-bold text-foreground">
           {parLevel}
         </span>
-      </div>
+      </button>
 
       {/* Count Controls - Optimized spacing for mobile fit */}
       <div className="flex items-center gap-3 md:gap-4 w-full max-w-md mt-1 md:mt-2">

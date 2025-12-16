@@ -38,7 +38,8 @@ export interface RTDEItem {
   itemId: string;
   name: string; // Display name (e.g., "Egg & Cheese Sandwich")
   brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
-  icon: string; // Emoji icon for visual recognition (e.g., "🥪")
+  imageFilename?: string | null; // Product image filename (e.g., "ethos-water.jpeg") - managed by engineering
+  icon?: string | null; // Emoji icon for visual recognition (e.g., "🥪") - optional fallback
   parLevel: number; // Target quantity for display
   displayOrder: number; // Order in counting sequence
   countedQuantity: number | null; // null = uncounted, 0+ = counted value
@@ -72,7 +73,8 @@ export interface RTDEPullItem {
   itemId: string;
   name: string;
   brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
-  icon: string;
+  imageFilename?: string | null; // Product image filename - managed by engineering
+  icon?: string | null; // Emoji icon - optional fallback
   needQuantity: number;
   isPulled: boolean;
 }

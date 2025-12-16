@@ -128,6 +128,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
           itemId: apiItem.item_id,
           name: apiItem.name,
           brand: apiItem.brand,
+          imageFilename: apiItem.image_filename,
           icon: apiItem.icon,
           parLevel: apiItem.par_level,
           displayOrder: apiItem.display_order,

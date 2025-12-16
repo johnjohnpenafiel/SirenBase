@@ -158,7 +158,8 @@ export interface RTDEItem {
   id: string;
   name: string;
   brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
-  icon: string; // Emoji (🥪, 🥤, etc.)
+  image_filename?: string | null; // Product image filename (e.g., "ethos-water.jpeg") - managed by engineering
+  icon?: string | null; // Emoji (🥪, 🥤, etc.) - optional fallback
   par_level: number;
   display_order: number;
   active: boolean;
@@ -182,7 +183,8 @@ export interface RTDESessionItem {
   item_id: string;
   name: string;
   brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
-  icon: string;
+  image_filename?: string | null; // Product image filename - managed by engineering
+  icon?: string | null; // Emoji - optional fallback
   par_level: number;
   display_order: number;
   counted_quantity: number;
@@ -194,7 +196,8 @@ export interface RTDEPullListItem {
   item_id: string;
   name: string;
   brand?: string | null; // Brand name (e.g., "Evolution") - displayed above item name
-  icon: string;
+  image_filename?: string | null; // Product image filename - managed by engineering
+  icon?: string | null; // Emoji - optional fallback
   need_quantity: number;
   is_pulled: boolean;
 }
@@ -207,7 +210,8 @@ export interface GetRTDEItemsResponse {
 export interface CreateRTDEItemRequest {
   name: string;
   brand?: string;
-  icon: string;
+  image_filename?: string; // Optional - managed by engineering
+  icon?: string; // Optional - emoji fallback
   par_level: number;
 }
 
@@ -219,7 +223,8 @@ export interface CreateRTDEItemResponse {
 export interface UpdateRTDEItemRequest {
   name?: string;
   brand?: string | null;
-  icon?: string;
+  image_filename?: string | null; // Optional - managed by engineering
+  icon?: string | null; // Optional - emoji fallback
   par_level?: number;
   active?: boolean;
 }

@@ -3,8 +3,8 @@
  *
  * Apple-inspired checkbox list item for the pull list screen.
  * Features:
+ * - Product image with emoji/placeholder fallback
  * - Refined checkbox (36-40px) with smooth animation
- * - Emoji icon with subtle depth and grayscale on completion
  * - Premium typography with proper tracking
  * - Quantity badge with gradient background
  * - Smooth strikethrough animation when marked as pulled
@@ -15,11 +15,13 @@
 
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import { RTDEItemImage } from "./RTDEItemImage";
 
 interface RTDEPullListItemProps {
   itemName: string;
   brand?: string | null; // Brand name displayed above item name
-  icon: string; // Emoji
+  imageFilename?: string | null; // Product image filename
+  icon?: string | null; // Emoji fallback
   quantityNeeded: number;
   isPulled: boolean;
   onToggle: () => void;
@@ -29,6 +31,7 @@ interface RTDEPullListItemProps {
 export function RTDEPullListItem({
   itemName,
   brand,
+  imageFilename,
   icon,
   quantityNeeded,
   isPulled,
@@ -78,21 +81,19 @@ export function RTDEPullListItem({
         />
       </div>
 
-      {/* Item Icon with Background - Enhanced with gradient and depth */}
-      <div
+      {/* Product Image / Emoji / Placeholder - with fallback hierarchy */}
+      <RTDEItemImage
+        imageFilename={imageFilename}
+        icon={icon}
+        size="md"
+        grayscale={isPulled}
+        alt={`${brand ? `${brand} ` : ""}${itemName}`}
         className={cn(
-          "flex items-center justify-center",
-          "w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl shrink-0",
-          "bg-gradient-to-br from-muted/50 to-muted/80",
-          "shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]",
+          "shrink-0 rounded-xl md:rounded-2xl",
           "transition-all duration-300",
-          isPulled && "opacity-40 grayscale"
+          isPulled && "opacity-40"
         )}
-      >
-        <span className="text-2xl md:text-[2rem]" aria-hidden="true">
-          {icon}
-        </span>
-      </div>
+      />
 
       {/* Brand & Item Name - Refined typography */}
       <div className="flex-1 text-left min-w-0">

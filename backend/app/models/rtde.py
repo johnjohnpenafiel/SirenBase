@@ -27,12 +27,18 @@ class RTDEItem(db.Model):
         id: UUID primary key
         name: Item name (e.g., "Egg & Cheese Sandwich")
         brand: Brand name (e.g., "Evolution") - optional, displayed above item name
-        icon: Emoji icon for visual recognition (e.g., "🥪")
+        image_filename: Product image filename (e.g., "ethos-water.jpeg") - managed by engineering
+        icon: Emoji icon for visual recognition (e.g., "🥪") - optional fallback
         par_level: Target quantity for display
         display_order: Position in counting sequence (1, 2, 3...)
         active: Whether item is currently in use (seasonal toggle)
         created_at: Timestamp when item was created
         updated_at: Timestamp when item was last modified
+
+    Display Fallback Hierarchy:
+        1. Product image (if image_filename exists)
+        2. Emoji icon (if icon exists)
+        3. Universal placeholder emoji (handled by frontend)
     """
 
     __tablename__ = 'rtde_items'
@@ -47,7 +53,8 @@ class RTDEItem(db.Model):
     # Item details
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     brand: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
-    icon: Mapped[str] = mapped_column(String(10), nullable=False)
+    image_filename: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    icon: Mapped[Optional[str]] = mapped_column(String(10), nullable=True)
     par_level: Mapped[int] = mapped_column(Integer, nullable=False)
     display_order: Mapped[int] = mapped_column(Integer, nullable=False)
     active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False, index=True)
@@ -83,6 +90,7 @@ class RTDEItem(db.Model):
             'id': self.id,
             'name': self.name,
             'brand': self.brand,
+            'image_filename': self.image_filename,
             'icon': self.icon,
             'par_level': self.par_level,
             'display_order': self.display_order,
@@ -95,7 +103,8 @@ class RTDEItem(db.Model):
         """String representation for debugging."""
         status = "ACTIVE" if self.active else "INACTIVE"
         brand_str = f"{self.brand} " if self.brand else ""
-        return f'<RTDEItem {self.icon} {brand_str}{self.name} - Par: {self.par_level} ({status})>'
+        icon_str = self.icon if self.icon else "📦"
+        return f'<RTDEItem {icon_str} {brand_str}{self.name} - Par: {self.par_level} ({status})>'
 
 
 class RTDECountSession(db.Model):

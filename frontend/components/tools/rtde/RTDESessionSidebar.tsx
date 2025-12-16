@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { RTDEItem, RTDESessionPhase } from "./types";
 import { formatCountDisplay, isItemCounted } from "./utils";
+import { RTDEItemImage } from "./RTDEItemImage";
 
 interface RTDESessionSidebarProps {
   items: RTDEItem[];
@@ -68,12 +69,14 @@ export function RTDESessionSidebar({
                 }`}
                 aria-current={isCurrent ? "true" : undefined}
               >
-                {/* Item emoji icon with rounded square background */}
-                <div className="flex items-center justify-center w-12 h-12 rounded-md bg-border shrink-0">
-                  <span className="text-2xl" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                </div>
+                {/* Product Image / Emoji / Placeholder - with fallback hierarchy */}
+                <RTDEItemImage
+                  imageFilename={item.imageFilename}
+                  icon={item.icon}
+                  size="sm"
+                  alt={`${item.brand ? `${item.brand} ` : ""}${item.name}`}
+                  className="shrink-0"
+                />
 
                 {/* Brand, Item name and count */}
                 <div className="flex-1 min-w-0">

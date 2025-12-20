@@ -178,8 +178,8 @@ export function RTDEPullingPhase({
 
       {/* Complete Session Button - Mobile Footer (always visible at bottom) */}
       {hasItemsToPull && (
-        <div className="sm:hidden px-4 pt-4 pb-4 pb-safe bg-background border-t border-border shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
-          <div className="container max-w-4xl mx-auto">
+        <div className="sm:hidden bg-background border-t border-border pb-safe shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+          <div className="container max-w-4xl mx-auto px-4 pt-4 pb-6">
             <Button
               onClick={onComplete}
               disabled={completing}

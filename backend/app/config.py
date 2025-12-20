@@ -24,6 +24,16 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # Connection Pool Configuration
+    # Prevents "SSL connection has been closed unexpectedly" errors after idle periods
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,    # Validate connections before use (handles unexpected drops)
+        "pool_recycle": 300,      # Recycle connections every 5 minutes (prevents staleness)
+        "pool_size": 5,           # Base pool size
+        "max_overflow": 10,       # Allow up to 15 total connections under load
+        "pool_timeout": 30,       # Wait up to 30s for available connection
+    }
+
     # CORS
     CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'http://localhost:3000').split(',')
 

@@ -10,6 +10,57 @@ _No active bugs at this time._
 
 ---
 
+## ✅ Fixed Bugs Archive
+
+### [BUG-009] Database connection timeout causes SSL error after idle period
+
+**Fixed**: 2025-12-20
+**Commit**: (current session)
+**Impact**: High - App becomes unusable until page refresh
+
+**Affected Component**: `backend/app/config.py`, `backend/app/__init__.py`
+
+**Description**:
+After leaving the app idle for extended periods (1+ hours), users would see technical error messages like `(psycopg2.OperationalError) SSL connection has been closed unexpectedly` when attempting to login or load data. The error would fix itself after a page refresh.
+
+**Root Cause**:
+1. SQLAlchemy connection pool had no staleness handling configured
+2. PostgreSQL SSL connections in the pool became stale (closed by DB server or network infrastructure)
+3. App tried to use dead connections, causing OperationalError
+4. Production error handlers were exposing raw SQL queries to users (security issue)
+
+**Expected Behavior**:
+- App should handle connection drops gracefully
+- Users should see friendly error messages, not SQL queries
+- Stale connections should be automatically recycled
+
+**Solution Implemented**:
+1. Added `SQLALCHEMY_ENGINE_OPTIONS` with connection pool configuration:
+   - `pool_pre_ping: True` - Validates connections before use
+   - `pool_recycle: 300` - Recycles connections every 5 minutes
+   - `pool_size: 5` - Base pool size
+   - `max_overflow: 10` - Up to 15 connections under load
+   - `pool_timeout: 30` - Wait up to 30s for connection
+
+2. Added dedicated error handlers for database errors:
+   - `OperationalError` handler returns user-friendly "Database connection error" (503)
+   - `SQLAlchemyError` handler returns "A database error occurred" (500)
+   - Fixed production check to use `app.debug` instead of deprecated `ENV` config
+
+3. All error handlers now NEVER expose SQL queries or schema details to users
+
+**Files Changed**:
+- `backend/app/config.py:27-35` - Added SQLALCHEMY_ENGINE_OPTIONS
+- `backend/app/__init__.py:105-129` - Added OperationalError and SQLAlchemyError handlers
+- `backend/app/__init__.py:138-144` - Fixed production error sanitization
+
+**Testing**:
+- [ ] Deploy to production and verify connection stability after idle periods
+- [ ] Confirm error messages no longer expose SQL queries
+- [ ] Monitor logs for any remaining connection issues
+
+---
+
 ## 💡 Known Issues / Technical Debt
 
 ### [TECH-002] No error boundary components

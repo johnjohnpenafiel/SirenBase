@@ -148,17 +148,19 @@ export function RTDEMobileDrawer({
           </div>
 
           {/* "Start Pull List" button */}
-          <DrawerFooter className="border-t bg-background pb-4 pb-safe flex items-center justify-center">
-            <DrawerClose asChild>
-              <Button
-                size="lg"
-                onClick={onStartPull}
-                disabled={!isCountingPhase}
-                className="h-12 w-full max-w-md"
-              >
-                Start Pull
-              </Button>
-            </DrawerClose>
+          <DrawerFooter className="border-t bg-background pb-safe">
+            <div className="flex items-center justify-center w-full pt-4 pb-6">
+              <DrawerClose asChild>
+                <Button
+                  size="lg"
+                  onClick={onStartPull}
+                  disabled={!isCountingPhase}
+                  className="h-12 w-full max-w-md"
+                >
+                  Start Pull
+                </Button>
+              </DrawerClose>
+            </div>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

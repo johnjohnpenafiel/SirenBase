@@ -63,6 +63,7 @@ def register_error_handlers(app):
     """
     from marshmallow import ValidationError
     from werkzeug.exceptions import HTTPException
+    from sqlalchemy.exc import SQLAlchemyError, OperationalError
 
     @app.errorhandler(ValidationError)
     def handle_validation_error(error):
@@ -98,9 +99,34 @@ def register_error_handlers(app):
     def internal_error(error):
         """Handle internal server errors."""
         db.session.rollback()
-        # Log the actual error for debugging (would use logging in production)
         app.logger.error(f"Internal error: {error}")
         return {"error": "Internal server error"}, 500
+
+    @app.errorhandler(OperationalError)
+    def handle_db_operational_error(error):
+        """
+        Handle database operational errors (connection issues, SSL drops, etc.).
+
+        These errors should NEVER expose SQL queries to users.
+        """
+        db.session.rollback()
+        # Log full error for debugging (includes SQL for investigation)
+        app.logger.error(f"Database operational error: {error}")
+        # Return user-friendly message - never expose SQL details
+        return {"error": "Database connection error. Please try again."}, 503
+
+    @app.errorhandler(SQLAlchemyError)
+    def handle_db_error(error):
+        """
+        Handle general SQLAlchemy errors.
+
+        These errors should NEVER expose SQL queries or schema details to users.
+        """
+        db.session.rollback()
+        # Log full error for debugging
+        app.logger.error(f"Database error: {error}")
+        # Return generic message - never expose SQL details
+        return {"error": "A database error occurred. Please try again."}, 500
 
     @app.errorhandler(Exception)
     def handle_unexpected_error(error):
@@ -109,8 +135,10 @@ def register_error_handlers(app):
         # Log the actual error for debugging
         app.logger.error(f"Unexpected error: {error}")
 
-        # Don't expose internal errors to client in production
-        if app.config.get('ENV') == 'production':
-            return {"error": "An unexpected error occurred"}, 500
+        # ALWAYS sanitize errors in production (DEBUG=False)
+        # Never expose internal details, SQL queries, or stack traces
+        if not app.debug:
+            return {"error": "An unexpected error occurred. Please try again."}, 500
         else:
+            # Only show full errors in development mode
             return {"error": str(error)}, 500

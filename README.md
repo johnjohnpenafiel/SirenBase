@@ -1,17 +1,19 @@
 # SirenBase
 
-A comprehensive digital operations platform for Starbucks store partners, providing a unified suite of specialized tools to streamline daily workflows. Partners log in once and access multiple tools from a central dashboard, each designed to solve specific operational challenges while sharing authentication, UI components, and design systems.
+A comprehensive digital operations platform for Coffee House store partners, providing a unified suite of specialized tools to streamline daily workflows. Partners log in once and access multiple tools from a central dashboard, each designed to solve specific operational challenges while sharing authentication, UI components, and design systems.
 
 ## Multi-Tool Platform
 
 SirenBase consists of three independent tools:
 
 - **Tool 1: Inventory Tracking System** _(Complete)_
+
   - Track basement inventory using unique 4-digit codes
   - Autocomplete suggestions with 49 item name templates
   - Complete audit history of all actions
 
 - **Tool 2: Milk Count System** _(Next)_
+
   - Automate milk inventory counting (FOH/BOH)
   - Calculate delivery amounts and order quantities
   - Replace manual paper logbook system
@@ -211,6 +213,7 @@ npm run test
 ## Key Features
 
 ### Platform-Wide
+
 - **Single Sign-On**: One login for all tools
 - **Role-Based Access**: Global admin and staff roles
 - **Mobile-First Design**: Optimized for phones/tablets
@@ -218,6 +221,7 @@ npm run test
 - **Secure Authentication**: JWT tokens with 24-hour expiration
 
 ### Tool 1: Inventory Tracking (Complete)
+
 - Unique 4-digit code generation for items
 - **Autocomplete suggestions** with 49 item name templates
 - Complete audit history of all actions
@@ -226,12 +230,14 @@ npm run test
 - **Status**: Backend complete (75/75 tests), Frontend complete
 
 ### Tool 2: Milk Count (Planned)
+
 - Night count (FOH/BOH) with sequential screens
 - Morning count with dual input methods
 - Automatic delivery and order calculations
 - Par level management
 
 ### Tool 3: RTD&E Counting (Complete)
+
 - One-item-at-a-time counting interface with +/- buttons
 - Automatic pull list generation
 - BOH fulfillment tracking with checkable items
@@ -242,17 +248,20 @@ npm run test
 ## Documentation
 
 ### Core Documentation
+
 - **[PLANNING.md](./PLANNING.md)** - Multi-tool architecture and key decisions
 - **[TASKS.md](./TASKS.md)** - Development task breakdown (organized by tool)
 - **[CLAUDE.md](./CLAUDE.md)** - Development guidelines and conventions
 - **[README.md](./README.md)** - This file: Setup and overview
 
 ### Tool-Specific Planning
+
 - **[Planning/InventoryTracking.md](./Planning/InventoryTracking.md)** - Tool 1 detailed planning
 - **[Planning/MilkCount.md](./Planning/MilkCount.md)** - Tool 2 detailed planning
 - **[Planning/RTDE.md](./Planning/RTDE.md)** - Tool 3 detailed planning
 
 ### Component Documentation
+
 - **backend/CLAUDE.md** - Backend-specific guidelines
 - **frontend/CLAUDE.md** - Frontend-specific guidelines
 

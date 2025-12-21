@@ -643,6 +643,8 @@ Mobile-first responsive design:
 
 ### Dialogs & Modals
 
+**Design Philosophy**: Apple-inspired minimalism with generous rounded corners, subtle backdrop blur, and clean shadow-based separation. The design prioritizes clarity and focus while maintaining a modern, polished aesthetic.
+
 **Use Cases**:
 - Confirmations (remove item, logout)
 - Multi-step forms (add item flow)
@@ -671,20 +673,63 @@ Mobile-first responsive design:
 </Dialog>
 ```
 
-#### Dialog Styling
+#### Dialog Styling (Apple-Inspired)
 
-- **Max Width**: `sm:max-w-md` (448px on desktop)
-- **Padding**: `p-6` (24px)
-- **Shadow**: `shadow-lg` (elevated)
-- **Backdrop**: Semi-transparent overlay (`bg-black/50`)
-- **Animation**: Fade in + scale up (via Radix UI)
+| Property | Value | Rationale |
+|----------|-------|-----------|
+| **Border Radius** | `rounded-2xl` (16px) | Modern Apple-style corners, softer than standard rounded-lg |
+| **Border** | None | Clean separation via shadow only, Apple design language |
+| **Shadow** | `shadow-xl shadow-black/10 dark:shadow-black/30` | Soft, diffused shadow for depth without harshness |
+| **Backdrop** | `bg-black/50 backdrop-blur-sm` | Dim + blur creates depth and focus on modal |
+| **Padding** | `p-6` (24px) | Generous internal spacing for readability |
+| **Max Width** | `sm:max-w-lg` (default) or `sm:max-w-md` (448px) | Appropriate for most modal content |
+| **Animation** | Fade + zoom (200ms) | Smooth entrance/exit via Radix UI |
+
+**Close Button Styling**:
+- `rounded-full` for circular shape
+- `p-1` padding with `hover:bg-muted` for subtle hover state
+- Positioned `top-4 right-4` with opacity transitions
+
+#### Visual Comparison
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                                                         │
+│     ┌─────────────────────────────────────────────┐     │
+│     │                                             │     │
+│     │         Dialog Title                  [×]   │     │  • rounded-2xl corners
+│     │                                             │     │  • No visible border
+│     │     Clean, spacious content with            │     │  • shadow-xl (soft)
+│     │     generous padding on all sides           │     │  • backdrop-blur-sm
+│     │                                             │     │
+│     │         ┌──────────┐  ┌──────────┐          │     │
+│     │         │  Cancel  │  │  Action  │          │     │
+│     │         └──────────┘  └──────────┘          │     │
+│     └─────────────────────────────────────────────┘     │
+│                                                         │
+│              (blurred + dimmed backdrop)                │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### Implementation Notes
+
+**Do NOT override in custom dialogs**:
+- Border radius (handled by base component)
+- Shadow styles (handled by base component)
+- Border styles (intentionally removed)
+- Backdrop blur (handled by overlay)
+
+**Safe to override in custom dialogs**:
+- Max width: `className="sm:max-w-md"` or `sm:max-w-lg`
+- Additional padding if needed
 
 #### Mobile Considerations
 
-- **Full-screen on mobile** (optional): For complex dialogs, use full-screen modal on mobile
+- **Full-width on small screens**: `max-w-[calc(100%-2rem)]` ensures 16px margin
 - **Bottom sheet** (future): Slide-up sheet for mobile-native feel
 - **Keyboard dismissal**: ESC key closes dialog
 - **Focus trap**: Tab cycles within dialog only
+- **Safe areas**: Respects device safe areas via viewport units
 
 ### Navigation
 
@@ -1515,11 +1560,19 @@ Use this checklist when implementing new UI:
 
 ---
 
-**Last Updated**: December 14, 2025
-**Version**: 3.5.1
+**Last Updated**: December 21, 2025
+**Version**: 3.6.0
 **Maintainer**: Development Team
 
 **Change Log**:
+- **v3.6.0** (Dec 21, 2025): **Apple-Inspired Modal Redesign** — Complete overhaul of dialog/modal styling for modern, minimalist aesthetic:
+  - Border radius increased from `rounded-lg` (8px) to `rounded-2xl` (16px)
+  - Removed visible borders in favor of shadow-only separation
+  - Enhanced shadow to `shadow-xl shadow-black/10 dark:shadow-black/30` for soft depth
+  - Added `backdrop-blur-sm` to overlay for focus and depth effect
+  - Close button updated to `rounded-full` with subtle hover state
+  - Updated documentation with visual comparison and implementation notes
+  - All dialogs (Dialog, AlertDialog) now share consistent Apple-inspired styling
 - **v3.5.1** (Dec 14, 2025): **Dynamic Scroll Shadow Pattern** — Expanded documentation for the scroll shadow pattern as the standard for all scrollable sections:
   - Added "When to Use" guidelines for applying the pattern
   - Added Visual Specifications table with timing, threshold, and shadow values

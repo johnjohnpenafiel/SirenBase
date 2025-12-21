@@ -3,7 +3,7 @@ RTD&E (Ready-to-Drink & Eat) models for Tool 3.
 
 This module contains models for the RTD&E Counting System:
 - RTDEItem: Display items with par levels
-- RTDECountSession: Counting sessions with 4-hour expiration
+- RTDECountSession: Counting sessions with 30-minute expiration
 - RTDESessionCount: Individual item counts within a session
 """
 from datetime import datetime, timedelta
@@ -199,12 +199,12 @@ class RTDECountSession(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'status': self.status,
-            'started_at': self.started_at.isoformat(),
-            'expires_at': self.expires_at.isoformat()
+            'started_at': self.started_at.isoformat() + 'Z',
+            'expires_at': self.expires_at.isoformat() + 'Z'
         }
 
         if self.completed_at:
-            data['completed_at'] = self.completed_at.isoformat()
+            data['completed_at'] = self.completed_at.isoformat() + 'Z'
 
         if include_counts:
             data['counts'] = [count.to_dict() for count in self.counts]

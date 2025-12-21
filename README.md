@@ -242,7 +242,7 @@ npm run test
 - Automatic pull list generation
 - BOH fulfillment tracking with checkable items
 - Admin-managed item lists with drag-and-drop reordering
-- Session management with 4-hour expiration
+- Session management with 30-minute expiration
 - **Status**: Backend complete (77/77 tests), Frontend complete
 
 ## Documentation

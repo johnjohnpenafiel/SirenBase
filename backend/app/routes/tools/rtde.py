@@ -409,8 +409,8 @@ def get_active_session():
     return jsonify({
         "session": {
             "id": session.id,
-            "started_at": session.started_at.isoformat(),
-            "expires_at": session.expires_at.isoformat(),
+            "started_at": session.started_at.isoformat() + 'Z',
+            "expires_at": session.expires_at.isoformat() + 'Z',
             "items_counted": items_counted,
             "total_items": total_items
         }
@@ -456,7 +456,7 @@ def start_session():
 
             return jsonify({
                 "session_id": existing_session.id,
-                "expires_at": existing_session.expires_at.isoformat()
+                "expires_at": existing_session.expires_at.isoformat() + 'Z'
             }), 200
 
         # action == 'new'
@@ -477,7 +477,7 @@ def start_session():
 
         return jsonify({
             "session_id": session.id,
-            "expires_at": session.expires_at.isoformat()
+            "expires_at": session.expires_at.isoformat() + 'Z'
         }), 201
 
     except Exception as e:

@@ -102,7 +102,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 - Quick item counting with +/- interface
 - Automatic pull list generation (shows only items needed)
 - BOH fulfillment tracking (mark items as pulled)
-- Session management (auto-start, resume, 4-hour expiration)
+- Session management (auto-start, resume, 30-minute expiration)
 - Admin-managed item lists with drag-and-drop reordering
 - Mobile-first counting interface with arrow key navigation
 

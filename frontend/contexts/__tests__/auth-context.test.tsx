@@ -241,7 +241,6 @@ describe('AuthContext', () => {
       });
 
       expect(mockSetToken).toHaveBeenCalledWith('new-jwt-token');
-      expect(mockToastSuccess).toHaveBeenCalledWith('Welcome back, Admin User!');
       expect(mockPush).toHaveBeenCalledWith('/dashboard');
       expect(screen.getByTestId('authenticated')).toHaveTextContent('true');
       expect(screen.getByTestId('user')).toHaveTextContent('Admin User');

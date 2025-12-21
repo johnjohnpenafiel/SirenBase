@@ -84,9 +84,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Set user data
         setUser(response.user);
 
-        // Show success message
-        toast.success(`Welcome back, ${response.user.name}!`);
-
         // Redirect to dashboard
         router.push('/dashboard');
       } catch (error: any) {

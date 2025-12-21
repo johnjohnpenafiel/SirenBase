@@ -16,7 +16,7 @@
 "use client";
 
 import { use, useState, useEffect, useCallback, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { RTDECountingPhase } from "@/components/tools/rtde/RTDECountingPhase";
@@ -24,6 +24,7 @@ import { RTDEPullingPhase } from "@/components/tools/rtde/RTDEPullingPhase";
 import { RTDESessionSidebar } from "@/components/tools/rtde/RTDESessionSidebar";
 import { RTDEMobileDrawer } from "@/components/tools/rtde/RTDEMobileDrawer";
 import { UncountedItemsDialog } from "@/components/tools/rtde/UncountedItemsDialog";
+import { ResumeSessionDialog } from "@/components/tools/rtde/ResumeSessionDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -64,10 +65,12 @@ interface SessionPageProps {
 
 export default function RTDESessionPage({ params }: SessionPageProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { sessionId } = use(params);
 
   // State management
   const [loading, setLoading] = useState(true);
+  const [showResumeDialog, setShowResumeDialog] = useState(false);
   const [phase, setPhase] = useState<RTDESessionPhase>("counting");
   const [sessionData, setSessionData] = useState<RTDESessionWithPhase | null>(
     null
@@ -91,6 +94,15 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   useEffect(() => {
     loadSession();
   }, [sessionId]);
+
+  // Check for resume prompt in URL (show dialog after session loads)
+  useEffect(() => {
+    if (searchParams.get("resume") === "prompt" && sessionData && !loading) {
+      setShowResumeDialog(true);
+      // Clean up URL without triggering navigation
+      window.history.replaceState({}, "", `/tools/rtde/session/${sessionId}`);
+    }
+  }, [searchParams, sessionData, loading, sessionId]);
 
   // Arrow key navigation (counting phase only)
   useEffect(() => {
@@ -450,6 +462,24 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
     }
   };
 
+  /**
+   * Handle "Start Fresh" from Resume Dialog
+   * Abandons current session, creates new one, and redirects
+   */
+  const handleStartFresh = async () => {
+    try {
+      // Backend auto-abandons old session when starting new
+      const newSession = await apiClient.startRTDESession({});
+      router.replace(`/tools/rtde/session/${newSession.session_id}`);
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.error ||
+        error.message ||
+        "Failed to start new session";
+      toast.error(errorMessage);
+    }
+  };
+
   // Loading state
   if (loading) {
     return (
@@ -589,6 +619,20 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* Resume Session Dialog - Shown when navigating from existing session */}
+        {sessionData && (
+          <ResumeSessionDialog
+            open={showResumeDialog}
+            onOpenChange={setShowResumeDialog}
+            sessionStartedAt={sessionData.startedAt}
+            itemsCounted={sessionData.items.filter(
+              (i) => i.countedQuantity !== null
+            ).length}
+            totalItems={sessionData.items.length}
+            onStartFresh={handleStartFresh}
+          />
+        )}
       </div>
     </ProtectedRoute>
   );

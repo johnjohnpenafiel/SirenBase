@@ -1,13 +1,12 @@
 /**
  * Resume Session Dialog Component
- *
  * Shown when user has an active RTD&E session.
  * Now displayed IN-CONTEXT on the session page (not on a landing page).
  * Allows user to either:
  * - Resume (continue) - just closes the dialog
  * - Start Fresh - abandons current session and creates new one
  */
-'use client';
+"use client";
 
 import {
   Dialog,
@@ -16,10 +15,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { AlertCircle, Clock } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, Clock } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 interface ResumeSessionDialogProps {
   open: boolean;
@@ -48,7 +47,9 @@ export function ResumeSessionDialog({
     onOpenChange(false);
   };
 
-  const timeAgo = formatDistanceToNow(new Date(sessionStartedAt), { addSuffix: true });
+  const timeAgo = formatDistanceToNow(new Date(sessionStartedAt), {
+    addSuffix: true,
+  });
   const progress = Math.round((itemsCounted / totalItems) * 100);
 
   return (
@@ -68,7 +69,8 @@ export function ResumeSessionDialog({
             <div className="flex items-center gap-2 text-sm">
               <Clock className="h-4 w-4 text-muted-foreground" />
               <span className="text-muted-foreground">
-                Started <span className="font-medium text-foreground">{timeAgo}</span>
+                Started{" "}
+                <span className="font-medium text-foreground">{timeAgo}</span>
               </span>
             </div>
 

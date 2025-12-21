@@ -111,7 +111,7 @@ class RTDECountSession(db.Model):
     """
     RTD&E counting session model.
 
-    Sessions have a 4-hour expiration window and are user-specific.
+    Sessions have a 30-minute expiration window and are user-specific.
     Sessions are deleted immediately after completion (calculator-style).
 
     Attributes:
@@ -120,7 +120,7 @@ class RTDECountSession(db.Model):
         status: Session status ('in_progress', 'completed', 'expired')
         started_at: Timestamp when session was created
         completed_at: Timestamp when session was completed (nullable)
-        expires_at: Timestamp when session expires (started_at + 4 hours)
+        expires_at: Timestamp when session expires (started_at + 30 minutes)
     """
 
     __tablename__ = 'rtde_count_sessions'
@@ -173,7 +173,7 @@ class RTDECountSession(db.Model):
         """
         Initialize session with automatic expiration calculation.
 
-        Sets expires_at to started_at + 4 hours if not provided.
+        Sets expires_at to started_at + 30 minutes if not provided.
         """
         # Set started_at if not provided
         if 'started_at' not in kwargs:
@@ -183,7 +183,7 @@ class RTDECountSession(db.Model):
 
         # Auto-calculate expires_at if not provided
         if not self.expires_at:
-            self.expires_at = self.started_at + timedelta(hours=4)
+            self.expires_at = self.started_at + timedelta(minutes=30)
 
     def to_dict(self, include_counts: bool = False) -> dict:
         """

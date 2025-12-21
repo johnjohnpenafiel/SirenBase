@@ -57,7 +57,7 @@ A digital counting and restocking tool that:
 
 2. **Session Management**
    - Store-level sessions (not user-specific)
-   - 4-hour session expiration
+   - 30-minute session expiration
    - Resume or restart dialog if previous session exists
    - Auto-save counts as partner works
    - Immediate deletion after completion (no history)
@@ -231,7 +231,7 @@ A digital counting and restocking tool that:
 
 **Session Expiration:**
 
-- If partner doesn't return within **4 hours** → Session auto-expires
+- If partner doesn't return within **30 minutes** → Session auto-expires
 - Next time they open tool → Starts fresh automatically (no dialog)
 - Expired sessions cleaned up automatically
 
@@ -274,7 +274,7 @@ CREATE TABLE rtde_count_sessions (
     status VARCHAR(20) DEFAULT 'in_progress',  -- 'in_progress', 'completed', 'expired'
     started_at TIMESTAMP DEFAULT NOW(),
     completed_at TIMESTAMP,
-    expires_at TIMESTAMP NOT NULL             -- started_at + 4 hours
+    expires_at TIMESTAMP NOT NULL             -- started_at + 30 minutes
 );
 
 CREATE INDEX idx_rtde_sessions_user_status ON rtde_count_sessions(user_id, status);
@@ -284,7 +284,7 @@ CREATE INDEX idx_rtde_sessions_expires ON rtde_count_sessions(expires_at);
 **Key Design Decisions:**
 
 - **User-Specific Sessions:** Each partner has their own active session
-- **4-Hour Expiration:** `expires_at = started_at + 4 hours`
+- **30-Minute Expiration:** `expires_at = started_at + 30 minutes`
 - **Status Tracking:** In progress, completed, or expired
 - **No Historical Retention:** Sessions deleted immediately after completion
 
@@ -448,7 +448,7 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 - **Logic**:
   - If `action = "new"` → Delete any existing session, create new one
   - If `action = "resume"` → Return existing session ID (error if none exists)
-  - Set `expires_at = started_at + 4 hours`
+  - Set `expires_at = started_at + 30 minutes`
 - **Response**:
   ```json
   {
@@ -657,9 +657,9 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 
 #### Session Expiration Logic
 
-**4-Hour Window:**
+**30-Minute Window:**
 
-- `expires_at = started_at + 4 hours`
+- `expires_at = started_at + 30 minutes`
 - Long enough for interrupted workflows
 - Short enough to keep database clean
 - Prevents stale data accumulation

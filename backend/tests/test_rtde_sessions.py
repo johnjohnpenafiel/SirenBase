@@ -63,13 +63,13 @@ class TestGetActiveSession:
     def test_get_active_session_expired(self, client, staff_headers, staff_user, app):
         """Test when session is expired (marks as expired)."""
         # Create expired session
-        past_time = datetime.utcnow() - timedelta(hours=5)
+        past_time = datetime.utcnow() - timedelta(minutes=35)
         session = RTDECountSession(
             user_id=staff_user.id,
             status='in_progress',
             started_at=past_time
         )
-        session.expires_at = past_time + timedelta(hours=4)  # Override auto-calculation
+        session.expires_at = past_time + timedelta(minutes=30)  # Override auto-calculation
 
         db.session.add(session)
         db.session.commit()
@@ -159,13 +159,13 @@ class TestStartSession:
     def test_resume_session_expired(self, client, staff_headers, staff_user, app):
         """Test resume when session is expired."""
         # Create expired session
-        past_time = datetime.utcnow() - timedelta(hours=5)
+        past_time = datetime.utcnow() - timedelta(minutes=35)
         session = RTDECountSession(
             user_id=staff_user.id,
             status='in_progress',
             started_at=past_time
         )
-        session.expires_at = past_time + timedelta(hours=4)
+        session.expires_at = past_time + timedelta(minutes=30)
 
         db.session.add(session)
         db.session.commit()

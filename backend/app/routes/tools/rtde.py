@@ -470,7 +470,7 @@ def start_session():
             status='in_progress',
             started_at=datetime.utcnow()
         )
-        # expires_at set automatically in __init__ (started_at + 4 hours)
+        # expires_at set automatically in __init__ (started_at + 30 minutes)
 
         db.session.add(session)
         db.session.commit()

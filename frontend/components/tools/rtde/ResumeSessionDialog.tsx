@@ -1,14 +1,14 @@
 /**
  * Resume Session Dialog Component
  *
- * Shown when user tries to start a new RTD&E session but has an active one.
+ * Shown when user has an active RTD&E session.
+ * Now displayed IN-CONTEXT on the session page (not on a landing page).
  * Allows user to either:
- * - Resume the existing session
- * - Start a fresh session (abandons current session)
+ * - Resume (continue) - just closes the dialog
+ * - Start Fresh - abandons current session and creates new one
  */
 'use client';
 
-import { useRouter } from 'next/navigation';
 import {
   Dialog,
   DialogContent,
@@ -24,7 +24,6 @@ import { formatDistanceToNow } from 'date-fns';
 interface ResumeSessionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  sessionId: string;
   sessionStartedAt: string; // ISO timestamp
   itemsCounted: number;
   totalItems: number;
@@ -34,16 +33,13 @@ interface ResumeSessionDialogProps {
 export function ResumeSessionDialog({
   open,
   onOpenChange,
-  sessionId,
   sessionStartedAt,
   itemsCounted,
   totalItems,
   onStartFresh,
 }: ResumeSessionDialogProps) {
-  const router = useRouter();
-
   const handleResume = () => {
-    router.push(`/tools/rtde/session/${sessionId}`);
+    // Just close the dialog - we're already on the session page
     onOpenChange(false);
   };
 

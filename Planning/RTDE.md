@@ -125,17 +125,18 @@ A digital counting and restocking tool that:
 
 1. Partner opens SirenBase → Dashboard
 2. Clicks "RTD&E Counting" card → Routes to `/tools/rtde`
-3. System checks for active session:
-   - **If no session exists:** Automatically starts new session
-   - **If session exists:** Shows dialog:
-     ```
-     "You have a count in progress (started 30 min ago).
-     Resume or Start Fresh?"
-     [Resume] [Start Fresh]
-     ```
-   - Resume: Continues from last item
-   - Start Fresh: Deletes old session, starts new one
-4. Count screen loads with first item (based on `display_order`)
+3. `/tools/rtde` acts as a thin router (shows loading spinner):
+   - Checks for active session via API
+   - **If no session exists:** Auto-creates new session → redirects to `/tools/rtde/session/:id`
+   - **If session exists:** Redirects to `/tools/rtde/session/:id?resume=prompt`
+4. Session page loads with counting interface
+5. **If resume prompt:** Shows dialog IN-CONTEXT on top of counting UI:
+   ```
+   "You have a count in progress (started 30 min ago).
+   [Continue] [Start Fresh]"
+   ```
+   - Continue: Closes dialog, user continues counting
+   - Start Fresh: Abandons session, creates new one, redirects
 
 **Counting Interface:**
 
@@ -219,15 +220,17 @@ A digital counting and restocking tool that:
 ### Staff Workflow: Interrupted Count (Resume Later)
 
 1. Partner starts counting (gets to item 5/12)
-2. Gets pulled away for other tasks (30 minutes)
-3. Returns, opens RTD&E tool
-4. Dialog appears:
+2. Gets pulled away for other tasks
+3. Returns, opens RTD&E tool from Dashboard
+4. System auto-redirects to existing session page with `?resume=prompt`
+5. Dialog appears IN-CONTEXT (on top of counting UI showing their progress):
    ```
    "You have a count in progress (started 30 min ago).
-   Resume or Start Fresh?"
+   5 of 12 items counted.
+   [Continue] [Start Fresh]"
    ```
-5. **Resume:** Continues from item 5 with saved counts
-6. **Start Fresh:** Deletes old session, begins new count from item 1
+6. **Continue:** Dialog closes, partner continues from item 5
+7. **Start Fresh:** Abandons session, creates new one, redirects to fresh count
 
 **Session Expiration:**
 
@@ -601,13 +604,22 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 
 **Base Path**: `/tools/rtde/*`
 
-- **`/tools/rtde`** - Main RTD&E tool entry point
+- **`/tools/rtde`** - Session Router (thin loader)
 
-  - Checks for active session via `GET /api/rtde/sessions/active`
-  - Shows resume/restart dialog if session exists
-  - Routes to session page or starts new session
+  - No landing page UI - just displays a loading spinner
+  - On mount, checks for active session via `GET /api/rtde/sessions/active`
+  - **If session exists:** Redirects to `/tools/rtde/session/:id?resume=prompt`
+  - **If no session:** Creates new session, redirects to `/tools/rtde/session/:id`
+  - On error: Shows toast and redirects to dashboard
 
 - **`/tools/rtde/session/:sessionId`** - Unified session workflow with phase-based rendering
+
+  - **Resume Dialog (if `?resume=prompt` query param)**
+    - Shows `ResumeSessionDialog` IN-CONTEXT on top of counting UI
+    - User sees their progress in the background
+    - "Continue": Closes dialog, user continues counting
+    - "Start Fresh": Abandons session, creates new one, redirects
+    - URL query param is cleaned up after dialog shows
 
   - **Phase 1: Counting**
     - One-item-at-a-time focus with adaptive navigation
@@ -674,20 +686,22 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 
 **Dialog Trigger:**
 
-- Show dialog only if active session exists AND hasn't expired
-- Dialog text: "You have a count in progress (started X minutes ago). Resume or Start Fresh?"
+- `/tools/rtde` router detects active session → redirects to session page with `?resume=prompt`
+- Session page shows `ResumeSessionDialog` IN-CONTEXT (on top of counting UI)
+- Dialog text: "You have a count in progress (started X minutes ago). [Progress] X of Y items counted. [Continue] [Start Fresh]"
+- If session expired → Router auto-creates new session (no dialog)
 
-**Resume Action:**
+**Continue Action:**
 
-- Use existing `session_id`
-- Load saved counts from `rtde_session_counts`
-- Navigate to current/last item
+- Dialog closes
+- User continues counting with existing `session_id`
+- Progress is preserved from `rtde_session_counts`
 
 **Start Fresh Action:**
 
-- Delete existing session (cascade deletes counts)
+- API auto-abandons existing session when starting new
 - Create new session
-- Start from first item (display_order = 1)
+- Redirect to new session page (fresh count from first item)
 
 #### Calculator-Style Data Handling
 
@@ -1171,7 +1185,7 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 
 ---
 
-**Document Version:** 2.0
-**Last Updated:** 2025-11-21
-**Status:** Complete Planning - Ready for Phase 1 (Admin Dashboard Restructure)
+**Document Version:** 2.1
+**Last Updated:** 2025-12-21
+**Status:** Implementation Complete - Streamlined session flow (no landing page)
 **Part of:** SirenBase Multi-Tool Platform (Tool 3 of 3)

@@ -110,7 +110,7 @@ class TestRTDECountSession:
         assert session.completed_at is None
 
     def test_session_auto_expiration(self, app, staff_user):
-        """Test session auto-calculates expiration (4 hours)."""
+        """Test session auto-calculates expiration (30 minutes)."""
         session = RTDECountSession(
             user_id=staff_user.id,
             status='in_progress'
@@ -119,21 +119,21 @@ class TestRTDECountSession:
         db.session.add(session)
         db.session.commit()
 
-        # Verify expires_at is 4 hours after started_at
-        expected_expires = session.started_at + timedelta(hours=4)
+        # Verify expires_at is 30 minutes after started_at
+        expected_expires = session.started_at + timedelta(minutes=30)
         time_diff = abs((session.expires_at - expected_expires).total_seconds())
         assert time_diff < 1  # Within 1 second
 
     def test_session_is_expired(self, app, staff_user):
         """Test is_expired method."""
         # Create session that expires in the past
-        past_time = datetime.utcnow() - timedelta(hours=5)
+        past_time = datetime.utcnow() - timedelta(minutes=35)
         session = RTDECountSession(
             user_id=staff_user.id,
             status='in_progress',
             started_at=past_time
         )
-        session.expires_at = past_time + timedelta(hours=4)  # Override auto-calculation
+        session.expires_at = past_time + timedelta(minutes=30)  # Override auto-calculation
 
         assert session.is_expired() is True
 

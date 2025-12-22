@@ -143,8 +143,8 @@ export function RTDECountCard({
         alt={`${brand ? `${brand} ` : ""}${itemName}`}
       />
 
-      {/* Brand & Item Name - Brand displayed as secondary info above item name */}
-      <div className="flex flex-col items-center gap-0.5">
+      {/* Brand & Item Name - Fixed height container for consistent card sizing */}
+      <div className="flex flex-col items-center justify-center gap-0.5 h-[4rem] md:h-[5rem]">
         {brand && (
           <span className="text-xs md:text-sm font-medium text-gray-500 text-center">
             {brand}

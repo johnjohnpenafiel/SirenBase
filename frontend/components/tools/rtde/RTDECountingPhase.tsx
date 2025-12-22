@@ -116,7 +116,7 @@ export function RTDECountingPhase({
       </div>
 
       {/* Mobile Navigation - Above Bottom Bar */}
-      <div className="md:hidden flex justify-center gap-3 px-4 pb-4">
+      <div className="md:hidden flex justify-center gap-3 px-4 py-4">
         {showPreviousButton && (
           <Button
             variant="outline"

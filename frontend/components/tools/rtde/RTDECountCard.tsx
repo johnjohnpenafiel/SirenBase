@@ -124,8 +124,8 @@ export function RTDECountCard({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-[clamp(0.25rem,1vh,0.5rem)] md:gap-4",
-        "p-[clamp(0.75rem,2vh,1rem)] md:p-6",
+        "flex flex-col items-center gap-[clamp(0.125rem,0.75vh,0.5rem)] md:gap-4",
+        "p-[clamp(0.5rem,1.5vh,1rem)] md:p-6",
         "bg-gradient-to-br from-card to-card/95",
         "border border-border/50",
         "rounded-3xl",
@@ -144,7 +144,7 @@ export function RTDECountCard({
       />
 
       {/* Brand & Item Name - Fixed height container, viewport-responsive */}
-      <div className="flex flex-col items-center justify-center gap-0.5 h-[clamp(3rem,8vh,4rem)] md:h-[5rem]">
+      <div className="flex flex-col items-center justify-center gap-0.5 h-[clamp(4rem,10vh,5.5rem)] md:h-[5.5rem]">
         {brand && (
           <span className="text-xs md:text-sm font-medium text-gray-500 text-center">
             {brand}

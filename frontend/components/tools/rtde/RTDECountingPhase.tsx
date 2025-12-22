@@ -50,8 +50,8 @@ export function RTDECountingPhase({
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden bg-muted/30">
-      {/* Progress Section - Floating Card */}
-      <div className="px-4 md:px-8 pt-3 md:pt-6 pb-2">
+      {/* Progress Section - Full (hidden on short viewports) */}
+      <div className="px-4 md:px-8 pt-3 md:pt-6 pb-2 [@media(max-height:650px)]:hidden">
         <div className="container max-w-4xl mx-auto">
           <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-3 md:py-5">
             {/* Title */}
@@ -89,6 +89,37 @@ export function RTDECountingPhase({
                   aria-valuemax={100}
                 />
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Section - Compact (only on short viewports) */}
+      <div className="hidden [@media(max-height:650px)]:block px-4 pt-2 pb-1">
+        <div className="container max-w-4xl mx-auto">
+          <div className="bg-background border border-border rounded-xl px-3 py-2">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-medium text-foreground">
+                  Item {currentIndex + 1}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  of {totalItems}
+                </span>
+              </div>
+              <span className="text-xs font-bold text-primary">
+                {progressPercent}%
+              </span>
+            </div>
+            <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
+              <div
+                className="bg-primary h-1.5 rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${progressPercent}%` }}
+                role="progressbar"
+                aria-valuenow={progressPercent}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              />
             </div>
           </div>
         </div>

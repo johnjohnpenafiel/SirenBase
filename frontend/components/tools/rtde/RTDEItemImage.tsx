@@ -36,10 +36,11 @@ const SIZE_CONFIG = {
     icon: "h-6 w-6",
   },
   lg: {
-    container: "w-28 h-28 md:w-36 md:h-36",
+    // Viewport-responsive: shrinks from 112px to 80px based on viewport height
+    container: "w-[clamp(5rem,14vh,7rem)] h-[clamp(5rem,14vh,7rem)] md:w-36 md:h-36",
     image: 144, // Will be used for both mobile and desktop with responsive sizing
-    emoji: "text-[3.5rem] md:text-[5rem]",
-    icon: "h-14 w-14 md:h-[4.5rem] md:w-[4.5rem]",
+    emoji: "text-[clamp(2.5rem,7vh,3.5rem)] md:text-[5rem]",
+    icon: "h-[clamp(2.5rem,7vh,3.5rem)] w-[clamp(2.5rem,7vh,3.5rem)] md:h-[4.5rem] md:w-[4.5rem]",
   },
 } as const;
 

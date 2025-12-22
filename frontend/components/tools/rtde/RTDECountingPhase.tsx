@@ -95,7 +95,7 @@ export function RTDECountingPhase({
       </div>
 
       {/* Count Card - Centered Content */}
-      <div className="flex-1 flex flex-col items-center justify-center py-2 md:py-4">
+      <div className="flex-1 flex flex-col items-center justify-center py-1 md:py-4">
         <div className="container max-w-4xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-center">
             <div className="w-full max-w-lg">
@@ -116,7 +116,7 @@ export function RTDECountingPhase({
       </div>
 
       {/* Mobile Navigation - Above Bottom Bar */}
-      <div className="md:hidden flex justify-center gap-3 px-4 py-4">
+      <div className="md:hidden flex justify-center gap-3 px-4 py-3">
         {showPreviousButton && (
           <Button
             variant="outline"

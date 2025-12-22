@@ -50,8 +50,8 @@ export function RTDECountingPhase({
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden bg-muted/30">
-      {/* Progress Section - Full (hidden on short viewports) */}
-      <div className="px-4 md:px-8 pt-3 md:pt-6 pb-2 [@media(max-height:730px)]:hidden">
+      {/* Progress Section - Full (hidden on very short viewports) */}
+      <div className="px-4 md:px-8 pt-3 md:pt-6 pb-2 [@media(max-height:670px)]:hidden">
         <div className="container max-w-4xl mx-auto">
           <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-3 md:py-5">
             {/* Title */}
@@ -94,8 +94,8 @@ export function RTDECountingPhase({
         </div>
       </div>
 
-      {/* Progress Section - Compact (only on short viewports) */}
-      <div className="hidden [@media(max-height:730px)]:block px-4 pt-2 pb-1">
+      {/* Progress Section - Compact (only on very short viewports) */}
+      <div className="hidden [@media(max-height:670px)]:block px-4 pt-2 pb-1">
         <div className="container max-w-4xl mx-auto">
           <div className="bg-background border border-border rounded-xl px-3 py-2">
             <div className="flex items-center justify-between mb-1.5">
@@ -125,8 +125,8 @@ export function RTDECountingPhase({
         </div>
       </div>
 
-      {/* Count Card - Centered Content */}
-      <div className="flex-1 flex flex-col items-center justify-center py-1 md:py-4">
+      {/* Count Card - Centered Content (min-h-0 allows flex shrinking) */}
+      <div className="flex-1 min-h-0 flex flex-col items-center justify-center py-1 md:py-4">
         <div className="container max-w-4xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-center">
             <div className="w-full max-w-lg">
@@ -146,8 +146,8 @@ export function RTDECountingPhase({
         </div>
       </div>
 
-      {/* Mobile Navigation - Above Bottom Bar */}
-      <div className="md:hidden flex justify-center gap-3 px-4 py-3">
+      {/* Mobile Navigation - Above Bottom Bar (flex-shrink-0 ensures it never gets cut off) */}
+      <div className="md:hidden flex justify-center gap-3 px-4 py-3 flex-shrink-0">
         {showPreviousButton && (
           <Button
             variant="outline"
@@ -178,8 +178,8 @@ export function RTDECountingPhase({
         )}
       </div>
 
-      {/* Navigation Buttons - Fixed */}
-      <div className="border-t bg-background pb-safe">
+      {/* Navigation Buttons - Fixed (flex-shrink-0 ensures it never gets cut off) */}
+      <div className="border-t bg-background pb-safe flex-shrink-0">
         <div className="container max-w-4xl mx-auto px-4 pt-3 pb-6 md:py-6">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-between gap-3">

@@ -304,6 +304,172 @@ export interface CompleteRTDESessionResponse {
 }
 
 // ============================================================================
+// Milk Count Types (Tool 2)
+// ============================================================================
+
+export type MilkCategory = 'dairy' | 'non_dairy';
+
+export type MilkCountSessionStatus = 'night_foh' | 'night_boh' | 'morning' | 'completed';
+
+export type MilkCountMorningMethod = 'boh_count' | 'direct_delivered';
+
+export interface MilkType {
+  id: string;
+  name: string;
+  category: MilkCategory;
+  display_order: number;
+  active: boolean;
+  par_value?: number; // Included when include_par=true
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MilkCountParLevel {
+  id: string;
+  milk_type_id: string;
+  milk_type_name: string;
+  milk_type_category: MilkCategory;
+  par_value: number;
+  updated_at: string;
+  updated_by?: string;
+  updated_by_name?: string;
+}
+
+export interface MilkCountSession {
+  id: string;
+  date: string; // YYYY-MM-DD format
+  status: MilkCountSessionStatus;
+  night_count_user_id?: string;
+  night_count_user_name?: string;
+  morning_count_user_id?: string;
+  morning_count_user_name?: string;
+  night_foh_saved_at?: string;
+  night_boh_saved_at?: string;
+  morning_saved_at?: string;
+  completed_at?: string;
+  created_at: string;
+}
+
+export interface MilkCountEntry {
+  id: string;
+  session_id: string;
+  milk_type_id: string;
+  milk_type_name: string;
+  milk_type_category: MilkCategory;
+  foh_count: number | null;
+  boh_count: number | null;
+  morning_method: MilkCountMorningMethod | null;
+  current_boh: number | null;
+  delivered: number | null;
+  updated_at: string;
+}
+
+export interface MilkCountSummaryEntry {
+  milk_type: string;
+  category: MilkCategory;
+  foh: number;
+  boh: number;
+  delivered: number;
+  total: number;
+  par: number;
+  order: number;
+}
+
+export interface MilkCountSummaryTotals {
+  total_foh: number;
+  total_boh: number;
+  total_delivered: number;
+  total_inventory: number;
+  total_order: number;
+}
+
+// Milk Count Admin API Types
+export interface GetMilkTypesResponse {
+  milk_types: MilkType[];
+}
+
+export interface UpdateMilkTypeRequest {
+  display_order?: number;
+  active?: boolean;
+}
+
+export interface UpdateMilkTypeResponse {
+  message: string;
+  milk_type: MilkType;
+}
+
+export interface GetParLevelsResponse {
+  par_levels: MilkCountParLevel[];
+}
+
+export interface UpdateParLevelRequest {
+  par_value: number;
+}
+
+export interface UpdateParLevelResponse {
+  message: string;
+  par_level: MilkCountParLevel;
+}
+
+// Milk Count Session API Types
+export interface GetTodaySessionResponse {
+  session: MilkCountSession | null;
+}
+
+export interface StartMilkCountSessionResponse {
+  message: string;
+  session: MilkCountSession;
+}
+
+export interface GetMilkCountSessionResponse {
+  session: MilkCountSession;
+  entries: MilkCountEntry[];
+}
+
+export interface MilkCountNightCount {
+  milk_type_id: string;
+  foh_count?: number;
+  boh_count?: number;
+}
+
+export interface SaveNightFOHRequest {
+  counts: Array<{ milk_type_id: string; foh_count: number }>;
+}
+
+export interface SaveNightBOHRequest {
+  counts: Array<{ milk_type_id: string; boh_count: number }>;
+}
+
+export interface MilkCountMorningCount {
+  milk_type_id: string;
+  method: MilkCountMorningMethod;
+  current_boh?: number; // Required if method is 'boh_count'
+  delivered?: number; // Required if method is 'direct_delivered'
+}
+
+export interface SaveMorningCountRequest {
+  counts: MilkCountMorningCount[];
+}
+
+export interface SaveMilkCountResponse {
+  message: string;
+  session: MilkCountSession;
+}
+
+export interface GetMilkCountSummaryResponse {
+  session: MilkCountSession;
+  summary: MilkCountSummaryEntry[];
+  totals: MilkCountSummaryTotals;
+}
+
+export interface GetMilkCountHistoryResponse {
+  sessions: MilkCountSession[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+// ============================================================================
 // UI State Types
 // ============================================================================
 

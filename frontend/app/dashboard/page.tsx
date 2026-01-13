@@ -66,13 +66,12 @@ export default function DashboardPage() {
                   icon={<Package className="w-12 h-12 text-primary" />}
                 />
 
-                {/* Tool 2: Milk Count - Coming Soon */}
+                {/* Tool 2: Milk Count - Active */}
                 <ToolCard
                   title="Milk Count"
                   description="FOH/BOH counting with automated calculations"
                   route="/tools/milk-count"
-                  icon={<Milk className="w-12 h-12 text-muted-foreground" />}
-                  isDisabled={true}
+                  icon={<Milk className="w-12 h-12 text-primary" />}
                 />
 
                 {/* Tool 3: RTD&E - Active */}

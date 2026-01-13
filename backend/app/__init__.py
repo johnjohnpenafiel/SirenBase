@@ -33,18 +33,24 @@ def create_app(config_name='default'):
 
     # Import models (required for Flask-Migrate to detect them)
     with app.app_context():
-        from app.models import User, Item, History, RTDEItem, RTDECountSession, RTDESessionCount
+        from app.models import (
+            User, Item, History,
+            RTDEItem, RTDECountSession, RTDESessionCount,
+            MilkType, MilkCountParLevel, MilkCountSession, MilkCountEntry
+        )
 
     # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.admin import admin_bp
     from app.routes.tools.tracking import tracking_bp
     from app.routes.tools.rtde import rtde_bp
+    from app.routes.tools.milk_count import milk_count_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(tracking_bp)
     app.register_blueprint(rtde_bp)
+    app.register_blueprint(milk_count_bp)
 
     # Register error handlers
     register_error_handlers(app)

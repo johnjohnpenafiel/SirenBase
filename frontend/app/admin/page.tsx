@@ -45,13 +45,12 @@ export default function AdminPage() {
                   icon={<Package className="h-8 w-8" />}
                 />
 
-                {/* Milk Count Pars Module (Placeholder) */}
+                {/* Milk Count Pars Module */}
                 <AdminModuleCard
                   title="Milk Count Pars"
-                  description="Configure milk par levels (Tool 2)"
+                  description="Configure milk par levels"
                   route="/admin/milk-pars"
                   icon={<Milk className="h-8 w-8" />}
-                  isDisabled={true}
                 />
               </div>
             </div>

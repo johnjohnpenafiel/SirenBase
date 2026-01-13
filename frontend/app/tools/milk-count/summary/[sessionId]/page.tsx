@@ -2,7 +2,7 @@
  * Milk Count - Summary Page
  *
  * Displays the final summary matching the paper logbook format:
- * Milk Type | FOH | BOH | Delivered | Total | Par | Order
+ * Milk Type | FOH | BOH | Delivered | On Order | Total | Par | Order
  *
  * Color coding for order amounts:
  * - Green: At or above par (order = 0)
@@ -141,7 +141,7 @@ export default function SummaryPage() {
                                 <CardTitle className="text-base">{entry.milk_type}</CardTitle>
                               </CardHeader>
                               <CardContent className="py-3 px-4">
-                                <div className="grid grid-cols-3 gap-2 text-sm">
+                                <div className="grid grid-cols-4 gap-2 text-sm">
                                   <div>
                                     <p className="text-xs text-muted-foreground">FOH</p>
                                     <p className="font-semibold">{entry.foh}</p>
@@ -155,6 +155,10 @@ export default function SummaryPage() {
                                     <p className="font-semibold">{entry.delivered}</p>
                                   </div>
                                   <div>
+                                    <p className="text-xs text-muted-foreground">On Order</p>
+                                    <p className="font-semibold">{entry.on_order}</p>
+                                  </div>
+                                  <div>
                                     <p className="text-xs text-muted-foreground">Total</p>
                                     <p className="font-semibold">{entry.total}</p>
                                   </div>
@@ -162,7 +166,7 @@ export default function SummaryPage() {
                                     <p className="text-xs text-muted-foreground">Par</p>
                                     <p className="font-semibold">{entry.par}</p>
                                   </div>
-                                  <div>
+                                  <div className="col-span-2">
                                     <p className="text-xs text-muted-foreground">Order</p>
                                     <p className={cn(
                                       "font-bold rounded px-2 py-0.5 inline-block",
@@ -193,7 +197,7 @@ export default function SummaryPage() {
                                 <CardTitle className="text-base">{entry.milk_type}</CardTitle>
                               </CardHeader>
                               <CardContent className="py-3 px-4">
-                                <div className="grid grid-cols-3 gap-2 text-sm">
+                                <div className="grid grid-cols-4 gap-2 text-sm">
                                   <div>
                                     <p className="text-xs text-muted-foreground">FOH</p>
                                     <p className="font-semibold">{entry.foh}</p>
@@ -207,6 +211,10 @@ export default function SummaryPage() {
                                     <p className="font-semibold">{entry.delivered}</p>
                                   </div>
                                   <div>
+                                    <p className="text-xs text-muted-foreground">On Order</p>
+                                    <p className="font-semibold">{entry.on_order}</p>
+                                  </div>
+                                  <div>
                                     <p className="text-xs text-muted-foreground">Total</p>
                                     <p className="font-semibold">{entry.total}</p>
                                   </div>
@@ -214,7 +222,7 @@ export default function SummaryPage() {
                                     <p className="text-xs text-muted-foreground">Par</p>
                                     <p className="font-semibold">{entry.par}</p>
                                   </div>
-                                  <div>
+                                  <div className="col-span-2">
                                     <p className="text-xs text-muted-foreground">Order</p>
                                     <p className={cn(
                                       "font-bold rounded px-2 py-0.5 inline-block",
@@ -244,6 +252,7 @@ export default function SummaryPage() {
                                 <th className="text-center py-3 px-4 font-semibold">FOH</th>
                                 <th className="text-center py-3 px-4 font-semibold">BOH</th>
                                 <th className="text-center py-3 px-4 font-semibold">Delivered</th>
+                                <th className="text-center py-3 px-4 font-semibold">On Order</th>
                                 <th className="text-center py-3 px-4 font-semibold">Total</th>
                                 <th className="text-center py-3 px-4 font-semibold">Par</th>
                                 <th className="text-center py-3 px-4 font-semibold">Order</th>
@@ -253,7 +262,7 @@ export default function SummaryPage() {
                               {/* Dairy Header */}
                               {dairyEntries.length > 0 && (
                                 <tr className="bg-blue-50/50">
-                                  <td colSpan={7} className="py-2 px-4 font-semibold text-blue-700 flex items-center gap-2">
+                                  <td colSpan={8} className="py-2 px-4 font-semibold text-blue-700 flex items-center gap-2">
                                     <Milk className="h-4 w-4" />
                                     Dairy
                                   </td>
@@ -265,6 +274,7 @@ export default function SummaryPage() {
                                   <td className="text-center py-3 px-4">{entry.foh}</td>
                                   <td className="text-center py-3 px-4">{entry.boh}</td>
                                   <td className="text-center py-3 px-4">{entry.delivered}</td>
+                                  <td className="text-center py-3 px-4">{entry.on_order}</td>
                                   <td className="text-center py-3 px-4 font-semibold">{entry.total}</td>
                                   <td className="text-center py-3 px-4">{entry.par}</td>
                                   <td className="text-center py-3 px-4">
@@ -281,7 +291,7 @@ export default function SummaryPage() {
                               {/* Non-Dairy Header */}
                               {nonDairyEntries.length > 0 && (
                                 <tr className="bg-green-50/50">
-                                  <td colSpan={7} className="py-2 px-4 font-semibold text-green-700 flex items-center gap-2">
+                                  <td colSpan={8} className="py-2 px-4 font-semibold text-green-700 flex items-center gap-2">
                                     <Leaf className="h-4 w-4" />
                                     Non-Dairy
                                   </td>
@@ -293,6 +303,7 @@ export default function SummaryPage() {
                                   <td className="text-center py-3 px-4">{entry.foh}</td>
                                   <td className="text-center py-3 px-4">{entry.boh}</td>
                                   <td className="text-center py-3 px-4">{entry.delivered}</td>
+                                  <td className="text-center py-3 px-4">{entry.on_order}</td>
                                   <td className="text-center py-3 px-4 font-semibold">{entry.total}</td>
                                   <td className="text-center py-3 px-4">{entry.par}</td>
                                   <td className="text-center py-3 px-4">
@@ -319,7 +330,7 @@ export default function SummaryPage() {
                         <CardTitle className="text-lg">Totals</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
                           <div>
                             <p className="text-sm text-muted-foreground">Total FOH</p>
                             <p className="text-2xl font-bold">{totals.total_foh}</p>
@@ -331,6 +342,10 @@ export default function SummaryPage() {
                           <div>
                             <p className="text-sm text-muted-foreground">Total Delivered</p>
                             <p className="text-2xl font-bold">{totals.total_delivered}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground">Total On Order</p>
+                            <p className="text-2xl font-bold">{totals.total_on_order}</p>
                           </div>
                           <div>
                             <p className="text-sm text-muted-foreground">Total Inventory</p>

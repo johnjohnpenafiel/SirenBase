@@ -309,7 +309,7 @@ export interface CompleteRTDESessionResponse {
 
 export type MilkCategory = 'dairy' | 'non_dairy';
 
-export type MilkCountSessionStatus = 'night_foh' | 'night_boh' | 'morning' | 'completed';
+export type MilkCountSessionStatus = 'night_foh' | 'night_boh' | 'morning' | 'on_order' | 'completed';
 
 export type MilkCountMorningMethod = 'boh_count' | 'direct_delivered';
 
@@ -346,6 +346,7 @@ export interface MilkCountSession {
   night_foh_saved_at?: string;
   night_boh_saved_at?: string;
   morning_saved_at?: string;
+  on_order_saved_at?: string;
   completed_at?: string;
   created_at: string;
 }
@@ -361,6 +362,7 @@ export interface MilkCountEntry {
   morning_method: MilkCountMorningMethod | null;
   current_boh: number | null;
   delivered: number | null;
+  on_order: number | null;
   updated_at: string;
 }
 
@@ -370,6 +372,7 @@ export interface MilkCountSummaryEntry {
   foh: number;
   boh: number;
   delivered: number;
+  on_order: number;
   total: number;
   par: number;
   order: number;
@@ -379,6 +382,7 @@ export interface MilkCountSummaryTotals {
   total_foh: number;
   total_boh: number;
   total_delivered: number;
+  total_on_order: number;
   total_inventory: number;
   total_order: number;
 }
@@ -449,6 +453,15 @@ export interface MilkCountMorningCount {
 
 export interface SaveMorningCountRequest {
   counts: MilkCountMorningCount[];
+}
+
+export interface MilkCountOnOrder {
+  milk_type_id: string;
+  on_order: number;
+}
+
+export interface SaveOnOrderRequest {
+  on_orders: MilkCountOnOrder[];
 }
 
 export interface SaveMilkCountResponse {

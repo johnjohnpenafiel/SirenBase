@@ -32,6 +32,7 @@ class SessionStatus(str, Enum):
     NIGHT_FOH = 'night_foh'      # Night count started, FOH in progress
     NIGHT_BOH = 'night_boh'      # FOH complete, BOH in progress
     MORNING = 'morning'          # Night complete, morning count in progress
+    ON_ORDER = 'on_order'        # Morning complete, on order entry in progress
     COMPLETED = 'completed'      # All counts complete
 
 
@@ -223,17 +224,18 @@ class MilkCountSession(db.Model):
     Daily milk counting session model.
 
     One session per day, store-level (not user-specific).
-    Tracks the progress through night FOH → night BOH → morning → completed.
+    Tracks the progress through night FOH → night BOH → morning → on_order → completed.
 
     Attributes:
         id: UUID primary key
         date: Date of the count (unique - one session per day)
         status: Current status of the session
         night_count_user_id: User who completed night count
-        morning_count_user_id: User who completed morning count
+        morning_count_user_id: User who completed morning/on_order count
         night_foh_saved_at: Timestamp when FOH count was saved
         night_boh_saved_at: Timestamp when BOH count was saved
         morning_saved_at: Timestamp when morning count was saved
+        on_order_saved_at: Timestamp when on order entry was saved
         completed_at: Timestamp when session was marked complete
         created_at: Timestamp when session was created
     """
@@ -283,6 +285,10 @@ class MilkCountSession(db.Model):
         nullable=True
     )
     morning_saved_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime,
+        nullable=True
+    )
+    on_order_saved_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime,
         nullable=True
     )
@@ -336,6 +342,8 @@ class MilkCountSession(db.Model):
             data['night_boh_saved_at'] = self.night_boh_saved_at.isoformat()
         if self.morning_saved_at:
             data['morning_saved_at'] = self.morning_saved_at.isoformat()
+        if self.on_order_saved_at:
+            data['on_order_saved_at'] = self.on_order_saved_at.isoformat()
         if self.completed_at:
             data['completed_at'] = self.completed_at.isoformat()
 
@@ -357,7 +365,11 @@ class MilkCountSession(db.Model):
 
     def is_night_complete(self) -> bool:
         """Check if night count (both FOH and BOH) is complete."""
-        return self.status in [SessionStatus.MORNING.value, SessionStatus.COMPLETED.value]
+        return self.status in [
+            SessionStatus.MORNING.value,
+            SessionStatus.ON_ORDER.value,
+            SessionStatus.COMPLETED.value
+        ]
 
     def mark_night_foh_complete(self, user_id: str) -> None:
         """Mark FOH count as complete and advance to BOH phase."""
@@ -371,10 +383,18 @@ class MilkCountSession(db.Model):
         self.night_boh_saved_at = datetime.utcnow()
 
     def mark_morning_complete(self, user_id: str) -> None:
-        """Mark morning count as complete."""
-        self.status = SessionStatus.COMPLETED.value
+        """Mark morning count as complete and advance to on order phase."""
+        self.status = SessionStatus.ON_ORDER.value
         self.morning_saved_at = datetime.utcnow()
+        self.morning_count_user_id = user_id
+
+    def mark_on_order_complete(self, user_id: str) -> None:
+        """Mark on order entry as complete and finalize session."""
+        self.status = SessionStatus.COMPLETED.value
+        self.on_order_saved_at = datetime.utcnow()
         self.completed_at = datetime.utcnow()
+        # Note: on order user is the same as morning count user in most cases
+        # but we update it in case a different person completes this step
         self.morning_count_user_id = user_id
 
     def __repr__(self) -> str:
@@ -435,6 +455,9 @@ class MilkCountEntry(db.Model):
     current_boh: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     delivered: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
 
+    # On order value (from IMS - already ordered but not yet delivered)
+    on_order: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+
     # Timestamp
     updated_at: Mapped[datetime] = mapped_column(
         DateTime,
@@ -472,6 +495,7 @@ class MilkCountEntry(db.Model):
             'morning_method': self.morning_method,
             'current_boh': self.current_boh,
             'delivered': self.delivered,
+            'on_order': self.on_order,
             'updated_at': self.updated_at.isoformat()
         }
 

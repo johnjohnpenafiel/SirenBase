@@ -23,9 +23,10 @@ The current paper logbook has the following columns:
 - **FOH (Front of House):** Milks in beverage fridges
 - **BOH (Back of House):** Milks in backup fridge
 - **Delivered:** Milks delivered that morning
+- **On Order:** Milks already ordered from IMS (not yet delivered)
 - **Total:** FOH + BOH + Delivered
 - **Par:** Target inventory level
-- **Order:** Par - Total (amount to order)
+- **Order:** Par - Total - On Order (amount to order)
 
 ### The Solution
 
@@ -191,29 +192,41 @@ A digital counting and ordering tool that:
 ```
 
 4. For each milk type, partner selects method and enters count
-5. Clicks "Calculate & Save Order"
-6. Session marked complete, redirected to summary
+5. Clicks "Save & Continue"
+6. Session advances to on_order status, redirected to On Order page
+
+**On Order Screen:**
+
+7. Partner checks IMS for quantities already on order
+8. Enters on_order value for each milk type (default: 0)
+9. Clicks "Save & View Summary"
+10. Session marked complete, redirected to summary
 
 ### Summary Screen
 
 ```
-┌─────────────────────────────────────┐
-│  Daily Milk Count Summary           │
-│  January 12, 2026                   │
-├─────────────────────────────────────┤
-│                                     │
-│  Milk Type | FOH | BOH | Del | Tot | Par | Order │
-│  ─────────────────────────────────────────────── │
-│  Whole     | 15  | 20  | 10  | 45  | 60  | 15    │
-│  2%        | 12  | 18  |  8  | 38  | 50  | 12    │
-│  Oat       |  8  | 12  |  6  | 26  | 35  |  9    │
-│  ...                                             │
-│                                     │
-│  Totals    | 100 | 150 | 80  | 330 | 400 | 70    │
-│                                     │
-├─────────────────────────────────────┤
-│  [View History]  [Back to Dashboard] │
-└─────────────────────────────────────┘
+┌───────────────────────────────────────────────────┐
+│  Daily Milk Count Summary                         │
+│  January 12, 2026                                 │
+├───────────────────────────────────────────────────┤
+│                                                   │
+│  Milk Type | FOH | BOH | Del | OnOrd | Tot | Par | Order │
+│  ───────────────────────────────────────────────────────  │
+│  Whole     | 15  | 20  | 10  |   5   | 45  | 60  |  10   │
+│  2%        | 12  | 18  |  8  |   0   | 38  | 50  |  12   │
+│  Oat       |  8  | 12  |  6  |   2   | 26  | 35  |   7   │
+│  ...                                                      │
+│                                                   │
+│  Totals    | 100 | 150 | 80  |  15   | 330 | 400 |  55   │
+│                                                   │
+├───────────────────────────────────────────────────┤
+│  [View History]  [Back to Dashboard]              │
+└───────────────────────────────────────────────────┘
+```
+
+**Order Calculation Formula:**
+```
+Order = max(0, Par - Total - OnOrder)
 ```
 
 ---
@@ -274,6 +287,7 @@ CREATE TABLE milk_count_sessions (
     night_foh_saved_at TIMESTAMP,
     night_boh_saved_at TIMESTAMP,
     morning_saved_at TIMESTAMP,
+    on_order_saved_at TIMESTAMP,            -- When on order entry was completed
     completed_at TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -285,12 +299,13 @@ CREATE INDEX idx_sessions_status ON milk_count_sessions(status);
 **Session Status State Machine:**
 
 ```
-night_foh → night_boh → morning → completed
+night_foh → night_boh → morning → on_order → completed
 ```
 
 - **night_foh:** FOH count in progress
 - **night_boh:** FOH complete, BOH in progress
 - **morning:** Night complete, morning count in progress
+- **on_order:** Morning complete, on order entry in progress
 - **completed:** All counts complete
 
 #### milk_count_entries Table
@@ -305,6 +320,7 @@ CREATE TABLE milk_count_entries (
     morning_method VARCHAR(20),             -- 'boh_count' or 'direct_delivered'
     current_boh INTEGER,                    -- Morning BOH count (if method = boh_count)
     delivered INTEGER,                      -- Calculated or direct delivered count
+    on_order INTEGER,                       -- Quantity already on order from IMS
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
 
     UNIQUE(session_id, milk_type_id)
@@ -318,6 +334,7 @@ CREATE INDEX idx_entries_session ON milk_count_entries(session_id);
 - **Cascade Delete:** Entries deleted when session deleted
 - **Unique Constraint:** One entry per milk type per session
 - **Method Tracking:** Records which method was used for morning count
+- **On Order Field:** Tracks quantities already ordered from IMS (defaults to 0)
 
 #### Relationships
 
@@ -557,7 +574,7 @@ CREATE INDEX idx_entries_session ON milk_count_entries(session_id);
 - **Response:**
   ```json
   {
-    "message": "Morning count saved - session complete",
+    "message": "Morning count saved - continue to on order",
     "session": {...}
   }
   ```
@@ -565,6 +582,37 @@ CREATE INDEX idx_entries_session ON milk_count_entries(session_id);
   - Validates session status is `morning`
   - For `boh_count` method: Calculates `delivered = current_boh - boh_count`
   - For `direct_delivered` method: Uses provided delivered value
+  - Advances status to `on_order`
+  - Records timestamp and user
+
+---
+
+#### On Order Endpoint
+
+**PUT `/api/milk-count/sessions/:id/on-order`**
+
+- **Purpose:** Save on-order quantities from IMS and complete session
+- **Auth:** Required (JWT)
+- **Body:**
+  ```json
+  {
+    "on_orders": [
+      {"milk_type_id": "uuid", "on_order": 5},
+      {"milk_type_id": "uuid", "on_order": 0}
+    ]
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "message": "On order quantities saved - session complete",
+    "session": {...}
+  }
+  ```
+- **Logic:**
+  - Validates session status is `on_order`
+  - Updates on_order values for each milk type
+  - Values must be non-negative integers
   - Advances status to `completed`
   - Records timestamp and user
 
@@ -587,23 +635,25 @@ CREATE INDEX idx_entries_session ON milk_count_entries(session_id);
         "foh": 15,
         "boh": 20,
         "delivered": 10,
+        "on_order": 5,
         "total": 45,
         "par": 60,
-        "order": 15
+        "order": 10
       }
     ],
     "totals": {
       "total_foh": 100,
       "total_boh": 150,
       "total_delivered": 80,
+      "total_on_order": 15,
       "total_inventory": 330,
-      "total_order": 70
+      "total_order": 55
     }
   }
   ```
 - **Logic:**
   - Calculates `total = foh + boh + delivered`
-  - Calculates `order = max(0, par - total)`
+  - Calculates `order = max(0, par - total - on_order)`
   - Aggregates totals across all milk types
 
 **GET `/api/milk-count/history`**
@@ -673,14 +723,20 @@ CREATE INDEX idx_entries_session ON milk_count_entries(session_id);
   - MorningCountRow components with method selection
   - Shows night BOH values (read-only)
   - Expandable rows showing calculations
-  - "Calculate & Save Order" button
+  - "Save & Continue" button → redirects to On Order page
+
+- **`/tools/milk-count/on-order`** - On Order Page
+  - OnOrderRow components with +/- counters
+  - Instructions to check IMS for on-order quantities
+  - Default value is 0 for all milk types
+  - "Save & View Summary" button → completes session
 
 - **`/tools/milk-count/summary/[sessionId]`** - Summary Page
-  - Table with all columns (FOH, BOH, Delivered, Total, Par, Order)
+  - Table with all columns (FOH, BOH, Delivered, On Order, Total, Par, Order)
   - Mobile: Card-based layout
   - Desktop: Table layout
   - Color-coded order amounts
-  - Totals row
+  - Totals row with Total On Order
   - Navigation to history
 
 - **`/tools/milk-count/history`** - History Page
@@ -715,6 +771,12 @@ CREATE INDEX idx_entries_session ON milk_count_entries(session_id);
   - Shows night BOH value
   - Calculates delivered quantity live
 
+- **OnOrderRow** - On order entry
+  - Simple row with milk name and category icon
+  - +/- counter for on_order value
+  - Direct number input on tap
+  - No method selection (simpler than MorningCountRow)
+
 ---
 
 ### Key Technical Considerations
@@ -724,16 +786,17 @@ CREATE INDEX idx_entries_session ON milk_count_entries(session_id);
 **Status Flow:**
 
 ```
-night_foh → night_boh → morning → completed
-     ↑                      │
-     └──────────────────────┘ (new day, new session)
+night_foh → night_boh → morning → on_order → completed
+     ↑                                  │
+     └──────────────────────────────────┘ (new day, new session)
 ```
 
 **State Transitions:**
 
 - `night_foh` → `night_boh`: When FOH counts saved
 - `night_boh` → `morning`: When BOH counts saved
-- `morning` → `completed`: When morning counts saved
+- `morning` → `on_order`: When morning counts saved
+- `on_order` → `completed`: When on order quantities saved
 
 **State Validation:**
 
@@ -767,8 +830,8 @@ night_foh → night_boh → morning → completed
 
 - `delivered = current_boh - boh_count` (for boh_count method)
 - `total = foh + boh + delivered`
-- `order = max(0, par - total)`
-- Totals aggregated across all milk types
+- `order = max(0, par - total - on_order)`
+- Totals aggregated across all milk types (including total_on_order)
 
 ---
 
@@ -918,7 +981,7 @@ night_foh → night_boh → morning → completed
 
 ---
 
-**Document Version:** 3.0
-**Last Updated:** 2026-01-12
-**Status:** Implementation Complete - Backend (68 tests passing), Frontend (all pages and admin)
+**Document Version:** 3.1
+**Last Updated:** 2026-01-13
+**Status:** Implementation Complete - Backend (with On Order feature), Frontend (all pages including On Order)
 **Part of:** SirenBase Multi-Tool Platform (Tool 2 of 3)

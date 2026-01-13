@@ -41,6 +41,22 @@ import type {
   MarkRTDEItemPulledRequest,
   MarkRTDEItemPulledResponse,
   CompleteRTDESessionResponse,
+  // Milk Count Types
+  GetMilkTypesResponse,
+  UpdateMilkTypeRequest,
+  UpdateMilkTypeResponse,
+  GetParLevelsResponse,
+  UpdateParLevelRequest,
+  UpdateParLevelResponse,
+  GetTodaySessionResponse,
+  StartMilkCountSessionResponse,
+  GetMilkCountSessionResponse,
+  SaveNightFOHRequest,
+  SaveNightBOHRequest,
+  SaveMorningCountRequest,
+  SaveMilkCountResponse,
+  GetMilkCountSummaryResponse,
+  GetMilkCountHistoryResponse,
 } from '@/types';
 import { API_BASE_URL, AUTH_TOKEN_KEY } from './constants';
 
@@ -306,6 +322,139 @@ class APIClient {
   async completeRTDESession(sessionId: string): Promise<CompleteRTDESessionResponse> {
     const response = await this.client.post<CompleteRTDESessionResponse>(
       `/api/rtde/sessions/${sessionId}/complete`
+    );
+    return response.data;
+  }
+
+  // ============================================================================
+  // Milk Count Tool - Admin Endpoints
+  // ============================================================================
+
+  async getMilkTypes(params?: { include_inactive?: boolean }): Promise<GetMilkTypesResponse> {
+    const response = await this.client.get<GetMilkTypesResponse>(
+      '/api/milk-count/admin/milk-types',
+      { params }
+    );
+    return response.data;
+  }
+
+  async updateMilkType(
+    milkTypeId: string,
+    data: UpdateMilkTypeRequest
+  ): Promise<UpdateMilkTypeResponse> {
+    const response = await this.client.put<UpdateMilkTypeResponse>(
+      `/api/milk-count/admin/milk-types/${milkTypeId}`,
+      data
+    );
+    return response.data;
+  }
+
+  async getParLevels(): Promise<GetParLevelsResponse> {
+    const response = await this.client.get<GetParLevelsResponse>(
+      '/api/milk-count/admin/par-levels'
+    );
+    return response.data;
+  }
+
+  async updateParLevel(
+    milkTypeId: string,
+    data: UpdateParLevelRequest
+  ): Promise<UpdateParLevelResponse> {
+    const response = await this.client.put<UpdateParLevelResponse>(
+      `/api/milk-count/admin/par-levels/${milkTypeId}`,
+      data
+    );
+    return response.data;
+  }
+
+  // ============================================================================
+  // Milk Count Tool - Session Endpoints
+  // ============================================================================
+
+  async getMilkCountTodaySession(): Promise<GetTodaySessionResponse> {
+    const response = await this.client.get<GetTodaySessionResponse>(
+      '/api/milk-count/sessions/today'
+    );
+    return response.data;
+  }
+
+  async startMilkCountSession(): Promise<StartMilkCountSessionResponse> {
+    const response = await this.client.post<StartMilkCountSessionResponse>(
+      '/api/milk-count/sessions/start'
+    );
+    return response.data;
+  }
+
+  async getMilkCountSession(sessionId: string): Promise<GetMilkCountSessionResponse> {
+    const response = await this.client.get<GetMilkCountSessionResponse>(
+      `/api/milk-count/sessions/${sessionId}`
+    );
+    return response.data;
+  }
+
+  async saveMilkCountNightFOH(
+    sessionId: string,
+    data: SaveNightFOHRequest
+  ): Promise<SaveMilkCountResponse> {
+    const response = await this.client.put<SaveMilkCountResponse>(
+      `/api/milk-count/sessions/${sessionId}/night-foh`,
+      data
+    );
+    return response.data;
+  }
+
+  async saveMilkCountNightBOH(
+    sessionId: string,
+    data: SaveNightBOHRequest
+  ): Promise<SaveMilkCountResponse> {
+    const response = await this.client.put<SaveMilkCountResponse>(
+      `/api/milk-count/sessions/${sessionId}/night-boh`,
+      data
+    );
+    return response.data;
+  }
+
+  async saveMilkCountMorning(
+    sessionId: string,
+    data: SaveMorningCountRequest
+  ): Promise<SaveMilkCountResponse> {
+    const response = await this.client.put<SaveMilkCountResponse>(
+      `/api/milk-count/sessions/${sessionId}/morning`,
+      data
+    );
+    return response.data;
+  }
+
+  // ============================================================================
+  // Milk Count Tool - Summary & History Endpoints
+  // ============================================================================
+
+  async getMilkCountSummary(sessionId: string): Promise<GetMilkCountSummaryResponse> {
+    const response = await this.client.get<GetMilkCountSummaryResponse>(
+      `/api/milk-count/sessions/${sessionId}/summary`
+    );
+    return response.data;
+  }
+
+  async getMilkCountHistory(params?: {
+    limit?: number;
+    offset?: number;
+    status?: string;
+  }): Promise<GetMilkCountHistoryResponse> {
+    const response = await this.client.get<GetMilkCountHistoryResponse>(
+      '/api/milk-count/history',
+      { params }
+    );
+    return response.data;
+  }
+
+  // ============================================================================
+  // Milk Count Tool - Staff Endpoint (for counting screens)
+  // ============================================================================
+
+  async getMilkTypesForCounting(): Promise<GetMilkTypesResponse> {
+    const response = await this.client.get<GetMilkTypesResponse>(
+      '/api/milk-count/milk-types'
     );
     return response.data;
   }

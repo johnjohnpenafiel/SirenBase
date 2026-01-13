@@ -1,16 +1,16 @@
 # Milk Count Tool - Feature Documentation
 
-## Overview
+## Tool Overview
 
-The Milk Count Tool is a digital solution designed to streamline and automate the milk inventory counting and ordering process at Starbucks stores. This tool replaces the manual paper logbook system with an efficient, accurate, and user-friendly digital interface within SirenBase.
+The **Milk Count Tool** is the second tool in SirenBase, designed to streamline the milk inventory counting and ordering process at Starbucks stores. This tool replaces the manual paper logbook system with an efficient, accurate, and user-friendly digital interface.
 
 ---
 
 ## Problem Statement
 
-### Current Manual Process
+### Current Challenges
 
-Partners at Starbucks must count milk inventory twice daily (night and morning shifts) using a physical logbook with multiple columns. This process is:
+Partners currently count milk inventory twice daily (night and morning shifts) using a physical logbook with multiple columns. This process is:
 
 - **Time-consuming:** Partners must open each fridge, count by type, and manually record data
 - **Error-prone:** Manual addition and calculation increase risk of mistakes
@@ -27,497 +27,898 @@ The current paper logbook has the following columns:
 - **Par:** Target inventory level
 - **Order:** Par - Total (amount to order)
 
-### Current Workflow Steps
+### The Solution
 
-**Night Shift:**
+A digital counting and ordering tool that:
 
-1. Count Front of House (FOH) milks in beverage fridges
-2. Count Back of House (BOH) milks in backup fridge
-3. Record counts in physical logbook
-
-**Morning Shift:**
-
-1. Review night's FOH and BOH counts from logbook
-2. Determine delivered milk quantity:
-   - **For Dairy Milks:** Count current BOH, subtract night BOH to calculate delivered
-   - **For Non-Dairy Milks:** Can directly count delivered boxes (arrive outside fridge)
-3. Calculate Total = FOH + BOH + Delivered
-4. Calculate Order Needed = Par - Total
-5. Write order quantities
-
-### Example Calculation
-
-```
-Whole Milk:
-FOH (night): 15
-BOH (night): 20
-BOH (morning): 30
-Delivered: 30 - 20 = 10
-Total: 15 + 20 + 10 = 45
-
-Par level: 60
-Order needed: 60 - 45 = 15 milks
-```
+- Provides guided FOH and BOH counting with +/- counters
+- Offers two methods for morning counts (BOH count or direct delivered)
+- Automatically calculates totals, delivered quantities, and order amounts
+- Generates summary matching the paper logbook format
+- Stores historical data for reference
 
 ---
 
-## Proposed Digital Solution
+## Scope & Features
 
-### Core Features
+### In Scope (MVP)
 
-#### 1. Night Count Process (Two Sequential Screens)
+1. **Night Count Process (Two Sequential Screens)**
+   - FOH Count Screen: +/- counters for all milk types
+   - BOH Count Screen: +/- counters for all milk types
+   - Session-based workflow with progress tracking
+   - Data saved at store level (accessible by any partner)
+
+2. **Morning Count Process (Single Screen)**
+   - Displays previous night's BOH count (read-only)
+   - Two input options per milk type:
+     - **Option A:** Count current BOH → App calculates delivered
+     - **Option B:** Enter delivered count directly
+   - Flexible method selection per milk type
+
+3. **Summary & Calculation**
+   - Table matching paper logbook format
+   - Auto-calculations: Total = FOH + BOH + Delivered, Order = Par - Total
+   - Color-coded order amounts (green/amber/red)
+   - Historical session viewing
+
+4. **Par Level Management (Admin)**
+   - View and edit par values per milk type
+   - Track who made changes and when
+   - Inline editing interface
+
+5. **Session History**
+   - View past counting sessions
+   - Filter by status (completed, in-progress)
+   - Navigate to view summaries
+
+### Out of Scope (Future Enhancements)
+
+- Export functionality to physical logbook
+- Push notifications for incomplete counts
+- Automated ordering integration
+- Multi-store support
+
+---
+
+## Milk Types
+
+| Category | Milk Types (9 Total) |
+|----------|----------------------|
+| **Dairy (5)** | Whole, 2%, Non-Fat, Half & Half, Heavy Cream |
+| **Non-Dairy (4)** | Oat, Almond, Coconut, Soy |
+
+---
+
+## User Workflows
+
+### Admin Workflow: Managing Par Levels
+
+1. Admin logs in → Dashboard
+2. Clicks "Admin Panel" card
+3. Sees Admin Dashboard with module cards
+4. Clicks "Milk Count Pars"
+5. Views list of all milk types with current par values
+6. Edits par values inline with save/cancel buttons
+7. Changes saved with timestamp and user tracking
+
+### Staff Workflow: Night Count
+
+**Starting Night Count:**
+
+1. Partner opens SirenBase → Dashboard
+2. Clicks "Milk Count" card → Routes to `/tools/milk-count`
+3. Sees session status (no session, in-progress, completed)
+4. Clicks "Start Night Count" to begin
+5. Session created, redirected to FOH page
 
 **FOH Count Screen:**
 
-- Display vertical list of all milk types with +/- counters
-- Partner counts and enters FOH milks for each type
-- Save and proceed to BOH screen
+```
+┌─────────────────────────────────────┐
+│  Night Count - FOH                  │
+│  Progress: 3/9 milks counted        │
+├─────────────────────────────────────┤
+│                                     │
+│  Dairy                              │
+│  ┌─────────────────────────────┐   │
+│  │ 🥛 Whole                    │   │
+│  │    ┌───┐  [ 15 ]  ┌───┐    │   │
+│  │    │ - │          │ + │    │   │
+│  │    └───┘          └───┘    │   │
+│  └─────────────────────────────┘   │
+│                                     │
+│  Non-Dairy                          │
+│  ┌─────────────────────────────┐   │
+│  │ 🌱 Oat                      │   │
+│  │    ┌───┐  [  8 ]  ┌───┐    │   │
+│  │    │ - │          │ + │    │   │
+│  │    └───┘          └───┘    │   │
+│  └─────────────────────────────┘   │
+│                                     │
+├─────────────────────────────────────┤
+│         [Save & Continue to BOH]    │
+└─────────────────────────────────────┘
+```
+
+6. Partner counts FOH milks for each type
+7. Clicks "Save & Continue to BOH"
+8. Session advances to BOH phase
 
 **BOH Count Screen:**
 
-- Identical interface to FOH screen
-- Partner counts and enters BOH milks for each type
-- Final save stores both FOH and BOH counts at store level
+9. Identical interface to FOH
+10. Partner counts BOH milks for each type
+11. Clicks "Save Night Count"
+12. Session advances to "morning" status
+13. Redirected to landing page with success message
 
-**Key Points:**
+### Staff Workflow: Morning Count
 
-- Simple +/- buttons for quick counting
-- No fridge-by-fridge breakdown needed
-- Data saved to store database (not user-specific)
-- Any partner can access the saved counts next morning
+**Starting Morning Count:**
 
-#### 2. Morning Count Process (Single Screen)
+1. Different partner logs in → Dashboard
+2. Opens Milk Count tool → Sees "Continue to Morning Count"
+3. Clicks to open morning count page
 
-**Morning Count Screen displays per milk type:**
-
-- Previous night's BOH count (read-only reference)
-- Two input options (partner chooses one):
-
-  **Option A: BOH Count Method**
-
-  - Input current BOH count using +/- buttons
-  - App auto-calculates: `Delivered = Current BOH - Night BOH`
-  - Best for dairy milks (delivered milks already in fridge)
-
-  **Option B: Direct Delivered Count**
-
-  - Input delivered milk count directly using +/- buttons
-  - Best for non-dairy milks (boxes visible outside fridge)
-  - Still allows flexibility if boxes aren't accessible
-
-**Why Two Methods?**
-
-- **Dairy milks** are delivered directly to BOH fridge (must stay cold) → Use Option A
-- **Non-dairy milks** arrive in boxes outside → Can use Option B for faster counting
-- Flexibility allows partners to use whichever method is most efficient
-
-#### 3. Summary & Calculation
-
-After morning save, display comprehensive summary matching logbook format:
+**Morning Count Screen:**
 
 ```
-Milk Type    | FOH | BOH | Delivered | Total | Par | Order
--------------|-----|-----|-----------|-------|-----|-------
-Whole        | 15  | 20  | 10        | 45    | 60  | 15
-2%           | 12  | 18  | 8         | 38    | 50  | 12
-Oat          | 8   | 12  | 6         | 26    | 35  | 9
+┌─────────────────────────────────────┐
+│  Morning Count                      │
+├─────────────────────────────────────┤
+│                                     │
+│  🥛 Whole Milk                      │
+│  Night BOH: 20                      │
+│                                     │
+│  Choose counting method:            │
+│  ┌─────────────────────────────┐   │
+│  │ ○ Count Current BOH         │   │
+│  │   ┌───┐  [ 30 ]  ┌───┐     │   │
+│  │   │ - │          │ + │     │   │
+│  │   └───┘          └───┘     │   │
+│  │   → Delivered: 10          │   │
+│  │                             │   │
+│  │ ○ Enter Delivered Directly  │   │
+│  │   ┌───┐  [  0 ]  ┌───┐     │   │
+│  │   │ - │          │ + │     │   │
+│  │   └───┘          └───┘     │   │
+│  └─────────────────────────────┘   │
+│                                     │
+├─────────────────────────────────────┤
+│       [Calculate & Save Order]      │
+└─────────────────────────────────────┘
 ```
 
-**Automatic Calculations:**
-
-- Total = FOH + BOH + Delivered
-- Order = Par - Total
-
-**Actions Available:**
-
-- View data to transfer to physical logbook
-- View historical counts
-- Start new counting cycle
-
-#### 4. Par Level Management
-
-**Admin/Manager Dashboard:**
-
-- Set and update par values per milk type
-- Track who made changes and when
-- Adjustable as store needs change
-
----
-
-## Daily Tracking Cycle
-
-### Complete Workflow
-
-**Night Shift (e.g., 9 PM):**
-
-1. Partner logs into SirenBase → Milk Count Tool
-2. Counts FOH milks using +/- buttons for each type
-3. Saves and continues to BOH screen
-4. Counts BOH milks using +/- buttons for each type
-5. Saves night count → Data stored in store database
-6. Visual confirmation displayed
-
-**Morning Shift (e.g., 6 AM):**
-
-1. Different partner logs into SirenBase → Milk Count Tool
-2. Opens morning count screen
-3. For each milk type, sees previous night's BOH count
-4. Chooses counting method:
-   - Dairy: Counts current BOH (app calculates delivered)
-   - Non-dairy: Counts delivered boxes directly (or uses BOH method if preferred)
+4. For each milk type, partner selects method and enters count
 5. Clicks "Calculate & Save Order"
-6. Reviews summary with all calculated values
-7. Exports/copies data to physical logbook
-
-**Cycle Completion:**
-
-- System marks daily log as complete
-- Historical data archived
-- New counting cycle begins for next night
-- Partners can view past counts anytime
-
----
-
-## User Interface Considerations
-
-### Night Count Screens
-
-#### FOH Count Screen
-
-**Layout:**
-
-- Screen title: "Night Count - Front of House (FOH)"
-- Vertical list of all milk types:
-  - Whole
-  - 2%
-  - Half & Half (H&H)
-  - Heavy Cream
-  - Oat
-  - Almond
-  - Coconut
-  - Soy
-
-**Per Milk Type:**
-
-- Milk name/label
-- **[−]** button | **Count Display** (large, centered) | **[+]** button
-- Default value: 0
-
-**Bottom Actions:**
-
-- "Save & Continue to BOH" button
-- Saves FOH counts and navigates to BOH screen
-- Toast notification: "FOH count saved"
-
-#### BOH Count Screen
-
-**Layout:**
-
-- Screen title: "Night Count - Back of House (BOH)"
-- Identical milk list and interface as FOH screen
-
-**Per Milk Type:**
-
-- Same +/- counter interface
-
-**Bottom Actions:**
-
-- "Back to FOH" button (optional, allows corrections)
-- "Save Night Count" button (primary action)
-- Saves both FOH and BOH to store database
-- Confirmation: "Night count complete!"
-- Returns to dashboard or shows summary
-
-### Morning Count Screen
-
-**Layout:**
-
-- Screen title: "Morning Count - Calculate Delivery"
-- Vertical list of all milk types
-
-**Per Milk Type Display:**
-
-```
-┌─────────────────────────────────────────┐
-│ Whole Milk                              │
-│ Night BOH: 20 (greyed out, read-only)   │
-│                                         │
-│ Choose counting method:                 │
-│                                         │
-│ ○ Current BOH Count                     │
-│   [−] [  0  ] [+]                       │
-│   → Delivered: 0 (calculated)           │
-│                                         │
-│ ○ Direct Delivered Count                │
-│   [−] [  0  ] [+]                       │
-│                                         │
-└─────────────────────────────────────────┘
-```
-
-**Features:**
-
-- Radio buttons or tabs to select method
-- Only one method active per milk type
-- If Option A selected: Shows calculated delivered count
-- Visual indicator (color/icon) showing which method was used
-
-**Method Explanations:**
-
-- Option A label: "Current BOH Count (for dairy)"
-- Option B label: "Delivered Count (for non-dairy boxes)"
-- Helper text or tooltips available
-
-**Bottom Actions:**
-
-- "Calculate & Save Order" button (primary)
-- When clicked, validates all inputs and shows summary
+6. Session marked complete, redirected to summary
 
 ### Summary Screen
 
-**Layout:**
-
-- Screen title: "Daily Milk Count Summary"
-- Table displaying all milk types with calculated values
-- Matches physical logbook format exactly
-
-**Table Columns:**
-
-- Milk Type
-- FOH (from night)
-- BOH (from night)
-- Delivered (calculated or entered)
-- Total (FOH + BOH + Delivered)
-- Par (preset value)
-- Order (Par - Total)
-
-**Visual Design:**
-
-- Highlight Order column (final result)
-- Use color coding for low/adequate stock levels
-- Clear, readable table format
-
-**Action Buttons:**
-
-- **"Export to Book"** - Copy formatted data or print view
-- **"View History"** - See past daily counts
-- **"Start New Count"** - Begin next night cycle
-- **"Back to Edit"** - Return to morning count if corrections needed
-
-**Purpose:**
-Provides complete data transfer to physical logbook for official Starbucks recordkeeping and delivery verification.
-
-### Admin/Manager Dashboard
-
-**Par Level Management:**
-
-- List view of all milk types with current par values
-- Edit mode: Change par value with +/- or direct input
-- Save button with confirmation
-- Display: Last updated timestamp and user
-
-**Historical Data View:**
-
-- Date range picker
-- Table showing past counts per day
-- Filter by milk type
-
----
-
-## Technical Considerations
-
-### Data Structure Requirements
-
-```javascript
-MilkCountSession {
-  id: string (unique identifier)
-  storeId: string (which store)
-  date: Date (date of count)
-  status: "night_pending" | "morning_pending" | "completed"
-
-  nightCount: {
-    whole: { foh: number, boh: number },
-    twoPercent: { foh: number, boh: number },
-    halfAndHalf: { foh: number, boh: number },
-    heavyCream: { foh: number, boh: number },
-    oat: { foh: number, boh: number },
-    almond: { foh: number, boh: number },
-    coconut: { foh: number, boh: number },
-    soy: { foh: number, boh: number }
-  },
-
-  morningCount: {
-    milkType: {
-      method: "boh_count" | "direct_delivered",
-      currentBOH?: number (if using boh_count method),
-      delivered: number (calculated or direct)
-    }
-  },
-
-  calculatedTotals: {
-    milkType: {
-      total: number,
-      orderNeeded: number
-    }
-  },
-
-  completedBy: {
-    nightCountUser: string (user ID),
-    morningCountUser: string (user ID)
-  },
-
-  timestamps: {
-    nightCountSaved: DateTime,
-    morningCountSaved: DateTime,
-    completed: DateTime
-  }
-}
-
-ParLevels {
-  storeId: string
-  milkType: string
-  parValue: number
-  lastUpdated: DateTime
-  updatedBy: string (user ID)
-}
-
-MilkTypes {
-  id: string
-  name: string
-  category: "dairy" | "non_dairy"
-  displayOrder: number
-}
+```
+┌─────────────────────────────────────┐
+│  Daily Milk Count Summary           │
+│  January 12, 2026                   │
+├─────────────────────────────────────┤
+│                                     │
+│  Milk Type | FOH | BOH | Del | Tot | Par | Order │
+│  ─────────────────────────────────────────────── │
+│  Whole     | 15  | 20  | 10  | 45  | 60  | 15    │
+│  2%        | 12  | 18  |  8  | 38  | 50  | 12    │
+│  Oat       |  8  | 12  |  6  | 26  | 35  |  9    │
+│  ...                                             │
+│                                     │
+│  Totals    | 100 | 150 | 80  | 330 | 400 | 70    │
+│                                     │
+├─────────────────────────────────────┤
+│  [View History]  [Back to Dashboard] │
+└─────────────────────────────────────┘
 ```
 
-### Key Technical Features
+---
 
-**Session State Management:**
+## Technical Details
 
-- Track current phase: night FOH, night BOH, morning, or completed
-- Persist state between screens and sessions
-- Allow navigation back to previous steps for corrections
+### Database Schema
 
-**Store-Level Data Sharing:**
+#### milk_count_milk_types Table
 
-- All counts saved at store level (not user-specific)
-- Any authenticated partner at the store can access
-- Prevents data loss from shift changes
+```sql
+CREATE TABLE milk_count_milk_types (
+    id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    category VARCHAR(20) NOT NULL,          -- 'dairy' or 'non_dairy'
+    display_order INTEGER NOT NULL,         -- Position in counting list
+    active BOOLEAN DEFAULT TRUE NOT NULL,   -- Enable/disable milk type
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-**Input Validation:**
+CREATE INDEX idx_milk_types_active ON milk_count_milk_types(active);
+```
 
-- Ensure all fields have valid numeric values
-- Prevent negative numbers
-- Confirm before overwriting existing counts
+**Key Design Decisions:**
 
-**Auto-Save & Recovery:**
+- **Category String:** Enum-like values ('dairy', 'non_dairy')
+- **Display Order:** Determines counting sequence
+- **Active Flag:** Soft toggle for seasonal items
 
-- Auto-save counts as they're entered (prevent data loss)
-- Recover partial counts if user navigates away
-- Clear indication of saved vs. unsaved state
+#### milk_count_par_levels Table
 
-**Conflict Resolution:**
+```sql
+CREATE TABLE milk_count_par_levels (
+    id VARCHAR(36) PRIMARY KEY,
+    milk_type_id VARCHAR(36) NOT NULL UNIQUE REFERENCES milk_count_milk_types(id) ON DELETE CASCADE,
+    par_value INTEGER NOT NULL DEFAULT 0,
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_by VARCHAR(36) REFERENCES users(id) ON DELETE SET NULL
+);
+```
 
-- Handle edge case of multiple users counting simultaneously
-- Lock session when in use or use last-write-wins with warning
-- Display who is currently counting (if applicable)
+**Key Design Decisions:**
 
-**Calculation Engine:**
+- **One Par Level Per Milk Type:** Unique constraint on milk_type_id
+- **Audit Trail:** Tracks who updated and when
+- **Cascade Delete:** Par level deleted if milk type deleted
 
-- Real-time calculation of delivered milks (Option A)
-- Real-time calculation of totals and order amounts
-- Validation that calculations match logbook formulas
+#### milk_count_sessions Table
 
-**Historical Data:**
+```sql
+CREATE TABLE milk_count_sessions (
+    id VARCHAR(36) PRIMARY KEY,
+    session_date DATE NOT NULL UNIQUE,      -- One session per day
+    status VARCHAR(20) NOT NULL DEFAULT 'night_foh',  -- State machine
+    night_count_user_id VARCHAR(36) REFERENCES users(id) ON DELETE SET NULL,
+    morning_count_user_id VARCHAR(36) REFERENCES users(id) ON DELETE SET NULL,
+    night_foh_saved_at TIMESTAMP,
+    night_boh_saved_at TIMESTAMP,
+    morning_saved_at TIMESTAMP,
+    completed_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
-- Store all daily counts permanently
-- Index by date for quick retrieval
-- Enable trend analysis and reporting
+CREATE INDEX idx_sessions_date ON milk_count_sessions(session_date);
+CREATE INDEX idx_sessions_status ON milk_count_sessions(status);
+```
 
-**Export Functionality:**
+**Session Status State Machine:**
 
-- Format data to match physical logbook
-- Include all columns: FOH, BOH, Delivered, Total, Par, Order
+```
+night_foh → night_boh → morning → completed
+```
+
+- **night_foh:** FOH count in progress
+- **night_boh:** FOH complete, BOH in progress
+- **morning:** Night complete, morning count in progress
+- **completed:** All counts complete
+
+#### milk_count_entries Table
+
+```sql
+CREATE TABLE milk_count_entries (
+    id VARCHAR(36) PRIMARY KEY,
+    session_id VARCHAR(36) NOT NULL REFERENCES milk_count_sessions(id) ON DELETE CASCADE,
+    milk_type_id VARCHAR(36) NOT NULL REFERENCES milk_count_milk_types(id) ON DELETE CASCADE,
+    foh_count INTEGER,                      -- Night FOH count
+    boh_count INTEGER,                      -- Night BOH count
+    morning_method VARCHAR(20),             -- 'boh_count' or 'direct_delivered'
+    current_boh INTEGER,                    -- Morning BOH count (if method = boh_count)
+    delivered INTEGER,                      -- Calculated or direct delivered count
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+    UNIQUE(session_id, milk_type_id)
+);
+
+CREATE INDEX idx_entries_session ON milk_count_entries(session_id);
+```
+
+**Key Design Decisions:**
+
+- **Cascade Delete:** Entries deleted when session deleted
+- **Unique Constraint:** One entry per milk type per session
+- **Method Tracking:** Records which method was used for morning count
+
+#### Relationships
+
+- **milk_count_milk_types → milk_count_par_levels** (one-to-one)
+- **milk_count_sessions → milk_count_entries** (one-to-many)
+- **milk_count_milk_types → milk_count_entries** (one-to-many)
+- **users → milk_count_sessions** (one-to-many via night/morning user IDs)
+- **users → milk_count_par_levels** (one-to-many via updated_by)
 
 ---
 
-## Benefits of Digital Solution
+### API Endpoints
 
-### Efficiency Gains
+**Base Path:** `/api/milk-count/*`
 
-- **Faster Counting:** Simple +/- interface, no writing or column management
-- **Automatic Math:** Eliminates manual calculation errors
-- **Flexible Methods:** Choice of counting method based on milk type and situation
-- **Better Handoffs:** Seamless data transfer between night and morning shifts
+#### Admin - Milk Type Endpoints
 
-### Operational Improvements
+**GET `/api/milk-count/admin/milk-types`**
 
-- **Historical Insights:** Analyze ordering patterns over time
-- **Delivery Verification:** Compare calculated vs. actual deliveries
-- **Accountability:** Track who performed counts and when
-- **Consistency:** Standardized process across all partners
-- **Accessibility:** Mobile-friendly for counting on the floor
+- **Purpose:** Get all milk types ordered by display_order
+- **Auth:** Admin only (JWT + role check)
+- **Query Params:**
+  - `include_inactive` (optional): Include inactive types (default: false)
+- **Response:**
+  ```json
+  {
+    "milk_types": [
+      {
+        "id": "uuid",
+        "name": "Whole",
+        "category": "dairy",
+        "display_order": 1,
+        "active": true,
+        "par_value": 30
+      }
+    ]
+  }
+  ```
 
-### Manager Value
+**PUT `/api/milk-count/admin/milk-types/:id`**
 
-- **Data-Driven Decisions:** Optimize par levels based on actual usage trends
-- **Reduce Waste:** Better inventory management reduces spoilage
-- **Time Savings:** Partners spend less time on manual inventory tasks
-- **Accuracy Monitoring:** Identify counting discrepancies and training needs
-- **Audit Trail:** Complete record for compliance and review
+- **Purpose:** Update milk type (display_order, active)
+- **Auth:** Admin only
+- **Body:**
+  ```json
+  {
+    "display_order": 2,
+    "active": true
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "message": "Milk type updated successfully",
+    "milk_type": {...}
+  }
+  ```
 
-### Physical Logbook Integration
+#### Admin - Par Level Endpoints
 
-- Digital tool complements (not replaces) official logbook
-- Easy data export for required recordkeeping
-- Reduces transcription errors when filling physical book
-- Provides backup/verification of physical records
+**GET `/api/milk-count/admin/par-levels`**
+
+- **Purpose:** Get all par levels with milk type info
+- **Auth:** Admin only
+- **Response:**
+  ```json
+  {
+    "par_levels": [
+      {
+        "id": "uuid",
+        "milk_type_id": "uuid",
+        "milk_type_name": "Whole",
+        "milk_type_category": "dairy",
+        "par_value": 30,
+        "updated_at": "2026-01-12T...",
+        "updated_by_name": "John Doe"
+      }
+    ]
+  }
+  ```
+
+**PUT `/api/milk-count/admin/par-levels/:milk_type_id`**
+
+- **Purpose:** Update par level for a milk type
+- **Auth:** Admin only
+- **Body:**
+  ```json
+  {
+    "par_value": 30
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "message": "Par level updated successfully",
+    "par_level": {...}
+  }
+  ```
 
 ---
 
-## Implementation Priority
+#### Session Management Endpoints
 
-This feature is planned as the **second major tool** in SirenBase's multi-tool architecture, following the existing tracking system.
+**GET `/api/milk-count/sessions/today`**
 
-### Development Phases
+- **Purpose:** Check for today's session
+- **Auth:** Required (JWT)
+- **Response:**
+  ```json
+  {
+    "session": {
+      "id": "uuid",
+      "date": "2026-01-12",
+      "status": "night_foh",
+      "night_count_user_name": "John Doe"
+    }
+  }
+  ```
+- **Or:** `{ "session": null }` if no session exists
 
-**Phase 1: Core Counting Features**
+**POST `/api/milk-count/sessions/start`**
 
-- Night FOH and BOH count screens
-- Morning count with dual input methods
-- Basic summary display
-- Store-level data persistence
+- **Purpose:** Start new session for today
+- **Auth:** Required (JWT)
+- **Response:**
+  ```json
+  {
+    "message": "Session started",
+    "session": {...}
+  }
+  ```
+- **Error:** `400` if session already exists for today
 
-**Phase 2: Calculations & Summary**
+**GET `/api/milk-count/sessions/:id`**
 
-- Auto-calculation of delivered milks
-- Order quantity calculation
-- Complete summary screen with all columns
-- Export functionality
+- **Purpose:** Get session details with all entries
+- **Auth:** Required (JWT)
+- **Response:**
+  ```json
+  {
+    "session": {...},
+    "entries": [
+      {
+        "milk_type_id": "uuid",
+        "milk_type_name": "Whole",
+        "milk_type_category": "dairy",
+        "foh_count": 15,
+        "boh_count": 20,
+        "morning_method": null,
+        "current_boh": null,
+        "delivered": null
+      }
+    ]
+  }
+  ```
 
-**Phase 3: Admin & Historical**
+---
 
-- Par level management interface
-- Historical data view
-- Data export (CSV/Excel)
-- User tracking and audit trails
+#### Night Count Endpoints
 
-**Phase 4: Polish & Optimization**
+**PUT `/api/milk-count/sessions/:id/night-foh`**
 
-- Mobile optimization
-- Auto-save and recovery
-- Improved validation and error handling
-- Performance optimization
+- **Purpose:** Save FOH counts and advance to BOH phase
+- **Auth:** Required (JWT)
+- **Body:**
+  ```json
+  {
+    "counts": [
+      {"milk_type_id": "uuid", "foh_count": 15},
+      {"milk_type_id": "uuid", "foh_count": 12}
+    ]
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "message": "FOH counts saved",
+    "session": {...}
+  }
+  ```
+- **Logic:**
+  - Validates session status is `night_foh`
+  - Updates all FOH counts
+  - Advances status to `night_boh`
+  - Records timestamp and user
+
+**PUT `/api/milk-count/sessions/:id/night-boh`**
+
+- **Purpose:** Save BOH counts and advance to morning phase
+- **Auth:** Required (JWT)
+- **Body:**
+  ```json
+  {
+    "counts": [
+      {"milk_type_id": "uuid", "boh_count": 20},
+      {"milk_type_id": "uuid", "boh_count": 18}
+    ]
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "message": "BOH counts saved - night count complete",
+    "session": {...}
+  }
+  ```
+- **Logic:**
+  - Validates session status is `night_boh`
+  - Updates all BOH counts
+  - Advances status to `morning`
+
+---
+
+#### Morning Count Endpoint
+
+**PUT `/api/milk-count/sessions/:id/morning`**
+
+- **Purpose:** Save morning count data and complete session
+- **Auth:** Required (JWT)
+- **Body:**
+  ```json
+  {
+    "counts": [
+      {
+        "milk_type_id": "uuid",
+        "method": "boh_count",
+        "current_boh": 30
+      },
+      {
+        "milk_type_id": "uuid",
+        "method": "direct_delivered",
+        "delivered": 10
+      }
+    ]
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "message": "Morning count saved - session complete",
+    "session": {...}
+  }
+  ```
+- **Logic:**
+  - Validates session status is `morning`
+  - For `boh_count` method: Calculates `delivered = current_boh - boh_count`
+  - For `direct_delivered` method: Uses provided delivered value
+  - Advances status to `completed`
+  - Records timestamp and user
+
+---
+
+#### Summary & History Endpoints
+
+**GET `/api/milk-count/sessions/:id/summary`**
+
+- **Purpose:** Get calculated summary for a session
+- **Auth:** Required (JWT)
+- **Response:**
+  ```json
+  {
+    "session": {...},
+    "summary": [
+      {
+        "milk_type": "Whole",
+        "category": "dairy",
+        "foh": 15,
+        "boh": 20,
+        "delivered": 10,
+        "total": 45,
+        "par": 60,
+        "order": 15
+      }
+    ],
+    "totals": {
+      "total_foh": 100,
+      "total_boh": 150,
+      "total_delivered": 80,
+      "total_inventory": 330,
+      "total_order": 70
+    }
+  }
+  ```
+- **Logic:**
+  - Calculates `total = foh + boh + delivered`
+  - Calculates `order = max(0, par - total)`
+  - Aggregates totals across all milk types
+
+**GET `/api/milk-count/history`**
+
+- **Purpose:** Get historical sessions
+- **Auth:** Required (JWT)
+- **Query Params:**
+  - `limit` (optional): Max sessions (default: 30, max: 100)
+  - `offset` (optional): Pagination offset (default: 0)
+  - `status` (optional): Filter by status
+- **Response:**
+  ```json
+  {
+    "sessions": [...],
+    "total": 45,
+    "limit": 30,
+    "offset": 0
+  }
+  ```
+
+---
+
+#### Staff Endpoints
+
+**GET `/api/milk-count/milk-types`**
+
+- **Purpose:** Get active milk types with par levels (for counting screens)
+- **Auth:** Required (JWT)
+- **Response:**
+  ```json
+  {
+    "milk_types": [
+      {
+        "id": "uuid",
+        "name": "Whole",
+        "category": "dairy",
+        "display_order": 1,
+        "par_value": 30
+      }
+    ]
+  }
+  ```
+
+---
+
+### Frontend Routes
+
+**Base Path:** `/tools/milk-count/*`
+
+- **`/tools/milk-count`** - Landing Page
+  - Shows session status card
+  - Actions: "Start Night Count", "Continue to BOH", "Start Morning Count", "View Summary"
+  - Handles session state transitions
+
+- **`/tools/milk-count/night/foh`** - FOH Count Page
+  - MilkCountCard components with +/- counters
+  - Grouped by dairy/non-dairy
+  - Progress indicator
+  - "Save & Continue to BOH" button
+
+- **`/tools/milk-count/night/boh`** - BOH Count Page
+  - Same interface as FOH
+  - "Back to FOH" and "Save Night Count" buttons
+  - On save → redirects to landing
+
+- **`/tools/milk-count/morning`** - Morning Count Page
+  - MorningCountRow components with method selection
+  - Shows night BOH values (read-only)
+  - Expandable rows showing calculations
+  - "Calculate & Save Order" button
+
+- **`/tools/milk-count/summary/[sessionId]`** - Summary Page
+  - Table with all columns (FOH, BOH, Delivered, Total, Par, Order)
+  - Mobile: Card-based layout
+  - Desktop: Table layout
+  - Color-coded order amounts
+  - Totals row
+  - Navigation to history
+
+- **`/tools/milk-count/history`** - History Page
+  - List of past sessions
+  - Status badges (In Progress, Completed)
+  - Click to view summary
+
+### Admin Routes
+
+**Base Path:** `/admin/*`
+
+- **`/admin/milk-pars`** - Milk Count Pars Management
+  - List all milk types with current par values
+  - Inline editing with save/cancel
+  - Shows last updated timestamp and user
+
+---
+
+### Frontend Components
+
+**Location:** `frontend/components/tools/milk-count/`
+
+- **MilkCountCard** - Counter component
+  - Milk name, category icon (dairy/non-dairy)
+  - +/- buttons with touch-friendly targets
+  - Direct number input field
+  - Reusable for FOH and BOH pages
+
+- **MorningCountRow** - Morning count entry
+  - Expandable row design
+  - Method selection (radio buttons)
+  - Shows night BOH value
+  - Calculates delivered quantity live
+
+---
+
+### Key Technical Considerations
+
+#### Session State Machine
+
+**Status Flow:**
+
+```
+night_foh → night_boh → morning → completed
+     ↑                      │
+     └──────────────────────┘ (new day, new session)
+```
+
+**State Transitions:**
+
+- `night_foh` → `night_boh`: When FOH counts saved
+- `night_boh` → `morning`: When BOH counts saved
+- `morning` → `completed`: When morning counts saved
+
+**State Validation:**
+
+- Each endpoint validates current status before allowing updates
+- Status advancement is automatic (not user-controlled)
+
+#### Store-Level Data Sharing
+
+- Sessions are date-based (one per day)
+- Any authenticated partner can continue a session
+- No user ownership - store-level shared data
+- Tracks which user completed each phase
+
+#### Morning Count Methods
+
+**Option A: BOH Count Method (recommended for dairy)**
+
+- Partner counts current BOH quantity
+- App calculates: `delivered = current_boh - night_boh`
+- Use when delivery is already in fridge
+
+**Option B: Direct Delivered Method (optional for non-dairy)**
+
+- Partner enters delivered count directly
+- Best when boxes are visible outside fridge
+- Flexible per milk type
+
+#### Calculation Engine
+
+**All calculations server-side:**
+
+- `delivered = current_boh - boh_count` (for boh_count method)
+- `total = foh + boh + delivered`
+- `order = max(0, par - total)`
+- Totals aggregated across all milk types
+
+---
+
+## User Interface Design
+
+### Mobile-First Design Philosophy
+
+- **Primary Target:** Mobile devices (phones/tablets)
+- **Touch Targets:** Minimum 44x44px for all interactive elements
+- **Card-Based Layout:** Large, touch-friendly counters
+- **Responsive Tables:** Cards on mobile, tables on desktop
+- **Color Coding:** Green (at/above par), amber (close), red (below par)
+
+### Design Patterns
+
+- **Progress Indicators:** X/9 milks counted
+- **Grouped Lists:** Dairy and non-dairy sections
+- **Inline Editing:** Par levels editable inline
+- **Expandable Rows:** Morning count method selection
+- **Status Badges:** Session status visualization
+
+---
+
+## Testing Strategy
+
+### Backend Tests (68/68 tests passing)
+
+**Test Coverage:**
+
+- ✅ **Models** (`tests/test_milk_count_models.py`):
+  - MilkType, MilkCountParLevel, MilkCountSession, MilkCountEntry
+  - Relationships and cascade behavior
+  - Session status methods
+  - Calculation methods
+
+- ✅ **Admin Endpoints** (`tests/test_milk_count_admin.py`):
+  - Get milk types (with/without inactive)
+  - Update milk type (display_order, active)
+  - Get par levels
+  - Update par level
+  - Authorization checks (admin only)
+
+- ✅ **Session Endpoints** (`tests/test_milk_count_sessions.py`):
+  - Get today's session
+  - Start new session
+  - Get session with entries
+  - Save FOH counts
+  - Save BOH counts
+  - Status validation
+
+- ✅ **Morning Count** (`tests/test_milk_count_morning.py`):
+  - BOH count method
+  - Direct delivered method
+  - Mixed methods per session
+  - Delivered calculation
+  - Session completion
+
+- ✅ **Summary & History** (`tests/test_milk_count_summary.py`):
+  - Summary calculations
+  - Totals aggregation
+  - History pagination
+  - Status filtering
+
+### Frontend Tests (Planned)
+
+- Component tests for MilkCountCard, MorningCountRow
+- Integration tests for counting workflows
+- E2E tests for complete night → morning → summary flow
+
+---
+
+## Performance Considerations
+
+### Database Indexes
+
+**Indexed Columns:**
+
+- `milk_count_milk_types.active` (filtering active types)
+- `milk_count_sessions.session_date` (unique, daily lookup)
+- `milk_count_sessions.status` (status filtering)
+- `milk_count_entries.session_id` (foreign key join)
+
+### API Response Times
+
+**Targets:**
+
+- GET `/api/milk-count/milk-types`: < 200ms
+- GET `/api/milk-count/sessions/today`: < 200ms
+- PUT `/api/milk-count/sessions/:id/night-foh`: < 300ms
+- GET `/api/milk-count/sessions/:id/summary`: < 300ms
+
+---
+
+## Security Considerations
+
+### Authentication & Authorization
+
+- All endpoints require valid JWT token
+- Admin endpoints (`/admin/*`) require `role = 'admin'`
+- Staff can view/update sessions they work on
+- No cross-store data access (single-store system)
+
+### Input Validation
+
+- Count values: Non-negative integers only
+- Par values: Non-negative integers only
+- Method: Must be 'boh_count' or 'direct_delivered'
+- Session status: State machine validation
+
+### Data Protection
+
+- User IDs tracked for audit trail
+- Session data retained for history
+- No sensitive PII in milk count tables
+
+---
+
+## Future Enhancements (Post-MVP)
+
+### Phase 2 Possibilities
+
+1. **Export Functionality**
+   - Generate PDF matching paper logbook
+   - Copy/print formatted summary
+
+2. **Push Notifications**
+   - Remind partners to complete morning count
+   - Alert when session incomplete at shift end
+
+3. **Par Level Optimization**
+   - Suggest par adjustments based on historical data
+   - Track ordering patterns over time
+
+4. **Auto-Complete Suggestions**
+   - Pre-fill counts based on previous sessions
+   - Pattern recognition for typical values
 
 ---
 
 ## Related Documentation
 
-- See `PLANNING.md` for overall SirenBase architecture
-- Multi-tool dashboard design (card grid navigation)
-- Store authentication and role management
+- **Overall Architecture:** See `PLANNING.md` for multi-tool system design
+- **Tool 1 Planning:** See `Planning/InventoryTracking.md`
+- **Tool 3 Planning:** See `Planning/RTDE.md`
+- **Design System:** See `DESIGN.md` for UI guidelines
+- **Development Guidelines:** See `CLAUDE.md`
 
 ---
 
-**Document Version:** 2.0
-**Last Updated:** 2025-10-25
-**Status:** Planning Phase - Awaiting Tool 1 Deployment
+**Document Version:** 3.0
+**Last Updated:** 2026-01-12
+**Status:** Implementation Complete - Backend (68 tests passing), Frontend (all pages and admin)
 **Part of:** SirenBase Multi-Tool Platform (Tool 2 of 3)

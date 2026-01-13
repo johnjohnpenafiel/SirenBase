@@ -8,6 +8,7 @@ Tests cover:
 - PUT /api/milk-count/sessions/:id/night-foh
 - PUT /api/milk-count/sessions/:id/night-boh
 - PUT /api/milk-count/sessions/:id/morning
+- PUT /api/milk-count/sessions/:id/on-order
 - GET /api/milk-count/sessions/:id/summary
 - GET /api/milk-count/history
 """
@@ -342,8 +343,8 @@ class TestSaveMorningCount:
 
         assert response.status_code == 200
         data = response.json
-        assert 'session complete' in data['message']
-        assert data['session']['status'] == 'completed'
+        assert 'continue to on order' in data['message']
+        assert data['session']['status'] == 'on_order'
 
         # Verify delivered was calculated
         db.session.refresh(entry)
@@ -386,7 +387,7 @@ class TestSaveMorningCount:
 
         assert response.status_code == 200
         data = response.json
-        assert data['session']['status'] == 'completed'
+        assert data['session']['status'] == 'on_order'
 
         # Verify delivered was set directly
         db.session.refresh(entry)
@@ -479,6 +480,148 @@ class TestSaveMorningCount:
         assert 'current_boh required' in response.json['error']
 
 
+class TestSaveOnOrder:
+    """Tests for PUT /api/milk-count/sessions/:id/on-order."""
+
+    def test_save_on_order_success(self, client, staff_headers, app):
+        """Test saving on order quantities."""
+        milk_type = MilkType(name="Whole", category=MilkCategory.DAIRY.value, display_order=1)
+        db.session.add(milk_type)
+
+        session = MilkCountSession(
+            session_date=date.today(),
+            status=SessionStatus.ON_ORDER.value
+        )
+        db.session.add(session)
+        db.session.commit()
+
+        entry = MilkCountEntry(
+            session_id=session.id,
+            milk_type_id=milk_type.id,
+            foh_count=10,
+            boh_count=20,
+            delivered=5
+        )
+        db.session.add(entry)
+        db.session.commit()
+
+        response = client.put(
+            f'/api/milk-count/sessions/{session.id}/on-order',
+            json={
+                'on_orders': [
+                    {'milk_type_id': milk_type.id, 'on_order': 3}
+                ]
+            },
+            headers=staff_headers
+        )
+
+        assert response.status_code == 200
+        data = response.json
+        assert 'session complete' in data['message']
+        assert data['session']['status'] == 'completed'
+
+        # Verify on_order was saved
+        db.session.refresh(entry)
+        assert entry.on_order == 3
+
+    def test_save_on_order_zero_value(self, client, staff_headers, app):
+        """Test saving on_order with zero value (default case)."""
+        milk_type = MilkType(name="Whole", category=MilkCategory.DAIRY.value, display_order=1)
+        db.session.add(milk_type)
+
+        session = MilkCountSession(
+            session_date=date.today(),
+            status=SessionStatus.ON_ORDER.value
+        )
+        db.session.add(session)
+        db.session.commit()
+
+        entry = MilkCountEntry(
+            session_id=session.id,
+            milk_type_id=milk_type.id,
+            foh_count=10,
+            boh_count=20,
+            delivered=5
+        )
+        db.session.add(entry)
+        db.session.commit()
+
+        response = client.put(
+            f'/api/milk-count/sessions/{session.id}/on-order',
+            json={
+                'on_orders': [
+                    {'milk_type_id': milk_type.id, 'on_order': 0}
+                ]
+            },
+            headers=staff_headers
+        )
+
+        assert response.status_code == 200
+        db.session.refresh(entry)
+        assert entry.on_order == 0
+
+    def test_save_on_order_wrong_status(self, client, staff_headers, app):
+        """Test cannot save on_order if not in on_order status."""
+        session = MilkCountSession(
+            session_date=date.today(),
+            status=SessionStatus.MORNING.value  # Wrong status
+        )
+        db.session.add(session)
+        db.session.commit()
+
+        response = client.put(
+            f'/api/milk-count/sessions/{session.id}/on-order',
+            json={'on_orders': []},
+            headers=staff_headers
+        )
+
+        assert response.status_code == 400
+        assert 'status' in response.json['error']
+
+    def test_save_on_order_validation_errors(self, client, staff_headers, app):
+        """Test validation error for missing on_orders array."""
+        session = MilkCountSession(
+            session_date=date.today(),
+            status=SessionStatus.ON_ORDER.value
+        )
+        db.session.add(session)
+        db.session.commit()
+
+        response = client.put(
+            f'/api/milk-count/sessions/{session.id}/on-order',
+            json={},
+            headers=staff_headers
+        )
+
+        assert response.status_code == 400
+        assert 'on_orders' in response.json['error']
+
+    def test_save_on_order_negative_value_rejected(self, client, staff_headers, app):
+        """Test on_order must be non-negative."""
+        milk_type = MilkType(name="Whole", category=MilkCategory.DAIRY.value, display_order=1)
+        db.session.add(milk_type)
+
+        session = MilkCountSession(
+            session_date=date.today(),
+            status=SessionStatus.ON_ORDER.value
+        )
+        db.session.add(session)
+        db.session.commit()
+
+        response = client.put(
+            f'/api/milk-count/sessions/{session.id}/on-order',
+            json={
+                'on_orders': [
+                    {'milk_type_id': milk_type.id, 'on_order': -5}
+                ]
+            },
+            headers=staff_headers
+        )
+
+        assert response.status_code == 400
+        assert 'non-negative' in response.json['error']
+
+
 class TestGetSessionSummary:
     """Tests for GET /api/milk-count/sessions/:id/summary."""
 
@@ -530,7 +673,52 @@ class TestGetSessionSummary:
         assert summary_item['delivered'] == 10
         assert summary_item['total'] == 45  # 15 + 20 + 10
         assert summary_item['par'] == 60
-        assert summary_item['order'] == 15  # 60 - 45
+        assert summary_item['on_order'] == 0  # Default when not set
+        assert summary_item['order'] == 15  # 60 - 45 - 0
+
+    def test_get_summary_with_on_order(self, client, staff_headers, app):
+        """Test summary calculation includes on_order in order formula."""
+        milk_type = MilkType(name="Whole", category=MilkCategory.DAIRY.value, display_order=1)
+        db.session.add(milk_type)
+        db.session.commit()
+
+        par = MilkCountParLevel(milk_type_id=milk_type.id, par_value=60)
+        db.session.add(par)
+
+        session = MilkCountSession(
+            session_date=date.today(),
+            status=SessionStatus.COMPLETED.value
+        )
+        db.session.add(session)
+        db.session.commit()
+
+        # Create entry with on_order value
+        entry = MilkCountEntry(
+            session_id=session.id,
+            milk_type_id=milk_type.id,
+            foh_count=10,
+            boh_count=15,
+            morning_method=MorningMethod.DIRECT_DELIVERED.value,
+            delivered=5,
+            on_order=10  # Already have 10 on order
+        )
+        db.session.add(entry)
+        db.session.commit()
+
+        response = client.get(
+            f'/api/milk-count/sessions/{session.id}/summary',
+            headers=staff_headers
+        )
+
+        assert response.status_code == 200
+        summary_item = response.json['summary'][0]
+
+        # Total = 10 + 15 + 5 = 30
+        assert summary_item['total'] == 30
+        assert summary_item['on_order'] == 10
+        assert summary_item['par'] == 60
+        # Order = Par - Total - OnOrder = 60 - 30 - 10 = 20
+        assert summary_item['order'] == 20
 
     def test_get_summary_order_cannot_be_negative(self, client, staff_headers, app):
         """Test order amount is 0 when total exceeds par."""
@@ -783,9 +971,23 @@ class TestFullWorkflow:
             headers=staff_headers
         )
         assert response.status_code == 200
+        assert response.json['session']['status'] == 'on_order'
+
+        # Step 5: Save on order quantities
+        response = client.put(
+            f'/api/milk-count/sessions/{session_id}/on-order',
+            json={
+                'on_orders': [
+                    {'milk_type_id': types[0].id, 'on_order': 5},  # 5 whole milk on order
+                    {'milk_type_id': types[1].id, 'on_order': 0}   # None on order
+                ]
+            },
+            headers=staff_headers
+        )
+        assert response.status_code == 200
         assert response.json['session']['status'] == 'completed'
 
-        # Step 5: Get summary
+        # Step 6: Get summary
         response = client.get(
             f'/api/milk-count/sessions/{session_id}/summary',
             headers=staff_headers
@@ -793,20 +995,24 @@ class TestFullWorkflow:
         assert response.status_code == 200
         summary = response.json['summary']
 
-        # Verify Whole milk: FOH=10, BOH=20, Delivered=10, Total=40, Par=50, Order=10
+        # Verify Whole milk: FOH=10, BOH=20, Delivered=10, OnOrder=5, Total=40, Par=50, Order=5
+        # Order = Par - Total - OnOrder = 50 - 40 - 5 = 5
         whole = next(s for s in summary if s['milk_type'] == 'Whole')
         assert whole['foh'] == 10
         assert whole['boh'] == 20
         assert whole['delivered'] == 10
+        assert whole['on_order'] == 5
         assert whole['total'] == 40
         assert whole['par'] == 50
-        assert whole['order'] == 10
+        assert whole['order'] == 5  # Was 10, now 5 because 5 on order
 
-        # Verify Oat milk: FOH=8, BOH=15, Delivered=5, Total=28, Par=60, Order=32
+        # Verify Oat milk: FOH=8, BOH=15, Delivered=5, OnOrder=0, Total=28, Par=60, Order=32
+        # Order = Par - Total - OnOrder = 60 - 28 - 0 = 32
         oat = next(s for s in summary if s['milk_type'] == 'Oat')
         assert oat['foh'] == 8
         assert oat['boh'] == 15
         assert oat['delivered'] == 5
+        assert oat['on_order'] == 0
         assert oat['total'] == 28
         assert oat['par'] == 60
         assert oat['order'] == 32

@@ -49,6 +49,12 @@ class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
 
+    # Override pooling options - SQLite doesn't support pool_size, max_overflow, pool_timeout
+    # We use SQLite in-memory for tests because it's faster and doesn't require a test database
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+    }
+
 
 class ProductionConfig(Config):
     """Production configuration."""

@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Moon,
   Sun,
+  ClipboardList,
 } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
@@ -46,6 +47,11 @@ const STATUS_DISPLAY: Record<MilkCountSessionStatus, {
     label: "Morning Pending",
     color: "text-amber-600 bg-amber-50",
     icon: <Sun className="h-4 w-4" />,
+  },
+  on_order: {
+    label: "On Order Pending",
+    color: "text-purple-600 bg-purple-50",
+    icon: <ClipboardList className="h-4 w-4" />,
   },
   completed: {
     label: "Completed",

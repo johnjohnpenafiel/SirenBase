@@ -17,7 +17,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Moon, Sun, CheckCircle2, Clock, ArrowLeft, History } from "lucide-react";
+import { Loader2, Moon, Sun, CheckCircle2, Clock, ArrowLeft, History, ClipboardList } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -58,11 +58,19 @@ const STATUS_CONFIG: Record<MilkCountSessionStatus | "none", {
   },
   morning: {
     title: "Morning Count Needed",
-    description: "Complete the morning count to finalize today's inventory",
+    description: "Complete the morning count to continue",
     icon: <Sun className="w-8 h-8" />,
     iconBg: "bg-amber-100 text-amber-600",
     action: "Start Morning Count",
     route: "/tools/milk-count/morning",
+  },
+  on_order: {
+    title: "On Order Entry Needed",
+    description: "Enter quantities already on order from IMS",
+    icon: <ClipboardList className="w-8 h-8" />,
+    iconBg: "bg-purple-100 text-purple-600",
+    action: "Enter On Order",
+    route: "/tools/milk-count/on-order",
   },
   completed: {
     title: "Count Completed",
@@ -277,6 +285,28 @@ export default function MilkCountPage() {
                                 {session.morning_saved_at
                                   ? `Saved at ${new Date(session.morning_saved_at).toLocaleTimeString()}`
                                   : session.status === "morning" ? "In progress..." : "Pending"
+                                }
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <div className={cn(
+                              "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
+                              session.on_order_saved_at
+                                ? "bg-green-100 text-green-600"
+                                : session.status === "on_order"
+                                  ? "bg-purple-100 text-purple-600 animate-pulse"
+                                  : "bg-gray-100 text-gray-400"
+                            )}>
+                              4
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-medium">On Order</p>
+                              <p className="text-sm text-muted-foreground">
+                                {session.on_order_saved_at
+                                  ? `Saved at ${new Date(session.on_order_saved_at).toLocaleTimeString()}`
+                                  : session.status === "on_order" ? "In progress..." : "Pending"
                                 }
                               </p>
                             </div>

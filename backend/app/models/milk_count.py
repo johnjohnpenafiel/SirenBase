@@ -113,8 +113,8 @@ class MilkType(db.Model):
             'category': self.category,
             'display_order': self.display_order,
             'active': self.active,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
+            'created_at': self.created_at.isoformat() + 'Z',
+            'updated_at': self.updated_at.isoformat() + 'Z'
         }
 
         if include_par and self.par_level:
@@ -200,7 +200,7 @@ class MilkCountParLevel(db.Model):
             'id': self.id,
             'milk_type_id': self.milk_type_id,
             'par_value': self.par_value,
-            'updated_at': self.updated_at.isoformat()
+            'updated_at': self.updated_at.isoformat() + 'Z'
         }
 
         if self.updated_by:
@@ -332,20 +332,20 @@ class MilkCountSession(db.Model):
             'id': self.id,
             'date': self.session_date.isoformat(),
             'status': self.status,
-            'created_at': self.created_at.isoformat()
+            'created_at': self.created_at.isoformat() + 'Z'
         }
 
-        # Add phase timestamps if set
+        # Add phase timestamps if set (all stored in UTC, append 'Z' for proper JS parsing)
         if self.night_foh_saved_at:
-            data['night_foh_saved_at'] = self.night_foh_saved_at.isoformat()
+            data['night_foh_saved_at'] = self.night_foh_saved_at.isoformat() + 'Z'
         if self.night_boh_saved_at:
-            data['night_boh_saved_at'] = self.night_boh_saved_at.isoformat()
+            data['night_boh_saved_at'] = self.night_boh_saved_at.isoformat() + 'Z'
         if self.morning_saved_at:
-            data['morning_saved_at'] = self.morning_saved_at.isoformat()
+            data['morning_saved_at'] = self.morning_saved_at.isoformat() + 'Z'
         if self.on_order_saved_at:
-            data['on_order_saved_at'] = self.on_order_saved_at.isoformat()
+            data['on_order_saved_at'] = self.on_order_saved_at.isoformat() + 'Z'
         if self.completed_at:
-            data['completed_at'] = self.completed_at.isoformat()
+            data['completed_at'] = self.completed_at.isoformat() + 'Z'
 
         # Add user info
         if self.night_count_user_id:
@@ -496,7 +496,7 @@ class MilkCountEntry(db.Model):
             'current_boh': self.current_boh,
             'delivered': self.delivered,
             'on_order': self.on_order,
-            'updated_at': self.updated_at.isoformat()
+            'updated_at': self.updated_at.isoformat() + 'Z'
         }
 
         if include_milk_type and self.milk_type:

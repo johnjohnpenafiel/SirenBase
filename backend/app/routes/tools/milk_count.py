@@ -596,18 +596,94 @@ def save_morning_count(session_id: str):
 
                 entry.updated_at = datetime.utcnow()
 
-        # Mark session as complete
+        # Advance to on order phase
         session.mark_morning_complete(current_user_id)
         db.session.commit()
 
         return jsonify({
-            "message": "Morning count saved - session complete",
+            "message": "Morning count saved - continue to on order",
             "session": session.to_dict()
         }), 200
 
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": "Failed to save morning count"}), 500
+
+
+@milk_count_bp.route('/sessions/<string:session_id>/on-order', methods=['PUT'])
+@jwt_required()
+def save_on_order(session_id: str):
+    """
+    Save on-order values and complete the session.
+
+    On-order values represent milk already ordered from IMS but not yet delivered.
+    These are subtracted from the order calculation.
+
+    URL Parameters:
+        session_id: The UUID of the session
+
+    Request JSON:
+        {
+            "on_orders": [
+                {"milk_type_id": "...", "on_order": 5},
+                {"milk_type_id": "...", "on_order": 0},
+                ...
+            ]
+        }
+
+    Returns:
+        200: {"message": "On order saved - session complete", "session": {...}}
+        400: {"error": "Validation error"}
+        404: {"error": "Session not found"}
+    """
+    current_user_id = get_jwt_identity()
+
+    session = MilkCountSession.query.get(session_id)
+
+    if not session:
+        return jsonify({"error": "Session not found"}), 404
+
+    # Verify session is in correct state
+    if session.status != SessionStatus.ON_ORDER.value:
+        return jsonify({"error": f"Cannot save on order - session status is {session.status}"}), 400
+
+    data = request.json or {}
+
+    if 'on_orders' not in data or not isinstance(data['on_orders'], list):
+        return jsonify({"error": "on_orders array required"}), 400
+
+    try:
+        # Update on_order values for each milk type
+        for order_data in data['on_orders']:
+            if 'milk_type_id' not in order_data or 'on_order' not in order_data:
+                return jsonify({"error": "Each entry must have milk_type_id and on_order"}), 400
+
+            on_order_value = order_data['on_order']
+            if not isinstance(on_order_value, int) or on_order_value < 0:
+                return jsonify({"error": "on_order must be a non-negative integer"}), 400
+
+            # Find entry
+            entry = MilkCountEntry.query.filter_by(
+                session_id=session_id,
+                milk_type_id=order_data['milk_type_id']
+            ).first()
+
+            if entry:
+                entry.on_order = on_order_value
+                entry.updated_at = datetime.utcnow()
+
+        # Mark session as complete
+        session.mark_on_order_complete(current_user_id)
+        db.session.commit()
+
+        return jsonify({
+            "message": "On order saved - session complete",
+            "session": session.to_dict()
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": "Failed to save on order values"}), 500
 
 
 # =============================================================================
@@ -633,9 +709,10 @@ def get_session_summary(session_id: str):
                     "foh": 15,
                     "boh": 20,
                     "delivered": 10,
+                    "on_order": 5,
                     "total": 45,
                     "par": 60,
-                    "order": 15
+                    "order": 10
                 },
                 ...
             ],
@@ -643,6 +720,7 @@ def get_session_summary(session_id: str):
                 "total_foh": 100,
                 "total_boh": 150,
                 "total_delivered": 80,
+                "total_on_order": 50,
                 "total_inventory": 330,
                 "total_order": 70
             }
@@ -663,6 +741,7 @@ def get_session_summary(session_id: str):
         "total_foh": 0,
         "total_boh": 0,
         "total_delivered": 0,
+        "total_on_order": 0,
         "total_inventory": 0,
         "total_order": 0
     }
@@ -677,9 +756,11 @@ def get_session_summary(session_id: str):
         foh = entry.foh_count or 0
         boh = entry.boh_count or 0
         delivered = entry.calculate_delivered() or 0
+        on_order = entry.on_order or 0
         total = foh + boh + delivered
         par = entry.milk_type.par_level.par_value if entry.milk_type.par_level else 0
-        order = max(0, par - total)
+        # Order = Par - Total - OnOrder (what still needs to be ordered)
+        order = max(0, par - total - on_order)
 
         summary.append({
             "milk_type": entry.milk_type.name,
@@ -687,6 +768,7 @@ def get_session_summary(session_id: str):
             "foh": foh,
             "boh": boh,
             "delivered": delivered,
+            "on_order": on_order,
             "total": total,
             "par": par,
             "order": order
@@ -696,6 +778,7 @@ def get_session_summary(session_id: str):
         totals["total_foh"] += foh
         totals["total_boh"] += boh
         totals["total_delivered"] += delivered
+        totals["total_on_order"] += on_order
         totals["total_inventory"] += total
         totals["total_order"] += order
 

@@ -90,10 +90,10 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 **Status**: Backend 100% complete (68 tests passing), Frontend 100% complete (all pages, components, admin integration)
 
 **Implementation Details**:
-- **Backend**: 4 models (MilkType, ParLevel, Session, Entry), 12 API endpoints under `/api/milk-count/*`
-- **Frontend**: 6 pages (landing, FOH, BOH, morning, summary, history), 2 components (MilkCountCard, MorningCountRow)
+- **Backend**: 4 models (MilkType, ParLevel, Session, Entry), 13 API endpoints under `/api/milk-count/*`
+- **Frontend**: 7 pages (landing, FOH, BOH, morning, on-order, summary, history), 3 components (MilkCountCard, MorningCountRow, OnOrderRow)
 - **Admin**: Functional par level management at `/admin/milk-pars`
-- **Workflow**: night_foh → night_boh → morning → completed (enforced state machine)
+- **Workflow**: night_foh → night_boh → morning → on_order → completed (enforced state machine)
 
 **Detailed Planning**: See `Planning/MilkCount.md`
 

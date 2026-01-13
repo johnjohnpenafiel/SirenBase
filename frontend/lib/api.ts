@@ -54,6 +54,7 @@ import type {
   SaveNightFOHRequest,
   SaveNightBOHRequest,
   SaveMorningCountRequest,
+  SaveOnOrderRequest,
   SaveMilkCountResponse,
   GetMilkCountSummaryResponse,
   GetMilkCountHistoryResponse,
@@ -420,6 +421,17 @@ class APIClient {
   ): Promise<SaveMilkCountResponse> {
     const response = await this.client.put<SaveMilkCountResponse>(
       `/api/milk-count/sessions/${sessionId}/morning`,
+      data
+    );
+    return response.data;
+  }
+
+  async saveMilkCountOnOrder(
+    sessionId: string,
+    data: SaveOnOrderRequest
+  ): Promise<SaveMilkCountResponse> {
+    const response = await this.client.put<SaveMilkCountResponse>(
+      `/api/milk-count/sessions/${sessionId}/on-order`,
       data
     );
     return response.data;

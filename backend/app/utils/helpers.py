@@ -2,10 +2,53 @@
 Helper utility functions for the SirenBase application.
 """
 import random
+from datetime import date, datetime
 from typing import Optional
+from zoneinfo import ZoneInfo
+
+from flask import current_app
 
 from app.models.item import Item
 from app.extensions import db
+
+
+def get_store_today() -> date:
+    """
+    Get today's date from the store's timezone perspective.
+
+    This is critical for date-based features like Milk Count sessions where
+    "today" should be determined by the store's local time, not the server's.
+
+    For example, at 5:30 PM Pacific on January 13th:
+    - Server in UTC would think it's January 14th (1:30 AM UTC)
+    - But the store's "today" should be January 13th
+
+    Returns:
+        date: Today's date in the store's configured timezone
+
+    Example:
+        >>> today = get_store_today()
+        >>> isinstance(today, date)
+        True
+    """
+    store_tz = ZoneInfo(current_app.config.get('STORE_TIMEZONE', 'America/Los_Angeles'))
+    return datetime.now(store_tz).date()
+
+
+def get_store_now() -> datetime:
+    """
+    Get the current datetime in the store's timezone.
+
+    Returns:
+        datetime: Current datetime with store timezone info
+
+    Example:
+        >>> now = get_store_now()
+        >>> now.tzinfo is not None
+        True
+    """
+    store_tz = ZoneInfo(current_app.config.get('STORE_TIMEZONE', 'America/Los_Angeles'))
+    return datetime.now(store_tz)
 
 
 def generate_unique_code(max_attempts: int = 100) -> str:

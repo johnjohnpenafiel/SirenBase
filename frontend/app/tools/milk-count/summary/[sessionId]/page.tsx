@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, parseLocalDate } from "@/lib/utils";
 import type { MilkCountSummaryEntry, MilkCountSummaryTotals, MilkCountSession } from "@/types";
 
 export default function SummaryPage() {
@@ -70,7 +70,7 @@ export default function SummaryPage() {
 
   // Format date
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+    const date = parseLocalDate(dateStr);
     return date.toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",

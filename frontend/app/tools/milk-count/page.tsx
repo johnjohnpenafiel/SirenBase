@@ -20,7 +20,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Loader2, Moon, Sun, CheckCircle2, Clock, ArrowLeft, History, ClipboardList } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, parseLocalDate } from "@/lib/utils";
 import type { MilkCountSession, MilkCountSessionStatus } from "@/types";
 
 // Status configuration for display
@@ -135,7 +135,7 @@ export default function MilkCountPage() {
 
   // Format date for display
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+    const date = parseLocalDate(dateStr);
     return date.toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",

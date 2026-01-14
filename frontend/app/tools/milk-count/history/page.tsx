@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, parseLocalDate } from "@/lib/utils";
 import type { MilkCountSession, MilkCountSessionStatus } from "@/types";
 
 // Status display configuration
@@ -110,8 +110,9 @@ export default function HistoryPage() {
 
   // Format date for display
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+    const date = parseLocalDate(dateStr);
     const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize to midnight for comparison
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
@@ -129,7 +130,7 @@ export default function HistoryPage() {
   };
 
   const formatFullDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+    const date = parseLocalDate(dateStr);
     return date.toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",
@@ -207,10 +208,10 @@ export default function HistoryPage() {
                             {/* Date Icon */}
                             <div className="shrink-0 w-12 h-12 rounded-lg bg-muted flex flex-col items-center justify-center">
                               <span className="text-xs text-muted-foreground uppercase">
-                                {new Date(session.date).toLocaleDateString("en-US", { month: "short" })}
+                                {parseLocalDate(session.date).toLocaleDateString("en-US", { month: "short" })}
                               </span>
                               <span className="text-lg font-bold">
-                                {new Date(session.date).getDate()}
+                                {parseLocalDate(session.date).getDate()}
                               </span>
                             </div>
 

@@ -37,6 +37,10 @@ class Config:
     # CORS
     CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'http://localhost:3000').split(',')
 
+    # Store Timezone (for date-based features like Milk Count sessions)
+    # This ensures "today" is calculated from the store's perspective, not the server's
+    STORE_TIMEZONE = os.getenv('STORE_TIMEZONE', 'America/Los_Angeles')
+
 
 class DevelopmentConfig(Config):
     """Development configuration."""

@@ -4,7 +4,7 @@ Milk Count System routes for managing milk inventory counting.
 This module provides API endpoints for Tool 2: Milk Count System
 All routes are namespaced under /api/milk-count/*
 """
-from datetime import datetime, date
+from datetime import datetime
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import joinedload
@@ -20,6 +20,7 @@ from app.models.milk_count import (
 from app.models.user import User
 from app.extensions import db
 from app.middleware.auth import admin_required
+from app.utils.helpers import get_store_today
 
 milk_count_bp = Blueprint('milk_count', __name__, url_prefix='/api/milk-count')
 
@@ -255,7 +256,7 @@ def get_today_session():
         OR
         200: {"session": null}
     """
-    today = date.today()
+    today = get_store_today()
 
     session = MilkCountSession.query.filter_by(session_date=today).first()
 
@@ -281,7 +282,7 @@ def start_session():
         400: {"error": "Session already exists for today"}
     """
     current_user_id = get_jwt_identity()
-    today = date.today()
+    today = get_store_today()
 
     # Check if session already exists for today
     existing = MilkCountSession.query.filter_by(session_date=today).first()

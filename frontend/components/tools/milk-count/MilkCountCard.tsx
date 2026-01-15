@@ -24,6 +24,8 @@ interface MilkCountCardProps {
   onCountChange: (count: number) => void;
   saving?: boolean;
   className?: string;
+  /** Size variant for testing larger touch targets. Temporary prop. */
+  size?: 'default' | 'large';
 }
 
 export function MilkCountCard({
@@ -34,7 +36,9 @@ export function MilkCountCard({
   onCountChange,
   saving = false,
   className,
+  size = 'default',
 }: MilkCountCardProps) {
+  const isLarge = size === 'large';
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(currentCount.toString());
   const inputRef = useRef<HTMLInputElement>(null);
@@ -101,8 +105,9 @@ export function MilkCountCard({
   return (
     <div
       className={cn(
-        "flex items-center gap-3 md:gap-4",
-        "p-3 md:p-4",
+        "flex items-center",
+        isLarge ? "gap-4" : "gap-3 md:gap-4",
+        isLarge ? "p-4" : "p-3 md:p-4",
         "bg-card border border-border/50",
         "rounded-xl",
         "shadow-sm",
@@ -113,14 +118,15 @@ export function MilkCountCard({
       {/* Category Icon */}
       <div
         className={cn(
-          "shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center",
+          "shrink-0 rounded-lg flex items-center justify-center",
+          isLarge ? "w-12 h-12" : "w-10 h-10 md:w-12 md:h-12",
           isDairy ? "bg-blue-50 text-blue-500" : "bg-green-50 text-green-500"
         )}
       >
         {isDairy ? (
-          <Milk className="w-5 h-5 md:w-6 md:h-6" />
+          <Milk className={isLarge ? "w-6 h-6" : "w-5 h-5 md:w-6 md:h-6"} />
         ) : (
-          <Leaf className="w-5 h-5 md:w-6 md:h-6" />
+          <Leaf className={isLarge ? "w-6 h-6" : "w-5 h-5 md:w-6 md:h-6"} />
         )}
       </div>
 
@@ -143,7 +149,7 @@ export function MilkCountCard({
           variant="outline"
           size="icon"
           className={cn(
-            "h-10 w-10 md:h-11 md:w-11",
+            isLarge ? "h-11 w-11" : "h-10 w-10 md:h-11 md:w-11",
             "rounded-lg",
             "border-border/60",
             "transition-all duration-150",
@@ -152,7 +158,7 @@ export function MilkCountCard({
           )}
           aria-label={`Decrease ${milkName} count`}
         >
-          <Minus className="h-4 w-4 md:h-5 md:w-5" strokeWidth={2.5} />
+          <Minus className={isLarge ? "h-5 w-5" : "h-4 w-4 md:h-5 md:w-5"} strokeWidth={2.5} />
         </Button>
 
         {/* Current Count */}
@@ -167,8 +173,9 @@ export function MilkCountCard({
             onBlur={handleInputBlur}
             onKeyDown={handleInputKeyDown}
             className={cn(
-              "w-14 md:w-16 h-10 md:h-11",
-              "text-xl md:text-2xl font-bold text-center",
+              isLarge ? "w-16 h-11" : "w-14 md:w-16 h-10 md:h-11",
+              isLarge ? "text-2xl" : "text-xl md:text-2xl",
+              "font-bold text-center",
               "border-2 border-primary/60",
               "rounded-lg",
               "shadow-sm"
@@ -180,10 +187,11 @@ export function MilkCountCard({
           <button
             onClick={handleCountClick}
             className={cn(
-              "w-14 md:w-16 h-10 md:h-11",
+              isLarge ? "w-16 h-11" : "w-14 md:w-16 h-10 md:h-11",
               "flex items-center justify-center",
               "rounded-lg",
-              "text-xl md:text-2xl font-bold tabular-nums",
+              isLarge ? "text-2xl" : "text-xl md:text-2xl",
+              "font-bold tabular-nums",
               "bg-muted/30 hover:bg-muted/50",
               "transition-all duration-150",
               "active:scale-95",
@@ -202,7 +210,7 @@ export function MilkCountCard({
           variant="outline"
           size="icon"
           className={cn(
-            "h-10 w-10 md:h-11 md:w-11",
+            isLarge ? "h-11 w-11" : "h-10 w-10 md:h-11 md:w-11",
             "rounded-lg",
             "border-border/60",
             "transition-all duration-150",
@@ -211,7 +219,7 @@ export function MilkCountCard({
           )}
           aria-label={`Increase ${milkName} count`}
         >
-          <Plus className="h-4 w-4 md:h-5 md:w-5" strokeWidth={2.5} />
+          <Plus className={isLarge ? "h-5 w-5" : "h-4 w-4 md:h-5 md:w-5"} strokeWidth={2.5} />
         </Button>
       </div>
 

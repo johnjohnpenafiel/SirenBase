@@ -24,8 +24,8 @@ interface MilkCountCardProps {
   onCountChange: (count: number) => void;
   saving?: boolean;
   className?: string;
-  /** Size variant for testing larger touch targets. Temporary prop. */
-  size?: 'default' | 'large';
+  /** Size variant - 'large' uses 44px buttons (WCAG compliant), 'compact' uses 40px */
+  size?: 'large' | 'compact';
 }
 
 export function MilkCountCard({
@@ -36,7 +36,7 @@ export function MilkCountCard({
   onCountChange,
   saving = false,
   className,
-  size = 'default',
+  size = 'large',
 }: MilkCountCardProps) {
   const isLarge = size === 'large';
   const [isEditing, setIsEditing] = useState(false);

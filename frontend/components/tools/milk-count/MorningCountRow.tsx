@@ -113,18 +113,18 @@ export function MorningCountRow({
     <Collapsible className={cn("group/collapsible", className)}>
       <div className="bg-card border border-border/50 rounded-xl shadow-sm overflow-hidden">
         {/* Main Row */}
-        <div className="flex items-center gap-3 p-3 md:p-4">
+        <div className="flex items-center gap-4 p-4">
           {/* Category Icon */}
           <div
             className={cn(
-              "shrink-0 w-10 h-10 rounded-lg flex items-center justify-center",
+              "shrink-0 w-12 h-12 rounded-lg flex items-center justify-center",
               isDairy ? "bg-blue-50 text-blue-500" : "bg-green-50 text-green-500"
             )}
           >
             {isDairy ? (
-              <Milk className="w-5 h-5" />
+              <Milk className="w-6 h-6" />
             ) : (
-              <Leaf className="w-5 h-5" />
+              <Leaf className="w-6 h-6" />
             )}
           </div>
 
@@ -143,9 +143,9 @@ export function MorningCountRow({
               disabled={value === 0}
               variant="outline"
               size="icon"
-              className="h-9 w-9 rounded-lg"
+              className="h-11 w-11 rounded-lg"
             >
-              <Minus className="h-4 w-4" strokeWidth={2.5} />
+              <Minus className="h-5 w-5" strokeWidth={2.5} />
             </Button>
 
             {isEditing ? (
@@ -158,13 +158,13 @@ export function MorningCountRow({
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
                 onKeyDown={handleInputKeyDown}
-                className="w-12 h-9 text-lg font-bold text-center border-2 border-primary/60 rounded-lg"
+                className="w-16 h-11 text-2xl font-bold text-center border-2 border-primary/60 rounded-lg"
                 maxLength={3}
               />
             ) : (
               <button
                 onClick={handleValueClick}
-                className="w-12 h-9 flex items-center justify-center rounded-lg text-lg font-bold tabular-nums bg-muted/30 hover:bg-muted/50 transition-colors"
+                className="w-16 h-11 flex items-center justify-center rounded-lg text-2xl font-bold tabular-nums bg-muted/30 hover:bg-muted/50 transition-colors"
               >
                 {value}
               </button>
@@ -175,9 +175,9 @@ export function MorningCountRow({
               disabled={value >= 999}
               variant="outline"
               size="icon"
-              className="h-9 w-9 rounded-lg"
+              className="h-11 w-11 rounded-lg"
             >
-              <Plus className="h-4 w-4" strokeWidth={2.5} />
+              <Plus className="h-5 w-5" strokeWidth={2.5} />
             </Button>
           </div>
 

@@ -4,10 +4,8 @@
  * Displays the final summary matching the paper logbook format:
  * Milk Type | FOH | BOH | Delivered | On Order | Total | Par | Order
  *
- * Color coding for order amounts:
- * - Green: At or above par (order = 0)
- * - Yellow: Close to par (order 1-3)
- * - Red: Below par (order > 3)
+ * Mobile view: Order amount shown prominently with expandable details
+ * Desktop view: Full table with all columns visible
  */
 "use client";
 
@@ -25,10 +23,16 @@ import {
   Home,
   Milk,
   Leaf,
+  ChevronDown,
 } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn, parseLocalDate } from "@/lib/utils";
+import { parseLocalDate } from "@/lib/utils";
 import type { MilkCountSummaryEntry, MilkCountSummaryTotals, MilkCountSession } from "@/types";
 
 export default function SummaryPage() {
@@ -59,13 +63,6 @@ export default function SummaryPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  // Get order status color
-  const getOrderColor = (order: number) => {
-    if (order <= 0) return "text-green-600 bg-green-50";
-    if (order <= 3) return "text-amber-600 bg-amber-50";
-    return "text-red-600 bg-red-50";
   };
 
   // Format date
@@ -136,48 +133,54 @@ export default function SummaryPage() {
                         </h2>
                         <div className="space-y-2">
                           {dairyEntries.map((entry) => (
-                            <Card key={entry.milk_type} className="overflow-hidden">
-                              <CardHeader className="py-3 px-4 bg-muted/30">
-                                <CardTitle className="text-base">{entry.milk_type}</CardTitle>
-                              </CardHeader>
-                              <CardContent className="py-3 px-4">
-                                <div className="grid grid-cols-4 gap-2 text-sm">
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">FOH</p>
-                                    <p className="font-semibold">{entry.foh}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">BOH</p>
-                                    <p className="font-semibold">{entry.boh}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">Delivered</p>
-                                    <p className="font-semibold">{entry.delivered}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">On Order</p>
-                                    <p className="font-semibold">{entry.on_order}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">Total</p>
-                                    <p className="font-semibold">{entry.total}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">Par</p>
-                                    <p className="font-semibold">{entry.par}</p>
-                                  </div>
-                                  <div className="col-span-2">
-                                    <p className="text-xs text-muted-foreground">Order</p>
-                                    <p className={cn(
-                                      "font-bold rounded px-2 py-0.5 inline-block",
-                                      getOrderColor(entry.order)
-                                    )}>
-                                      {Math.max(0, entry.order)}
-                                    </p>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
+                            <Collapsible key={entry.milk_type} className="group/collapsible">
+                              <Card className="overflow-hidden">
+                                <CollapsibleTrigger className="w-full text-left">
+                                  <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                      <CardTitle className="text-base">{entry.milk_type}</CardTitle>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <div className="text-right">
+                                        <p className="text-xs text-muted-foreground">Order</p>
+                                        <p className="text-xl font-bold">{Math.max(0, entry.order)}</p>
+                                      </div>
+                                      <ChevronDown className="h-5 w-5 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                                    </div>
+                                  </CardHeader>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                  <CardContent className="py-3 px-4 border-t bg-muted/20">
+                                    <div className="grid grid-cols-3 gap-3 text-sm">
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">FOH</p>
+                                        <p className="font-semibold">{entry.foh}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">BOH</p>
+                                        <p className="font-semibold">{entry.boh}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">Delivered</p>
+                                        <p className="font-semibold">{entry.delivered}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">On Order</p>
+                                        <p className="font-semibold">{entry.on_order}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">Total</p>
+                                        <p className="font-semibold">{entry.total}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">Par</p>
+                                        <p className="font-semibold">{entry.par}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </CollapsibleContent>
+                              </Card>
+                            </Collapsible>
                           ))}
                         </div>
                       </section>
@@ -192,48 +195,54 @@ export default function SummaryPage() {
                         </h2>
                         <div className="space-y-2">
                           {nonDairyEntries.map((entry) => (
-                            <Card key={entry.milk_type} className="overflow-hidden">
-                              <CardHeader className="py-3 px-4 bg-muted/30">
-                                <CardTitle className="text-base">{entry.milk_type}</CardTitle>
-                              </CardHeader>
-                              <CardContent className="py-3 px-4">
-                                <div className="grid grid-cols-4 gap-2 text-sm">
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">FOH</p>
-                                    <p className="font-semibold">{entry.foh}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">BOH</p>
-                                    <p className="font-semibold">{entry.boh}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">Delivered</p>
-                                    <p className="font-semibold">{entry.delivered}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">On Order</p>
-                                    <p className="font-semibold">{entry.on_order}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">Total</p>
-                                    <p className="font-semibold">{entry.total}</p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-muted-foreground">Par</p>
-                                    <p className="font-semibold">{entry.par}</p>
-                                  </div>
-                                  <div className="col-span-2">
-                                    <p className="text-xs text-muted-foreground">Order</p>
-                                    <p className={cn(
-                                      "font-bold rounded px-2 py-0.5 inline-block",
-                                      getOrderColor(entry.order)
-                                    )}>
-                                      {Math.max(0, entry.order)}
-                                    </p>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
+                            <Collapsible key={entry.milk_type} className="group/collapsible">
+                              <Card className="overflow-hidden">
+                                <CollapsibleTrigger className="w-full text-left">
+                                  <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                      <CardTitle className="text-base">{entry.milk_type}</CardTitle>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <div className="text-right">
+                                        <p className="text-xs text-muted-foreground">Order</p>
+                                        <p className="text-xl font-bold">{Math.max(0, entry.order)}</p>
+                                      </div>
+                                      <ChevronDown className="h-5 w-5 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                                    </div>
+                                  </CardHeader>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                  <CardContent className="py-3 px-4 border-t bg-muted/20">
+                                    <div className="grid grid-cols-3 gap-3 text-sm">
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">FOH</p>
+                                        <p className="font-semibold">{entry.foh}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">BOH</p>
+                                        <p className="font-semibold">{entry.boh}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">Delivered</p>
+                                        <p className="font-semibold">{entry.delivered}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">On Order</p>
+                                        <p className="font-semibold">{entry.on_order}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">Total</p>
+                                        <p className="font-semibold">{entry.total}</p>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs text-muted-foreground">Par</p>
+                                        <p className="font-semibold">{entry.par}</p>
+                                      </div>
+                                    </div>
+                                  </CardContent>
+                                </CollapsibleContent>
+                              </Card>
+                            </Collapsible>
                           ))}
                         </div>
                       </section>
@@ -278,10 +287,7 @@ export default function SummaryPage() {
                                   <td className="text-center py-3 px-4 font-semibold">{entry.total}</td>
                                   <td className="text-center py-3 px-4">{entry.par}</td>
                                   <td className="text-center py-3 px-4">
-                                    <span className={cn(
-                                      "font-bold rounded px-3 py-1 inline-block",
-                                      getOrderColor(entry.order)
-                                    )}>
+                                    <span className="font-bold">
                                       {Math.max(0, entry.order)}
                                     </span>
                                   </td>
@@ -307,10 +313,7 @@ export default function SummaryPage() {
                                   <td className="text-center py-3 px-4 font-semibold">{entry.total}</td>
                                   <td className="text-center py-3 px-4">{entry.par}</td>
                                   <td className="text-center py-3 px-4">
-                                    <span className={cn(
-                                      "font-bold rounded px-3 py-1 inline-block",
-                                      getOrderColor(entry.order)
-                                    )}>
+                                    <span className="font-bold">
                                       {Math.max(0, entry.order)}
                                     </span>
                                   </td>
@@ -353,10 +356,7 @@ export default function SummaryPage() {
                           </div>
                           <div>
                             <p className="text-sm text-muted-foreground">Total Order</p>
-                            <p className={cn(
-                              "text-2xl font-bold",
-                              totals.total_order > 0 ? "text-amber-600" : "text-green-600"
-                            )}>
+                            <p className="text-2xl font-bold">
                               {Math.max(0, totals.total_order)}
                             </p>
                           </div>

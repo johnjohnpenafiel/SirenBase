@@ -103,37 +103,27 @@ export function OnOrderRow({
         {/* Category Icon */}
         <div
           className={cn(
-            "shrink-0 w-12 h-12 rounded-lg flex items-center justify-center",
+            "shrink-0 w-14 h-14 rounded-xl flex items-center justify-center",
             isDairy ? "bg-blue-50 text-blue-500" : "bg-green-50 text-green-500"
           )}
         >
           {isDairy ? (
-            <Milk className="w-6 h-6" />
+            <Milk className="w-7 h-7" />
           ) : (
-            <Leaf className="w-6 h-6" />
+            <Leaf className="w-7 h-7" />
           )}
         </div>
 
         {/* Milk Name */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-foreground truncate">{milkName}</h3>
-          <p className="text-xs text-muted-foreground">
+          <h3 className="font-semibold text-foreground text-lg">{milkName}</h3>
+          <p className="text-sm text-muted-foreground">
             Currently on order
           </p>
         </div>
 
-        {/* Count Controls */}
-        <div className="flex items-center gap-2 shrink-0">
-          <Button
-            onClick={handleDecrement}
-            disabled={value === 0}
-            variant="outline"
-            size="icon"
-            className="h-11 w-11 rounded-lg"
-          >
-            <Minus className="h-5 w-5" strokeWidth={2.5} />
-          </Button>
-
+        {/* Count Display */}
+        <div className="shrink-0">
           {isEditing ? (
             <Input
               ref={inputRef}
@@ -144,18 +134,22 @@ export function OnOrderRow({
               onChange={handleInputChange}
               onBlur={handleInputBlur}
               onKeyDown={handleInputKeyDown}
-              className="w-16 h-11 text-2xl font-bold text-center border-2 border-primary/60 rounded-lg"
+              className="w-14 h-[92px] text-3xl font-bold text-center border-2 border-primary/60 rounded-lg"
               maxLength={3}
             />
           ) : (
             <button
               onClick={handleValueClick}
-              className="w-16 h-11 flex items-center justify-center rounded-lg text-2xl font-bold tabular-nums bg-muted/30 hover:bg-muted/50 transition-colors"
+              className="w-14 h-[92px] flex items-center justify-center rounded-lg text-3xl font-bold tabular-nums bg-muted/30 hover:bg-muted/50 transition-colors active:scale-95"
             >
               {value}
             </button>
           )}
+        </div>
 
+        {/* Vertical +/- Button Stack */}
+        <div className="flex flex-col gap-1 shrink-0">
+          {/* Increment Button (top) */}
           <Button
             onClick={handleIncrement}
             disabled={value >= 999}
@@ -164,6 +158,17 @@ export function OnOrderRow({
             className="h-11 w-11 rounded-lg"
           >
             <Plus className="h-5 w-5" strokeWidth={2.5} />
+          </Button>
+
+          {/* Decrement Button (bottom) */}
+          <Button
+            onClick={handleDecrement}
+            disabled={value === 0}
+            variant="outline"
+            size="icon"
+            className="h-11 w-11 rounded-lg"
+          >
+            <Minus className="h-5 w-5" strokeWidth={2.5} />
           </Button>
         </div>
       </div>

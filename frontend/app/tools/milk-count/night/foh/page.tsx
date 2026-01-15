@@ -210,7 +210,6 @@ export default function NightFOHPage() {
                             category={milk.category}
                             currentCount={counts[milk.id] ?? 0}
                             onCountChange={(count) => handleCountChange(milk.id, count)}
-                            size="large"
                           />
                         ))}
                       </div>
@@ -232,7 +231,6 @@ export default function NightFOHPage() {
                             category={milk.category}
                             currentCount={counts[milk.id] ?? 0}
                             onCountChange={(count) => handleCountChange(milk.id, count)}
-                            size="large"
                           />
                         ))}
                       </div>

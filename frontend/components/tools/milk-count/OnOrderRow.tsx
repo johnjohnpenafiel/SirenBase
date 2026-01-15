@@ -103,21 +103,21 @@ export function OnOrderRow({
         {/* Category Icon */}
         <div
           className={cn(
-            "shrink-0 w-14 h-14 rounded-xl flex items-center justify-center",
+            "shrink-0 w-[72px] h-[72px] rounded-xl flex items-center justify-center",
             isDairy ? "bg-blue-50 text-blue-500" : "bg-green-50 text-green-500"
           )}
         >
           {isDairy ? (
-            <Milk className="w-7 h-7" />
+            <Milk className="w-9 h-9" />
           ) : (
-            <Leaf className="w-7 h-7" />
+            <Leaf className="w-9 h-9" />
           )}
         </div>
 
         {/* Milk Name */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-foreground text-lg">{milkName}</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="font-semibold text-foreground text-base">{milkName}</h3>
+          <p className="text-xs text-muted-foreground">
             Currently on order
           </p>
         </div>

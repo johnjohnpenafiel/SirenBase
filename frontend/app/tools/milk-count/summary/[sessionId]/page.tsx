@@ -134,52 +134,60 @@ export default function SummaryPage() {
                         <div className="space-y-2">
                           {dairyEntries.map((entry) => (
                             <Collapsible key={entry.milk_type} className="group/collapsible">
-                              <Card className="overflow-hidden">
+                              <div className="bg-card border border-border/50 rounded-xl shadow-sm overflow-hidden">
                                 <CollapsibleTrigger className="w-full text-left">
-                                  <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                      <CardTitle className="text-base">{entry.milk_type}</CardTitle>
+                                  <div className="flex items-center gap-3 p-3">
+                                    {/* Category Icon */}
+                                    <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center bg-blue-50 text-blue-500">
+                                      <Milk className="w-5 h-5" />
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                      <div className="text-right">
-                                        <p className="text-xs text-muted-foreground">Order</p>
-                                        <p className="text-xl font-bold">{Math.max(0, entry.order)}</p>
-                                      </div>
-                                      <ChevronDown className="h-5 w-5 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                                    {/* Milk Name & Total */}
+                                    <div className="flex-1 min-w-0">
+                                      <h3 className="font-semibold text-foreground truncate">{entry.milk_type}</h3>
+                                      <p className="text-xs text-muted-foreground">
+                                        Total: {entry.total} · Par: {entry.par}
+                                      </p>
                                     </div>
-                                  </CardHeader>
+                                    {/* Order Value */}
+                                    <div className="text-right shrink-0">
+                                      <p className="text-xs text-muted-foreground">Order</p>
+                                      <p className="text-xl font-bold tabular-nums">{Math.max(0, entry.order)}</p>
+                                    </div>
+                                    {/* Chevron */}
+                                    <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                                  </div>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                  <CardContent className="py-3 px-4 border-t bg-muted/20">
+                                  <div className="px-3 pb-3 border-t border-border/30 pt-3">
                                     <div className="grid grid-cols-3 gap-3 text-sm">
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">FOH</p>
                                         <p className="font-semibold">{entry.foh}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">BOH</p>
                                         <p className="font-semibold">{entry.boh}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">Delivered</p>
                                         <p className="font-semibold">{entry.delivered}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">On Order</p>
                                         <p className="font-semibold">{entry.on_order}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">Total</p>
                                         <p className="font-semibold">{entry.total}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">Par</p>
                                         <p className="font-semibold">{entry.par}</p>
                                       </div>
                                     </div>
-                                  </CardContent>
+                                  </div>
                                 </CollapsibleContent>
-                              </Card>
+                              </div>
                             </Collapsible>
                           ))}
                         </div>
@@ -196,52 +204,60 @@ export default function SummaryPage() {
                         <div className="space-y-2">
                           {nonDairyEntries.map((entry) => (
                             <Collapsible key={entry.milk_type} className="group/collapsible">
-                              <Card className="overflow-hidden">
+                              <div className="bg-card border border-border/50 rounded-xl shadow-sm overflow-hidden">
                                 <CollapsibleTrigger className="w-full text-left">
-                                  <CardHeader className="py-3 px-4 flex flex-row items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                      <CardTitle className="text-base">{entry.milk_type}</CardTitle>
+                                  <div className="flex items-center gap-3 p-3">
+                                    {/* Category Icon */}
+                                    <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center bg-green-50 text-green-500">
+                                      <Leaf className="w-5 h-5" />
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                      <div className="text-right">
-                                        <p className="text-xs text-muted-foreground">Order</p>
-                                        <p className="text-xl font-bold">{Math.max(0, entry.order)}</p>
-                                      </div>
-                                      <ChevronDown className="h-5 w-5 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                                    {/* Milk Name & Total */}
+                                    <div className="flex-1 min-w-0">
+                                      <h3 className="font-semibold text-foreground truncate">{entry.milk_type}</h3>
+                                      <p className="text-xs text-muted-foreground">
+                                        Total: {entry.total} · Par: {entry.par}
+                                      </p>
                                     </div>
-                                  </CardHeader>
+                                    {/* Order Value */}
+                                    <div className="text-right shrink-0">
+                                      <p className="text-xs text-muted-foreground">Order</p>
+                                      <p className="text-xl font-bold tabular-nums">{Math.max(0, entry.order)}</p>
+                                    </div>
+                                    {/* Chevron */}
+                                    <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                                  </div>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                  <CardContent className="py-3 px-4 border-t bg-muted/20">
+                                  <div className="px-3 pb-3 border-t border-border/30 pt-3">
                                     <div className="grid grid-cols-3 gap-3 text-sm">
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">FOH</p>
                                         <p className="font-semibold">{entry.foh}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">BOH</p>
                                         <p className="font-semibold">{entry.boh}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">Delivered</p>
                                         <p className="font-semibold">{entry.delivered}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">On Order</p>
                                         <p className="font-semibold">{entry.on_order}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">Total</p>
                                         <p className="font-semibold">{entry.total}</p>
                                       </div>
-                                      <div>
+                                      <div className="bg-muted/30 rounded-lg p-2">
                                         <p className="text-xs text-muted-foreground">Par</p>
                                         <p className="font-semibold">{entry.par}</p>
                                       </div>
                                     </div>
-                                  </CardContent>
+                                  </div>
                                 </CollapsibleContent>
-                              </Card>
+                              </div>
                             </Collapsible>
                           ))}
                         </div>

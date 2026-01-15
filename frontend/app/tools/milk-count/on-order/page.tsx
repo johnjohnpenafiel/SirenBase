@@ -153,7 +153,7 @@ export default function OnOrderPage() {
                       </h1>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Enter quantities already on order from IMS
+                      Enter quantities already on order
                     </p>
                   </div>
                 </div>
@@ -189,10 +189,9 @@ export default function OnOrderPage() {
                 <div className="space-y-6">
                   {/* Instructions */}
                   <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 text-sm text-purple-800">
-                    <p className="font-medium mb-1">Check IMS for on-order quantities:</p>
+                    <p className="font-medium mb-1">Check on-order quantities:</p>
                     <ul className="list-disc list-inside space-y-0.5 text-xs">
-                      <li>Open IMS and check each milk type's pending orders</li>
-                      <li>Enter the quantity that is already on order but not delivered</li>
+                      <li>Enter the quantity that is on order for each milk type</li>
                       <li>Leave at 0 if nothing is on order for that milk type</li>
                     </ul>
                   </div>

@@ -204,6 +204,7 @@ export default function NightBOHPage() {
                             category={milk.category}
                             currentCount={counts[milk.id] ?? 0}
                             onCountChange={(count) => handleCountChange(milk.id, count)}
+                            variant="large-icon"
                           />
                         ))}
                       </div>
@@ -225,6 +226,7 @@ export default function NightBOHPage() {
                             category={milk.category}
                             currentCount={counts[milk.id] ?? 0}
                             onCountChange={(count) => handleCountChange(milk.id, count)}
+                            variant="large-icon"
                           />
                         ))}
                       </div>

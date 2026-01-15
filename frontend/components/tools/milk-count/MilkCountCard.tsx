@@ -24,6 +24,8 @@ interface MilkCountCardProps {
   onCountChange: (count: number) => void;
   saving?: boolean;
   className?: string;
+  /** Variant for testing different icon/text balance */
+  variant?: 'default' | 'large-icon';
 }
 
 export function MilkCountCard({
@@ -34,7 +36,9 @@ export function MilkCountCard({
   onCountChange,
   saving = false,
   className,
+  variant = 'default',
 }: MilkCountCardProps) {
+  const isLargeIcon = variant === 'large-icon';
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(currentCount.toString());
   const inputRef = useRef<HTMLInputElement>(null);
@@ -113,23 +117,30 @@ export function MilkCountCard({
       {/* Category Icon */}
       <div
         className={cn(
-          "shrink-0 w-14 h-14 rounded-xl flex items-center justify-center",
+          "shrink-0 rounded-xl flex items-center justify-center",
+          isLargeIcon ? "w-[72px] h-[72px]" : "w-14 h-14",
           isDairy ? "bg-blue-50 text-blue-500" : "bg-green-50 text-green-500"
         )}
       >
         {isDairy ? (
-          <Milk className="w-7 h-7" />
+          <Milk className={isLargeIcon ? "w-9 h-9" : "w-7 h-7"} />
         ) : (
-          <Leaf className="w-7 h-7" />
+          <Leaf className={isLargeIcon ? "w-9 h-9" : "w-7 h-7"} />
         )}
       </div>
 
       {/* Milk Name - flex-1 to take available space */}
       <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-foreground text-lg">
+        <h3 className={cn(
+          "font-semibold text-foreground",
+          isLargeIcon ? "text-base" : "text-lg"
+        )}>
           {milkName}
         </h3>
-        <p className="text-sm text-muted-foreground capitalize">
+        <p className={cn(
+          "text-muted-foreground capitalize",
+          isLargeIcon ? "text-xs" : "text-sm"
+        )}>
           {isDairy ? "Dairy" : "Non-Dairy"}
         </p>
       </div>

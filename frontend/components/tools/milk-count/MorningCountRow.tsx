@@ -202,17 +202,15 @@ export function MorningCountRow({
             <div className="flex gap-2">
               <Button
                 variant={method === "boh_count" ? "default" : "outline"}
-                size="sm"
                 onClick={() => onMethodChange("boh_count")}
-                className="flex-1 text-xs"
+                className="flex-1 h-11"
               >
-                Count Current BOH
+                Current BOH
               </Button>
               <Button
                 variant={method === "direct_delivered" ? "default" : "outline"}
-                size="sm"
                 onClick={() => onMethodChange("direct_delivered")}
-                className="flex-1 text-xs"
+                className="flex-1 h-11"
               >
                 Enter Delivered
               </Button>

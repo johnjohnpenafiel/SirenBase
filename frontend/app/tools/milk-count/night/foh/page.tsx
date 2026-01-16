@@ -161,7 +161,7 @@ export default function NightFOHPage() {
                       </h1>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Count milk in front beverage fridges
+                      Count milk in front of house fridges
                     </p>
                   </div>
                 </div>

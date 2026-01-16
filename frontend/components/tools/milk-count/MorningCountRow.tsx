@@ -16,7 +16,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Minus, Plus, Milk, Leaf, ChevronDown } from "lucide-react";
+import { Minus, Plus, Milk, Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MilkCategory, MilkCountMorningMethod } from "@/types";
 
@@ -114,40 +114,38 @@ export function MorningCountRow({
       <div className="bg-card border border-border/50 rounded-xl shadow-sm overflow-hidden">
         {/* Main Row */}
         <div className="flex items-center gap-4 p-4">
-          {/* Category Icon */}
-          <div
-            className={cn(
-              "shrink-0 w-12 h-12 rounded-lg flex items-center justify-center",
-              isDairy ? "bg-blue-50 text-blue-500" : "bg-green-50 text-green-500"
-            )}
-          >
-            {isDairy ? (
-              <Milk className="w-6 h-6" />
-            ) : (
-              <Leaf className="w-6 h-6" />
-            )}
-          </div>
+          {/* CollapsibleTrigger: Icon + Name area */}
+          <CollapsibleTrigger asChild>
+            <button className="flex items-center gap-4 flex-1 min-w-0 text-left">
+              {/* Category Icon with dashed border */}
+              <div
+                className={cn(
+                  "shrink-0 w-[72px] h-[72px] rounded-xl flex items-center justify-center",
+                  "border-2 border-dashed transition-all",
+                  isDairy
+                    ? "bg-blue-50 text-blue-500 border-blue-300 group-data-[state=open]/collapsible:border-solid group-data-[state=open]/collapsible:border-blue-400"
+                    : "bg-green-50 text-green-500 border-green-300 group-data-[state=open]/collapsible:border-solid group-data-[state=open]/collapsible:border-green-400"
+                )}
+              >
+                {isDairy ? (
+                  <Milk className="w-9 h-9" />
+                ) : (
+                  <Leaf className="w-9 h-9" />
+                )}
+              </div>
 
-          {/* Milk Name & Night BOH */}
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-foreground truncate">{milkName}</h3>
-            <p className="text-xs text-muted-foreground">
-              Night BOH: {nightBohCount}
-            </p>
-          </div>
+              {/* Milk Name & Night BOH */}
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-foreground text-base">{milkName}</h3>
+                <p className="text-xs text-muted-foreground">
+                  Night BOH: {nightBohCount}
+                </p>
+              </div>
+            </button>
+          </CollapsibleTrigger>
 
-          {/* Count Controls */}
-          <div className="flex items-center gap-2 shrink-0">
-            <Button
-              onClick={handleDecrement}
-              disabled={value === 0}
-              variant="outline"
-              size="icon"
-              className="h-11 w-11 rounded-lg"
-            >
-              <Minus className="h-5 w-5" strokeWidth={2.5} />
-            </Button>
-
+          {/* Count Display */}
+          <div className="shrink-0">
             {isEditing ? (
               <Input
                 ref={inputRef}
@@ -158,18 +156,22 @@ export function MorningCountRow({
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
                 onKeyDown={handleInputKeyDown}
-                className="w-16 h-11 text-2xl font-bold text-center border-2 border-primary/60 rounded-lg"
+                className="w-14 h-[92px] text-3xl font-bold text-center border-2 border-primary/60 rounded-lg"
                 maxLength={3}
               />
             ) : (
               <button
                 onClick={handleValueClick}
-                className="w-16 h-11 flex items-center justify-center rounded-lg text-2xl font-bold tabular-nums bg-muted/30 hover:bg-muted/50 transition-colors"
+                className="w-14 h-[92px] flex items-center justify-center rounded-lg text-3xl font-bold tabular-nums bg-muted/30 hover:bg-muted/50 transition-colors active:scale-95"
               >
                 {value}
               </button>
             )}
+          </div>
 
+          {/* Vertical +/- Button Stack */}
+          <div className="flex flex-col gap-1 shrink-0">
+            {/* Increment Button (top) */}
             <Button
               onClick={handleIncrement}
               disabled={value >= 999}
@@ -179,18 +181,18 @@ export function MorningCountRow({
             >
               <Plus className="h-5 w-5" strokeWidth={2.5} />
             </Button>
-          </div>
 
-          {/* Expand Button */}
-          <CollapsibleTrigger asChild>
+            {/* Decrement Button (bottom) */}
             <Button
-              variant="ghost"
+              onClick={handleDecrement}
+              disabled={value === 0}
+              variant="outline"
               size="icon"
-              className="shrink-0 h-9 w-9"
+              className="h-11 w-11 rounded-lg"
             >
-              <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+              <Minus className="h-5 w-5" strokeWidth={2.5} />
             </Button>
-          </CollapsibleTrigger>
+          </div>
         </div>
 
         {/* Expanded Details */}

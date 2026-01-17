@@ -267,103 +267,105 @@ This principle ensures that SirenBase remains intuitive and functional across de
 
 ### Color System
 
-**Foundation**: We use a **Supabase-inspired mint/teal palette** with OKLCH values for better perceptual uniformity. The palette features clean neutral backgrounds with a vibrant mint/teal primary color.
+**Foundation**: We use a **Vercel-inspired neutral grayscale palette** with OKLCH values for better perceptual uniformity. The palette features a clean black/white aesthetic with clear visual hierarchy through luminosity differences.
 
-**Design Decision**: All tools share the same color palette for consistency. No tool-specific accent colors.
+**Design Decision**: All tools share the same color palette for consistency. The neutral palette ensures professional appearance and maximum content focus.
+
+**Key Feature**: Background (`0.99`) vs Card (`1.0`) luminosity difference creates natural elevation without relying solely on borders.
 
 #### Light Mode (Default)
 
 ```css
-/* Base Colors - Clean neutral backgrounds */
---background: oklch(0.9911 0 0);             /* Near-white */
---foreground: oklch(0.2046 0 0);             /* Dark gray */
+/* Base Colors - Clear separation between background and surfaces */
+--background: oklch(0.9900 0 0);             /* Off-white (~99% lightness) */
+--foreground: oklch(0 0 0);                  /* Pure black */
 
-/* Surfaces */
---card: oklch(0.9911 0 0);                   /* Near-white */
---card-foreground: oklch(0.2046 0 0);
---popover: oklch(0.9911 0 0);
---popover-foreground: oklch(0.4386 0 0);     /* Medium gray */
+/* Surfaces - Pure white cards "float" above background */
+--card: oklch(1 0 0);                        /* Pure white */
+--card-foreground: oklch(0 0 0);
+--popover: oklch(0.9900 0 0);
+--popover-foreground: oklch(0 0 0);
 
-/* Interactive Elements - Mint/teal primary */
---primary: oklch(0.8348 0.1302 160.9080);    /* Vibrant mint */
---primary-foreground: oklch(0.2626 0.0147 166.4589);  /* Dark teal */
---secondary: oklch(0.9940 0 0);              /* Off-white */
---secondary-foreground: oklch(0.2046 0 0);
+/* Interactive Elements - Black primary for maximum contrast */
+--primary: oklch(0 0 0);                     /* Pure black */
+--primary-foreground: oklch(1 0 0);          /* Pure white */
+--secondary: oklch(0.9400 0 0);              /* Light gray */
+--secondary-foreground: oklch(0 0 0);
 
 /* States */
---muted: oklch(0.9461 0 0);                  /* Light gray */
---muted-foreground: oklch(0.2435 0 0);       /* Dark gray */
---accent: oklch(0.9461 0 0);                 /* Light gray */
---accent-foreground: oklch(0.2435 0 0);
---destructive: oklch(0.5523 0.1927 32.7272); /* Red */
---destructive-foreground: oklch(0.9934 0.0032 17.2118);
+--muted: oklch(0.9700 0 0);                  /* Very light gray */
+--muted-foreground: oklch(0.4400 0 0);       /* Medium gray */
+--accent: oklch(0.9400 0 0);                 /* Light gray */
+--accent-foreground: oklch(0 0 0);
+--destructive: oklch(0.6300 0.1900 23.0300); /* Red */
+--destructive-foreground: oklch(1 0 0);
 
 /* Borders & Inputs */
---border: oklch(0.9037 0 0);                 /* Subtle gray border */
---input: oklch(0.9731 0 0);                  /* Light input background */
---ring: oklch(0.8348 0.1302 160.9080);       /* Mint focus ring */
+--border: oklch(0.9200 0 0);                 /* Subtle gray border */
+--input: oklch(0.9400 0 0);                  /* Light input background */
+--ring: oklch(0 0 0);                        /* Black focus ring */
 ```
 
 #### Dark Mode
 
 ```css
-/* Base Colors - Dark neutral backgrounds */
---background: oklch(0.1822 0 0);             /* Near-black */
---foreground: oklch(0.9288 0.0126 255.5078); /* Off-white with slight blue */
---card: oklch(0.2046 0 0);                   /* Dark gray */
---card-foreground: oklch(0.9288 0.0126 255.5078);
---popover: oklch(0.2603 0 0);
---popover-foreground: oklch(0.7348 0 0);
+/* Base Colors - Pure black background */
+--background: oklch(0 0 0);                  /* Pure black */
+--foreground: oklch(1 0 0);                  /* Pure white */
+--card: oklch(0.1400 0 0);                   /* Dark gray */
+--card-foreground: oklch(1 0 0);
+--popover: oklch(0.1800 0 0);
+--popover-foreground: oklch(1 0 0);
 
-/* Interactive Elements */
---primary: oklch(0.4365 0.1044 156.7556);    /* Deep teal */
---primary-foreground: oklch(0.9213 0.0135 167.1556);  /* Light mint */
---secondary: oklch(0.2603 0 0);
---secondary-foreground: oklch(0.9851 0 0);
+/* Interactive Elements - White primary */
+--primary: oklch(1 0 0);                     /* Pure white */
+--primary-foreground: oklch(0 0 0);          /* Pure black */
+--secondary: oklch(0.2500 0 0);
+--secondary-foreground: oklch(1 0 0);
 
 /* States */
---muted: oklch(0.2393 0 0);
---muted-foreground: oklch(0.7122 0 0);
---accent: oklch(0.3132 0 0);
---accent-foreground: oklch(0.9851 0 0);
---destructive: oklch(0.3123 0.0852 29.7877);
---destructive-foreground: oklch(0.9368 0.0045 34.3092);
+--muted: oklch(0.2300 0 0);
+--muted-foreground: oklch(0.7200 0 0);
+--accent: oklch(0.3200 0 0);
+--accent-foreground: oklch(1 0 0);
+--destructive: oklch(0.6900 0.2000 23.9100);
+--destructive-foreground: oklch(0 0 0);
 
 /* Borders & Inputs */
---border: oklch(0.2809 0 0);
---input: oklch(0.2603 0 0);
---ring: oklch(0.8003 0.1821 151.7110);
+--border: oklch(0.2600 0 0);
+--input: oklch(0.3200 0 0);
+--ring: oklch(0.7200 0 0);
 ```
 
 #### Chart Colors (for data visualization)
 
 ```css
-/* Light Mode - Diverse color palette */
---chart-1: oklch(0.8348 0.1302 160.9080);  /* Mint (primary) */
---chart-2: oklch(0.6231 0.1880 259.8145);  /* Blue */
---chart-3: oklch(0.6056 0.2189 292.7172);  /* Purple */
---chart-4: oklch(0.7686 0.1647 70.0804);   /* Orange */
---chart-5: oklch(0.6959 0.1491 162.4796);  /* Teal */
+/* Light Mode - Neutral-friendly palette */
+--chart-1: oklch(0.8100 0.1700 75.3500);   /* Orange/amber */
+--chart-2: oklch(0.5500 0.2200 264.5300);  /* Blue */
+--chart-3: oklch(0.7200 0 0);              /* Gray */
+--chart-4: oklch(0.9200 0 0);              /* Light gray */
+--chart-5: oklch(0.5600 0 0);              /* Dark gray */
 
 /* Dark Mode */
---chart-1: oklch(0.8003 0.1821 151.7110);
---chart-2: oklch(0.7137 0.1434 254.6240);
---chart-3: oklch(0.7090 0.1592 293.5412);
---chart-4: oklch(0.8369 0.1644 84.4286);
---chart-5: oklch(0.7845 0.1325 181.9120);
+--chart-1: oklch(0.8100 0.1700 75.3500);
+--chart-2: oklch(0.5800 0.2100 260.8400);
+--chart-3: oklch(0.5600 0 0);
+--chart-4: oklch(0.4400 0 0);
+--chart-5: oklch(0.9200 0 0);
 ```
 
 ### Typography
 
-**Font Stack**: We use **Montserrat** as the primary UI font, loaded via Next.js font optimization. System defaults are used for serif and monospace to minimize bundle size.
+**Font Stack**: We use **Geist** as the primary font family, loaded via the `geist` npm package. Geist is Vercel's custom font designed for clarity and modern interfaces.
 
 ```css
---font-sans: Montserrat, sans-serif        /* Primary UI font (loaded via next/font) */
---font-serif: ui-serif, Georgia, serif     /* System serif (rarely used) */
---font-mono: monospace                     /* System monospace (item codes) */
+--font-sans: Geist, sans-serif             /* Primary UI font (loaded via geist package) */
+--font-serif: Georgia, serif               /* System serif (rarely used) */
+--font-mono: Geist Mono, monospace         /* Monospace for codes (loaded via geist package) */
 ```
 
-**Implementation Note**: Montserrat is imported in `app/layout.tsx` using `next/font/google` for optimal loading performance. Serif and monospace fonts use system defaults since they're rarely needed in this UI-focused application.
+**Implementation Note**: Both Geist Sans and Geist Mono are imported in `app/layout.tsx` using the `geist` package for optimal loading performance. This provides consistent typography for both UI text and code displays (like item codes).
 
 #### Font Sizes (Mobile-First)
 
@@ -1690,11 +1692,20 @@ Use this checklist when implementing new UI:
 
 ---
 
-**Last Updated**: January 16, 2026
-**Version**: 3.7.0
+**Last Updated**: January 17, 2026
+**Version**: 4.0.0
 **Maintainer**: Development Team
 
 **Change Log**:
+- **v4.0.0** (Jan 17, 2026): **MAJOR THEME CHANGE — Vercel Theme** — Complete overhaul from Supabase mint/teal to Vercel neutral grayscale:
+  - **Color System**: Replaced mint/teal primary with pure black/white neutral palette
+  - **Visual Hierarchy**: Background (0.99 lightness) vs Card (1.0 pure white) creates natural elevation
+  - **Primary Color**: Now pure black (`oklch(0 0 0)`) for maximum contrast and neutrality
+  - **Typography**: Switched from Montserrat to Geist font family (via `geist` npm package)
+  - **Monospace**: Now uses Geist Mono for consistent code/item display
+  - **Dark Mode**: Pure black background with white foreground, inverted primary
+  - **Chart Colors**: Updated to neutral-friendly orange/blue/gray palette
+  - **Breaking Change**: Components using `text-primary` will now render black instead of mint/teal
 - **v3.7.0** (Jan 16, 2026): **Title Area Island Pattern** — New frosted glass island component for page titles:
   - Apple-style translucent floating "island" with `backdrop-blur-md` and `bg-gray-100/60`
   - `sticky top-0` positioning allows content to scroll beneath with visible blur effect

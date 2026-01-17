@@ -46,7 +46,7 @@ Reference guide for consistent naming when discussing or modifying the Inventory
 | Top Bar                  | **Header**                        |
 | Fixed Page Header        | **Page Header Section**           |
 | Back Button (filtered)   | **Back to Categories Button**     |
-| Page Title               | **Page Title** ("Inventory Tracking" or category name) |
+| Page Title               | **Page Title**                    |
 | Action Buttons           | **Action Buttons**                |
 | History Button           | **History Button**                |
 | Add Item Button          | **Add Item Button**               |

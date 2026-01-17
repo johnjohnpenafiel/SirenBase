@@ -34,30 +34,31 @@ export default function DashboardPage() {
     <ProtectedRoute>
       <div className="flex flex-col h-dvh">
         <Header />
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Fixed Header Section - Shadow fades in when content scrolls beneath */}
-          <div
-            className={cn(
-              "relative z-10 transition-all duration-300 ease-out",
-              isScrolled
-                ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
-                : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
-            )}
-          >
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
+        <main className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+          {/* Sticky Frosted Island - content scrolls beneath */}
+          <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+            <div
+              className={cn(
+                "max-w-6xl mx-auto rounded-2xl",
+                "bg-gray-100/60 backdrop-blur-md",
+                "border border-gray-200/50",
+                "px-5 py-4 md:px-6 md:py-5",
+                "transition-all duration-300 ease-out",
+                isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+              )}
+            >
               <h1 className="text-3xl font-bold mb-1 text-foreground">
                 Dashboard
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Welcome back, {user?.name || "Partner"}!
               </p>
             </div>
           </div>
 
-          {/* Scrollable Tools Grid */}
-          <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Tools Grid - scrolls under the sticky island */}
+          <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Tool 1: Inventory Tracking - Active */}
                 <ToolCard
                   title="Inventory Tracking"
@@ -92,14 +93,13 @@ export default function DashboardPage() {
                     isAdminOnly={true}
                   />
                 )}
-              </div>
-
-              {!isAdmin && (
-                <p className="mt-8 text-sm text-muted-foreground text-center">
-                  Need admin access? Contact your store manager.
-                </p>
-              )}
             </div>
+
+            {!isAdmin && (
+              <p className="mt-8 text-sm text-muted-foreground text-center">
+                Need admin access? Contact your store manager.
+              </p>
+            )}
           </div>
         </main>
       </div>

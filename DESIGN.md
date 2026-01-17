@@ -762,6 +762,130 @@ Mobile-first responsive design:
 - **Minimal**: Copyright, version number
 - **Sticky bottom** (optional): Only if page content is short
 
+### Title Area Island
+
+**Design Philosophy**: A modern Apple-style frosted glass "island" that floats above scrollable content. The translucent effect reveals motion beneath while maintaining full legibility. This pattern creates visual depth and a premium, app-like feel.
+
+**Use Cases**:
+- Dashboard page title
+- Tool landing pages (Inventory, Milk Count, RTD&E)
+- Any page where the title area should feel distinct and elevated
+
+#### Visual Characteristics
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Header (Global Navigation)                                 │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   ┌─────────────────────────────────────────────────────┐   │
+│   │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │   │  ← Frosted glass island
+│   │ ░░  Page Title                                   ░░ │   │    • rounded-2xl corners
+│   │ ░░  Subtitle or context message                  ░░ │   │    • bg-gray-100/60
+│   │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │   │    • backdrop-blur-md
+│   └─────────────────────────────────────────────────────┘   │    • border-gray-200/50
+│                                                             │
+│   ┌─────────┐  ┌─────────┐  ┌─────────┐                     │
+│   │  Card   │  │  Card   │  │  Card   │  ← Content scrolls  │
+│   │         │  │         │  │         │    beneath island   │
+│   └─────────┘  └─────────┘  └─────────┘                     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Specification Table
+
+| Property | Value | Purpose |
+|----------|-------|---------|
+| **Positioning** | `sticky top-0 z-10` | Stays at top while content scrolls beneath |
+| **Outer wrapper padding** | `px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6` | Horizontal inset from edges + minimal gap from header |
+| **Max width** | `max-w-6xl mx-auto` | Matches content container width |
+| **Border radius** | `rounded-2xl` (16px) | Apple-style soft corners |
+| **Background** | `bg-gray-100/60` | Light grey at 60% opacity for frosted tint |
+| **Blur** | `backdrop-blur-md` | 12px blur reveals content motion beneath |
+| **Border** | `border border-gray-200/50` | Subtle edge definition at 50% opacity |
+| **Inner padding** | `px-5 py-4 md:px-6 md:py-5` | Comfortable internal spacing |
+| **Title typography** | `text-3xl font-bold mb-1 text-foreground` | Bold page title |
+| **Subtitle typography** | `text-sm text-muted-foreground` | Smaller secondary text |
+| **Scroll shadow** | `shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]` | Bottom-only shadow on scroll |
+| **Transition** | `transition-all duration-300 ease-out` | Smooth shadow appearance |
+
+#### Structure Requirements
+
+**Critical**: For the backdrop blur to work, content must physically scroll *beneath* the island. This requires:
+
+1. **Single scroll container**: `main` element uses `overflow-y-auto`
+2. **Sticky positioning**: Island wrapper uses `sticky top-0`
+3. **Content as sibling**: Scrollable content is a sibling element, not nested
+
+```tsx
+<main className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+  {/* Sticky Frosted Island */}
+  <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+    <div
+      className={cn(
+        "max-w-6xl mx-auto rounded-2xl",
+        "bg-gray-100/60 backdrop-blur-md",
+        "border border-gray-200/50",
+        "px-5 py-4 md:px-6 md:py-5",
+        "transition-all duration-300 ease-out",
+        isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+      )}
+    >
+      <h1 className="text-3xl font-bold mb-1 text-foreground">
+        Page Title
+      </h1>
+      <p className="text-sm text-muted-foreground">
+        Subtitle or context
+      </p>
+      {/* Optional: Action buttons, filters */}
+    </div>
+  </div>
+
+  {/* Content - scrolls under the island */}
+  <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
+    {/* Cards, lists, grids */}
+  </div>
+</main>
+```
+
+#### Scroll Shadow Behavior
+
+The island gains a subtle bottom-only shadow when content scrolls beneath it:
+
+- **Threshold**: 16px scroll before activation (prevents accidental triggers)
+- **Shadow**: `shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]` — bottom-only, very subtle
+- **Why bottom-only**: Creates natural "content sliding under" effect without unnatural side shadows
+
+```tsx
+const [isScrolled, setIsScrolled] = useState(false);
+
+const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  setIsScrolled(e.currentTarget.scrollTop > 16);
+};
+```
+
+#### When to Use Title Area Island
+
+| Scenario | Use Island? | Notes |
+|----------|-------------|-------|
+| Dashboard | ✅ Yes | Primary showcase of the pattern |
+| Tool landing pages | ✅ Yes | Inventory, Milk Count, RTD&E main pages |
+| Admin list pages | ❌ No | Use standard scroll shadow pattern |
+| Forms/dialogs | ❌ No | Not applicable |
+| History/detail pages | ⚠️ Maybe | Evaluate based on content density |
+
+#### Common Mistakes
+
+❌ **Don't** nest the scroll container inside another `overflow-hidden` wrapper — blur won't work
+❌ **Don't** use `position: fixed` — breaks scroll relationship
+❌ **Don't** add side shadows — looks unnatural for content scrolling from below
+❌ **Don't** use very dark or opaque backgrounds — defeats the translucent effect
+
+✅ **Do** use `sticky top-0` on the outer wrapper
+✅ **Do** keep scroll handler on the `main` element
+✅ **Do** maintain subtle, light grey tint for the frosted effect
+✅ **Do** test on mobile to ensure blur performance is acceptable
+
 ### Lists & Tables
 
 #### Inventory Item List
@@ -1343,8 +1467,14 @@ const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 
 ##### Pages Using This Pattern
 
+**Note**: Some pages use the **Title Area Island** pattern (see Component Patterns section) instead of the standard scroll shadow. The island pattern includes frosted glass translucency with `backdrop-blur-md`.
+
 Track implementation status:
-- [x] Dashboard (`app/dashboard/page.tsx`)
+
+**Title Area Island Pattern** (frosted glass):
+- [x] Dashboard (`app/dashboard/page.tsx`) — **Reference implementation**
+
+**Standard Scroll Shadow Pattern**:
 - [x] Admin Users (`app/admin/users/page.tsx`)
 - [x] Admin Milk Pars (`app/admin/milk-pars/page.tsx`)
 - [x] Admin RTDE Items (`app/admin/rtde-items/page.tsx`)
@@ -1560,11 +1690,20 @@ Use this checklist when implementing new UI:
 
 ---
 
-**Last Updated**: December 21, 2025
-**Version**: 3.6.0
+**Last Updated**: January 16, 2026
+**Version**: 3.7.0
 **Maintainer**: Development Team
 
 **Change Log**:
+- **v3.7.0** (Jan 16, 2026): **Title Area Island Pattern** — New frosted glass island component for page titles:
+  - Apple-style translucent floating "island" with `backdrop-blur-md` and `bg-gray-100/60`
+  - `sticky top-0` positioning allows content to scroll beneath with visible blur effect
+  - `rounded-2xl` corners with subtle `border border-gray-200/50` edge definition
+  - Bottom-only scroll shadow (`shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]`) for natural depth
+  - Requires single scroll container structure for blur to work correctly
+  - Dashboard is the reference implementation; pattern can extend to tool landing pages
+  - Added full specification table, code examples, and usage guidelines
+  - Updated "Pages Using This Pattern" to differentiate island vs. standard scroll shadow
 - **v3.6.0** (Dec 21, 2025): **Apple-Inspired Modal Redesign** — Complete overhaul of dialog/modal styling for modern, minimalist aesthetic:
   - Border radius increased from `rounded-lg` (8px) to `rounded-2xl` (16px)
   - Removed visible borders in favor of shadow-only separation

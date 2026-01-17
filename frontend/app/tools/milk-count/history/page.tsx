@@ -21,6 +21,7 @@ import {
   Moon,
   Sun,
   ClipboardList,
+  XCircle,
 } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
@@ -68,6 +69,15 @@ export default function HistoryPage() {
   const [offset, setOffset] = useState(0);
   const limit = 20;
 
+  // Determine if session is "missed" (incomplete and from a past day)
+  const isMissed = (session: MilkCountSession) => {
+    if (session.status === "completed") return false;
+    const sessionDate = parseLocalDate(session.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return sessionDate < today;
+  };
+
   useEffect(() => {
     loadSessions();
   }, []);
@@ -101,11 +111,13 @@ export default function HistoryPage() {
 
   const handleSessionClick = (session: MilkCountSession) => {
     if (session.status === "completed") {
+      // Completed: Navigate to summary
       router.push(`/tools/milk-count/summary/${session.id}`);
-    } else {
-      // In-progress session - redirect to appropriate step
+    } else if (!isMissed(session)) {
+      // Today's incomplete: Navigate to landing page to continue
       router.push("/tools/milk-count");
     }
+    // Past incomplete (missed): Do nothing - not clickable
   };
 
   // Format date for display
@@ -192,14 +204,29 @@ export default function HistoryPage() {
               ) : (
                 <div className="space-y-3">
                   {sessions.map((session) => {
+                    const sessionIsMissed = isMissed(session);
                     const statusConfig = STATUS_DISPLAY[session.status];
+
+                    // Override status display for missed sessions
+                    const displayConfig = sessionIsMissed
+                      ? {
+                          label: "Missed",
+                          color: "text-red-600 bg-red-50",
+                          icon: <XCircle className="h-4 w-4" />,
+                        }
+                      : statusConfig;
+
+                    // Determine if session is clickable
+                    const isClickable = session.status === "completed" || !sessionIsMissed;
 
                     return (
                       <Card
                         key={session.id}
                         className={cn(
-                          "cursor-pointer transition-all hover:shadow-md",
-                          session.status === "completed" && "hover:border-primary/50"
+                          "transition-all",
+                          isClickable && "cursor-pointer hover:shadow-md",
+                          session.status === "completed" && "hover:border-primary/50",
+                          sessionIsMissed && "opacity-60"
                         )}
                         onClick={() => handleSessionClick(session)}
                       >
@@ -228,13 +255,13 @@ export default function HistoryPage() {
                             {/* Status Badge */}
                             <div className={cn(
                               "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium",
-                              statusConfig.color
+                              displayConfig.color
                             )}>
-                              {statusConfig.icon}
-                              <span className="hidden sm:inline">{statusConfig.label}</span>
+                              {displayConfig.icon}
+                              <span className="hidden sm:inline">{displayConfig.label}</span>
                             </div>
 
-                            {/* Chevron */}
+                            {/* Chevron - only for completed sessions */}
                             {session.status === "completed" && (
                               <ChevronRight className="h-5 w-5 text-muted-foreground" />
                             )}

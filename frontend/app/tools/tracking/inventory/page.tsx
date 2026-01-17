@@ -162,7 +162,7 @@ export default function InventoryPage() {
               )}
             >
               {/* Main row: Title + Action buttons (aligned) */}
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-4">
                 <h1 className="text-lg md:text-3xl font-bold text-foreground">
                   {viewMode === "filtered" && selectedCategory
                     ? formatCategory(selectedCategory)
@@ -189,7 +189,6 @@ export default function InventoryPage() {
                 <BackButton
                   onClick={handleBackToCategories}
                   label="Back to Categories"
-                  className="mb-2"
                 />
               )}
 
@@ -198,7 +197,6 @@ export default function InventoryPage() {
                 <div className="flex gap-2">
                   <Button
                     variant={viewMode === "all" ? "default" : "outline"}
-                    size="sm"
                     className={
                       viewMode === "all"
                         ? "bg-accent text-accent-foreground hover:bg-accent/90"
@@ -213,7 +211,6 @@ export default function InventoryPage() {
                   </Button>
                   <Button
                     variant={viewMode === "categories" ? "default" : "outline"}
-                    size="sm"
                     className={
                       viewMode === "categories"
                         ? "bg-accent text-accent-foreground hover:bg-accent/90"

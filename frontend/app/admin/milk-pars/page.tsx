@@ -10,11 +10,12 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
+import { BackButton } from '@/components/shared/BackButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { ArrowLeft, Milk, Leaf, Loader2, Check, X, Edit2 } from 'lucide-react';
+import { Milk, Leaf, Loader2, Check, X, Edit2 } from 'lucide-react';
 import apiClient from '@/lib/api';
 import { toast } from 'sonner';
 import type { MilkCountParLevel, MilkCategory } from '@/types';
@@ -216,14 +217,12 @@ export default function MilkParsPage() {
             )}
           >
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
-              <Button
-                variant="ghost"
-                onClick={() => router.push('/admin')}
+              <BackButton
+                variant="full"
+                href="/admin"
+                label="Back to Admin Panel"
                 className="mb-4"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Admin Panel
-              </Button>
+              />
               <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                 Milk Count Pars
               </h1>

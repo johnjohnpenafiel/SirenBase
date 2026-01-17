@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
+import { BackButton } from '@/components/shared/BackButton';
 import { Button } from '@/components/ui/button';
 import { AddUserDialog } from '@/components/admin/AddUserDialog';
 import { DeleteUserDialog } from '@/components/admin/DeleteUserDialog';
@@ -17,7 +18,7 @@ import apiClient from '@/lib/api';
 import { cn } from '@/lib/utils';
 import type { User } from '@/types';
 import { toast } from 'sonner';
-import { Plus, UserCheck, Shield, Loader2, ArrowLeft } from 'lucide-react';
+import { Plus, UserCheck, Shield, Loader2 } from 'lucide-react';
 
 export default function UserManagementPage() {
   const router = useRouter();
@@ -100,14 +101,12 @@ export default function UserManagementPage() {
             )}
           >
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
-              <Button
-                variant="ghost"
-                onClick={() => router.push('/admin')}
+              <BackButton
+                variant="full"
+                href="/admin"
+                label="Back to Admin Panel"
                 className="mb-4"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Admin Panel
-              </Button>
+              />
               <div className="flex justify-between items-center mb-2">
                 <h1 className="text-2xl md:text-3xl font-bold text-foreground">User Management</h1>
                 <Button onClick={() => setAddDialogOpen(true)}>

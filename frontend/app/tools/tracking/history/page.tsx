@@ -10,6 +10,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
+import { BackButton } from "@/components/shared/BackButton";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -24,7 +25,6 @@ import { HISTORY_PAGE_SIZE, HISTORY_MAX_FETCH } from "@/lib/constants";
 import type { HistoryEntry, HistoryAction } from "@/types";
 import { toast } from "sonner";
 import {
-  ArrowLeft,
   ChevronLeft,
   ChevronRight,
   Plus,
@@ -124,15 +124,11 @@ export default function HistoryPage() {
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
               )}
             >
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => router.push("/tools/tracking/inventory")}
+              <BackButton
+                href="/tools/tracking/inventory"
+                label="Back to Inventory"
                 className="mb-2"
-              >
-                <ArrowLeft className="h-4 w-4 md:mr-2" />
-                <span className="hidden md:inline">Back to Inventory</span>
-              </Button>
+              />
               <h1 className="text-2xl md:text-3xl font-bold mb-2 text-foreground">
                 Audit History
               </h1>

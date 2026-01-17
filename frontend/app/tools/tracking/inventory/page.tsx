@@ -147,17 +147,19 @@ export default function InventoryPage() {
     <ProtectedRoute>
       <div className="flex flex-col h-dvh">
         <Header />
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Fixed Header Section */}
-          <div
-            className={cn(
-              "relative z-10 transition-all duration-300 ease-out",
-              isScrolled
-                ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
-                : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
-            )}
-          >
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
+        <main className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+          {/* Sticky Frosted Island */}
+          <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+            <div
+              className={cn(
+                "max-w-6xl mx-auto rounded-2xl",
+                "bg-gray-100/60 backdrop-blur-md",
+                "border border-gray-200/50",
+                "px-5 py-4 md:px-6 md:py-5",
+                "transition-all duration-300 ease-out",
+                isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+              )}
+            >
               <div className="flex items-center justify-between mb-4">
                 <div>
                   {viewMode === "filtered" && selectedCategory && (
@@ -173,7 +175,7 @@ export default function InventoryPage() {
                       </span>
                     </Button>
                   )}
-                  <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+                  <h1 className="text-lg md:text-3xl font-bold text-foreground">
                     {viewMode === "filtered" && selectedCategory
                       ? formatCategory(selectedCategory)
                       : "Inventory Tracking"}
@@ -233,9 +235,8 @@ export default function InventoryPage() {
             </div>
           </div>
 
-          {/* Scrollable Content Area - ONLY this scrolls */}
-          <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
+          {/* Content - scrolls under the island */}
+          <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
               {/* Categories View */}
               {viewMode === "categories" && (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -314,7 +315,6 @@ export default function InventoryPage() {
                 </div>
               )}
             </div>
-          </div>
         </main>
 
         {/* Add Item Dialog */}

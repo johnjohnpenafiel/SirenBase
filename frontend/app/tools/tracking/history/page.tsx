@@ -111,17 +111,19 @@ export default function HistoryPage() {
     <ProtectedRoute>
       <div className="flex flex-col h-dvh">
         <Header />
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Fixed Header Section */}
-          <div
-            className={cn(
-              "relative z-10 transition-all duration-300 ease-out",
-              isScrolled
-                ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
-                : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
-            )}
-          >
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
+        <main className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+          {/* Sticky Frosted Island */}
+          <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+            <div
+              className={cn(
+                "max-w-6xl mx-auto rounded-2xl",
+                "bg-gray-100/60 backdrop-blur-md",
+                "border border-gray-200/50",
+                "px-5 py-4 md:px-6 md:py-5",
+                "transition-all duration-300 ease-out",
+                isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+              )}
+            >
               <Button
                 variant="ghost"
                 size="sm"
@@ -166,9 +168,8 @@ export default function HistoryPage() {
             </div>
           </div>
 
-          {/* Scrollable Content Area - ONLY this scrolls */}
-          <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
-            <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
+          {/* Content - scrolls under the island */}
+          <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
               {paginatedHistory.length === 0 ? (
               <div className="text-center py-12 bg-card rounded-xl border border-border">
                 <p className="text-muted-foreground">
@@ -306,7 +307,6 @@ export default function HistoryPage() {
                 )}
               </>
             )}
-            </div>
           </div>
         </main>
       </div>

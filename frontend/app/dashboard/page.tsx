@@ -64,7 +64,7 @@ export default function DashboardPage() {
                   title="Inventory Tracking"
                   description="Track basement inventory with 4-digit codes"
                   route="/tools/tracking/inventory"
-                  icon={<Package className="w-12 h-12 text-primary" />}
+                  icon={<Package className="w-12 h-12 text-[#C4A882]" />}
                 />
 
                 {/* Tool 2: Milk Count - Active */}
@@ -72,7 +72,7 @@ export default function DashboardPage() {
                   title="Milk Count"
                   description="FOH/BOH counting with automated calculations"
                   route="/tools/milk-count"
-                  icon={<Milk className="w-12 h-12 text-primary" />}
+                  icon={<Milk className="w-12 h-12 text-slate-400" />}
                 />
 
                 {/* Tool 3: RTD&E - Active */}
@@ -80,7 +80,7 @@ export default function DashboardPage() {
                   title="RTD&E Count"
                   description="Display restocking with pull lists"
                   route="/tools/rtde"
-                  icon={<ScanEye className="w-12 h-12 text-primary" />}
+                  icon={<ScanEye className="w-12 h-12 text-emerald-400/80" />}
                 />
 
                 {/* Admin Panel - Admin Only */}

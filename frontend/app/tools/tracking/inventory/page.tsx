@@ -18,6 +18,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
+import { BackButton } from "@/components/shared/BackButton";
 import { Button } from "@/components/ui/button";
 import { AddItemDialog } from "@/components/tools/tracking/AddItemDialog";
 import { RemoveItemDialog } from "@/components/tools/tracking/RemoveItemDialog";
@@ -26,7 +27,7 @@ import { cn } from "@/lib/utils";
 import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
 import type { Item, ItemCategory, ViewMode } from "@/types";
 import { toast } from "sonner";
-import { ArrowLeft, Plus, History, Trash2, Loader2 } from "lucide-react";
+import { Plus, History, Trash2, Loader2 } from "lucide-react";
 
 export default function InventoryPage() {
   const router = useRouter();
@@ -160,27 +161,13 @@ export default function InventoryPage() {
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
               )}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  {viewMode === "filtered" && selectedCategory && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleBackToCategories}
-                      className="mb-2"
-                    >
-                      <ArrowLeft className="h-4 w-4 md:mr-2" />
-                      <span className="hidden md:inline">
-                        Back to Categories
-                      </span>
-                    </Button>
-                  )}
-                  <h1 className="text-lg md:text-3xl font-bold text-foreground">
-                    {viewMode === "filtered" && selectedCategory
-                      ? formatCategory(selectedCategory)
-                      : "Inventory Tracking"}
-                  </h1>
-                </div>
+              {/* Main row: Title + Action buttons (aligned) */}
+              <div className="flex items-center justify-between mb-2">
+                <h1 className="text-lg md:text-3xl font-bold text-foreground">
+                  {viewMode === "filtered" && selectedCategory
+                    ? formatCategory(selectedCategory)
+                    : "Inventory Tracking"}
+                </h1>
 
                 <div className="flex gap-2">
                   <Button
@@ -196,6 +183,15 @@ export default function InventoryPage() {
                   </Button>
                 </div>
               </div>
+
+              {/* Back button row (only in filtered view) */}
+              {viewMode === "filtered" && selectedCategory && (
+                <BackButton
+                  onClick={handleBackToCategories}
+                  label="Back to Categories"
+                  className="mb-2"
+                />
+              )}
 
               {/* View Toggle - Only show when not in filtered category view */}
               {viewMode !== "filtered" && (

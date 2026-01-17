@@ -9,11 +9,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
+import { BackButton } from "@/components/shared/BackButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Loader2,
-  ArrowLeft,
   Calendar,
   CheckCircle2,
   Clock,
@@ -160,14 +160,11 @@ export default function HistoryPage() {
           <div className="border-b bg-background">
             <div className="container max-w-2xl mx-auto px-4 py-3 md:py-4">
               <div className="flex items-center gap-3">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => router.push("/tools/milk-count")}
-                  className="shrink-0"
-                >
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
+                <BackButton
+                  variant="icon-only"
+                  href="/tools/milk-count"
+                  label="Back to Milk Count"
+                />
                 <div>
                   <h1 className="text-lg md:text-xl font-bold text-foreground">
                     Milk Count History

@@ -10,9 +10,10 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
+import { BackButton } from "@/components/shared/BackButton";
 import { Button } from "@/components/ui/button";
 import { OnOrderRow } from "@/components/tools/milk-count/OnOrderRow";
-import { Loader2, ArrowLeft, ArrowRight, ClipboardList } from "lucide-react";
+import { Loader2, ArrowRight, ClipboardList } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import type { MilkType, MilkCountSession, MilkCountEntry } from "@/types";
@@ -137,14 +138,11 @@ export default function OnOrderPage() {
             <div className="container max-w-2xl mx-auto px-4 py-3 md:py-4">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => router.push("/tools/milk-count")}
-                    className="shrink-0"
-                  >
-                    <ArrowLeft className="h-5 w-5" />
-                  </Button>
+                  <BackButton
+                    variant="icon-only"
+                    href="/tools/milk-count"
+                    label="Back to Milk Count"
+                  />
                   <div>
                     <div className="flex items-center gap-2">
                       <ClipboardList className="h-4 w-4 text-purple-500" />

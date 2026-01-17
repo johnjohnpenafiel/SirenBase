@@ -13,11 +13,11 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
+import { BackButton } from "@/components/shared/BackButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Loader2,
-  ArrowLeft,
   History,
   CheckCircle2,
   Home,
@@ -89,14 +89,11 @@ export default function SummaryPage() {
           <div className="border-b bg-background">
             <div className="container max-w-4xl mx-auto px-4 py-3 md:py-4">
               <div className="flex items-center gap-3">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => router.push("/tools/milk-count")}
-                  className="shrink-0"
-                >
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
+                <BackButton
+                  variant="icon-only"
+                  href="/tools/milk-count"
+                  label="Back to Milk Count"
+                />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="h-5 w-5 text-green-500" />

@@ -27,9 +27,10 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
+import { BackButton } from '@/components/shared/BackButton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ArrowLeft, Plus, Edit2, Trash2, GripVertical, Loader2, Package } from 'lucide-react';
+import { Plus, Edit2, Trash2, GripVertical, Loader2, Package } from 'lucide-react';
 import { AddRTDEItemDialog } from '@/components/admin/rtde/AddRTDEItemDialog';
 import { EditRTDEItemDialog } from '@/components/admin/rtde/EditRTDEItemDialog';
 import { DeleteRTDEItemDialog } from '@/components/admin/rtde/DeleteRTDEItemDialog';
@@ -242,14 +243,12 @@ export default function RTDEItemsPage() {
             )}
           >
             <div className="container max-w-6xl mx-auto px-4 md:px-8 py-4 md:py-6">
-              <Button
-                variant="ghost"
-                onClick={() => router.push('/admin')}
+              <BackButton
+                variant="full"
+                href="/admin"
+                label="Back to Admin Panel"
                 className="mb-4"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Admin Panel
-              </Button>
+              />
 
               <div className="flex items-center justify-between mb-4">
                 <div>

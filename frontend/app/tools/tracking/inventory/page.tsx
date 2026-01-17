@@ -278,10 +278,10 @@ export default function InventoryPage() {
                             </p>
                             <div className="flex">
                               <p className="text-sm font-mono font-bold mt-1">
-                                <span className="text-primary-foreground">
+                                <span className="text-muted-foreground">
                                   Code:
                                 </span>
-                                <span className="text-primary ml-1">
+                                <span className="text-foreground ml-1">
                                   {item.code}
                                 </span>
                               </p>

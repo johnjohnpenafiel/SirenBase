@@ -17,7 +17,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Moon, Sun, CheckCircle2, Clock, ArrowLeft, History, ClipboardList } from "lucide-react";
+import { Loader2, Moon, Sun, CheckCircle2, Clock, History, ClipboardList } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import { cn, parseLocalDate } from "@/lib/utils";
@@ -150,24 +150,12 @@ export default function MilkCountPage() {
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* Fixed Header */}
           <div className="container max-w-2xl mx-auto px-4 py-4 md:py-6">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => router.push("/dashboard")}
-                className="shrink-0"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-                  Milk Count
-                </h1>
-                <p className="text-muted-foreground text-sm">
-                  {session ? formatDate(session.date) : "Today"}
-                </p>
-              </div>
-            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+              Milk Count
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              {session ? formatDate(session.date) : "Today"}
+            </p>
           </div>
 
           {/* Content */}

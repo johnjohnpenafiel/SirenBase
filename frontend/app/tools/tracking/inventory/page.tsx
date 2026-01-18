@@ -173,12 +173,18 @@ export default function InventoryPage() {
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
+                    size="icon"
+                    className="md:w-auto md:px-4"
                     onClick={() => router.push("/tools/tracking/history")}
                   >
                     <History className="h-4 w-4 md:mr-2" />
                     <span className="hidden md:inline">History</span>
                   </Button>
-                  <Button onClick={() => setAddDialogOpen(true)}>
+                  <Button
+                    size="icon"
+                    className="md:w-auto md:px-4"
+                    onClick={() => setAddDialogOpen(true)}
+                  >
                     <Plus className="h-4 w-4 md:mr-2" />
                     <span className="hidden md:inline">Add Item</span>
                   </Button>

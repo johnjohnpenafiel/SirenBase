@@ -31,7 +31,7 @@ export function CategoryCard({ category, count, onClick }: CategoryCardProps) {
         <span className="text-4xl font-bold tabular-nums tracking-tight text-foreground">
           {count}
         </span>
-        <span className="text-sm text-muted-foreground">items</span>
+        <span className="text-sm text-muted-foreground">{count === 1 ? "item" : "items"}</span>
       </div>
     </button>
   );

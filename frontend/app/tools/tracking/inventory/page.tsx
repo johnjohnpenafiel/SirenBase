@@ -195,14 +195,14 @@ export default function InventoryPage() {
 
               {/* View Toggle - Only show when not in filtered category view */}
               {viewMode !== "filtered" && (
-                <div className="flex gap-2">
+                <div className="inline-flex rounded-full border border-border p-0.5">
                   <Button
-                    variant={viewMode === "all" ? "default" : "outline"}
-                    className={
-                      viewMode === "all"
-                        ? "bg-accent text-accent-foreground hover:bg-accent/90"
-                        : ""
-                    }
+                    variant={viewMode === "all" ? "secondary" : "ghost"}
+                    size="sm"
+                    className={cn(
+                      "rounded-full",
+                      viewMode !== "all" && "text-muted-foreground"
+                    )}
                     onClick={() => {
                       setViewMode("all");
                       setSelectedCategory(null);
@@ -211,12 +211,12 @@ export default function InventoryPage() {
                     All Items
                   </Button>
                   <Button
-                    variant={viewMode === "categories" ? "default" : "outline"}
-                    className={
-                      viewMode === "categories"
-                        ? "bg-accent text-accent-foreground hover:bg-accent/90"
-                        : ""
-                    }
+                    variant={viewMode === "categories" ? "secondary" : "ghost"}
+                    size="sm"
+                    className={cn(
+                      "rounded-full",
+                      viewMode !== "categories" && "text-muted-foreground"
+                    )}
                     onClick={() => {
                       setViewMode("categories");
                       setSelectedCategory(null);

@@ -495,11 +495,21 @@ Mobile-first responsive design:
 
 #### Button Sizes
 
-| Size      | Height | Padding (x/y) | Font Size | Use Case                    |
-|-----------|--------|---------------|-----------|-----------------------------|
-| `sm`      | 36px   | 12px / 8px    | `text-sm` | Compact UIs, inline actions |
-| `default` | 44px   | 16px / 12px   | `text-base`| **Standard buttons**        |
-| `lg`      | 52px   | 20px / 14px   | `text-lg` | Primary CTAs, mobile forms  |
+| Size      | Class  | Height | Padding     | Use Case                    |
+|-----------|--------|--------|-------------|-----------------------------|
+| `sm`      | `h-9`  | 36px   | `px-3 py-2` | Compact UIs, inline actions |
+| `default` | `h-11` | 44px   | `px-4 py-2` | **Standard buttons** (WCAG) |
+| `lg`      | `h-13` | 52px   | `px-6 py-3` | Primary CTAs, mobile forms  |
+
+#### Icon Button Sizes
+
+| Size       | Class     | Dimensions | Use Case                     |
+|------------|-----------|------------|------------------------------|
+| `icon-sm`  | `size-9`  | 36x36px    | Compact icon buttons         |
+| `icon`     | `size-11` | 44x44px    | **Standard** (WCAG compliant)|
+| `icon-lg`  | `size-13` | 52x52px    | Large icon buttons           |
+
+**WCAG Compliance**: `default` and `icon` sizes meet WCAG 2.5.5 AAA touch target recommendation (44x44px).
 
 **Default Choice**: Use `size="default"` unless space is constrained.
 
@@ -515,11 +525,11 @@ Mobile-first responsive design:
 
 - **Full-width on mobile**: Buttons in forms should be `w-full` on mobile, `w-auto md:w-auto` on desktop
 - **Bottom-fixed CTAs**: Primary actions (Add Item) can be fixed to bottom on mobile for thumb access
-- **Icon-only on mobile** (optional): Hide button text on mobile, show icon only if space-constrained
+- **Icon-only on mobile**: Use `size="icon"` with `md:w-auto md:px-4` to create circular buttons on mobile that expand for text on desktop
 
-**Example**:
+**Example - Responsive Icon Button**:
 ```tsx
-<Button className="w-full md:w-auto">
+<Button size="icon" className="md:w-auto md:px-4">
   <Plus className="h-4 w-4 md:mr-2" />
   <span className="hidden md:inline">Add Item</span>
 </Button>

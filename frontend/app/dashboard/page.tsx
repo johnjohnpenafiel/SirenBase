@@ -17,7 +17,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { useAuth } from "@/hooks/use-auth";
-import { Package, Milk, ScanEye, ShieldCheck } from "lucide-react";
+import { Package, Milk, ShoppingBasket, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
@@ -64,23 +64,23 @@ export default function DashboardPage() {
                   title="Inventory Tracking"
                   description="Track basement inventory with 4-digit codes"
                   route="/tools/tracking/inventory"
-                  icon={<Package className="w-12 h-12 text-[#C4A882]" />}
+                  icon={<Package className="w-12 h-12 text-stone-500/70" />}
                 />
 
-                {/* Tool 2: Milk Count - Active */}
-                <ToolCard
-                  title="Milk Count"
-                  description="FOH/BOH counting with automated calculations"
-                  route="/tools/milk-count"
-                  icon={<Milk className="w-12 h-12 text-slate-400" />}
-                />
-
-                {/* Tool 3: RTD&E - Active */}
+                {/* Tool 2: RTD&E - Active */}
                 <ToolCard
                   title="RTD&E Count"
                   description="Display restocking with pull lists"
                   route="/tools/rtde"
-                  icon={<ScanEye className="w-12 h-12 text-emerald-400/80" />}
+                  icon={<ShoppingBasket className="w-12 h-12 text-emerald-500/70" />}
+                />
+
+                {/* Tool 3: Milk Count - Active */}
+                <ToolCard
+                  title="Milk Count"
+                  description="FOH/BOH counting with automated calculations"
+                  route="/tools/milk-count"
+                  icon={<Milk className="w-12 h-12 text-sky-500/70" />}
                 />
 
                 {/* Admin Panel - Admin Only */}
@@ -89,7 +89,7 @@ export default function DashboardPage() {
                     title="Admin Panel"
                     description="Manage users and system settings"
                     route="/admin"
-                    icon={<ShieldCheck className="w-12 h-12 text-amber-600" />}
+                    icon={<ShieldCheck className="w-12 h-12 text-amber-500/70" />}
                     isAdminOnly={true}
                   />
                 )}

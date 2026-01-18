@@ -28,6 +28,7 @@ import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
 import type { Item, ItemCategory, ViewMode } from "@/types";
 import { toast } from "sonner";
 import { Plus, History, Trash2, Loader2 } from "lucide-react";
+import { CategoryCard } from "@/components/tools/tracking/CategoryCard";
 
 export default function InventoryPage() {
   const router = useRouter();
@@ -232,23 +233,14 @@ export default function InventoryPage() {
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
               {/* Categories View */}
               {viewMode === "categories" && (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                   {ITEM_CATEGORIES.map((category) => (
-                    <button
+                    <CategoryCard
                       key={category}
+                      category={formatCategory(category)}
+                      count={categoryCounts[category]}
                       onClick={() => handleCategoryClick(category)}
-                      className="p-6 bg-card rounded-xl border-[1.5px] border-border hover:border-slate-600 hover:shadow-md transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    >
-                      <h3 className="font-semibold text-lg mb-1 text-foreground">
-                        {formatCategory(category)}
-                      </h3>
-                      <p className="text-2xl font-medium">
-                        {categoryCounts[category]}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        items
-                      </p>
-                    </button>
+                    />
                   ))}
                 </div>
               )}

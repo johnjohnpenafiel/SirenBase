@@ -12,6 +12,47 @@ _No active bugs at this time._
 
 ## ✅ Fixed Bugs Archive
 
+### [BUG-010] Autocomplete suggestions reappear after selecting a suggestion
+
+**Fixed**: 2026-01-18
+**Commit**: (current session)
+**Impact**: Medium - Poor UX requiring extra tap to dismiss
+
+**Affected Component**: `frontend/components/tools/tracking/ItemNameAutocomplete.tsx`
+
+**Description**:
+In the Add Item dialog, when a user typed an item name and tapped on an autocomplete suggestion, the name field would autopopulate correctly, but after a brief moment the suggestions dropdown would reappear with the same results. Users had to tap the suggestion again to dismiss it, which could block the "Generate Code" button.
+
+**Root Cause**:
+Race condition between selection and the search effect:
+1. `handleSelectSuggestion` called `onChange(suggestion.name)` updating the value
+2. `setShowSuggestions(false)` hid the dropdown
+3. But the `useEffect` watching `value` triggered due to the value change
+4. The debounced search completed and called `setShowSuggestions(true)`
+5. Dropdown reappeared with suggestions matching the selected name
+
+**Expected Behavior**:
+- User taps suggestion → name autopopulates → suggestions stay hidden
+- Suggestions should only reappear if user manually types something different
+
+**Solution Implemented**:
+Added a `justSelectedRef` ref to track explicit selection:
+1. Set `justSelectedRef.current = true` before calling `onChange` in `handleSelectSuggestion`
+2. In the search `useEffect`, check the ref first - if set, skip the search and reset the ref
+3. When typing manually via `handleInputChange`, the ref stays `false` so search works normally
+
+**Files Changed**:
+- `frontend/components/tools/tracking/ItemNameAutocomplete.tsx:47` - Added justSelectedRef
+- `frontend/components/tools/tracking/ItemNameAutocomplete.tsx:78-82` - Skip search when just selected
+- `frontend/components/tools/tracking/ItemNameAutocomplete.tsx:124` - Set ref before onChange
+
+**Testing**:
+- [ ] Type item name, tap suggestion → suggestions stay hidden
+- [ ] After selecting, manually edit name → suggestions reappear normally
+- [ ] Keyboard selection (Enter) also works without suggestions reappearing
+
+---
+
 ### [BUG-009] Database connection timeout causes SSL error after idle period
 
 **Fixed**: 2025-12-20
@@ -488,6 +529,6 @@ Ideas for how to fix
 
 ---
 
-_Last Updated: 2025-12-12_ (Pre-deployment cleanup complete)
+_Last Updated: 2026-01-18_
 _Version: 3.3.0_
 _Maintainer: Development Team_

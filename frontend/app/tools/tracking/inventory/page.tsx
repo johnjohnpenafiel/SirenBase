@@ -288,7 +288,7 @@ export default function InventoryPage() {
                 />
                 <Input
                   type="search"
-                                    placeholder="Search"
+                  placeholder="Search"
                   value={searchQuery}
                   onChange={(e) => {
                     const value = e.target.value;

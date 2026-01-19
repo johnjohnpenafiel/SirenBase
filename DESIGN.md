@@ -1702,11 +1702,16 @@ Use this checklist when implementing new UI:
 
 ---
 
-**Last Updated**: January 17, 2026
-**Version**: 4.0.0
+**Last Updated**: January 18, 2026
+**Version**: 4.0.1
 **Maintainer**: Development Team
 
 **Change Log**:
+- **v4.0.1** (Jan 18, 2026): **WCAG Touch Target Compliance** — Fixed Input and Select components to meet 44px minimum:
+  - **Input**: Changed `h-9` (36px) to `h-11` (44px), adjusted `py-1` to `py-2`
+  - **SelectTrigger**: Changed default `h-9` to `h-11` (44px), sm `h-8` to `h-9` (36px)
+  - Components now match documented spec of 44px height for mobile-friendly touch targets
+  - Meets WCAG 2.5.5 AAA touch target recommendation
 - **v4.0.0** (Jan 17, 2026): **MAJOR THEME CHANGE — Vercel Theme** — Complete overhaul from Supabase mint/teal to Vercel neutral grayscale:
   - **Color System**: Replaced mint/teal primary with pure black/white neutral palette
   - **Visual Hierarchy**: Background (0.99 lightness) vs Card (1.0 pure white) creates natural elevation

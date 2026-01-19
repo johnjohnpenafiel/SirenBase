@@ -15,7 +15,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Trash2, AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 interface RemoveItemDialogProps {
   open: boolean;
@@ -42,9 +42,8 @@ export function RemoveItemDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Trash2 className="h-5 w-5 text-destructive" />
+        <DialogHeader className="pt-4">
+          <DialogTitle>
             Remove Item?
           </DialogTitle>
           <DialogDescription>
@@ -53,20 +52,18 @@ export function RemoveItemDialog({
         </DialogHeader>
 
         <div className="space-y-3">
-          {/* Item details box */}
-          <div className="bg-muted border border-border rounded-lg p-3">
-            <div className="text-sm">
-              <p className="font-semibold text-foreground">{itemName}</p>
-              <p className="text-muted-foreground mt-1">
-                Code: <span className="font-mono font-medium text-primary">{itemCode}</span>
-              </p>
-            </div>
+          {/* Item details box - matching ItemCard design */}
+          <div className="bg-muted/50 border border-border rounded-2xl px-5 py-3">
+            <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-foreground bg-secondary px-2.5 py-1 rounded-full mb-2">
+              {itemCode}
+            </p>
+            <p className="text-lg font-semibold text-foreground">{itemName}</p>
           </div>
 
           {/* Warning box */}
-          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
-            <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2">
-              <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
+            <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
+              <AlertTriangle className="size-4 mt-0.5 flex-shrink-0" />
               <span>
                 This action will mark the item as removed and create a history entry.
                 You can view removed items in the history log.
@@ -75,21 +72,21 @@ export function RemoveItemDialog({
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex-col gap-2 sm:flex-col">
+          <Button
+            onClick={handleConfirm}
+            disabled={isRemoving}
+            className="w-full"
+          >
+            {isRemoving ? 'Removing...' : 'Remove Item'}
+          </Button>
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isRemoving}
+            className="w-full"
           >
             Cancel
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handleConfirm}
-            disabled={isRemoving}
-            className="hover:border-destructive hover:text-destructive hover:bg-destructive/10"
-          >
-            {isRemoving ? 'Removing...' : 'Remove Item'}
           </Button>
         </DialogFooter>
       </DialogContent>

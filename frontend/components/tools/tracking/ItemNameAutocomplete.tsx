@@ -26,6 +26,7 @@ interface ItemNameAutocompleteProps {
   category: ItemCategory | '';
   disabled?: boolean;
   autoFocus?: boolean;
+  inputClassName?: string;
 }
 
 export function ItemNameAutocomplete({
@@ -34,6 +35,7 @@ export function ItemNameAutocomplete({
   category,
   disabled = false,
   autoFocus = false,
+  inputClassName,
 }: ItemNameAutocompleteProps) {
   const [suggestions, setSuggestions] = useState<ItemSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -165,6 +167,7 @@ export function ItemNameAutocomplete({
           disabled={disabled}
           autoFocus={autoFocus}
           autoComplete="off"
+          className={inputClassName}
         />
         {loading && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">

@@ -27,7 +27,8 @@ import { cn } from "@/lib/utils";
 import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
 import type { Item, ItemCategory, ViewMode } from "@/types";
 import { toast } from "sonner";
-import { Plus, History, Loader2 } from "lucide-react";
+import { Plus, History, Loader2, Search, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { CategoryCard } from "@/components/tools/tracking/CategoryCard";
 import { ItemCard } from "@/components/tools/tracking/ItemCard";
 
@@ -44,9 +45,15 @@ export default function InventoryPage() {
   const [itemToRemove, setItemToRemove] = useState<Item | null>(null);
   const [removingCode, setRemovingCode] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearchBarScrolled, setIsSearchBarScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    setIsScrolled(e.currentTarget.scrollTop > 16);
+    const scrollTop = e.currentTarget.scrollTop;
+    // Search bar shadow activates when content reaches search bar
+    setIsSearchBarScrolled(scrollTop > 1);
+    // Island shadow activates when content reaches island (after passing search bar ~64px)
+    setIsScrolled(scrollTop > 64);
   };
 
   // Fetch items on mount
@@ -71,6 +78,28 @@ export default function InventoryPage() {
     if (viewMode !== "filtered" || !selectedCategory) return items;
     return items.filter((item) => item.category === selectedCategory);
   }, [items, viewMode, selectedCategory]);
+
+  // Search-filtered items (works on top of category filtering)
+  const searchedItems = useMemo(() => {
+    const baseItems = viewMode === "filtered" ? filteredItems : items;
+
+    if (!searchQuery.trim()) return baseItems;
+
+    const query = searchQuery.toLowerCase().trim();
+
+    return baseItems.filter((item) => {
+      // Match by name (case-insensitive substring)
+      const nameMatch = item.name.toLowerCase().includes(query);
+      // Match by code (partial match)
+      const codeMatch = item.code.includes(query);
+      // Match by category display name
+      const categoryMatch = formatCategory(item.category)
+        .toLowerCase()
+        .includes(query);
+
+      return nameMatch || codeMatch || categoryMatch;
+    });
+  }, [items, filteredItems, viewMode, searchQuery]);
 
   // Count items per category
   const categoryCounts = useMemo(() => {
@@ -128,6 +157,7 @@ export default function InventoryPage() {
   const handleBackToCategories = () => {
     setViewMode("categories");
     setSelectedCategory(null);
+    setSearchQuery("");
   };
 
   if (loading) {
@@ -151,92 +181,138 @@ export default function InventoryPage() {
       <div className="flex flex-col h-dvh">
         <Header />
         <main className="flex-1 overflow-y-auto" onScroll={handleScroll}>
-          {/* Sticky Frosted Island */}
-          <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
-            <div
-              className={cn(
-                "max-w-6xl mx-auto rounded-2xl",
-                "bg-gray-100/60 backdrop-blur-md",
-                "border border-gray-200/50",
-                "px-5 py-4 md:px-6 md:py-5",
-                "transition-all duration-300 ease-out",
-                isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
-              )}
-            >
-              {/* Top row: Back button (filtered) or Title (other views) + Action buttons */}
-              <div className="flex items-center justify-between mb-4">
-                {viewMode === "filtered" && selectedCategory ? (
-                  <BackButton
-                    onClick={handleBackToCategories}
-                    label="Back to Categories"
-                  />
-                ) : (
+          {/* Sticky wrapper containing both island and search bar */}
+          <div className="sticky top-0 z-10">
+            {/* Frosted Island */}
+            <div className="px-4 md:px-8 pt-2 pb-2 md:pt-3 md:pb-3">
+              <div
+                className={cn(
+                  "max-w-6xl mx-auto rounded-2xl",
+                  "bg-gray-100/60 backdrop-blur-md",
+                  "border border-gray-200/50",
+                  "px-5 py-4 md:px-6 md:py-5",
+                  "transition-all duration-300 ease-out",
+                  isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+                )}
+              >
+                {/* Top row: Back button (filtered) or Title (other views) + Action buttons */}
+                <div className="flex items-center justify-between mb-4">
+                  {viewMode === "filtered" && selectedCategory ? (
+                    <BackButton
+                      onClick={handleBackToCategories}
+                      label="Back to Categories"
+                    />
+                  ) : (
+                    <h1 className="text-lg md:text-3xl font-bold text-foreground">
+                      Inventory Tracking
+                    </h1>
+                  )}
+
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="md:w-auto md:px-4"
+                      onClick={() => router.push("/tools/tracking/history")}
+                    >
+                      <History className="h-4 w-4 md:mr-2" />
+                      <span className="hidden md:inline">History</span>
+                    </Button>
+                    <Button
+                      size="icon"
+                      className="md:w-auto md:px-4"
+                      onClick={() => setAddDialogOpen(true)}
+                    >
+                      <Plus className="h-4 w-4 md:mr-2" />
+                      <span className="hidden md:inline">Add Item</span>
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Category title row (only in filtered view) */}
+                {viewMode === "filtered" && selectedCategory && (
                   <h1 className="text-lg md:text-3xl font-bold text-foreground">
-                    Inventory Tracking
+                    {formatCategory(selectedCategory)}
                   </h1>
                 )}
 
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="md:w-auto md:px-4"
-                    onClick={() => router.push("/tools/tracking/history")}
-                  >
-                    <History className="h-4 w-4 md:mr-2" />
-                    <span className="hidden md:inline">History</span>
-                  </Button>
-                  <Button
-                    size="icon"
-                    className="md:w-auto md:px-4"
-                    onClick={() => setAddDialogOpen(true)}
-                  >
-                    <Plus className="h-4 w-4 md:mr-2" />
-                    <span className="hidden md:inline">Add Item</span>
-                  </Button>
-                </div>
+                {/* View Toggle - Only show when not in filtered category view */}
+                {viewMode !== "filtered" && (
+                  <div className="inline-flex rounded-full border border-border p-0.5">
+                    <Button
+                      variant={viewMode === "all" ? "secondary" : "ghost"}
+                      size="sm"
+                      className={cn(
+                        "rounded-full",
+                        viewMode !== "all" && "text-muted-foreground"
+                      )}
+                      onClick={() => {
+                        setViewMode("all");
+                        setSelectedCategory(null);
+                        setSearchQuery("");
+                      }}
+                    >
+                      All Items
+                    </Button>
+                    <Button
+                      variant={viewMode === "categories" ? "secondary" : "ghost"}
+                      size="sm"
+                      className={cn(
+                        "rounded-full",
+                        viewMode !== "categories" && "text-muted-foreground"
+                      )}
+                      onClick={() => {
+                        setViewMode("categories");
+                        setSelectedCategory(null);
+                        setSearchQuery("");
+                      }}
+                    >
+                      Categories
+                    </Button>
+                  </div>
+                )}
               </div>
+            </div>
 
-              {/* Category title row (only in filtered view) */}
-              {viewMode === "filtered" && selectedCategory && (
-                <h1 className="text-lg md:text-3xl font-bold text-foreground">
-                  {formatCategory(selectedCategory)}
-                </h1>
-              )}
-
-              {/* View Toggle - Only show when not in filtered category view */}
-              {viewMode !== "filtered" && (
-                <div className="inline-flex rounded-full border border-border p-0.5">
-                  <Button
-                    variant={viewMode === "all" ? "secondary" : "ghost"}
-                    size="sm"
-                    className={cn(
-                      "rounded-full",
-                      viewMode !== "all" && "text-muted-foreground"
-                    )}
-                    onClick={() => {
+            {/* Search Bar - Below island, both stay fixed */}
+            <div className="px-4 md:px-8 pb-5">
+              <div
+                className={cn(
+                  "max-w-6xl mx-auto relative rounded-full transition-all duration-300 ease-out",
+                  isSearchBarScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+                )}
+              >
+                <Search
+                  className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none z-10"
+                  aria-hidden="true"
+                />
+                <Input
+                  type="search"
+                                    placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSearchQuery(value);
+                    // Switch to all items view when user starts typing
+                    if (value.trim() && viewMode === "categories") {
                       setViewMode("all");
                       setSelectedCategory(null);
-                    }}
+                    }
+                  }}
+                  className="pl-10 pr-10 rounded-full bg-gray-100/60 backdrop-blur-md shadow-none [&::-webkit-search-cancel-button]:hidden"
+                  aria-label="Search inventory items"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted transition-colors"
+                    aria-label="Clear search"
                   >
-                    All Items
-                  </Button>
-                  <Button
-                    variant={viewMode === "categories" ? "secondary" : "ghost"}
-                    size="sm"
-                    className={cn(
-                      "rounded-full",
-                      viewMode !== "categories" && "text-muted-foreground"
-                    )}
-                    onClick={() => {
-                      setViewMode("categories");
-                      setSelectedCategory(null);
-                    }}
-                  >
-                    Categories
-                  </Button>
-                </div>
-              )}
+                    <X className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -259,14 +335,16 @@ export default function InventoryPage() {
               {/* All Items / Filtered View - Individual Display */}
               {(viewMode === "all" || viewMode === "filtered") && (
                 <div className="space-y-3">
-                  {filteredItems.length === 0 ? (
+                  {searchedItems.length === 0 ? (
                     <div className="text-center py-12">
                       <p className="text-muted-foreground">
-                        No items in inventory. Click "Add Item" to get started.
+                        {searchQuery.trim()
+                          ? `No items match "${searchQuery}"`
+                          : 'No items in inventory. Click "Add Item" to get started.'}
                       </p>
                     </div>
                   ) : (
-                    filteredItems.map((item) => (
+                    searchedItems.map((item) => (
                       <ItemCard
                         key={item.id}
                         code={item.code}

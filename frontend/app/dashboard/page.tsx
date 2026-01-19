@@ -69,7 +69,7 @@ export default function DashboardPage() {
 
                 {/* Tool 2: RTD&E - Active */}
                 <ToolCard
-                  title="RTD&E Count"
+                  title="RTD&E Display"
                   description="Display restocking with pull lists"
                   route="/tools/rtde"
                   icon={<ShoppingBasket className="w-12 h-12 text-emerald-500/70" />}

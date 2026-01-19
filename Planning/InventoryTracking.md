@@ -51,6 +51,14 @@ A digital inventory system that:
    - Remove items by unique code with inline "Remove" button
    - View current inventory displayed individually (no grouping)
    - Category filtering for focused viewing
+   - **Search functionality** for quickly finding items
+     - Pill-shaped search bar with frosted glass effect
+     - Client-side filtering (instant results, no API calls)
+     - Search by item name (case-insensitive substring match)
+     - Search by 4-digit code (partial match supported)
+     - Search by category display name (e.g., "Syrups", "Coffee Beans")
+     - Auto-switches from Categories view to All Items when typing
+     - Clear button to reset search
 
 2. **Categorization**
 
@@ -110,6 +118,18 @@ A digital inventory system that:
 4. Optionally switches between view modes (Categories/All/Filtered)
 5. Sees all items with their unique codes
 6. Completes order without basement trip
+
+### Staff Workflow: Searching for Items
+
+1. Partner needs to quickly find a specific item
+2. Opens SirenBase → Tracking Tool
+3. Types in the search bar (always visible at top)
+4. Can search by:
+   - Item name (e.g., "vanilla" finds "Vanilla Syrup")
+   - Item code (e.g., "28" finds items with codes containing "28")
+   - Category (e.g., "syrup" finds all items in Syrups category)
+5. Results filter instantly as user types
+6. Clicks the X button or clears search to see all items again
 
 ### Admin Workflow: Managing Users
 
@@ -372,6 +392,23 @@ ITEM_CATEGORIES = [
 - **Layout Style**: Large, touch-friendly smooth rectangles
 - **Grid System**: 2 columns per row on mobile for optimal space usage
 - **Navigation**: Clear view switching between Categories and All views
+- **Search**: Always-visible search bar for quick item lookup
+
+### Search Bar
+
+**Position**: Fixed below the frosted island header, above the content list
+
+**Visual Design**:
+- Pill-shaped input (`rounded-full`)
+- Frosted glass effect matching island (`bg-gray-100/60 backdrop-blur-md`)
+- Search icon on left, clear (X) button on right when text present
+- Independent scroll shadow activates when content scrolls behind it
+
+**Behavior**:
+- Always visible in all three view modes
+- Typing in Categories view auto-switches to All Items view
+- Filters items client-side for instant feedback
+- Search cleared when switching views via toggle buttons
 
 ### Three Main Views
 
@@ -664,7 +701,7 @@ Tool-specific admin features (if any) will use same global admin role check.
 
 ---
 
-**Document Version:** 1.1
-**Last Updated:** 2025-11-20
-**Status:** Backend Complete (75/75 tests passing), Frontend Complete (all features including autocomplete)
+**Document Version:** 1.2
+**Last Updated:** 2026-01-18
+**Status:** Backend Complete (75/75 tests passing), Frontend Complete (all features including autocomplete and search)
 **Part of:** SirenBase Multi-Tool Platform (Tool 1 of 3)

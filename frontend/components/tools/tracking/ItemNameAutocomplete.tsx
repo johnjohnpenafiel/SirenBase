@@ -43,6 +43,8 @@ export function ItemNameAutocomplete({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  // Track when user explicitly selected a suggestion to prevent re-showing dropdown
+  const justSelectedRef = useRef(false);
 
   // Debounced search function
   const searchItems = useRef(
@@ -73,6 +75,12 @@ export function ItemNameAutocomplete({
 
   // Trigger search when value or category changes
   useEffect(() => {
+    // Skip search if user just selected a suggestion (value changed via selection)
+    if (justSelectedRef.current) {
+      justSelectedRef.current = false;
+      return;
+    }
+
     if (!category) {
       setSuggestions([]);
       setShowSuggestions(false);
@@ -113,6 +121,7 @@ export function ItemNameAutocomplete({
   };
 
   const handleSelectSuggestion = (suggestion: ItemSuggestion) => {
+    justSelectedRef.current = true;
     onChange(suggestion.name);
     setShowSuggestions(false);
     setSuggestions([]);

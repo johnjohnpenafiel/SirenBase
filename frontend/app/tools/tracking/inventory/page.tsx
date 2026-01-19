@@ -163,13 +163,18 @@ export default function InventoryPage() {
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
               )}
             >
-              {/* Main row: Title + Action buttons (aligned) */}
+              {/* Top row: Back button (filtered) or Title (other views) + Action buttons */}
               <div className="flex items-center justify-between mb-4">
-                <h1 className="text-lg md:text-3xl font-bold text-foreground">
-                  {viewMode === "filtered" && selectedCategory
-                    ? formatCategory(selectedCategory)
-                    : "Inventory Tracking"}
-                </h1>
+                {viewMode === "filtered" && selectedCategory ? (
+                  <BackButton
+                    onClick={handleBackToCategories}
+                    label="Back to Categories"
+                  />
+                ) : (
+                  <h1 className="text-lg md:text-3xl font-bold text-foreground">
+                    Inventory Tracking
+                  </h1>
+                )}
 
                 <div className="flex gap-2">
                   <Button
@@ -192,12 +197,11 @@ export default function InventoryPage() {
                 </div>
               </div>
 
-              {/* Back button row (only in filtered view) */}
+              {/* Category title row (only in filtered view) */}
               {viewMode === "filtered" && selectedCategory && (
-                <BackButton
-                  onClick={handleBackToCategories}
-                  label="Back to Categories"
-                />
+                <h1 className="text-lg md:text-3xl font-bold text-foreground">
+                  {formatCategory(selectedCategory)}
+                </h1>
               )}
 
               {/* View Toggle - Only show when not in filtered category view */}

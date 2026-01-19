@@ -7,7 +7,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { BackButton } from "@/components/shared/BackButton";
@@ -24,16 +23,10 @@ import apiClient from "@/lib/api";
 import { HISTORY_PAGE_SIZE, HISTORY_MAX_FETCH } from "@/lib/constants";
 import type { HistoryEntry, HistoryAction } from "@/types";
 import { toast } from "sonner";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Plus,
-  Trash2,
-  Loader2,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { HistoryEntryCard } from "@/components/tools/tracking/HistoryEntryCard";
 
 export default function HistoryPage() {
-  const router = useRouter();
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionFilter, setActionFilter] = useState<HistoryAction | "all">(
@@ -79,18 +72,6 @@ export default function HistoryPage() {
     setCurrentPage(1);
   }, [actionFilter]);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }).format(date);
-  };
-
   if (loading) {
     return (
       <ProtectedRoute>
@@ -127,7 +108,7 @@ export default function HistoryPage() {
               <BackButton
                 href="/tools/tracking/inventory"
                 label="Back to Inventory"
-                className="mb-2"
+                className="mb-4"
               />
               <h1 className="text-2xl md:text-3xl font-bold mb-2 text-foreground">
                 Audit History
@@ -166,107 +147,26 @@ export default function HistoryPage() {
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-              {paginatedHistory.length === 0 ? (
-              <div className="text-center py-12 bg-card rounded-xl border border-border">
+            {paginatedHistory.length === 0 ? (
+              <div className="text-center py-12 bg-card rounded-2xl border border-border">
                 <p className="text-muted-foreground">
                   No history entries found.
                 </p>
               </div>
             ) : (
               <>
-                <div className="bg-card rounded-xl border border-border overflow-hidden">
-                  {/* Desktop Table */}
-                  <div className="hidden md:block overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-muted border-b border-border">
-                        <tr>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                            Date & Time
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                            Partner
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                            Action
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                            Item
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                            Code
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-border">
-                        {paginatedHistory.map((entry) => (
-                          <tr key={entry.id} className="hover:bg-muted/50">
-                            <td className="px-4 py-3 text-sm text-foreground">
-                              {formatDate(entry.timestamp)}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-foreground">
-                              {entry.user_name}
-                            </td>
-                            <td className="px-4 py-3 text-sm">
-                              {entry.action === "ADD" ? (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
-                                  <Plus className="h-3 w-3 mr-1" />
-                                  Add
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-destructive/10 text-destructive">
-                                  <Trash2 className="h-3 w-3 mr-1" />
-                                  Remove
-                                </span>
-                              )}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-foreground">
-                              {entry.item_name}
-                            </td>
-                            <td className="px-4 py-3 text-sm font-mono font-semibold text-primary">
-                              {entry.item_code}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* Mobile Cards */}
-                  <div className="md:hidden divide-y divide-border">
-                    {paginatedHistory.map((entry) => (
-                      <div key={entry.id} className="p-4">
-                        <div className="flex justify-between items-start mb-2">
-                          <div>
-                            <p className="font-semibold text-foreground">
-                              {entry.item_name}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              {entry.user_name}
-                            </p>
-                          </div>
-                          <div className="font-mono font-semibold text-primary">
-                            {entry.item_code}
-                          </div>
-                        </div>
-                        <div className="flex justify-between items-center mt-2">
-                          <span className="text-xs text-muted-foreground">
-                            {formatDate(entry.timestamp)}
-                          </span>
-                          {entry.action === "ADD" ? (
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
-                              <Plus className="h-3 w-3 mr-1" />
-                              Add
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-destructive/10 text-destructive">
-                              <Trash2 className="h-3 w-3 mr-1" />
-                              Remove
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                {/* Unified card list for all screen sizes */}
+                <div className="space-y-3">
+                  {paginatedHistory.map((entry) => (
+                    <HistoryEntryCard
+                      key={entry.id}
+                      action={entry.action}
+                      itemName={entry.item_name}
+                      itemCode={entry.item_code}
+                      userName={entry.user_name}
+                      timestamp={entry.timestamp}
+                    />
+                  ))}
                 </div>
 
                 {/* Pagination */}

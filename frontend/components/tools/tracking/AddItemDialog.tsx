@@ -42,6 +42,7 @@ import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
 import type { ItemCategory } from '@/types';
 import { toast } from 'sonner';
 import { addItemSchema, type AddItemFormData } from '@/lib/validations/tracking';
+import { AlertTriangle } from 'lucide-react';
 
 interface AddItemDialogProps {
   open: boolean;
@@ -185,7 +186,7 @@ export function AddItemDialog({
       <DialogContent className="sm:max-w-md">
         {step === 'input' ? (
           <>
-            <DialogHeader className="pt-4">
+            <DialogHeader>
               <DialogTitle>Add New Item</DialogTitle>
               <DialogDescription>
                 Enter the item details to generate a unique 4-digit code.
@@ -256,33 +257,41 @@ export function AddItemDialog({
           </>
         ) : (
           <>
-            <DialogHeader className="pt-4">
+            <DialogHeader>
               <DialogTitle>Code Generated!</DialogTitle>
               <DialogDescription>
                 Write this code on the physical item with a marker, then confirm to save.
               </DialogDescription>
             </DialogHeader>
 
-            <div className="py-8">
-              <div className="text-center">
+            <div className="space-y-3">
+              {/* Code display box */}
+              <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4 text-center">
                 <p className="text-sm text-muted-foreground mb-2">Your 4-digit code:</p>
-                <div className="text-6xl font-bold font-mono text-primary tracking-wider mb-4">
+                <div className="text-5xl font-bold font-mono text-foreground tracking-wider">
                   {generatedCode}
                 </div>
-                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-amber-900 dark:text-amber-200">
-                    ⚠️ <strong>Important:</strong> Write this code on the item before confirming.
+              </div>
+
+              {/* Warning box */}
+              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
+                <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
+                  <AlertTriangle className="size-4 mt-0.5 flex-shrink-0" />
+                  <span>
+                    <strong>Important:</strong> Write this code on the item before confirming.
                     Once confirmed, the item will be added to your inventory.
-                  </p>
-                </div>
+                  </span>
+                </p>
               </div>
             </div>
 
-            <DialogFooter>
-              <Button variant="outline" onClick={handleCancel}>
+            <DialogFooter className="flex-col gap-2 sm:flex-col">
+              <Button onClick={handleConfirm} disabled={loading} className="w-full">
+                {loading ? 'Saving...' : 'Confirm & Save'}
+              </Button>
+              <Button variant="outline" onClick={handleCancel} disabled={loading} className="w-full">
                 Cancel
               </Button>
-              <Button onClick={handleConfirm}>Confirm & Save</Button>
             </DialogFooter>
           </>
         )}

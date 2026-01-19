@@ -42,7 +42,7 @@ export function RemoveItemDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader className="pt-4">
+        <DialogHeader>
           <DialogTitle>
             Remove Item?
           </DialogTitle>
@@ -53,7 +53,7 @@ export function RemoveItemDialog({
 
         <div className="space-y-3">
           {/* Item details box - matching ItemCard design */}
-          <div className="bg-muted/50 border border-border rounded-2xl px-5 py-3">
+          <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4">
             <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-foreground bg-secondary px-2.5 py-1 rounded-full mb-2">
               {itemCode}
             </p>

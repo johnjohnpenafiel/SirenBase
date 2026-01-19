@@ -27,8 +27,9 @@ import { cn } from "@/lib/utils";
 import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
 import type { Item, ItemCategory, ViewMode } from "@/types";
 import { toast } from "sonner";
-import { Plus, History, Trash2, Loader2 } from "lucide-react";
+import { Plus, History, Loader2 } from "lucide-react";
 import { CategoryCard } from "@/components/tools/tracking/CategoryCard";
+import { ItemCard } from "@/components/tools/tracking/ItemCard";
 
 export default function InventoryPage() {
   const router = useRouter();
@@ -262,45 +263,15 @@ export default function InventoryPage() {
                     </div>
                   ) : (
                     filteredItems.map((item) => (
-                      <div
+                      <ItemCard
                         key={item.id}
-                        className="w-full p-4 bg-card rounded-xl border-2 border-border hover:shadow-md transition-all"
-                      >
-                        <div className="flex justify-between items-center">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-lg text-foreground">
-                              {item.name}
-                            </h3>
-                            <p className="text-sm text-muted-foreground">
-                              {formatCategory(item.category)}
-                            </p>
-                            <div className="flex">
-                              <p className="text-sm font-mono font-bold mt-1">
-                                <span className="text-muted-foreground">
-                                  Code:
-                                </span>
-                                <span className="text-foreground ml-1">
-                                  {item.code}
-                                </span>
-                              </p>
-                            </div>
-                          </div>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleRemoveClick(item)}
-                            disabled={removingCode === item.code}
-                            className="hover:border-destructive hover:text-destructive hover:bg-destructive/10"
-                          >
-                            <Trash2 className="h-4 w-4 md:mr-2" />
-                            <span className="hidden md:inline">
-                              {removingCode === item.code
-                                ? "Removing..."
-                                : "Remove"}
-                            </span>
-                          </Button>
-                        </div>
-                      </div>
+                        code={item.code}
+                        name={item.name}
+                        category={formatCategory(item.category)}
+                        addedAt={item.added_at}
+                        onRemove={() => handleRemoveClick(item)}
+                        isRemoving={removingCode === item.code}
+                      />
                     ))
                   )}
                 </div>

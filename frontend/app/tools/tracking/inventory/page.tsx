@@ -203,7 +203,7 @@ export default function InventoryPage() {
                       label="Back to Categories"
                     />
                   ) : (
-                    <h1 className="text-lg md:text-3xl font-bold text-foreground">
+                    <h1 className="text-2xl md:text-4xl font-normal text-foreground">
                       Inventory Tracking
                     </h1>
                   )}

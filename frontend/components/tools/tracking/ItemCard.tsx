@@ -58,8 +58,8 @@ export function ItemCard({
           <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-muted-foreground bg-muted px-2.5 py-1 rounded-full mb-3">
             {code}
           </p>
-          {/* Item name - prominent */}
-          <h3 className="text-xl font-semibold text-foreground mb-1 truncate">
+          {/* Item name - prominent but slightly muted for hierarchy */}
+          <h3 className="text-xl font-normal text-gray-800 mb-1 truncate">
             {name}
           </h3>
           {/* Category and date - muted secondary */}

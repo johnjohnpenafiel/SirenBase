@@ -110,12 +110,9 @@ export default function HistoryPage() {
                 label="Back to Inventory"
                 className="mb-4"
               />
-              <h1 className="text-2xl md:text-3xl font-bold mb-2 text-foreground">
+              <h1 className="text-2xl md:text-4xl font-normal mb-4 text-foreground">
                 Audit History
               </h1>
-              <p className="text-muted-foreground mb-4">
-                Complete record of all inventory actions
-              </p>
 
               {/* Filters */}
               <div className="flex flex-col sm:flex-row gap-4">

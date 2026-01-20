@@ -99,7 +99,7 @@ export function RTDEPullingPhase({
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-green-600">
+                    <span className="text-sm font-bold text-emerald-500">
                       {pullProgress}%
                     </span>
                     <span className="text-sm text-muted-foreground">
@@ -109,7 +109,7 @@ export function RTDEPullingPhase({
                 </div>
                 <div className="w-full bg-muted rounded-full h-2.5 overflow-hidden">
                   <div
-                    className="bg-green-600 h-2.5 rounded-full transition-all duration-500 ease-out"
+                    className="bg-emerald-500 h-2.5 rounded-full transition-all duration-500 ease-out"
                     style={{ width: `${pullProgress}%` }}
                     role="progressbar"
                     aria-valuenow={pullProgress}

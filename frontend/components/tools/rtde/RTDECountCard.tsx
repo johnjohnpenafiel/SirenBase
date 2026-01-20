@@ -74,12 +74,11 @@ export function RTDECountCard({
     onNext?.();
   };
 
-  // Enable direct editing mode
-  const handleCountClick = () => {
+  // Enable direct editing mode when input is focused
+  const handleInputFocus = () => {
     setIsEditing(true);
-    setTimeout(() => {
-      inputRef.current?.select();
-    }, 0);
+    // Select all text when focused (slight delay to ensure it works on mobile)
+    setTimeout(() => inputRef.current?.select(), 10);
   };
 
   // Handle input change
@@ -127,9 +126,8 @@ export function RTDECountCard({
         "flex flex-col items-center gap-[clamp(0.125rem,0.75vh,0.5rem)] md:gap-4",
         "p-[clamp(0.5rem,1.5vh,1rem)] md:p-6",
         "bg-gradient-to-br from-card to-card/95",
-        "border border-border/50",
+        "border border-border",
         "rounded-3xl",
-        "shadow-sm",
         "transition-all duration-200",
         "animate-scale-in",
         className
@@ -170,32 +168,32 @@ export function RTDECountCard({
       </button>
 
       {/* Count Controls - Optimized spacing for mobile fit */}
-      <div className="flex items-center gap-3 md:gap-4 w-full max-w-md mt-1 md:mt-2">
-        {/* Decrement Button - Enhanced with gradient, shadow, and smooth feedback */}
-        <Button
-          onClick={handleDecrement}
-          disabled={currentCount === 0}
-          variant="outline"
-          size="lg"
-          className={cn(
-            "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
-            "rounded-2xl",
-            "border-2 border-border/40",
-            "bg-gradient-to-b from-background to-muted/20",
-            "shadow-sm",
-            "transition-all duration-150 ease-out",
-            "hover:shadow-md hover:scale-[1.02]",
-            "active:scale-[0.98] active:shadow-sm",
-            "disabled:opacity-30 disabled:hover:scale-100"
-          )}
-          aria-label={`Decrease count for ${itemName}`}
-        >
-          <Minus className="h-6 w-6 md:h-6 md:w-6" strokeWidth={2.5} />
-        </Button>
+      <div className="flex flex-col items-center gap-1.5 md:gap-2 w-full max-w-xs md:max-w-md mt-1 md:mt-2">
+        {/* Row with buttons and input */}
+        <div className="flex items-center justify-center gap-1 md:gap-3 w-full">
+          {/* Decrement Button - Enhanced with gradient, shadow, and smooth feedback */}
+          <Button
+            onClick={handleDecrement}
+            disabled={currentCount === 0}
+            variant="outline"
+            size="lg"
+            className={cn(
+              "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
+              "rounded-2xl",
+              "border-2 border-gray-100",
+              "bg-gray-50 text-gray-700 hover:bg-gray-100",
+              "transition-all duration-150 ease-out",
+              "hover:scale-[1.02]",
+              "active:scale-[0.98]",
+              "disabled:opacity-30 disabled:hover:scale-100"
+            )}
+            aria-label={`Decrease count for ${itemName}`}
+          >
+            <Minus className="h-6 w-6 md:h-6 md:w-6" strokeWidth={2.5} />
+          </Button>
 
-        {/* Current Count Display / Input - Optimized size for mobile fit */}
-        <div className="flex-1 flex flex-col items-center gap-1.5 md:gap-2">
-          {isEditing ? (
+          {/* Current Count Display / Input */}
+          <div className="w-36 md:w-40">
             <Input
               ref={inputRef}
               type="text"
@@ -205,66 +203,57 @@ export function RTDECountCard({
               onChange={handleInputChange}
               onBlur={handleInputBlur}
               onKeyDown={handleInputKeyDown}
+              onFocus={handleInputFocus}
               className={cn(
-                "h-14 md:h-16",
-                "text-[2.5rem] md:text-[2.75rem] leading-none font-bold text-center",
-                "border-2 border-primary/60",
-                "bg-gradient-to-br from-primary/5 to-primary/10",
+                "h-14 md:h-14",
+                "text-[2.5rem] md:text-[2.75rem] leading-none font-bold text-center tabular-nums",
                 "rounded-2xl",
-                "shadow-lg shadow-primary/10",
-                "ring-4 ring-primary/10",
-                "transition-all duration-200"
+                "transition-all duration-200",
+                isEditing
+                  ? [
+                      "border-2 border-primary/60",
+                      "bg-gradient-to-br from-primary/5 to-primary/10",
+                      "ring-4 ring-primary/10",
+                    ]
+                  : [
+                      "border-transparent bg-transparent",
+                      "shadow-none",
+                      "focus-visible:ring-0",
+                      "cursor-pointer",
+                      "hover:bg-muted/30",
+                    ]
               )}
               maxLength={3}
-              aria-label={`Enter count for ${itemName}`}
+              aria-label={`Current count: ${currentCount}. Tap to edit.`}
             />
-          ) : (
-            <button
-              onClick={handleCountClick}
-              className={cn(
-                "h-14 md:h-16 w-full",
-                "flex items-center justify-center",
-                "rounded-2xl",
-                "text-[2.5rem] md:text-[2.75rem] leading-none font-bold tabular-nums",
-                "transition-all duration-200 ease-out",
-                "hover:bg-muted/30",
-                "active:scale-[0.97]",
-                "focus-visible:ring-2 focus-visible:ring-primary/50",
-                "relative overflow-hidden",
-                "before:absolute before:inset-0 before:bg-gradient-to-br before:from-muted/0 before:to-muted/30",
-                "before:opacity-0 before:hover:opacity-100 before:transition-opacity before:duration-300"
-              )}
-              aria-label={`Current count: ${currentCount}. Click to edit.`}
-            >
-              <span className="relative z-10">{currentCount}</span>
-            </button>
-          )}
-          <span className="text-[0.625rem] md:text-[0.6875rem] font-semibold text-muted-foreground uppercase tracking-[0.06em]">
-            Current Count
-          </span>
+          </div>
+
+          {/* Increment Button - Enhanced with gradient, shadow, and smooth feedback */}
+          <Button
+            onClick={handleIncrement}
+            disabled={currentCount >= 999}
+            variant="outline"
+            size="lg"
+            className={cn(
+              "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
+              "rounded-2xl",
+              "border-2 border-gray-100",
+              "bg-gray-50 text-gray-700 hover:bg-gray-100",
+              "transition-all duration-150 ease-out",
+              "hover:scale-[1.02]",
+              "active:scale-[0.98]",
+              "disabled:opacity-30 disabled:hover:scale-100"
+            )}
+            aria-label={`Increase count for ${itemName}`}
+          >
+            <Plus className="h-6 w-6 md:h-6 md:w-6" strokeWidth={2.5} />
+          </Button>
         </div>
 
-        {/* Increment Button - Enhanced with gradient, shadow, and smooth feedback */}
-        <Button
-          onClick={handleIncrement}
-          disabled={currentCount >= 999}
-          variant="outline"
-          size="lg"
-          className={cn(
-            "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
-            "rounded-2xl",
-            "border-2 border-border/40",
-            "bg-gradient-to-b from-background to-muted/20",
-            "shadow-sm",
-            "transition-all duration-150 ease-out",
-            "hover:shadow-md hover:scale-[1.02]",
-            "active:scale-[0.98] active:shadow-sm",
-            "disabled:opacity-30 disabled:hover:scale-100"
-          )}
-          aria-label={`Increase count for ${itemName}`}
-        >
-          <Plus className="h-6 w-6 md:h-6 md:w-6" strokeWidth={2.5} />
-        </Button>
+        {/* Label below the controls */}
+        <span className="text-[0.625rem] md:text-[0.6875rem] font-semibold text-muted-foreground uppercase tracking-[0.06em]">
+          Current Count
+        </span>
       </div>
 
       {/* Saving Indicator - Fixed height container to prevent layout shift */}

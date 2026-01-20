@@ -56,7 +56,7 @@ export function RTDECountingPhase({
           <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-3 md:py-5">
             {/* Title */}
             <h2 className="text-sm font-semibold text-popover-foreground mb-3 md:mb-4">
-              Phase Count
+              Count phase
             </h2>
 
             {/* Progress Bar */}
@@ -71,7 +71,7 @@ export function RTDECountingPhase({
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-primary">
+                  <span className="text-sm font-bold text-emerald-500">
                     {progressPercent}%
                   </span>
                   <span className="text-sm text-muted-foreground">
@@ -81,7 +81,7 @@ export function RTDECountingPhase({
               </div>
               <div className="w-full bg-muted rounded-full h-2 md:h-2.5 overflow-hidden">
                 <div
-                  className="bg-primary h-2 md:h-2.5 rounded-full transition-all duration-500 ease-out"
+                  className="bg-emerald-500 h-2 md:h-2.5 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${progressPercent}%` }}
                   role="progressbar"
                   aria-valuenow={progressPercent}
@@ -107,13 +107,13 @@ export function RTDECountingPhase({
                   of {totalItems}
                 </span>
               </div>
-              <span className="text-xs font-bold text-primary">
+              <span className="text-xs font-bold text-emerald-500">
                 {progressPercent}%
               </span>
             </div>
             <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
               <div
-                className="bg-primary h-1.5 rounded-full transition-all duration-500 ease-out"
+                className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${progressPercent}%` }}
                 role="progressbar"
                 aria-valuenow={progressPercent}

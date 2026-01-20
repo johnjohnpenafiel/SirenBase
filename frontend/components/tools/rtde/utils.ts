@@ -40,29 +40,6 @@ export function validateAllItemsCounted(items: RTDEItem[]): ValidationResult {
 }
 
 /**
- * Assign Zero to Uncounted Items - Utility Function
- *
- * Replaces null countedQuantity values with 0.
- *
- * NOTE: This function is no longer used in the standard validation dialog flow.
- * The current behavior excludes uncounted items from the pull list rather than
- * assigning them 0. This function is retained for potential future use cases
- * where explicit zero assignment is needed.
- *
- * @param items - Full item list with potentially null countedQuantity values
- * @returns Updated items array with all null values replaced by 0
- */
-export function assignZeroToUncounted(items: RTDEItem[]): RTDEItem[] {
-  return items.map((item) => ({
-    ...item,
-    countedQuantity:
-      item.countedQuantity === null || item.countedQuantity === undefined
-        ? 0
-        : item.countedQuantity,
-  }));
-}
-
-/**
  * Generate Pull List - Filter Items Needing Restocking
  *
  * Creates the pull list shown in pulling phase from full item inventory.
@@ -224,21 +201,6 @@ export function calculateProgress(current: number, total: number): number {
  */
 export function getCountedItemsCount(items: RTDEItem[]): number {
   return items.filter(isItemCounted).length;
-}
-
-/**
- * Get Count of Pulled Items (Full Item List)
- *
- * Counts pulled items from the full session item list.
- *
- * Note: Prefer getPulledCountFromPullList() in pulling phase for efficiency.
- * This function is useful when working with the full item list.
- *
- * @param items - Full RTD&E item list
- * @returns Count of items where isPulled === true
- */
-export function getPulledItemsCount(items: RTDEItem[]): number {
-  return items.filter((item) => item.isPulled).length;
 }
 
 /**

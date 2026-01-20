@@ -12,6 +12,55 @@ _No active bugs at this time._
 
 ## ✅ Fixed Bugs Archive
 
+### [BUG-011] Scroll position persists when switching views in inventory tracking
+
+**Fixed**: 2026-01-19
+**Commit**: (current session)
+**Impact**: Low - UX issue causing disorientation
+
+**Affected Component**: `frontend/app/tools/tracking/inventory/page.tsx`
+
+**Description**:
+When a user scrolls down a list (either categories or inventory items) and then switches to a different view or filter, the scroll position persists instead of resetting to the top. For example, if a user scrolls three elements down in the "All Items" view and switches to "Categories" view, the categories list would also appear scrolled down three elements.
+
+**Expected Behavior**:
+- User scrolls down in any view
+- User switches views (Categories ↔ All Items) or selects a category
+- List resets to the beginning (scroll position = 0)
+
+**Current Behavior** (before fix):
+- User scrolls down in any view
+- User switches views or selects a category
+- Scroll position persists from the previous view
+- User sees content partway down the list instead of the top
+
+**Solution Implemented**:
+Added scroll reset functionality using a ref to the scrollable container:
+1. Added `useRef` import and created `scrollContainerRef` to reference the `<main>` element
+2. Created `resetScroll()` helper function that sets `scrollTop = 0`
+3. Attached ref to the scrollable `<main>` element
+4. Called `resetScroll()` in all view-changing handlers:
+   - `handleCategoryClick()` - when selecting a category
+   - `handleBackToCategories()` - when returning to categories view
+   - "All Items" toggle button click
+   - "Categories" toggle button click
+   - Search input onChange (when auto-switching from categories to all)
+
+**Files Changed**:
+- `frontend/app/tools/tracking/inventory/page.tsx:17` - Added useRef import
+- `frontend/app/tools/tracking/inventory/page.tsx:50-57` - Added scrollContainerRef and resetScroll()
+- `frontend/app/tools/tracking/inventory/page.tsx:163,170,263,279,312` - Added resetScroll() calls
+- `frontend/app/tools/tracking/inventory/page.tsx:193` - Attached ref to main element
+
+**Testing**:
+- [ ] Scroll down in All Items view, switch to Categories → List starts at top
+- [ ] Scroll down in Categories view, switch to All Items → List starts at top
+- [ ] Scroll down in Categories view, click a category → Items list starts at top
+- [ ] Scroll down in filtered view, click Back to Categories → Categories start at top
+- [ ] Start typing in search while in Categories view → All Items view starts at top
+
+---
+
 ### [BUG-010] Autocomplete suggestions reappear after selecting a suggestion
 
 **Fixed**: 2026-01-18

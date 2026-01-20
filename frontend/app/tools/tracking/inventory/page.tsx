@@ -14,7 +14,7 @@
  */
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
@@ -47,6 +47,14 @@ export default function InventoryPage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchBarScrolled, setIsSearchBarScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const scrollContainerRef = useRef<HTMLElement>(null);
+
+  // Reset scroll position when view or category changes
+  const resetScroll = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  };
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const scrollTop = e.currentTarget.scrollTop;
@@ -152,12 +160,14 @@ export default function InventoryPage() {
   const handleCategoryClick = (category: ItemCategory) => {
     setSelectedCategory(category);
     setViewMode("filtered");
+    resetScroll();
   };
 
   const handleBackToCategories = () => {
     setViewMode("categories");
     setSelectedCategory(null);
     setSearchQuery("");
+    resetScroll();
   };
 
   if (loading) {
@@ -180,7 +190,7 @@ export default function InventoryPage() {
     <ProtectedRoute>
       <div className="flex flex-col h-dvh">
         <Header />
-        <main className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+        <main ref={scrollContainerRef} className="flex-1 overflow-y-auto" onScroll={handleScroll}>
           {/* Sticky wrapper containing both island and search bar */}
           <div className="sticky top-0 z-10">
             {/* Frosted Island */}
@@ -250,6 +260,7 @@ export default function InventoryPage() {
                         setViewMode("all");
                         setSelectedCategory(null);
                         setSearchQuery("");
+                        resetScroll();
                       }}
                     >
                       All Items
@@ -265,6 +276,7 @@ export default function InventoryPage() {
                         setViewMode("categories");
                         setSelectedCategory(null);
                         setSearchQuery("");
+                        resetScroll();
                       }}
                     >
                       Categories
@@ -297,6 +309,7 @@ export default function InventoryPage() {
                     if (value.trim() && viewMode === "categories") {
                       setViewMode("all");
                       setSelectedCategory(null);
+                      resetScroll();
                     }
                   }}
                   className="pl-10 pr-10 rounded-full bg-gray-100/60 backdrop-blur-md shadow-none [&::-webkit-search-cancel-button]:hidden"

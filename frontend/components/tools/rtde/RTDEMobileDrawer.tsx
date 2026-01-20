@@ -92,10 +92,12 @@ export function RTDEMobileDrawer({
                       disabled={!isCountingPhase}
                       className={cn(
                         "w-full flex items-center gap-2.5 py-2 px-3 text-left",
-                        "rounded-lg bg-background",
+                        "rounded-lg",
                         "transition-colors duration-150",
                         "active:bg-muted/50",
-                        isCurrent && "bg-muted/60",
+                        isCurrent
+                          ? "bg-white ring-2 ring-foreground/10"
+                          : "bg-background",
                         !isCountingPhase && "cursor-not-allowed opacity-60"
                       )}
                       aria-label={`${item.name}, ${

@@ -56,7 +56,7 @@ export function RTDECountingPhase({
           <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-3 md:py-5">
             {/* Title */}
             <h2 className="text-sm font-semibold text-popover-foreground mb-3 md:mb-4">
-              Count phase
+              Counting Phase
             </h2>
 
             {/* Progress Bar */}

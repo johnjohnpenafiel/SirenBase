@@ -12,16 +12,14 @@
 import type { RTDEItem, ValidationResult, RTDEPullItem } from "./types";
 
 /**
- * Validate All Items Counted - Phase Transition Gatekeeper
+ * Validate All Items Counted - Phase Transition Check
  *
- * CRITICAL VALIDATION: Required before transitioning from counting phase to pulling phase.
+ * Checks if all items have been counted before transitioning to pull phase.
  *
  * Business Logic:
- * - Prevents pull list generation from partial data
- * - Ensures accurate need quantity calculations
  * - If validation fails, user sees dialog with 2 options:
- *   1. "Go Back" → Jump to first uncounted item
- *   2. "Assign 0 & Continue" → Calls assignZeroToUncounted() and proceeds
+ *   1. "Go Back & Count" → Jump to first uncounted item
+ *   2. "Continue" → Proceed to pull phase (uncounted items excluded from pull list)
  *
  * Detection Strategy:
  * - Uncounted items have countedQuantity === null (frontend representation)
@@ -42,22 +40,14 @@ export function validateAllItemsCounted(items: RTDEItem[]): ValidationResult {
 }
 
 /**
- * Assign Zero to Uncounted Items - Validation Dialog Recovery
+ * Assign Zero to Uncounted Items - Utility Function
  *
- * Called when user chooses "Assign 0 & Continue" from UncountedItemsDialog.
+ * Replaces null countedQuantity values with 0.
  *
- * Use Case:
- * - User clicks "Start Pull" but some items haven't been counted yet
- * - Validation fails and shows dialog listing uncounted items
- * - User decides to assign 0 to uncounted items and proceed to pull phase
- *
- * Business Logic:
- * - Treats uncounted items as "counted zero" (intentional, not missing data)
- * - Allows phase transition to proceed
- * - Backend receives 0 for these items (matching frontend state)
- *
- * Alternative Flow:
- * - If user clicks "Go Back", they jump to first uncounted item instead
+ * NOTE: This function is no longer used in the standard validation dialog flow.
+ * The current behavior excludes uncounted items from the pull list rather than
+ * assigning them 0. This function is retained for potential future use cases
+ * where explicit zero assignment is needed.
  *
  * @param items - Full item list with potentially null countedQuantity values
  * @returns Updated items array with all null values replaced by 0
@@ -78,7 +68,8 @@ export function assignZeroToUncounted(items: RTDEItem[]): RTDEItem[] {
  * Creates the pull list shown in pulling phase from full item inventory.
  *
  * Filtering Strategy:
- * - Only includes items where needQuantity > 0 (display needs restocking)
+ * - Only includes COUNTED items where needQuantity > 0 (display needs restocking)
+ * - UNCOUNTED items (countedQuantity === null) are EXCLUDED entirely
  * - Items at or above par level are excluded (display is fully stocked)
  * - Transforms full RTDEItem to lightweight RTDEPullItem (only pull-relevant fields)
  *
@@ -86,17 +77,19 @@ export function assignZeroToUncounted(items: RTDEItem[]): RTDEItem[] {
  * - needQuantity is calculated as: parLevel - countedQuantity
  * - Staff pulls needQuantity items from BOH to restock display
  * - Empty pull list = "All items at par!" empty state
+ * - Uncounted items are excluded so users can count only items they need to restock
  *
  * Example:
  * - Item A: parLevel=10, counted=7 → needQuantity=3 → INCLUDED in pull list
- * - Item B: parLevel=10, counted=10 → needQuantity=0 → EXCLUDED from pull list
+ * - Item B: parLevel=10, counted=10 → needQuantity=0 → EXCLUDED (at par)
+ * - Item C: parLevel=10, counted=null → EXCLUDED (not counted)
  *
  * @param items - Full RTD&E item list (all items from session)
- * @returns Filtered pull list with only items needing restocking
+ * @returns Filtered pull list with only counted items needing restocking
  */
 export function generatePullList(items: RTDEItem[]): RTDEPullItem[] {
   return items
-    .filter((item) => item.needQuantity > 0)
+    .filter((item) => item.countedQuantity !== null && item.needQuantity > 0)
     .map((item) => ({
       itemId: item.itemId,
       name: item.name,
@@ -127,7 +120,7 @@ export function generatePullList(items: RTDEItem[]): RTDEPullItem[] {
  * - Par=10, Counted=12 → Need=0  (overstocked, still don't pull - never negative)
  *
  * Edge Cases:
- * - countedQuantity=null → Treated as 0 (uncounted assumed empty)
+ * - countedQuantity=null → Calculated as need=parLevel, but item is excluded from pull list
  * - Overstocked items (counted > par) → Returns 0, not negative
  *
  * @param parLevel - Target quantity for display (admin-configured)

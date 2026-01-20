@@ -12,7 +12,6 @@
  */
 "use client";
 
-import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { RTDEItem, RTDESessionPhase } from "./types";
@@ -46,8 +45,8 @@ export function RTDESessionSidebar({
       </div>
 
       {/* Scrollable item list */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-3 space-y-2">
+      <div className="flex-1 overflow-y-auto bg-neutral-100 px-2 py-1">
+        <div className="flex flex-col gap-[3px]">
           {items.map((item, index) => {
             const isCurrent = index === currentIndex;
             const counted = isItemCounted(item);
@@ -59,9 +58,13 @@ export function RTDESessionSidebar({
                 onClick={() => onItemClick(index)}
                 disabled={!isCountingPhase}
                 className={cn(
-                  "w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors duration-150",
-                  "hover:bg-muted",
-                  isCurrent && "bg-accent",
+                  "w-full flex items-center gap-2.5 py-2 px-3 text-left",
+                  "rounded-lg",
+                  "transition-colors duration-150",
+                  "active:bg-muted/50",
+                  isCurrent
+                    ? "bg-white ring-2 ring-foreground/10"
+                    : "bg-background",
                   !isCountingPhase && "cursor-not-allowed opacity-60"
                 )}
                 aria-label={`${item.name}, ${
@@ -69,38 +72,36 @@ export function RTDESessionSidebar({
                 }`}
                 aria-current={isCurrent ? "true" : undefined}
               >
-                {/* Product Image / Emoji / Placeholder - with fallback hierarchy */}
+                {/* Product Image / Emoji / Placeholder */}
                 <RTDEItemImage
                   imageFilename={item.imageFilename}
                   icon={item.icon}
-                  size="sm"
+                  size="md"
                   alt={`${item.brand ? `${item.brand} ` : ""}${item.name}`}
                   className="shrink-0"
                 />
 
-                {/* Brand, Item name and count */}
+                {/* Brand & Item name */}
                 <div className="flex-1 min-w-0">
                   {item.brand && (
-                    <span className="text-xs text-gray-500 truncate block">
+                    <p className="text-[10px] text-muted-foreground leading-none mb-0.5">
                       {item.brand}
-                    </span>
+                    </p>
                   )}
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="font-medium truncate text-sm">
-                      {item.name}
-                    </span>
-                    {counted && (
-                      <div
-                        className="flex items-center justify-center w-4 h-4 rounded-full bg-primary shrink-0"
-                        aria-label="Counted"
-                      >
-                        <Check className="w-2.5 h-2.5 text-primary-foreground" />
-                      </div>
-                    )}
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    {countDisplay}
-                  </span>
+                  <p className="text-[13px] font-medium truncate leading-tight">
+                    {item.name}
+                  </p>
+                </div>
+
+                {/* Count on the right */}
+                <div
+                  className={cn(
+                    "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
+                    "text-xs font-medium tabular-nums text-muted-foreground",
+                    counted && "border-2 border-emerald-500"
+                  )}
+                >
+                  {countDisplay}
                 </div>
               </button>
             );

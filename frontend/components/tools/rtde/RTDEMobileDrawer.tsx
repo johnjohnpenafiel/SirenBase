@@ -10,15 +10,14 @@
  */
 "use client";
 
+import { useCallback } from "react";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -51,6 +50,20 @@ export function RTDEMobileDrawer({
 }: RTDEMobileDrawerProps) {
   const isCountingPhase = phase === "counting";
   const countedCount = getCountedItemsCount(items);
+
+  // Callback ref that scrolls immediately when element mounts
+  const currentItemCallbackRef = useCallback(
+    (node: HTMLButtonElement | null) => {
+      if (node && open) {
+        // Scroll immediately so it happens during drawer animation, not after
+        node.scrollIntoView({
+          behavior: "instant",
+          block: "center",
+        });
+      }
+    },
+    [open]
+  );
 
   const handleItemSelect = (index: number) => {
     onItemClick(index);
@@ -88,6 +101,7 @@ export function RTDEMobileDrawer({
                 return (
                   <DrawerClose key={item.itemId} asChild>
                     <button
+                      ref={isCurrent ? currentItemCallbackRef : undefined}
                       onClick={() => handleItemSelect(index)}
                       disabled={!isCountingPhase}
                       className={cn(

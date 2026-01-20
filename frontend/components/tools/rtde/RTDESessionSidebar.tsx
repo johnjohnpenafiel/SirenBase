@@ -59,7 +59,7 @@ export function RTDESessionSidebar({
                 disabled={!isCountingPhase}
                 className={cn(
                   "w-full flex items-center gap-2.5 py-2 px-3 text-left",
-                  "rounded-lg",
+                  "rounded-2xl",
                   "transition-colors duration-150",
                   "active:bg-muted/50",
                   isCurrent ? "bg-background border-2 border-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]" : "bg-background",

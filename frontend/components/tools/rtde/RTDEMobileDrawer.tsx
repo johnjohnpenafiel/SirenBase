@@ -10,7 +10,6 @@
  */
 "use client";
 
-import { Check } from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -67,25 +66,20 @@ export function RTDEMobileDrawer({
     <div className="md:hidden">
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent className="bg-background">
-          <DrawerHeader className="border-b bg-background">
+          <DrawerHeader className="border-b bg-background pb-3">
             <DrawerTitle className="text-lg">RTD&E Items</DrawerTitle>
-            <DrawerDescription className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                <span className="font-bold text-secondary-foreground">
-                  {countedCount}
-                </span>
-                <span className="opacity-75 text-secondary-foreground">of</span>
-                <span className="font-bold text-secondary-foreground">
-                  {items.length}
-                </span>
+            <div className="flex justify-center">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-muted text-xs text-foreground">
+                <span className="font-bold">{countedCount}</span>
+                <span>of</span>
+                <span className="font-bold">{items.length}</span>
               </span>
-              <span className="text-muted-foreground">items counted</span>
-            </DrawerDescription>
+            </div>
           </DrawerHeader>
 
           {/* Scrollable item list */}
-          <div className="overflow-y-auto max-h-[60vh] px-4 bg-background">
-            <div className="space-y-2 py-4">
+          <div className="overflow-y-auto max-h-[60vh] bg-neutral-100 px-2 py-1">
+            <div className="flex flex-col gap-[3px]">
               {items.map((item, index) => {
                 const isCurrent = index === currentIndex;
                 const counted = isItemCounted(item);
@@ -97,9 +91,11 @@ export function RTDEMobileDrawer({
                       onClick={() => handleItemSelect(index)}
                       disabled={!isCountingPhase}
                       className={cn(
-                        "w-full flex items-center gap-4 p-4 rounded-lg text-left transition-colors duration-150",
-                        "active:bg-muted/40",
-                        isCurrent && "bg-muted/50",
+                        "w-full flex items-center gap-2.5 py-2 px-3 text-left",
+                        "rounded-lg bg-background",
+                        "transition-colors duration-150",
+                        "active:bg-muted/50",
+                        isCurrent && "bg-muted/60",
                         !isCountingPhase && "cursor-not-allowed opacity-60"
                       )}
                       aria-label={`${item.name}, ${
@@ -107,7 +103,7 @@ export function RTDEMobileDrawer({
                       }`}
                       aria-current={isCurrent ? "true" : undefined}
                     >
-                      {/* Product Image / Emoji / Placeholder - with fallback hierarchy */}
+                      {/* Product Image / Emoji / Placeholder */}
                       <RTDEItemImage
                         imageFilename={item.imageFilename}
                         icon={item.icon}
@@ -116,29 +112,27 @@ export function RTDEMobileDrawer({
                         className="shrink-0"
                       />
 
-                      {/* Brand, Item name and count */}
+                      {/* Brand & Item name */}
                       <div className="flex-1 min-w-0">
                         {item.brand && (
-                          <span className="text-xs text-gray-500 truncate block">
+                          <p className="text-[10px] text-muted-foreground leading-none mb-0.5">
                             {item.brand}
-                          </span>
+                          </p>
                         )}
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium truncate">
-                            {item.name}
-                          </span>
-                          {counted && (
-                            <div
-                              className="flex items-center justify-center w-4 h-4 rounded-full bg-primary shrink-0"
-                              aria-label="Counted"
-                            >
-                              <Check className="w-2.5 h-2.5 text-primary-foreground" />
-                            </div>
-                          )}
-                        </div>
-                        <span className="text-sm text-muted-foreground">
-                          {countDisplay}
-                        </span>
+                        <p className="text-[13px] font-medium truncate leading-tight">
+                          {item.name}
+                        </p>
+                      </div>
+
+                      {/* Count on the right */}
+                      <div
+                        className={cn(
+                          "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
+                          "text-xs font-medium tabular-nums text-muted-foreground",
+                          counted && "border-2 border-emerald-500"
+                        )}
+                      >
+                        {countDisplay}
                       </div>
                     </button>
                   </DrawerClose>

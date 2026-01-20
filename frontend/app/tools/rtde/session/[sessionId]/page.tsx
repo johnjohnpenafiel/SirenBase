@@ -49,7 +49,6 @@ import type {
 } from "@/types";
 import {
   validateAllItemsCounted,
-  assignZeroToUncounted,
   calculateNeedQuantity,
   calculateProgress,
   getCountedItemsCount,
@@ -271,24 +270,24 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   /**
    * Phase Transition: Counting → Pulling
    *
-   * CRITICAL WORKFLOW STEP: Validates all items counted before phase transition.
+   * Validates counting status before phase transition.
    *
    * Architectural Pattern:
    * - Phase-based rendering: Same route, different UI based on `phase` state
-   * - Validation gatekeeper: Ensures data integrity before pull list generation
+   * - Validation check: Notifies user of uncounted items before pull list generation
    * - No backend API call: Phase state is frontend-only (stateless transition)
    *
    * Flow:
    * 1. User clicks "Start Pull" button (last item in counting phase)
-   * 2. Validate all items have countedQuantity !== null
-   * 3a. If valid → setPhase("pulling") → RTDEPullingPhase renders
-   * 3b. If invalid → Show UncountedItemsDialog with 2 options:
-   *     - "Go Back" → handleGoBack() → Jump to first uncounted item
-   *     - "Assign 0 & Continue" → handleAssignZeroAndContinue() → Proceed anyway
+   * 2. Check if all items have countedQuantity !== null
+   * 3a. If all counted → setPhase("pulling") → RTDEPullingPhase renders
+   * 3b. If some uncounted → Show UncountedItemsDialog with 2 options:
+   *     - "Go Back & Count" → handleGoBack() → Jump to first uncounted item
+   *     - "Continue" → handleContinueWithExclusions() → Exclude uncounted from pull list
    *
    * Design Decision:
-   * - Validation before transition prevents pull list showing "Need: X" based on null values
-   * - Gives user choice: Fix missing counts OR treat them as zero
+   * - Uncounted items are excluded from pull list (not assigned 0)
+   * - Allows users to count only items they need to restock
    */
   const handleStartPull = () => {
     if (!sessionData) return;
@@ -306,46 +305,32 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   };
 
   /**
-   * Validation Dialog Recovery: "Assign 0 & Continue"
+   * Validation Dialog: "Continue" (Exclude Uncounted Items)
    *
-   * User chose to treat uncounted items as "counted zero" and proceed to pull phase.
-   *
-   * State Updates:
-   * 1. Frontend: null → 0 (assignZeroToUncounted utility)
-   * 2. Backend: Batch save 0 values via saveCount (debounced)
-   * 3. Phase transition: "counting" → "pulling"
+   * User chose to proceed to pull phase with uncounted items excluded.
    *
    * Business Logic:
-   * - Uncounted items now treated as "intentionally zero" (not missing data)
-   * - Pull list will calculate needQuantity = parLevel - 0 for these items
-   * - Example: Par=10, Counted=null → Assign 0 → Need=10 (pull all 10)
+   * - Uncounted items remain null (not modified)
+   * - Pull list excludes uncounted items via generatePullList() filter
+   * - User only sees items they explicitly counted that need restocking
+   *
+   * Use Case:
+   * - User only needs to restock a subset of items (e.g., 5 of 20 items)
+   * - Count only those items, proceed to pull phase
+   * - Uncounted items don't clutter the pull list
    *
    * Alternative Flow:
-   * - If user clicked "Go Back", they'd jump to first uncounted item instead
+   * - If user clicked "Go Back & Count", they'd jump to first uncounted item
    */
-  const handleAssignZeroAndContinue = () => {
-    if (!sessionData) return;
-
-    const updatedItems = assignZeroToUncounted(sessionData.items);
-
-    setSessionData({
-      ...sessionData,
-      items: updatedItems,
-    });
-
-    // Save all newly assigned zeros to backend
-    uncountedItems.forEach((item) => {
-      saveCount(item.itemId, 0);
-    });
-
+  const handleContinueWithExclusions = () => {
     setShowValidationDialog(false);
     setUncountedItems([]);
     setPhase("pulling");
   };
 
   /**
-   * Handle "Go Back" from validation dialog
-   * Returns to first uncounted item
+   * Handle "Go Back & Count" from validation dialog
+   * Returns to first uncounted item in counting phase
    */
   const handleGoBack = () => {
     setShowValidationDialog(false);
@@ -579,7 +564,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
         <UncountedItemsDialog
           open={showValidationDialog}
           uncountedItems={uncountedItems}
-          onAssignZero={handleAssignZeroAndContinue}
+          onContinue={handleContinueWithExclusions}
           onGoBack={handleGoBack}
         />
 

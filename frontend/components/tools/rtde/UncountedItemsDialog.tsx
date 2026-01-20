@@ -5,8 +5,8 @@
  * but some items have not been counted yet.
  *
  * Provides two options:
- * 1. Assign 0 & Continue - Sets uncounted items to 0
- * 2. Go Back - Returns to counting phase
+ * 1. Continue - Excludes uncounted items from pull list
+ * 2. Go Back - Returns to counting phase to count them
  */
 'use client';
 
@@ -25,14 +25,14 @@ import type { RTDEItem } from './types';
 interface UncountedItemsDialogProps {
   open: boolean;
   uncountedItems: RTDEItem[];
-  onAssignZero: () => void;
+  onContinue: () => void;
   onGoBack: () => void;
 }
 
 export function UncountedItemsDialog({
   open,
   uncountedItems,
-  onAssignZero,
+  onContinue,
   onGoBack,
 }: UncountedItemsDialogProps) {
   return (
@@ -63,8 +63,8 @@ export function UncountedItemsDialog({
         </div>
 
         <p className="text-sm text-muted-foreground">
-          Do you want to assign 0 to these items and continue, or go back and
-          count them?
+          These items will be excluded from the pull list. You can go back and
+          count them, or continue without them.
         </p>
 
         <DialogFooter className="flex-col sm:flex-row gap-2">
@@ -73,13 +73,13 @@ export function UncountedItemsDialog({
             onClick={onGoBack}
             className="w-full sm:w-auto"
           >
-            Go Back
+            Go Back & Count
           </Button>
           <Button
-            onClick={onAssignZero}
+            onClick={onContinue}
             className="w-full sm:w-auto"
           >
-            Assign 0 & Continue
+            Continue
           </Button>
         </DialogFooter>
       </DialogContent>

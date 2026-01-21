@@ -49,7 +49,7 @@ export function UncountedItemsDialog({
         </DialogHeader>
 
         {/* List of uncounted items */}
-        <div className="bg-gray-100 rounded-xl p-2 max-h-[200px] overflow-y-auto space-y-1.5">
+        <div className="bg-gray-100 rounded-xl p-2 max-h-[200px] overflow-y-auto space-y-1.5 border border-border">
           {uncountedItems.map((item) => (
             <div
               key={item.itemId}

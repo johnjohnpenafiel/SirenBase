@@ -82,9 +82,9 @@ export function ResumeSessionDialog({
                   {itemsCounted} of {totalItems} items counted
                 </span>
               </div>
-              <div className="w-full bg-muted rounded-full h-2">
+              <div className="w-full bg-gray-200/60 rounded-full h-2.5 overflow-hidden border border-gray-300/50">
                 <div
-                  className="bg-emerald-500 h-2 rounded-full transition-all"
+                  className="bg-emerald-500 h-full rounded-full transition-all"
                   style={{ width: `${progress}%` }}
                   role="progressbar"
                   aria-valuenow={progress}

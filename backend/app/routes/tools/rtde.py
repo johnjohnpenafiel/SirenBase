@@ -383,11 +383,11 @@ def get_active_session():
     """
     current_user_id = get_jwt_identity()
 
-    # Find active session for user
+    # Find active session for user (most recent if multiple exist)
     session = RTDECountSession.query.filter_by(
         user_id=current_user_id,
         status='in_progress'
-    ).first()
+    ).order_by(RTDECountSession.started_at.desc()).first()
 
     if not session:
         return jsonify({"session": None}), 200
@@ -444,13 +444,15 @@ def start_session():
     action = data.get('action', 'new')
 
     try:
-        # Find existing session
-        existing_session = RTDECountSession.query.filter_by(
+        # Find existing sessions (there may be multiple from bugs/testing)
+        existing_sessions = RTDECountSession.query.filter_by(
             user_id=current_user_id,
             status='in_progress'
-        ).first()
+        ).order_by(RTDECountSession.started_at.desc()).all()
 
         if action == 'resume':
+            # Get most recent non-expired session
+            existing_session = existing_sessions[0] if existing_sessions else None
             if not existing_session or existing_session.is_expired():
                 return jsonify({"error": "No active session to resume"}), 400
 
@@ -460,8 +462,8 @@ def start_session():
             }), 200
 
         # action == 'new'
-        # Delete existing session if any (cascade deletes counts)
-        if existing_session:
+        # Delete ALL existing sessions (cascade deletes counts)
+        for existing_session in existing_sessions:
             db.session.delete(existing_session)
 
         # Create new session
@@ -819,12 +821,17 @@ def complete_session(session_id: str):
         return jsonify({"error": "Unauthorized - not your session"}), 403
 
     try:
-        # Mark as completed
-        session.mark_completed()
-        db.session.commit()
-
-        # Delete session (cascade deletes counts)
+        # Delete this session (cascade deletes counts)
         db.session.delete(session)
+
+        # Also clean up any other stray in_progress sessions for this user
+        stray_sessions = RTDECountSession.query.filter_by(
+            user_id=current_user_id,
+            status='in_progress'
+        ).all()
+        for stray in stray_sessions:
+            db.session.delete(stray)
+
         db.session.commit()
 
         return jsonify({

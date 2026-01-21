@@ -59,6 +59,8 @@ interface RTDEItemImageProps {
   grayscale?: boolean;
   /** Alt text for the image */
   alt?: string;
+  /** Whether to show background styling (default: true) */
+  showBackground?: boolean;
 }
 
 export function RTDEItemImage({
@@ -68,6 +70,7 @@ export function RTDEItemImage({
   className,
   grayscale = false,
   alt = "RTD&E item",
+  showBackground = true,
 }: RTDEItemImageProps) {
   const [imageError, setImageError] = useState(false);
 
@@ -85,8 +88,10 @@ export function RTDEItemImage({
       className={cn(
         "flex items-center justify-center",
         "rounded-full",
-        "bg-gradient-to-br from-muted/50 to-muted",
-        "shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]",
+        showBackground && [
+          "bg-gradient-to-br from-muted/50 to-muted",
+          "shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]",
+        ],
         config.container,
         grayscale && "grayscale",
         className

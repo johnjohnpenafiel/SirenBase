@@ -41,8 +41,8 @@ export function RemoveItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
+        <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
           <DialogTitle>
             Remove Item?
           </DialogTitle>
@@ -57,7 +57,7 @@ export function RemoveItemDialog({
             <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-foreground bg-secondary px-2.5 py-1 rounded-full mb-2">
               {itemCode}
             </p>
-            <p className="text-lg font-semibold text-foreground">{itemName}</p>
+            <p className="text-lg text-foreground">{itemName}</p>
           </div>
 
           {/* Warning box */}

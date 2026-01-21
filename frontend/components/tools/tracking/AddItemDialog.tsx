@@ -183,10 +183,10 @@ export function AddItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
         {step === 'input' ? (
           <>
-            <DialogHeader>
+            <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
               <DialogTitle>Add New Item</DialogTitle>
               <DialogDescription>
                 Enter the item details to generate a unique 4-digit code.
@@ -194,7 +194,7 @@ export function AddItemDialog({
             </DialogHeader>
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleGenerateCode)} className="space-y-4 pt-2 pb-4">
+              <form onSubmit={form.handleSubmit(handleGenerateCode)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="itemName"
@@ -257,7 +257,7 @@ export function AddItemDialog({
           </>
         ) : (
           <>
-            <DialogHeader>
+            <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
               <DialogTitle>Code Generated!</DialogTitle>
               <DialogDescription>
                 Write this code on the physical item with a marker, then confirm to save.

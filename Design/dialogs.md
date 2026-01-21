@@ -50,11 +50,21 @@ This document defines the design language for dialogs, modals, and their interna
 | **Border** | None | Clean separation via shadow only |
 | **Shadow** | `shadow-xl shadow-black/10 dark:shadow-black/30` | Soft, diffused shadow |
 | **Backdrop** | `bg-black/50 backdrop-blur-sm` | Dim + blur for focus |
-| **Padding** | `p-6` (24px) | Generous internal spacing |
+| **Padding** | `p-6` (24px) | Symmetrical spacing on all sides |
 | **Animation** | Fade + zoom (200ms) | Smooth entrance/exit |
 
 ### Close Button
 
+**When to show**: Only display the X close button when there is no explicit Cancel or Close button in the dialog footer.
+
+**When to hide**: If the footer contains a Cancel button (or equivalent dismissal action), hide the X button to reduce redundancy and create a cleaner UI.
+
+```tsx
+// Hide close button when Cancel exists in footer
+<DialogContent showCloseButton={false}>
+```
+
+**Styling (when shown)**:
 - `rounded-full` for circular shape
 - `p-1` padding with `hover:bg-muted` for subtle hover state
 - Positioned `top-4 right-4` with opacity transitions
@@ -65,15 +75,20 @@ This document defines the design language for dialogs, modals, and their interna
 ┌─────────────────────────────────────────────────────────┐
 │                                                         │
 │     ┌─────────────────────────────────────────────┐     │
-│     │                                             │     │
-│     │         Dialog Title                  [×]   │     │  • rounded-2xl corners
-│     │                                             │     │  • No visible border
+│     │  ┌─────────────────────────────────────┐    │     │
+│     │  │  Dialog Title                       │    │     │  • Header card: bg-gray-100
+│     │  │  Description text here              │    │     │  • rounded-xl corners
+│     │  └─────────────────────────────────────┘    │     │
+│     │                                             │     │  • No X button (Cancel in footer)
 │     │     Clean, spacious content with            │     │  • shadow-xl (soft)
 │     │     generous padding on all sides           │     │  • backdrop-blur-sm
 │     │                                             │     │
-│     │         ┌──────────┐  ┌──────────┐          │     │
-│     │         │  Cancel  │  │  Action  │          │     │
-│     │         └──────────┘  └──────────┘          │     │
+│     │         ┌─────────────────────────┐         │     │
+│     │         │        Action           │         │     │
+│     │         └─────────────────────────┘         │     │
+│     │         ┌─────────────────────────┐         │     │
+│     │         │        Cancel           │         │     │
+│     │         └─────────────────────────┘         │     │
 │     └─────────────────────────────────────────────┘     │
 │                                                         │
 │              (blurred + dimmed backdrop)                │
@@ -99,6 +114,39 @@ This document defines the design language for dialogs, modals, and their interna
 - **Keyboard dismissal**: ESC key closes dialog
 - **Focus trap**: Tab cycles within dialog only
 - **Safe areas**: Respects device safe areas via viewport units
+
+---
+
+## Header Card Pattern
+
+A visually distinct header area that groups the title and description together with a subtle background.
+
+### Styling
+
+```tsx
+<DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
+  <DialogTitle>Dialog Title</DialogTitle>
+  <DialogDescription>
+    Description text explaining the dialog's purpose.
+  </DialogDescription>
+</DialogHeader>
+```
+
+| Property | Value | Purpose |
+|----------|-------|---------|
+| Background | `bg-gray-100` | Light gray card background |
+| Radius | `rounded-xl` | 12px corners (softer than dialog's 2xl) |
+| Padding | `px-4 pt-3 pb-3` | 16px horizontal, 12px vertical |
+
+### When to Use
+
+- Multi-step dialogs (add item flow)
+- Dialogs with prominent titles
+- When you want visual separation between header and content
+
+### Dark Mode Consideration
+
+For dark mode support, consider using `bg-gray-100 dark:bg-gray-800` or the semantic `bg-muted` token.
 
 ---
 
@@ -271,8 +319,9 @@ Here's a complete dialog implementation following all patterns:
 
 ```tsx
 <Dialog open={open} onOpenChange={onOpenChange}>
-  <DialogContent className="sm:max-w-md">
-    <DialogHeader>
+  <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
+    {/* Header card with background */}
+    <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
       <DialogTitle>Remove Item?</DialogTitle>
       <DialogDescription>
         Are you sure you want to remove this item from inventory?
@@ -300,6 +349,7 @@ Here's a complete dialog implementation following all patterns:
       </div>
     </div>
 
+    {/* Stacked footer with Cancel (no X button needed) */}
     <DialogFooter className="flex-col gap-2 sm:flex-col">
       <Button onClick={handleConfirm} disabled={isLoading} className="w-full">
         {isLoading ? 'Removing...' : 'Remove Item'}
@@ -319,6 +369,9 @@ Here's a complete dialog implementation following all patterns:
 | Element | Styling |
 |---------|---------|
 | **Dialog width** | `sm:max-w-md` |
+| **Dialog padding** | `p-6` (symmetrical) |
+| **Header card** | `bg-gray-100 rounded-xl px-4 pt-3 pb-3` |
+| **Close button** | `showCloseButton={false}` when Cancel button exists |
 | **Content box** | `bg-muted/50 border border-border rounded-2xl px-5 py-4` |
 | **Warning box** | `bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4` |
 | **Warning icon** | `AlertTriangle` with `size-4 mt-0.5 flex-shrink-0` |
@@ -333,6 +386,7 @@ Here's a complete dialog implementation following all patterns:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | Jan 20, 2026 | Added Header Card pattern (bg-gray-100); close button visibility guidelines; standardized p-6 symmetrical padding |
 | 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md; added Dialog Content Patterns (content boxes, warning boxes) |
 
 **Last Updated**: January 20, 2026

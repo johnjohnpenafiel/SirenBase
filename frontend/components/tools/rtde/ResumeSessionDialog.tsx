@@ -54,17 +54,17 @@ export function ResumeSessionDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
+        <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
           <DialogTitle>Active Session Found</DialogTitle>
           <DialogDescription>
             You have an active RTD&E counting session in progress.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {/* Session Info Card */}
-          <div className="rounded-lg border bg-muted/50 p-4 space-y-3">
+          <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4 space-y-3">
             {/* Time Started */}
             <div className="flex items-center gap-2 text-sm">
               <Clock className="h-4 w-4 text-muted-foreground" />
@@ -97,31 +97,30 @@ export function ResumeSessionDialog({
           </div>
 
           {/* Warning for Starting Fresh */}
-          <div className="flex items-start gap-3 rounded-lg border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30 p-3">
-            <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
-            <div className="flex-1 space-y-1">
-              <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
-                Starting fresh will discard current progress
-              </p>
-              <p className="text-xs text-amber-700 dark:text-amber-200">
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
+            <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
+              <AlertCircle className="size-4 mt-0.5 flex-shrink-0" />
+              <span>
+                <strong>Starting fresh will discard current progress.</strong>{" "}
                 All counts from the current session will be lost.
-              </p>
-            </div>
+              </span>
+            </p>
           </div>
         </div>
 
-        <DialogFooter className="gap-3">
+        <DialogFooter className="flex-col gap-2 sm:flex-col">
           <Button
             type="button"
             onClick={handleResume}
-            className="flex-1 sm:flex-initial"
+            className="w-full"
           >
             Resume Session
           </Button>
           <Button
             type="button"
+            variant="outline"
             onClick={handleStartFresh}
-            className="flex-1 sm:flex-initial"
+            className="w-full"
           >
             Start Fresh
           </Button>

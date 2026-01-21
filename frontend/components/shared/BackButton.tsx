@@ -1,7 +1,7 @@
 /**
  * BackButton Component
  *
- * Reusable navigation back button following DESIGN.md guidelines:
+ * Reusable navigation back button following Design/components.md guidelines:
  * - Uses `variant="outline"` for secondary/navigation actions
  * - Default size (44px) for WCAG-compliant touch targets
  *

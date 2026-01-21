@@ -95,12 +95,12 @@ Each tool operates independently with its own features, while sharing authentica
    - `frontend/CLAUDE.md` for Next.js work (when created)
    - `backend/CLAUDE.md` for Flask work (when created)
 
-6. **ALWAYS read `DESIGN.md`** when working on UI/frontend
+6. **ALWAYS read `Design/README.md`** when working on UI/frontend
 
-   - Visual design tokens (colors, typography, spacing)
-   - Component patterns and variants
-   - Adaptive interface guidelines (mobile/desktop)
-   - Accessibility requirements
+   - Master design document with philosophy and workflow
+   - References modular docs: `tokens.md`, `components.md`, `dialogs.md`, `layout.md`
+   - See `Design/tool-specific.md` for per-tool UI patterns
+   - See `Design/accessibility.md` for WCAG and performance guidelines
 
 ## 🔒 Security Principles
 
@@ -146,6 +146,15 @@ SirenBase/
 ├── TASKS.md               # Task tracking (organized by tool)
 ├── BUGS.md                # Bug & issue tracker (with IDs)
 ├── README.md              # Setup & documentation
+│
+├── Design/                # Design system documentation
+│   ├── README.md              # Master doc: philosophy, workflow, references
+│   ├── tokens.md              # Colors, typography, spacing, shadows
+│   ├── components.md          # Buttons, cards, forms, lists
+│   ├── dialogs.md             # Dialog/modal patterns
+│   ├── layout.md              # Page structure, navigation, scrolling
+│   ├── tool-specific.md       # Per-tool UI characteristics
+│   └── accessibility.md       # WCAG, keyboard nav, performance
 │
 ├── Planning/              # Tool-specific planning documents
 │   ├── InventoryTracking.md   # Tool 1: Detailed planning
@@ -501,7 +510,7 @@ npm run dev
 ### Context Management
 
 - Read essential files (PLANNING.md, TASKS.md, component CLAUDE.md)
-- **Read DESIGN.md for ALL UI/component work** (pages, components, styling)
+- **Read `Design/README.md` for ALL UI/component work** (pages, components, styling)
 - Confirm file paths and module names exist
 - Reference actual code when suggesting changes
 
@@ -533,7 +542,13 @@ npm run dev
 
 ### Internal Docs
 
-- **Design System**: `DESIGN.md` - **READ BEFORE ALL UI WORK** - Visual design, components, patterns, accessibility
+- **Design System**: `Design/README.md` - **READ BEFORE ALL UI WORK**
+  - `Design/tokens.md` - Colors, typography, spacing
+  - `Design/components.md` - Buttons, cards, forms
+  - `Design/dialogs.md` - Modal/dialog patterns
+  - `Design/layout.md` - Page structure, scrolling
+  - `Design/tool-specific.md` - Per-tool UI
+  - `Design/accessibility.md` - WCAG, performance
 - **Overall Architecture**: See `PLANNING.md` (multi-tool system design)
 - **Tool-Specific Planning**:
   - Tool 1: `Planning/InventoryTracking.md`
@@ -546,6 +561,6 @@ npm run dev
 
 ---
 
-**Last Updated**: 2025-12-12
-**Version**: 3.3.0 - Tool 1 & Tool 3 Complete (Pre-Deployment Cleanup)
+**Last Updated**: 2026-01-20
+**Version**: 3.4.0 - Design Documentation Reorganization
 **Maintainer**: Development Team

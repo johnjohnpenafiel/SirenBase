@@ -976,7 +976,7 @@ night_foh → night_boh → morning → on_order → completed
 - **Overall Architecture:** See `PLANNING.md` for multi-tool system design
 - **Tool 1 Planning:** See `Planning/InventoryTracking.md`
 - **Tool 3 Planning:** See `Planning/RTDE.md`
-- **Design System:** See `DESIGN.md` for UI guidelines
+- **Design System:** See `Design/README.md` for UI guidelines
 - **Development Guidelines:** See `CLAUDE.md`
 
 ---

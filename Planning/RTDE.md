@@ -1180,7 +1180,7 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 - **Overall Architecture**: See `PLANNING.md` for multi-tool system design
 - **Tool 1 Planning**: See `Planning/InventoryTracking.md`
 - **Tool 2 Planning**: See `Planning/MilkCount.md`
-- **Design System**: See `DESIGN.md` for UI guidelines
+- **Design System**: See `Design/README.md` for UI guidelines
 - **Development Guidelines**: See `CLAUDE.md`
 
 ---

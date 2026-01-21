@@ -6,7 +6,7 @@
  * - All: List of all items (individual display)
  * - Filtered: Items filtered by selected category (individual display)
  *
- * Follows DESIGN.md guidelines:
+ * Follows Design/layout.md guidelines:
  * - App-like scrolling (h-dvh layout with overflow-y-auto)
  * - Design system color tokens throughout
  * - Adaptive buttons (icon-only on mobile)

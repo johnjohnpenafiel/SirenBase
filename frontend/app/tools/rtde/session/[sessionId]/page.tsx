@@ -26,16 +26,15 @@ import { RTDEMobileDrawer } from "@/components/tools/rtde/RTDEMobileDrawer";
 import { UncountedItemsDialog } from "@/components/tools/rtde/UncountedItemsDialog";
 import { ResumeSessionDialog } from "@/components/tools/rtde/ResumeSessionDialog";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Loader2 } from "lucide-react";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Loader2, AlertTriangle } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import type {
@@ -434,14 +433,13 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
     try {
       setCompleting(true);
       await apiClient.completeRTDESession(sessionId);
-      router.push("/tools/rtde");
+      router.push("/dashboard");
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.error ||
         error.message ||
         "Failed to complete session";
       toast.error(errorMessage);
-    } finally {
       setCompleting(false);
       setShowCompleteDialog(false);
     }
@@ -569,28 +567,35 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
         />
 
         {/* Complete Session Confirmation Dialog */}
-        <AlertDialog
+        <Dialog
           open={showCompleteDialog}
           onOpenChange={setShowCompleteDialog}
         >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Complete Session?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This will complete the RTD&E counting session. All data will be
-                permanently deleted (calculator-style).
-                {!allPulled &&
-                  pullList.length > 0 &&
-                  " Some items haven't been marked as pulled yet."}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={completing}>
-                Cancel
-              </AlertDialogCancel>
-              <AlertDialogAction
+          <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
+            <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
+              <DialogTitle>Complete Session?</DialogTitle>
+              <DialogDescription>
+                This will complete the RTD&E counting session.
+              </DialogDescription>
+            </DialogHeader>
+
+            {/* Warning about unpulled items - only show if applicable */}
+            {!allPulled && pullList.length > 0 && (
+              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
+                <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
+                  <AlertTriangle className="size-4 mt-0.5 flex-shrink-0" />
+                  <span>
+                    Some items haven&apos;t been marked as pulled yet.
+                  </span>
+                </p>
+              </div>
+            )}
+
+            <DialogFooter className="flex-col gap-2 sm:flex-col">
+              <Button
                 onClick={handleCompleteSession}
                 disabled={completing}
+                className="w-full"
               >
                 {completing ? (
                   <>
@@ -598,12 +603,20 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
                     Completing...
                   </>
                 ) : (
-                  "Complete"
+                  "Complete Session"
                 )}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowCompleteDialog(false)}
+                disabled={completing}
+                className="w-full"
+              >
+                Cancel
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Resume Session Dialog - Shown when navigating from existing session */}
         {sessionData && (

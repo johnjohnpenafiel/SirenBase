@@ -47,7 +47,7 @@ export default function DashboardPage() {
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
               )}
             >
-              <h1 className="text-3xl font-bold mb-1 text-foreground">
+              <h1 className="text-3xl font-bold mb-1 text-gray-800">
                 Dashboard
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -58,7 +58,7 @@ export default function DashboardPage() {
 
           {/* Tools Grid - scrolls under the sticky island */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {/* Tool 1: Inventory Tracking - Active */}
                 <ToolCard
                   title="Inventory Tracking"

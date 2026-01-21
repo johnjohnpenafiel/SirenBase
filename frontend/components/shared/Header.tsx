@@ -2,7 +2,7 @@
  * Header Component
  *
  * Global navigation header shared across all pages.
- * Follows DESIGN.md adaptive interface guidelines:
+ * Follows Design/layout.md adaptive interface guidelines:
  * - Desktop: Dashboard button + User icon with name → dropdown with Logout
  * - Mobile: Dashboard icon + User icon only → dropdown with Logout
  * - Sticky positioning with backdrop blur for app-like feel

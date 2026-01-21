@@ -2,7 +2,7 @@
  * Tool Card Component
  *
  * Reusable card for displaying tools on the dashboard.
- * Follows DESIGN.md guidelines:
+ * Follows Design/components.md guidelines:
  * - Uses design system color tokens
  * - Hover effects with theme colors
  * - Accessible with keyboard navigation

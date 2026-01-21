@@ -4,7 +4,7 @@
  * Displays available tools for partners to access.
  * Shows admin panel card only for admin role users.
  *
- * Follows DESIGN.md guidelines:
+ * Follows Design/layout.md guidelines:
  * - App-like scrolling (h-dvh layout with overflow-y-auto)
  * - Design system color tokens
  * - Responsive grid (1/2/3 columns)

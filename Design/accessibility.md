@@ -349,3 +349,14 @@ Use this checklist when implementing new UI:
 **Commit together**:
 - Code changes + design doc update in same commit
 - Reference design doc in commit message
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
+| — | Jan 18, 2026 | WCAG touch target compliance documented (pre-extraction) |
+
+**Last Updated**: January 20, 2026

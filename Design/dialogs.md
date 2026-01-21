@@ -326,3 +326,13 @@ Here's a complete dialog implementation following all patterns:
 | **Footer layout** | `flex-col gap-2 sm:flex-col` with `w-full` buttons |
 | **Content spacing** | `space-y-3` |
 | **Code badge** | `text-[10px] font-mono font-bold tracking-wide uppercase bg-secondary px-2.5 py-1 rounded-full` |
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md; added Dialog Content Patterns (content boxes, warning boxes) |
+
+**Last Updated**: January 20, 2026

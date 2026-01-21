@@ -369,3 +369,15 @@ Already configured in `globals.css` with `-webkit-overflow-scrolling: touch`.
 - Keep action buttons and filters fixed (always visible)
 - Use `pb-safe` on bottom-fixed elements
 - Test on real mobile devices (not just browser dev tools)
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
+| — | Jan 16, 2026 | Title Area Island Pattern added (pre-extraction) |
+| — | Dec 14, 2025 | Dynamic Scroll Shadow Pattern added (pre-extraction) |
+
+**Last Updated**: January 20, 2026

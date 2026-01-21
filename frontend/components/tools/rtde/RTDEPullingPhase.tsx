@@ -159,7 +159,7 @@ export function RTDEPullingPhase({
             </div>
           ) : (
             // Pull List Items
-            <div className="space-y-3">
+            <div className="space-y-2">
               {pullList.map((item) => (
                 <RTDEPullListItem
                   key={item.itemId}

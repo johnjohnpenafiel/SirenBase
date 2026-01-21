@@ -267,7 +267,12 @@ class APIClient {
 
   async getRTDEActiveSession(): Promise<GetRTDEActiveSessionResponse> {
     const response = await this.client.get<GetRTDEActiveSessionResponse>(
-      '/api/rtde/sessions/active'
+      '/api/rtde/sessions/active',
+      {
+        // Prevent browser caching to ensure fresh session state
+        headers: { 'Cache-Control': 'no-cache' },
+        params: { _t: Date.now() }
+      }
     );
     return response.data;
   }

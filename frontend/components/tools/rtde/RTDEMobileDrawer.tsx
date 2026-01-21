@@ -109,7 +109,7 @@ export function RTDEMobileDrawer({
                         "rounded-2xl",
                         "transition-colors duration-150",
                         "active:bg-muted/50",
-                        isCurrent ? "bg-background border-2 border-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.6)]" : "bg-background",
+                        isCurrent ? "bg-background border-2 border-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.7),0_0_8px_rgba(52,211,153,0.9)]" : "bg-background",
                         !isCountingPhase && "cursor-not-allowed opacity-60"
                       )}
                       aria-label={`${item.name}, ${

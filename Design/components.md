@@ -380,3 +380,14 @@ toast.warning("Please save your changes");
   <X className="h-4 w-4" />
 </Button>
 ```
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
+| 1.0.1 | Jan 18, 2026 | WCAG touch target compliance for buttons (44px minimum) |
+
+**Last Updated**: January 20, 2026

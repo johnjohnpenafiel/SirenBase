@@ -325,3 +325,13 @@ While all tools share the neutral palette, subtle color accents can help with to
 | RTD&E | Emerald/Green | Fresh, action-oriented |
 
 **Note**: Currently not implemented. All tools use the neutral grayscale palette.
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
+
+**Last Updated**: January 20, 2026

@@ -240,3 +240,13 @@ Mobile-first responsive design:
 <Button className="rounded-lg">         {/* 8px */}
 <Dialog className="rounded-2xl">        {/* 16px */}
 ```
+
+---
+
+## Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
+
+**Last Updated**: January 20, 2026

@@ -50,21 +50,24 @@ export function RTDEPullingPhase({
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden bg-muted/30">
-      {/* Progress Section - Floating Card with Scroll Shadow */}
-      <div
-        className={cn(
-          "relative z-10 transition-all duration-300 ease-out px-4 md:px-8 pt-4 md:pt-6 pb-2",
-          isScrolled
-            ? "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.08)]"
-            : "shadow-[0_0px_0px_0px_rgba(0,0,0,0)]"
-        )}
-      >
-        <div className="container max-w-4xl mx-auto">
-          <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-4 md:py-5">
+      {/* Scrollable Area - Contains Island + Pull List */}
+      <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+        {/* Sticky Frosted Island - Progress Card */}
+        <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+          <div
+            className={cn(
+              "max-w-4xl mx-auto rounded-2xl",
+              "bg-gray-100/60 backdrop-blur-md",
+              "border border-gray-200/50",
+              "px-5 py-4 md:px-6 md:py-5",
+              "transition-all duration-300 ease-out",
+              isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+            )}
+          >
             {/* Header with Complete Button (Desktop) */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-semibold text-popover-foreground">
-                Pull Items from BOH
+                Pulling Phase
               </h2>
               <Button
                 onClick={onComplete}
@@ -107,9 +110,9 @@ export function RTDEPullingPhase({
                     </span>
                   </div>
                 </div>
-                <div className="w-full bg-muted rounded-full h-2.5 overflow-hidden">
+                <div className="w-full bg-gray-200/60 rounded-full h-2.5 overflow-hidden border border-gray-300/50">
                   <div
-                    className="bg-emerald-500 h-2.5 rounded-full transition-all duration-500 ease-out"
+                    className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
                     style={{ width: `${pullProgress}%` }}
                     role="progressbar"
                     aria-valuenow={pullProgress}
@@ -121,11 +124,9 @@ export function RTDEPullingPhase({
             )}
           </div>
         </div>
-      </div>
 
-      {/* Pull List - Scrollable Area */}
-      <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
-        <div className="container max-w-4xl mx-auto px-4 md:px-8 pt-2 pb-6 md:pb-8">
+        {/* Content - Scrolls under the island */}
+        <div className="container max-w-4xl mx-auto px-4 md:px-8 pb-6 md:pb-8">
           {!hasItemsToPull ? (
             // Empty State - All items at par
             <div className="flex flex-col items-center justify-center py-16 text-center">

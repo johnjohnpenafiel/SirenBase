@@ -29,7 +29,6 @@ interface RTDEPullingPhaseProps {
   // Event handlers
   onTogglePulled: (itemId: string, currentPulledState: boolean) => void;
   onComplete: () => void;
-  onBackToCount?: () => void; // Optional - for future enhancement
 }
 
 export function RTDEPullingPhase({

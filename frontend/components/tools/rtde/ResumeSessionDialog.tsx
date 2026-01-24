@@ -1,10 +1,10 @@
 /**
- * Resume Session Dialog Component
- * Shown when user has an active RTD&E session.
- * Now displayed IN-CONTEXT on the session page (not on a landing page).
+ * Resume Session Dialog
+ *
+ * Modal shown when user navigates to an active RTD&E session.
  * Allows user to either:
- * - Resume (continue) - just closes the dialog
- * - Start Fresh - abandons current session and creates new one
+ * - Resume: Continue counting from where they left off
+ * - Start Fresh: Abandon current session and create a new one
  */
 "use client";
 

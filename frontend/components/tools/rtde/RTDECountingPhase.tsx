@@ -12,6 +12,7 @@
 "use client";
 
 import { RTDECountCard } from "./RTDECountCard";
+import { RTDEProgressBar } from "./RTDEProgressBar";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { RTDEItem } from "./types";
@@ -53,75 +54,23 @@ export function RTDECountingPhase({
       {/* Progress Section - Full (hidden on very short viewports) */}
       <div className="px-4 md:px-8 pt-3 md:pt-6 pb-2 [@media(max-height:670px)]:hidden">
         <div className="container max-w-4xl mx-auto">
-          <div className="bg-background border border-border rounded-2xl px-4 md:px-6 py-3 md:py-5">
-            {/* Title */}
-            <h2 className="text-sm font-semibold text-popover-foreground mb-3 md:mb-4">
-              Counting Phase
-            </h2>
-
-            {/* Progress Bar */}
-            <div className="space-y-2 md:space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-foreground">
-                    Item {currentIndex + 1}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    of {totalItems}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-emerald-500">
-                    {progressPercent}%
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    complete
-                  </span>
-                </div>
-              </div>
-              <div className="w-full bg-muted rounded-full h-2 md:h-2.5 overflow-hidden">
-                <div
-                  className="bg-emerald-500 h-2 md:h-2.5 rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${progressPercent}%` }}
-                  role="progressbar"
-                  aria-valuenow={progressPercent}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                />
-              </div>
-            </div>
-          </div>
+          <RTDEProgressBar
+            currentIndex={currentIndex}
+            totalItems={totalItems}
+            progressPercent={progressPercent}
+          />
         </div>
       </div>
 
       {/* Progress Section - Compact (only on very short viewports) */}
       <div className="hidden [@media(max-height:670px)]:block px-4 pt-2 pb-1">
         <div className="container max-w-4xl mx-auto">
-          <div className="bg-background border border-border rounded-xl px-3 py-2">
-            <div className="flex items-center justify-between mb-1.5">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-medium text-foreground">
-                  Item {currentIndex + 1}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  of {totalItems}
-                </span>
-              </div>
-              <span className="text-xs font-bold text-emerald-500">
-                {progressPercent}%
-              </span>
-            </div>
-            <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
-              <div
-                className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500 ease-out"
-                style={{ width: `${progressPercent}%` }}
-                role="progressbar"
-                aria-valuenow={progressPercent}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              />
-            </div>
-          </div>
+          <RTDEProgressBar
+            currentIndex={currentIndex}
+            totalItems={totalItems}
+            progressPercent={progressPercent}
+            size="compact"
+          />
         </div>
       </div>
 

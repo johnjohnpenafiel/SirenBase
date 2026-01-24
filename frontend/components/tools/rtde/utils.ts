@@ -12,6 +12,15 @@
 import type { RTDEItem, ValidationResult, RTDEPullItem } from "./types";
 
 /**
+ * Current Item Highlight Style
+ *
+ * Shared styling for the currently selected item in navigation components.
+ * Used in RTDESessionSidebar (desktop) and RTDEMobileDrawer (mobile).
+ */
+export const CURRENT_ITEM_HIGHLIGHT =
+  "border-2 border-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.7),0_0_8px_rgba(52,211,153,0.9)]";
+
+/**
  * Validate All Items Counted - Phase Transition Check
  *
  * Checks if all items have been counted before transitioning to pull phase.

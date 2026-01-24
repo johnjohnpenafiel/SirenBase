@@ -15,7 +15,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { RTDEItem, RTDESessionPhase } from "./types";
-import { formatCountDisplay, isItemCounted } from "./utils";
+import { formatCountDisplay, isItemCounted, CURRENT_ITEM_HIGHLIGHT } from "./utils";
 import { RTDEItemImage } from "./RTDEItemImage";
 
 interface RTDESessionSidebarProps {
@@ -59,10 +59,10 @@ export function RTDESessionSidebar({
                 disabled={!isCountingPhase}
                 className={cn(
                   "w-full flex items-center gap-2.5 py-2 px-3 text-left",
-                  "rounded-2xl",
+                  "rounded-2xl bg-background",
                   "transition-colors duration-150",
                   "active:bg-muted/50",
-                  isCurrent ? "bg-background border-2 border-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.7),0_0_8px_rgba(52,211,153,0.9)]" : "bg-background",
+                  isCurrent && CURRENT_ITEM_HIGHLIGHT,
                   !isCountingPhase && "cursor-not-allowed opacity-60"
                 )}
                 aria-label={`${item.name}, ${

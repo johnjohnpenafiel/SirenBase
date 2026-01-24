@@ -181,6 +181,22 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 4,
     },
+
+    # Yogurt
+    {
+        "brand": "Ellenos",
+        "name": "Strawberry Shortcake Greek Yogurt",
+        "image_filename": "ellenos-strawberry-shortcake-greek-yogurt.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    {
+        "brand": "Ellenos",
+        "name": "Muesli Yogurt – No Added Sugar",
+        "image_filename": "ellenos-muesli-yogurt-no-added-sugar.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
 ]
 
 

@@ -10,7 +10,7 @@
  */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { CupSoda } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -73,8 +73,15 @@ export function RTDEItemImage({
   showBackground = true,
 }: RTDEItemImageProps) {
   const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const config = SIZE_CONFIG[size];
+
+  // Reset loaded state when image source changes
+  useEffect(() => {
+    setImageLoaded(false);
+    setImageError(false);
+  }, [imageFilename]);
 
   // Determine what to display based on fallback hierarchy
   const showImage = imageFilename && !imageError;
@@ -104,7 +111,11 @@ export function RTDEItemImage({
             alt={alt}
             fill
             sizes={`${config.image}px`}
-            className="object-cover"
+            className={cn(
+              "object-cover transition-opacity duration-300",
+              imageLoaded ? "opacity-100" : "opacity-0"
+            )}
+            onLoad={() => setImageLoaded(true)}
             onError={() => setImageError(true)}
             priority={size === "lg"} // Prioritize loading for large images (main count card)
           />

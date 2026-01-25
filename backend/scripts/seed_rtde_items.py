@@ -20,9 +20,9 @@ from app.extensions import db
 from app.models.rtde import RTDEItem
 
 
-# Define all 20 RTD&E items - all with product images
+# RTD&E items ordered to match store display layout
 RTDE_ITEMS = [
-    # Waters
+    # 1. Water
     {
         "brand": "Ethos",
         "name": "Water",
@@ -30,63 +30,7 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 8,
     },
-
-    # Sparkling Waters
-    {
-        "brand": "Spindrift",
-        "name": "Lemon Sparkling Water",
-        "image_filename": "spindrift-lemon.jpeg",
-        "icon": None,
-        "par_level": 6,
-    },
-    {
-        "brand": "Spindrift",
-        "name": "Raspberry Lime Sparkling Water",
-        "image_filename": "spindrift-raspberry-lime.jpeg",
-        "icon": None,
-        "par_level": 6,
-    },
-
-    # Nutrition Shakes
-    {
-        "brand": "Koia",
-        "name": "Cacao Bean Nutrition Shake",
-        "image_filename": "koia-cacao-bean-nutrition.jpeg",
-        "icon": None,
-        "par_level": 4,
-    },
-    {
-        "brand": "Koia",
-        "name": "Vanilla Bean Nutrition Shake",
-        "image_filename": "koia-vanilla-bean-nutrition.jpeg",
-        "icon": None,
-        "par_level": 4,
-    },
-
-    # Milk
-    {
-        "brand": "Horizon Organic",
-        "name": "Lowfat Chocolate Milk",
-        "image_filename": "horizon-chocolate-milk.jpeg",
-        "icon": None,
-        "par_level": 6,
-    },
-    {
-        "brand": "Horizon Organic",
-        "name": "Lowfat Milk",
-        "image_filename": "horizon-milk.jpeg",
-        "icon": None,
-        "par_level": 6,
-    },
-
-    # Juices
-    {
-        "brand": "Evolution Fresh",
-        "name": "Pure Orange",
-        "image_filename": "evolution-pure-orange.jpeg",
-        "icon": None,
-        "par_level": 4,
-    },
+    # 2. Apple Juice
     {
         "brand": "Tree Top",
         "name": "Organic Apple Juice",
@@ -94,22 +38,23 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 6,
     },
+    # 3. Lowfat Milk
     {
-        "brand": "Evolution Fresh",
-        "name": "Organic Defense Up",
-        "image_filename": "evolution-defense-up.jpeg",
+        "brand": "Horizon Organic",
+        "name": "Lowfat Milk",
+        "image_filename": "horizon-milk.jpeg",
         "icon": None,
-        "par_level": 4,
+        "par_level": 6,
     },
+    # 4. Chocolate Milk
     {
-        "brand": "Evolution Fresh",
-        "name": "Organic Super Fruit Greens",
-        "image_filename": "evolution-super-fruit-greens.jpeg",
+        "brand": "Horizon Organic",
+        "name": "Lowfat Chocolate Milk",
+        "image_filename": "horizon-chocolate-milk.jpeg",
         "icon": None,
-        "par_level": 4,
+        "par_level": 6,
     },
-
-    # Sodas
+    # 5. Olipop Root Beer
     {
         "brand": "Olipop",
         "name": "Classic Root Beer",
@@ -117,6 +62,7 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 4,
     },
+    # 6. Olipop Grape
     {
         "brand": "Olipop",
         "name": "Classic Grape",
@@ -124,8 +70,39 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 4,
     },
-
-    # Energy Drinks
+    # 7. Koia Vanilla
+    {
+        "brand": "Koia",
+        "name": "Vanilla Bean Nutrition Shake",
+        "image_filename": "koia-vanilla-bean-nutrition.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    # 8. Koia Cacao
+    {
+        "brand": "Koia",
+        "name": "Cacao Bean Nutrition Shake",
+        "image_filename": "koia-cacao-bean-nutrition.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    # 9. Spindrift Lemon
+    {
+        "brand": "Spindrift",
+        "name": "Lemon Sparkling Water",
+        "image_filename": "spindrift-lemon.jpeg",
+        "icon": None,
+        "par_level": 6,
+    },
+    # 10. Spindrift Raspberry Lime
+    {
+        "brand": "Spindrift",
+        "name": "Raspberry Lime Sparkling Water",
+        "image_filename": "spindrift-raspberry-lime.jpeg",
+        "icon": None,
+        "par_level": 6,
+    },
+    # 11. Starbucks Energy Tropical Peach
     {
         "brand": "Starbucks",
         "name": "Iced Energy Tropical Peach",
@@ -133,6 +110,7 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 4,
     },
+    # 12. Starbucks Energy Blueberry Lemonade
     {
         "brand": "Starbucks",
         "name": "Iced Energy Blueberry Lemonade",
@@ -140,8 +118,31 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 4,
     },
-
-    # Wellness Shots
+    # 13. Evolution Fresh Pure Orange
+    {
+        "brand": "Evolution Fresh",
+        "name": "Pure Orange",
+        "image_filename": "evolution-pure-orange.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    # 14. Evolution Fresh Defense Up
+    {
+        "brand": "Evolution Fresh",
+        "name": "Organic Defense Up",
+        "image_filename": "evolution-defense-up.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    # 15. Evolution Fresh Super Fruit Greens
+    {
+        "brand": "Evolution Fresh",
+        "name": "Organic Super Fruit Greens",
+        "image_filename": "evolution-super-fruit-greens.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    # 16. Sol-ti Ginger Shot
     {
         "brand": "Sol-ti",
         "name": "GINGER SuperShot",
@@ -149,6 +150,7 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 4,
     },
+    # 17. Sol-ti Turmeric Shot
     {
         "brand": "Sol-ti",
         "name": "TURMERIC SuperShot",
@@ -156,33 +158,15 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 4,
     },
-
-    # Protein/Snack Bars
+    # 18. Ellenos Muesli Yogurt (No Added Sugar)
     {
-        "brand": "Perfect Bar",
-        "name": "Dark Chocolate Chip Peanut Butter",
-        "image_filename": "perfect-bar-dark-chocolate-peanut-butter.jpeg",
+        "brand": "Ellenos",
+        "name": "Muesli Yogurt – No Added Sugar",
+        "image_filename": "ellenos-muesli-yogurt-no-added-sugar.jpeg",
         "icon": None,
         "par_level": 4,
     },
-    {
-        "brand": "Perfect Bar",
-        "name": "Peanut Butter",
-        "image_filename": "perfect-bar-peanut-butter.jpeg",
-        "icon": None,
-        "par_level": 4,
-    },
-
-    # Spreads
-    {
-        "brand": "Starbucks",
-        "name": "Avocado Spread",
-        "image_filename": "starbucks-avocado-spread.jpeg",
-        "icon": None,
-        "par_level": 4,
-    },
-
-    # Yogurt
+    # 19. Ellenos Strawberry Yogurt
     {
         "brand": "Ellenos",
         "name": "Strawberry Shortcake Greek Yogurt",
@@ -190,10 +174,35 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 4,
     },
+    # 20. Perfect Bar Peanut Butter
     {
-        "brand": "Ellenos",
-        "name": "Muesli Yogurt – No Added Sugar",
-        "image_filename": "ellenos-muesli-yogurt-no-added-sugar.jpeg",
+        "brand": "Perfect Bar",
+        "name": "Peanut Butter",
+        "image_filename": "perfect-bar-peanut-butter.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    # 21. Perfect Bar Chocolate Peanut Butter
+    {
+        "brand": "Perfect Bar",
+        "name": "Dark Chocolate Chip Peanut Butter",
+        "image_filename": "perfect-bar-dark-chocolate-peanut-butter.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    # 22. String Cheese
+    {
+        "brand": "Organic Valley Stringles",
+        "name": "Mozzarella String Cheese",
+        "image_filename": "organic-valley-stringles-mozzarella-string-cheese.jpeg",
+        "icon": None,
+        "par_level": 4,
+    },
+    # 23. Avocado Spread
+    {
+        "brand": "Starbucks",
+        "name": "Avocado Spread",
+        "image_filename": "starbucks-avocado-spread.jpeg",
         "icon": None,
         "par_level": 4,
     },

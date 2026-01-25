@@ -34,6 +34,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { CheckmarkAnimation } from "@/components/ui/checkmark-animation";
 import { Loader2, AlertTriangle } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
@@ -78,6 +79,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   const [showValidationDialog, setShowValidationDialog] = useState(false);
   const [uncountedItems, setUncountedItems] = useState<RTDEItem[]>([]);
   const [completing, setCompleting] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const [showCompleteDialog, setShowCompleteDialog] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -433,7 +435,13 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
     try {
       setCompleting(true);
       await apiClient.completeRTDESession(sessionId);
-      router.push("/dashboard");
+      // Show success animation before redirecting
+      setCompleting(false);
+      setCompleted(true);
+      // Wait for animation to play, then redirect
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 1500);
     } catch (error: any) {
       const errorMessage =
         error.response?.data?.error ||
@@ -569,52 +577,70 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
         {/* Complete Session Confirmation Dialog */}
         <Dialog
           open={showCompleteDialog}
-          onOpenChange={setShowCompleteDialog}
+          onOpenChange={(open) => {
+            // Prevent closing during completion or after completed
+            if (!completing && !completed) {
+              setShowCompleteDialog(open);
+            }
+          }}
         >
           <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
-            <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
-              <DialogTitle>Complete Session?</DialogTitle>
-              <DialogDescription>
-                This will complete the RTD&E counting session.
-              </DialogDescription>
-            </DialogHeader>
-
-            {/* Warning about unpulled items - only show if applicable */}
-            {!allPulled && pullList.length > 0 && (
-              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
-                <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
-                  <AlertTriangle className="size-4 mt-0.5 flex-shrink-0" />
-                  <span>
-                    Some items haven&apos;t been marked as pulled yet.
-                  </span>
+            {completed ? (
+              // Success state with checkmark animation
+              <div className="flex flex-col items-center justify-center py-6">
+                <CheckmarkAnimation size={72} />
+                <p className="mt-4 text-lg font-medium text-foreground">
+                  Session Complete!
                 </p>
               </div>
-            )}
+            ) : (
+              // Confirmation state
+              <>
+                <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
+                  <DialogTitle>Complete Session?</DialogTitle>
+                  <DialogDescription>
+                    This will complete the RTD&E counting session.
+                  </DialogDescription>
+                </DialogHeader>
 
-            <DialogFooter className="flex-col gap-2 sm:flex-col">
-              <Button
-                onClick={handleCompleteSession}
-                disabled={completing}
-                className="w-full"
-              >
-                {completing ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Completing...
-                  </>
-                ) : (
-                  "Complete Session"
+                {/* Warning about unpulled items - only show if applicable */}
+                {!allPulled && pullList.length > 0 && (
+                  <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
+                    <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
+                      <AlertTriangle className="size-4 mt-0.5 flex-shrink-0" />
+                      <span>
+                        Some items haven&apos;t been marked as pulled yet.
+                      </span>
+                    </p>
+                  </div>
                 )}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setShowCompleteDialog(false)}
-                disabled={completing}
-                className="w-full"
-              >
-                Cancel
-              </Button>
-            </DialogFooter>
+
+                <DialogFooter className="flex-col gap-2 sm:flex-col">
+                  <Button
+                    onClick={handleCompleteSession}
+                    disabled={completing}
+                    className="w-full"
+                  >
+                    {completing ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Completing...
+                      </>
+                    ) : (
+                      "Complete Session"
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowCompleteDialog(false)}
+                    disabled={completing}
+                    className="w-full"
+                  >
+                    Cancel
+                  </Button>
+                </DialogFooter>
+              </>
+            )}
           </DialogContent>
         </Dialog>
 

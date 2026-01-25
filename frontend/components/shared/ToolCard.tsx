@@ -53,7 +53,7 @@ export function ToolCard({
       aria-label={`${title}${isDisabled ? " (Coming soon)" : ""}`}
       aria-disabled={isDisabled}
       className={`
-        p-6 border border-border rounded-2xl bg-card text-card-foreground transition-all
+        p-6 border-2 border-border rounded-2xl bg-card text-card-foreground transition-all
         ${
           isDisabled
             ? "opacity-50 cursor-not-allowed"

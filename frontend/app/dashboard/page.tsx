@@ -78,7 +78,7 @@ export default function DashboardPage() {
                 {/* Tool 3: Milk Count - Active */}
                 <ToolCard
                   title="Milk Count"
-                  description="FOH/BOH counting with automated calculations"
+                  description="Milk counting with automated calculations"
                   route="/tools/milk-count"
                   icon={<Milk className="w-12 h-12 text-sky-500/70" />}
                 />

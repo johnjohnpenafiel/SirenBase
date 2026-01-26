@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/collapsible";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { parseLocalDate } from "@/lib/utils";
+import { cn, parseLocalDate } from "@/lib/utils";
 import type { MilkCountSummaryEntry, MilkCountSummaryTotals, MilkCountSession } from "@/types";
 
 export default function SummaryPage() {
@@ -96,7 +96,7 @@ export default function SummaryPage() {
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    <CheckCircle2 className="h-5 w-5 text-sky-600" />
                     <h1 className="text-lg md:text-xl font-bold text-foreground">
                       Milk Count Summary
                     </h1>
@@ -125,17 +125,17 @@ export default function SummaryPage() {
                     {dairyEntries.length > 0 && (
                       <section>
                         <h2 className="flex items-center gap-2 text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-                          <Milk className="h-4 w-4 text-blue-500" />
+                          <Milk className="h-4 w-4" />
                           Dairy
                         </h2>
                         <div className="space-y-2">
                           {dairyEntries.map((entry) => (
                             <Collapsible key={entry.milk_type} className="group/collapsible">
-                              <div className="bg-card border border-border/50 rounded-xl shadow-sm overflow-hidden">
+                              <div className="bg-card border border-border rounded-2xl overflow-hidden">
                                 <CollapsibleTrigger className="w-full text-left">
                                   <div className="flex items-center gap-3 p-3">
-                                    {/* Category Icon */}
-                                    <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center bg-blue-50 text-blue-500">
+                                    {/* Category Icon - Neutral */}
+                                    <div className="shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center bg-muted text-muted-foreground">
                                       <Milk className="w-5 h-5" />
                                     </div>
                                     {/* Milk Name & Total */}
@@ -157,27 +157,27 @@ export default function SummaryPage() {
                                 <CollapsibleContent>
                                   <div className="px-3 pb-3 border-t border-border/30 pt-3">
                                     <div className="grid grid-cols-3 gap-3 text-sm">
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">FOH</p>
                                         <p className="font-semibold">{entry.foh}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">BOH</p>
                                         <p className="font-semibold">{entry.boh}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">Delivered</p>
                                         <p className="font-semibold">{entry.delivered}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">On Order</p>
                                         <p className="font-semibold">{entry.on_order}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">Total</p>
                                         <p className="font-semibold">{entry.total}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">Par</p>
                                         <p className="font-semibold">{entry.par}</p>
                                       </div>
@@ -195,17 +195,17 @@ export default function SummaryPage() {
                     {nonDairyEntries.length > 0 && (
                       <section>
                         <h2 className="flex items-center gap-2 text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-                          <Leaf className="h-4 w-4 text-green-500" />
+                          <Leaf className="h-4 w-4" />
                           Non-Dairy
                         </h2>
                         <div className="space-y-2">
                           {nonDairyEntries.map((entry) => (
                             <Collapsible key={entry.milk_type} className="group/collapsible">
-                              <div className="bg-card border border-border/50 rounded-xl shadow-sm overflow-hidden">
+                              <div className="bg-card border border-border rounded-2xl overflow-hidden">
                                 <CollapsibleTrigger className="w-full text-left">
                                   <div className="flex items-center gap-3 p-3">
-                                    {/* Category Icon */}
-                                    <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center bg-green-50 text-green-500">
+                                    {/* Category Icon - Neutral */}
+                                    <div className="shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center bg-muted text-muted-foreground">
                                       <Leaf className="w-5 h-5" />
                                     </div>
                                     {/* Milk Name & Total */}
@@ -227,27 +227,27 @@ export default function SummaryPage() {
                                 <CollapsibleContent>
                                   <div className="px-3 pb-3 border-t border-border/30 pt-3">
                                     <div className="grid grid-cols-3 gap-3 text-sm">
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">FOH</p>
                                         <p className="font-semibold">{entry.foh}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">BOH</p>
                                         <p className="font-semibold">{entry.boh}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">Delivered</p>
                                         <p className="font-semibold">{entry.delivered}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">On Order</p>
                                         <p className="font-semibold">{entry.on_order}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">Total</p>
                                         <p className="font-semibold">{entry.total}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-lg p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">Par</p>
                                         <p className="font-semibold">{entry.par}</p>
                                       </div>
@@ -264,7 +264,7 @@ export default function SummaryPage() {
 
                   {/* Summary Table - Desktop View */}
                   <div className="hidden md:block">
-                    <Card>
+                    <Card className="rounded-2xl overflow-hidden">
                       <CardContent className="p-0">
                         <div className="overflow-x-auto">
                           <table className="w-full text-sm">
@@ -281,11 +281,11 @@ export default function SummaryPage() {
                               </tr>
                             </thead>
                             <tbody>
-                              {/* Dairy Header */}
+                              {/* Dairy Header - Neutral */}
                               {dairyEntries.length > 0 && (
-                                <tr className="bg-blue-50/50">
-                                  <td colSpan={8} className="py-2 px-4 font-semibold text-blue-700 flex items-center gap-2">
-                                    <Milk className="h-4 w-4" />
+                                <tr className="bg-muted/30">
+                                  <td colSpan={8} className="py-2 px-4 font-semibold text-foreground flex items-center gap-2">
+                                    <Milk className="h-4 w-4 text-muted-foreground" />
                                     Dairy
                                   </td>
                                 </tr>
@@ -307,11 +307,11 @@ export default function SummaryPage() {
                                 </tr>
                               ))}
 
-                              {/* Non-Dairy Header */}
+                              {/* Non-Dairy Header - Neutral */}
                               {nonDairyEntries.length > 0 && (
-                                <tr className="bg-green-50/50">
-                                  <td colSpan={8} className="py-2 px-4 font-semibold text-green-700 flex items-center gap-2">
-                                    <Leaf className="h-4 w-4" />
+                                <tr className="bg-muted/30">
+                                  <td colSpan={8} className="py-2 px-4 font-semibold text-foreground flex items-center gap-2">
+                                    <Leaf className="h-4 w-4 text-muted-foreground" />
                                     Non-Dairy
                                   </td>
                                 </tr>
@@ -341,7 +341,7 @@ export default function SummaryPage() {
 
                   {/* Totals Card */}
                   {totals && (
-                    <Card className="bg-muted/30">
+                    <Card className="bg-muted/30 rounded-2xl">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-lg">Totals</CardTitle>
                       </CardHeader>

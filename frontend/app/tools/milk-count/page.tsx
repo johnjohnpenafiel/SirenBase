@@ -8,6 +8,11 @@
  * - Night BOH in progress: Continue to BOH
  * - Morning needed: Start morning count
  * - Completed: View summary
+ *
+ * Follows Design/layout.md guidelines:
+ * - App-like scrolling (h-dvh layout with overflow-y-auto)
+ * - Frosted island header pattern
+ * - Sky-500 brand color for progress/completed states
  */
 "use client";
 
@@ -26,6 +31,8 @@ import type { MilkCountSession, MilkCountSessionStatus } from "@/types";
 // Status configuration for display
 const STATUS_CONFIG: Record<MilkCountSessionStatus | "none", {
   title: string;
+  status: string;
+  statusColor: string;
   description: string;
   icon: React.ReactNode;
   iconBg: string;
@@ -33,50 +40,62 @@ const STATUS_CONFIG: Record<MilkCountSessionStatus | "none", {
   route: string;
 }> = {
   none: {
-    title: "No Session Today",
+    title: "Night FOH",
+    status: "Not Started",
+    statusColor: "text-muted-foreground",
     description: "Start the night count to begin tracking milk inventory",
     icon: <Moon className="w-8 h-8" />,
-    iconBg: "bg-slate-100 text-slate-600",
+    iconBg: "bg-muted text-muted-foreground",
     action: "Start Night Count",
     route: "/tools/milk-count/night/foh",
   },
   night_foh: {
-    title: "FOH Count In Progress",
+    title: "Night FOH",
+    status: "In Progress",
+    statusColor: "text-sky-500",
     description: "Continue counting front of house milk inventory",
     icon: <Moon className="w-8 h-8" />,
-    iconBg: "bg-blue-100 text-blue-600",
-    action: "Continue FOH Count",
+    iconBg: "bg-muted text-foreground",
+    action: "Continue Night FOH",
     route: "/tools/milk-count/night/foh",
   },
   night_boh: {
-    title: "BOH Count In Progress",
+    title: "Night BOH",
+    status: "In Progress",
+    statusColor: "text-sky-500",
     description: "Continue counting back of house milk inventory",
     icon: <Moon className="w-8 h-8" />,
-    iconBg: "bg-indigo-100 text-indigo-600",
-    action: "Continue BOH Count",
+    iconBg: "bg-muted text-foreground",
+    action: "Continue Night BOH",
     route: "/tools/milk-count/night/boh",
   },
   morning: {
-    title: "Morning Count Needed",
+    title: "Morning BOH",
+    status: "Ready",
+    statusColor: "text-sky-500",
     description: "Complete the morning count to continue",
     icon: <Sun className="w-8 h-8" />,
-    iconBg: "bg-amber-100 text-amber-600",
-    action: "Start Morning Count",
+    iconBg: "bg-muted text-foreground",
+    action: "Start Morning BOH",
     route: "/tools/milk-count/morning",
   },
   on_order: {
-    title: "On Order Entry Needed",
+    title: "On Order",
+    status: "Ready",
+    statusColor: "text-sky-500",
     description: "Enter quantities already on order from IMS",
     icon: <ClipboardList className="w-8 h-8" />,
-    iconBg: "bg-purple-100 text-purple-600",
+    iconBg: "bg-muted text-foreground",
     action: "Enter On Order",
     route: "/tools/milk-count/on-order",
   },
   completed: {
-    title: "Count Completed",
+    title: "Milk Count",
+    status: "Completed",
+    statusColor: "text-sky-600",
     description: "Today's milk count is complete. View the summary below.",
     icon: <CheckCircle2 className="w-8 h-8" />,
-    iconBg: "bg-green-100 text-green-600",
+    iconBg: "bg-sky-100 text-sky-600",
     action: "View Summary",
     route: "", // Will be set dynamically with session ID
   },
@@ -87,6 +106,7 @@ export default function MilkCountPage() {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<MilkCountSession | null>(null);
   const [starting, setStarting] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     loadSession();
@@ -101,6 +121,10 @@ export default function MilkCountPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setIsScrolled(e.currentTarget.scrollTop > 16);
   };
 
   const handleAction = async () => {
@@ -147,192 +171,206 @@ export default function MilkCountPage() {
     <ProtectedRoute>
       <div className="flex flex-col h-dvh">
         <Header />
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Fixed Header */}
-          <div className="container max-w-2xl mx-auto px-4 py-4 md:py-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-              Milk Count
-            </h1>
-            <p className="text-muted-foreground text-sm">
-              {session ? formatDate(session.date) : "Today"}
-            </p>
+        <main className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+          {/* Sticky Frosted Island */}
+          <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+            <div
+              className={cn(
+                "max-w-2xl mx-auto rounded-2xl",
+                "bg-gray-100/60 backdrop-blur-md",
+                "border border-gray-200/50",
+                "px-5 py-4 md:px-6 md:py-5",
+                "transition-all duration-300 ease-out",
+                isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+              )}
+            >
+              <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+                Milk Count
+              </h1>
+              <p className="text-muted-foreground text-sm">
+                {session ? formatDate(session.date) : "Today"}
+              </p>
+            </div>
           </div>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-2xl mx-auto px-4 pb-8">
-              {loading ? (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
-                  <p className="mt-4 text-muted-foreground">Loading...</p>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {/* Status Card */}
-                  <Card className="border-2">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start gap-4">
-                        <div className={cn("p-3 rounded-xl", config.iconBg)}>
-                          {config.icon}
-                        </div>
-                        <div className="flex-1">
-                          <CardTitle className="text-xl">{config.title}</CardTitle>
-                          <CardDescription className="mt-1">
-                            {config.description}
-                          </CardDescription>
-                        </div>
+          {/* Content - scrolls under the island */}
+          <div className="container max-w-2xl mx-auto px-4 pb-8">
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-16">
+                <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
+                <p className="mt-4 text-muted-foreground">Loading...</p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {/* Status Card */}
+                <Card className="border border-border rounded-2xl">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-start gap-4">
+                      <div className={cn("p-3 rounded-2xl", config.iconBg)}>
+                        {config.icon}
                       </div>
+                      <div className="flex-1">
+                        <CardTitle className="text-xl">{config.title}</CardTitle>
+                        <p className={cn("text-sm font-medium mt-0.5", config.statusColor)}>
+                          {config.status}
+                        </p>
+                        <CardDescription className="mt-2">
+                          {config.description}
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-4">
+                    <Button
+                      onClick={handleAction}
+                      disabled={starting}
+                      className="w-full h-12 text-lg font-semibold"
+                      size="lg"
+                    >
+                      {starting ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Starting...
+                        </>
+                      ) : (
+                        config.action
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Session Details - Show if in progress or completed */}
+                {session && (
+                  <Card className="rounded-2xl">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Clock className="h-5 w-5 text-muted-foreground" />
+                        Session Progress
+                      </CardTitle>
                     </CardHeader>
-                    <CardContent className="pt-4">
-                      <Button
-                        onClick={handleAction}
-                        disabled={starting}
-                        className="w-full h-12 text-lg font-semibold"
-                        size="lg"
-                      >
-                        {starting ? (
-                          <>
-                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                            Starting...
-                          </>
-                        ) : (
-                          config.action
+                    <CardContent>
+                      <div className="space-y-3">
+                        {/* Progress Steps - Sky brand color scheme */}
+                        <div className="flex items-center gap-3">
+                          <div className={cn(
+                            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
+                            session.night_foh_saved_at
+                              ? "bg-sky-100 text-sky-600"
+                              : session.status === "night_foh"
+                                ? "bg-muted text-foreground animate-pulse"
+                                : "bg-muted/50 text-muted-foreground"
+                          )}>
+                            1
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium">Night FOH</p>
+                            <p className="text-sm text-muted-foreground">
+                              {session.night_foh_saved_at
+                                ? `Saved at ${new Date(session.night_foh_saved_at).toLocaleTimeString()}`
+                                : session.status === "night_foh" ? "In progress..." : "Pending"
+                              }
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className={cn(
+                            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
+                            session.night_boh_saved_at
+                              ? "bg-sky-100 text-sky-600"
+                              : session.status === "night_boh"
+                                ? "bg-muted text-foreground animate-pulse"
+                                : "bg-muted/50 text-muted-foreground"
+                          )}>
+                            2
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium">Night BOH</p>
+                            <p className="text-sm text-muted-foreground">
+                              {session.night_boh_saved_at
+                                ? `Saved at ${new Date(session.night_boh_saved_at).toLocaleTimeString()}`
+                                : session.status === "night_boh" ? "In progress..." : "Pending"
+                              }
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className={cn(
+                            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
+                            session.morning_saved_at
+                              ? "bg-sky-100 text-sky-600"
+                              : session.status === "morning"
+                                ? "bg-muted text-foreground animate-pulse"
+                                : "bg-muted/50 text-muted-foreground"
+                          )}>
+                            3
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium">Morning BOH</p>
+                            <p className="text-sm text-muted-foreground">
+                              {session.morning_saved_at
+                                ? `Saved at ${new Date(session.morning_saved_at).toLocaleTimeString()}`
+                                : session.status === "morning" ? "In progress..." : "Pending"
+                              }
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className={cn(
+                            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
+                            session.on_order_saved_at
+                              ? "bg-sky-100 text-sky-600"
+                              : session.status === "on_order"
+                                ? "bg-muted text-foreground animate-pulse"
+                                : "bg-muted/50 text-muted-foreground"
+                          )}>
+                            4
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium">On Order</p>
+                            <p className="text-sm text-muted-foreground">
+                              {session.on_order_saved_at
+                                ? `Saved at ${new Date(session.on_order_saved_at).toLocaleTimeString()}`
+                                : session.status === "on_order" ? "In progress..." : "Pending"
+                              }
+                            </p>
+                          </div>
+                        </div>
+
+                        {session.status === "completed" && (
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-sky-100">
+                              <CheckCircle2 className="h-5 w-5 text-sky-600" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-medium text-sky-600">Complete!</p>
+                              <p className="text-sm text-muted-foreground">
+                                {session.completed_at
+                                  ? `Completed at ${new Date(session.completed_at).toLocaleTimeString()}`
+                                  : "Session complete"
+                                }
+                              </p>
+                            </div>
+                          </div>
                         )}
-                      </Button>
+                      </div>
                     </CardContent>
                   </Card>
+                )}
 
-                  {/* Session Details - Show if in progress or completed */}
-                  {session && (
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <Clock className="h-5 w-5 text-muted-foreground" />
-                          Session Progress
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3">
-                          {/* Progress Steps */}
-                          <div className="flex items-center gap-3">
-                            <div className={cn(
-                              "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
-                              session.status !== "night_foh"
-                                ? "bg-green-100 text-green-600"
-                                : "bg-blue-100 text-blue-600 animate-pulse"
-                            )}>
-                              1
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-medium">FOH Count</p>
-                              <p className="text-sm text-muted-foreground">
-                                {session.night_foh_saved_at
-                                  ? `Saved at ${new Date(session.night_foh_saved_at).toLocaleTimeString()}`
-                                  : session.status === "night_foh" ? "In progress..." : "Pending"
-                                }
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-3">
-                            <div className={cn(
-                              "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
-                              session.night_boh_saved_at
-                                ? "bg-green-100 text-green-600"
-                                : session.status === "night_boh"
-                                  ? "bg-blue-100 text-blue-600 animate-pulse"
-                                  : "bg-gray-100 text-gray-400"
-                            )}>
-                              2
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-medium">BOH Count</p>
-                              <p className="text-sm text-muted-foreground">
-                                {session.night_boh_saved_at
-                                  ? `Saved at ${new Date(session.night_boh_saved_at).toLocaleTimeString()}`
-                                  : session.status === "night_boh" ? "In progress..." : "Pending"
-                                }
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-3">
-                            <div className={cn(
-                              "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
-                              session.morning_saved_at
-                                ? "bg-green-100 text-green-600"
-                                : session.status === "morning"
-                                  ? "bg-amber-100 text-amber-600 animate-pulse"
-                                  : "bg-gray-100 text-gray-400"
-                            )}>
-                              3
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-medium">Morning Count</p>
-                              <p className="text-sm text-muted-foreground">
-                                {session.morning_saved_at
-                                  ? `Saved at ${new Date(session.morning_saved_at).toLocaleTimeString()}`
-                                  : session.status === "morning" ? "In progress..." : "Pending"
-                                }
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-3">
-                            <div className={cn(
-                              "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
-                              session.on_order_saved_at
-                                ? "bg-green-100 text-green-600"
-                                : session.status === "on_order"
-                                  ? "bg-purple-100 text-purple-600 animate-pulse"
-                                  : "bg-gray-100 text-gray-400"
-                            )}>
-                              4
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-medium">On Order</p>
-                              <p className="text-sm text-muted-foreground">
-                                {session.on_order_saved_at
-                                  ? `Saved at ${new Date(session.on_order_saved_at).toLocaleTimeString()}`
-                                  : session.status === "on_order" ? "In progress..." : "Pending"
-                                }
-                              </p>
-                            </div>
-                          </div>
-
-                          {session.status === "completed" && (
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-green-100">
-                                <CheckCircle2 className="h-5 w-5 text-green-600" />
-                              </div>
-                              <div className="flex-1">
-                                <p className="font-medium text-green-600">Complete!</p>
-                                <p className="text-sm text-muted-foreground">
-                                  {session.completed_at
-                                    ? `Completed at ${new Date(session.completed_at).toLocaleTimeString()}`
-                                    : "Session complete"
-                                  }
-                                </p>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {/* View History Link */}
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => router.push("/tools/milk-count/history")}
-                  >
-                    <History className="mr-2 h-5 w-5" />
-                    View Past Sessions
-                  </Button>
-                </div>
-              )}
-            </div>
+                {/* View History Link */}
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => router.push("/tools/milk-count/history")}
+                >
+                  <History className="mr-2 h-5 w-5" />
+                  View Past Sessions
+                </Button>
+              </div>
+            )}
           </div>
         </main>
       </div>

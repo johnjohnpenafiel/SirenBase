@@ -123,7 +123,7 @@ export function MorningCountRow({
                   "shrink-0 w-[72px] h-[72px] rounded-2xl flex items-center justify-center",
                   "border-2 border-dashed transition-all",
                   "bg-muted text-muted-foreground border-gray-300",
-                  "group-data-[state=open]/collapsible:border-solid group-data-[state=open]/collapsible:border-gray-400"
+                  "group-data-[state=open]/collapsible:border-solid group-data-[state=open]/collapsible:border-sky-500"
                 )}
               >
                 {isDairy ? (
@@ -261,13 +261,6 @@ export function MorningCountRow({
                 </p>
               </div>
             </div>
-
-            {/* Helper Text */}
-            <p className="text-xs text-muted-foreground">
-              {method === "boh_count"
-                ? "Enter what you count in BOH now. Delivered = Current BOH - Night BOH"
-                : "Enter delivered quantity directly. Current BOH = Night BOH + Delivered"}
-            </p>
           </div>
         </CollapsibleContent>
       </div>

@@ -24,8 +24,6 @@ interface MilkCountCardProps {
   onCountChange: (count: number) => void;
   saving?: boolean;
   className?: string;
-  /** Variant for testing different icon/text balance */
-  variant?: 'default' | 'large-icon';
 }
 
 export function MilkCountCard({
@@ -36,9 +34,7 @@ export function MilkCountCard({
   onCountChange,
   saving = false,
   className,
-  variant = 'default',
 }: MilkCountCardProps) {
-  const isLargeIcon = variant === 'large-icon';
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(currentCount.toString());
   const inputRef = useRef<HTMLInputElement>(null);
@@ -107,9 +103,8 @@ export function MilkCountCard({
       className={cn(
         "flex items-center gap-4",
         "p-4",
-        "bg-card border border-border/50",
-        "rounded-xl",
-        "shadow-sm",
+        "bg-card border border-border",
+        "rounded-2xl",
         "transition-all duration-200",
         className
       )}
@@ -117,30 +112,23 @@ export function MilkCountCard({
       {/* Category Icon */}
       <div
         className={cn(
-          "shrink-0 rounded-xl flex items-center justify-center",
-          isLargeIcon ? "w-[72px] h-[72px]" : "w-14 h-14",
-          isDairy ? "bg-blue-50 text-blue-500" : "bg-green-50 text-green-500"
+          "shrink-0 w-[72px] h-[72px] rounded-2xl flex items-center justify-center",
+          "bg-muted text-muted-foreground"
         )}
       >
         {isDairy ? (
-          <Milk className={isLargeIcon ? "w-9 h-9" : "w-7 h-7"} />
+          <Milk className="w-9 h-9" />
         ) : (
-          <Leaf className={isLargeIcon ? "w-9 h-9" : "w-7 h-7"} />
+          <Leaf className="w-9 h-9" />
         )}
       </div>
 
       {/* Milk Name - flex-1 to take available space */}
       <div className="flex-1 min-w-0">
-        <h3 className={cn(
-          "font-semibold text-foreground",
-          isLargeIcon ? "text-base" : "text-lg"
-        )}>
+        <h3 className="font-normal text-foreground text-base">
           {milkName}
         </h3>
-        <p className={cn(
-          "text-muted-foreground capitalize",
-          isLargeIcon ? "text-xs" : "text-sm"
-        )}>
+        <p className="text-muted-foreground text-xs capitalize">
           {isDairy ? "Dairy" : "Non-Dairy"}
         </p>
       </div>
@@ -161,8 +149,7 @@ export function MilkCountCard({
               "w-14 h-[92px]",
               "text-3xl font-bold text-center",
               "border-2 border-primary/60",
-              "rounded-lg",
-              "shadow-sm"
+              "rounded-2xl"
             )}
             maxLength={3}
             aria-label={`Enter ${milkName} count`}
@@ -173,11 +160,11 @@ export function MilkCountCard({
             className={cn(
               "w-14 h-[92px]",
               "flex items-center justify-center",
-              "rounded-lg",
+              "rounded-2xl",
               "text-3xl font-bold tabular-nums",
               "bg-muted/30 hover:bg-muted/50",
               "transition-all duration-150",
-              "active:scale-95",
+              "active:scale-[0.98]",
               "focus-visible:ring-2 focus-visible:ring-primary/50"
             )}
             aria-label={`${milkName} count: ${currentCount}. Click to edit.`}
@@ -196,16 +183,18 @@ export function MilkCountCard({
           variant="outline"
           size="icon"
           className={cn(
-            "h-11 w-11",
-            "rounded-lg",
-            "border-border/60",
-            "transition-all duration-150",
-            "hover:bg-muted active:scale-95",
-            "disabled:opacity-30"
+            "size-11",
+            "rounded-2xl",
+            "border-2 border-gray-200/50",
+            "bg-gray-100 text-gray-700 hover:bg-gray-200",
+            "transition-all duration-150 ease-out",
+            "hover:scale-[1.02]",
+            "active:scale-[0.98]",
+            "disabled:opacity-30 disabled:hover:scale-100"
           )}
           aria-label={`Increase ${milkName} count`}
         >
-          <Plus className="h-5 w-5" strokeWidth={2.5} />
+          <Plus className="h-4 w-4" strokeWidth={2.5} />
         </Button>
 
         {/* Decrement Button (bottom) */}
@@ -215,16 +204,18 @@ export function MilkCountCard({
           variant="outline"
           size="icon"
           className={cn(
-            "h-11 w-11",
-            "rounded-lg",
-            "border-border/60",
-            "transition-all duration-150",
-            "hover:bg-muted active:scale-95",
-            "disabled:opacity-30"
+            "size-11",
+            "rounded-2xl",
+            "border-2 border-gray-200/50",
+            "bg-gray-100 text-gray-700 hover:bg-gray-200",
+            "transition-all duration-150 ease-out",
+            "hover:scale-[1.02]",
+            "active:scale-[0.98]",
+            "disabled:opacity-30 disabled:hover:scale-100"
           )}
           aria-label={`Decrease ${milkName} count`}
         >
-          <Minus className="h-5 w-5" strokeWidth={2.5} />
+          <Minus className="h-4 w-4" strokeWidth={2.5} />
         </Button>
       </div>
 

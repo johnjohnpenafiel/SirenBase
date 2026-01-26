@@ -111,20 +111,19 @@ export function MorningCountRow({
 
   return (
     <Collapsible className={cn("group/collapsible", className)}>
-      <div className="bg-card border border-border/50 rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-card border border-border rounded-2xl overflow-hidden">
         {/* Main Row */}
         <div className="flex items-center gap-4 p-4">
           {/* CollapsibleTrigger: Icon + Name area */}
           <CollapsibleTrigger asChild>
             <button className="flex items-center gap-4 flex-1 min-w-0 text-left">
-              {/* Category Icon with dashed border */}
+              {/* Category Icon - Neutral */}
               <div
                 className={cn(
-                  "shrink-0 w-[72px] h-[72px] rounded-xl flex items-center justify-center",
+                  "shrink-0 w-[72px] h-[72px] rounded-2xl flex items-center justify-center",
                   "border-2 border-dashed transition-all",
-                  isDairy
-                    ? "bg-blue-50 text-blue-500 border-blue-300 group-data-[state=open]/collapsible:border-solid group-data-[state=open]/collapsible:border-blue-400"
-                    : "bg-green-50 text-green-500 border-green-300 group-data-[state=open]/collapsible:border-solid group-data-[state=open]/collapsible:border-green-400"
+                  "bg-muted text-muted-foreground border-gray-300",
+                  "group-data-[state=open]/collapsible:border-solid group-data-[state=open]/collapsible:border-gray-400"
                 )}
               >
                 {isDairy ? (
@@ -136,7 +135,7 @@ export function MorningCountRow({
 
               {/* Milk Name & Night BOH */}
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-foreground text-base">{milkName}</h3>
+                <h3 className="font-normal text-foreground text-base">{milkName}</h3>
                 <p className="text-xs text-muted-foreground">
                   Night BOH: {nightBohCount}
                 </p>
@@ -156,13 +155,22 @@ export function MorningCountRow({
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
                 onKeyDown={handleInputKeyDown}
-                className="w-14 h-[92px] text-3xl font-bold text-center border-2 border-primary/60 rounded-lg"
+                className="w-14 h-[92px] text-3xl font-bold text-center border-2 border-primary/60 rounded-2xl"
                 maxLength={3}
               />
             ) : (
               <button
                 onClick={handleValueClick}
-                className="w-14 h-[92px] flex items-center justify-center rounded-lg text-3xl font-bold tabular-nums bg-muted/30 hover:bg-muted/50 transition-colors active:scale-95"
+                className={cn(
+                  "w-14 h-[92px]",
+                  "flex items-center justify-center",
+                  "rounded-2xl",
+                  "text-3xl font-bold tabular-nums",
+                  "bg-muted/30 hover:bg-muted/50",
+                  "transition-all duration-150",
+                  "active:scale-[0.98]",
+                  "focus-visible:ring-2 focus-visible:ring-primary/50"
+                )}
               >
                 {value}
               </button>
@@ -177,9 +185,18 @@ export function MorningCountRow({
               disabled={value >= 999}
               variant="outline"
               size="icon"
-              className="h-11 w-11 rounded-lg"
+              className={cn(
+                "size-11",
+                "rounded-2xl",
+                "border-2 border-gray-200/50",
+                "bg-gray-100 text-gray-700 hover:bg-gray-200",
+                "transition-all duration-150 ease-out",
+                "hover:scale-[1.02]",
+                "active:scale-[0.98]",
+                "disabled:opacity-30 disabled:hover:scale-100"
+              )}
             >
-              <Plus className="h-5 w-5" strokeWidth={2.5} />
+              <Plus className="h-4 w-4" strokeWidth={2.5} />
             </Button>
 
             {/* Decrement Button (bottom) */}
@@ -188,9 +205,18 @@ export function MorningCountRow({
               disabled={value === 0}
               variant="outline"
               size="icon"
-              className="h-11 w-11 rounded-lg"
+              className={cn(
+                "size-11",
+                "rounded-2xl",
+                "border-2 border-gray-200/50",
+                "bg-gray-100 text-gray-700 hover:bg-gray-200",
+                "transition-all duration-150 ease-out",
+                "hover:scale-[1.02]",
+                "active:scale-[0.98]",
+                "disabled:opacity-30 disabled:hover:scale-100"
+              )}
             >
-              <Minus className="h-5 w-5" strokeWidth={2.5} />
+              <Minus className="h-4 w-4" strokeWidth={2.5} />
             </Button>
           </div>
         </div>
@@ -218,7 +244,7 @@ export function MorningCountRow({
 
             {/* Calculated Values */}
             <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="bg-muted/30 rounded-lg p-2">
+              <div className="bg-muted/30 rounded-2xl p-2">
                 <p className="text-xs text-muted-foreground mb-1">
                   {method === "boh_count" ? "Entering" : "Calculated"}
                 </p>
@@ -226,7 +252,7 @@ export function MorningCountRow({
                   Current BOH: {currentBoh}
                 </p>
               </div>
-              <div className="bg-muted/30 rounded-lg p-2">
+              <div className="bg-muted/30 rounded-2xl p-2">
                 <p className="text-xs text-muted-foreground mb-1">
                   {method === "direct_delivered" ? "Entering" : "Calculated"}
                 </p>

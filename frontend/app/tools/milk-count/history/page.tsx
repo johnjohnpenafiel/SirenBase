@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import { cn, parseLocalDate } from "@/lib/utils";
 import type { MilkCountSession, MilkCountSessionStatus } from "@/types";
 
-// Status display configuration
+// Status display configuration - Neutral for in-progress, sky for completed
 const STATUS_DISPLAY: Record<MilkCountSessionStatus, {
   label: string;
   color: string;
@@ -36,27 +36,27 @@ const STATUS_DISPLAY: Record<MilkCountSessionStatus, {
 }> = {
   night_foh: {
     label: "FOH In Progress",
-    color: "text-blue-600 bg-blue-50",
+    color: "text-foreground bg-muted",
     icon: <Moon className="h-4 w-4" />,
   },
   night_boh: {
     label: "BOH In Progress",
-    color: "text-indigo-600 bg-indigo-50",
+    color: "text-foreground bg-muted",
     icon: <Moon className="h-4 w-4" />,
   },
   morning: {
     label: "Morning Pending",
-    color: "text-amber-600 bg-amber-50",
+    color: "text-foreground bg-muted",
     icon: <Sun className="h-4 w-4" />,
   },
   on_order: {
     label: "On Order Pending",
-    color: "text-purple-600 bg-purple-50",
+    color: "text-foreground bg-muted",
     icon: <ClipboardList className="h-4 w-4" />,
   },
   completed: {
     label: "Completed",
-    color: "text-green-600 bg-green-50",
+    color: "text-sky-600 bg-sky-50",
     icon: <CheckCircle2 className="h-4 w-4" />,
   },
 };
@@ -220,7 +220,7 @@ export default function HistoryPage() {
                       <Card
                         key={session.id}
                         className={cn(
-                          "transition-all",
+                          "rounded-2xl transition-all",
                           isClickable && "cursor-pointer hover:shadow-md",
                           session.status === "completed" && "hover:border-primary/50",
                           sessionIsMissed && "opacity-60"
@@ -230,7 +230,7 @@ export default function HistoryPage() {
                         <CardContent className="p-4">
                           <div className="flex items-center gap-4">
                             {/* Date Icon */}
-                            <div className="shrink-0 w-12 h-12 rounded-lg bg-muted flex flex-col items-center justify-center">
+                            <div className="shrink-0 w-12 h-12 rounded-2xl bg-muted flex flex-col items-center justify-center">
                               <span className="text-xs text-muted-foreground uppercase">
                                 {parseLocalDate(session.date).toLocaleDateString("en-US", { month: "short" })}
                               </span>

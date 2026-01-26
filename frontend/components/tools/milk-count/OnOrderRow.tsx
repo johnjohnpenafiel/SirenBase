@@ -118,7 +118,7 @@ export function OnOrderRow({
         <div className="flex-1 min-w-0">
           <h3 className="font-normal text-foreground text-base">{milkName}</h3>
           <p className="text-xs text-muted-foreground">
-            Currently on order
+            On order
           </p>
         </div>
 

@@ -255,9 +255,9 @@ export default function MorningCountPage() {
             ) : (
               <div className="space-y-6">
                 {/* Instructions - Neutral styling */}
-                <div className="bg-muted/50 border border-border rounded-2xl p-3 text-sm text-foreground">
+                <div className="bg-muted/50 border border-border rounded-2xl p-3 pl-4 text-sm text-foreground">
                   <p className="font-medium mb-1">How to count:</p>
-                  <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
+                  <ul className="list-disc list-outside pl-4 space-y-0.5 text-xs text-muted-foreground">
                     <li>By default, enter the current BOH count (what you see now)</li>
                     <li>Tap a row to expand and change method or see calculations</li>
                     <li>Use "Enter Delivered" if you can see delivery boxes</li>

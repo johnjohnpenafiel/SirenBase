@@ -80,7 +80,7 @@ export function RTDEMobileDrawer({
     <div className="md:hidden">
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent className="bg-background">
-          <DrawerHeader className="border-b bg-background pb-3">
+          <DrawerHeader className="border-b border-gray-200 bg-background pb-3">
             <DrawerTitle className="text-lg">RTD&E Items</DrawerTitle>
             <div className="flex justify-center">
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-muted text-xs text-foreground">
@@ -157,7 +157,7 @@ export function RTDEMobileDrawer({
           </div>
 
           {/* "Start Pull List" button */}
-          <DrawerFooter className="border-t bg-background pb-safe">
+          <DrawerFooter className="border-t border-gray-200 bg-background pb-safe">
             <div className="flex items-center justify-center w-full pt-4 pb-6">
               <DrawerClose asChild>
                 <Button

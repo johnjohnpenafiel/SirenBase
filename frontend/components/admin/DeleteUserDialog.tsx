@@ -88,7 +88,7 @@ export function DeleteUserDialog({
             </p>
           </div>
         ) : (
-          <div className="bg-muted border border-border rounded-lg p-3">
+          <div className="bg-muted border border-gray-200 rounded-lg p-3">
             <p className="text-sm text-muted-foreground">
               ⚠️ <strong>Warning:</strong> This action cannot be undone. The user will
               immediately lose access to the system.

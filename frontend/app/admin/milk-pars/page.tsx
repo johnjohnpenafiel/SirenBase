@@ -119,7 +119,7 @@ export default function MilkParsPage() {
     return (
       <div
         key={parLevel.milk_type_id}
-        className="flex items-center gap-3 p-4 bg-card border border-border rounded-lg hover:shadow-sm transition-shadow"
+        className="flex items-center gap-3 p-4 bg-card border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
       >
         {/* Category Icon */}
         <div

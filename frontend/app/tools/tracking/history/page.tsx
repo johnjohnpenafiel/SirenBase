@@ -99,7 +99,7 @@ export default function HistoryPage() {
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",
                 "bg-gray-100/60 backdrop-blur-md",
-                "border border-gray-200/50",
+                "border border-gray-200",
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -145,7 +145,7 @@ export default function HistoryPage() {
           {/* Content - scrolls under the island */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
             {paginatedHistory.length === 0 ? (
-              <div className="text-center py-12 bg-card rounded-2xl border border-border">
+              <div className="text-center py-12 bg-card rounded-2xl border border-gray-200">
                 <p className="text-muted-foreground">
                   No history entries found.
                 </p>

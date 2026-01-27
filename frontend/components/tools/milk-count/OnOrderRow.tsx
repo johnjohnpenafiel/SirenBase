@@ -95,7 +95,7 @@ export function OnOrderRow({
   return (
     <div
       className={cn(
-        "bg-card border border-border rounded-2xl overflow-hidden",
+        "bg-card border border-gray-200 rounded-2xl overflow-hidden",
         className
       )}
     >

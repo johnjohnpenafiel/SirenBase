@@ -128,7 +128,7 @@ export function RTDECountingPhase({
       </div>
 
       {/* Navigation Buttons - Fixed (flex-shrink-0 ensures it never gets cut off) */}
-      <div className="border-t bg-background pb-safe flex-shrink-0">
+      <div className="border-t border-gray-200 bg-background pb-safe flex-shrink-0">
         <div className="container max-w-4xl mx-auto px-4 pt-3 pb-6 md:py-6">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-between gap-3">

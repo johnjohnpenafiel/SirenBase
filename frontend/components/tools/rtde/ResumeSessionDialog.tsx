@@ -64,7 +64,7 @@ export function ResumeSessionDialog({
 
         <div className="space-y-3">
           {/* Session Info Card */}
-          <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4 space-y-3">
+          <div className="bg-muted/50 border border-gray-200 rounded-2xl px-5 py-4 space-y-3">
             {/* Time Started */}
             <div className="flex items-center gap-2 text-sm">
               <Clock className="h-4 w-4 text-muted-foreground" />

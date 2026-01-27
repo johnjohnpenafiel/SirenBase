@@ -266,7 +266,7 @@ export function AddItemDialog({
 
             <div className="space-y-3">
               {/* Code display box */}
-              <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4 text-center">
+              <div className="bg-muted/50 border border-gray-200 rounded-2xl px-5 py-4 text-center">
                 <p className="text-sm text-muted-foreground mb-2">Your 4-digit code:</p>
                 <div className="text-5xl font-bold font-mono text-foreground tracking-wider">
                   {generatedCode}

@@ -103,7 +103,7 @@ export function MilkCountCard({
       className={cn(
         "flex items-center gap-4",
         "p-4",
-        "bg-card border border-border",
+        "bg-card border border-gray-200",
         "rounded-2xl",
         "transition-all duration-200",
         className

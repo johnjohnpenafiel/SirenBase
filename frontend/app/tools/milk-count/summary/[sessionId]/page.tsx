@@ -131,7 +131,7 @@ export default function SummaryPage() {
                         <div className="space-y-2">
                           {dairyEntries.map((entry) => (
                             <Collapsible key={entry.milk_type} className="group/collapsible">
-                              <div className="bg-card border border-border rounded-2xl overflow-hidden">
+                              <div className="bg-card border border-gray-200 rounded-2xl overflow-hidden">
                                 <CollapsibleTrigger className="w-full text-left">
                                   <div className="flex items-center gap-3 p-3">
                                     {/* Category Icon - Neutral */}
@@ -155,7 +155,7 @@ export default function SummaryPage() {
                                   </div>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                  <div className="px-3 pb-3 border-t border-border/30 pt-3">
+                                  <div className="px-3 pb-3 border-t border-gray-200 pt-3">
                                     <div className="grid grid-cols-3 gap-3 text-sm">
                                       <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">FOH</p>
@@ -201,7 +201,7 @@ export default function SummaryPage() {
                         <div className="space-y-2">
                           {nonDairyEntries.map((entry) => (
                             <Collapsible key={entry.milk_type} className="group/collapsible">
-                              <div className="bg-card border border-border rounded-2xl overflow-hidden">
+                              <div className="bg-card border border-gray-200 rounded-2xl overflow-hidden">
                                 <CollapsibleTrigger className="w-full text-left">
                                   <div className="flex items-center gap-3 p-3">
                                     {/* Category Icon - Neutral */}
@@ -225,7 +225,7 @@ export default function SummaryPage() {
                                   </div>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                  <div className="px-3 pb-3 border-t border-border/30 pt-3">
+                                  <div className="px-3 pb-3 border-t border-gray-200 pt-3">
                                     <div className="grid grid-cols-3 gap-3 text-sm">
                                       <div className="bg-muted/30 rounded-2xl p-2">
                                         <p className="text-xs text-muted-foreground">FOH</p>

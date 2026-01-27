@@ -51,7 +51,7 @@ export function AdminModuleCard({
       aria-label={`${title}${isDisabled ? ' (Coming soon)' : ''}`}
       aria-disabled={isDisabled}
       className={`
-        p-6 border border-border rounded-xl bg-card text-card-foreground transition-all
+        p-6 border border-gray-200 rounded-xl bg-card text-card-foreground transition-all
         ${isDisabled
           ? 'opacity-50 cursor-not-allowed'
           : 'cursor-pointer hover:shadow-lg hover:border-amber-500 hover:scale-102 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2'

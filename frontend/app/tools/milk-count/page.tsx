@@ -203,7 +203,7 @@ export default function MilkCountPage() {
             ) : (
               <div className="space-y-6">
                 {/* Status Card */}
-                <Card className="border border-border rounded-2xl">
+                <Card className="border border-gray-200 rounded-2xl">
                   <CardHeader className="pb-2">
                     <div className="flex items-start gap-4">
                       <div className={cn("p-3 rounded-2xl", config.iconBg)}>

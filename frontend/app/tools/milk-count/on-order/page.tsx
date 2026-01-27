@@ -200,7 +200,7 @@ export default function OnOrderPage() {
               ) : (
                 <div className="space-y-6">
                   {/* Instructions - Neutral styling */}
-                  <div className="bg-muted/50 border border-border rounded-2xl p-3 pl-4 text-sm text-foreground">
+                  <div className="bg-muted/50 border border-gray-200 rounded-2xl p-3 pl-4 text-sm text-foreground">
                     <p className="font-medium mb-1">Check on-order quantities:</p>
                     <ul className="list-disc list-outside pl-4 space-y-0.5 text-xs text-muted-foreground">
                       <li>Enter the quantity that is on order for each milk type</li>

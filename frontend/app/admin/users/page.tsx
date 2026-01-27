@@ -122,11 +122,11 @@ export default function UserManagementPage() {
           <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
             <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-6">
               {/* Users Table */}
-            <div className="bg-card rounded-xl border border-border overflow-hidden">
+            <div className="bg-card rounded-xl border border-gray-200 overflow-hidden">
               {/* Desktop Table */}
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-muted border-b border-border">
+                  <thead className="bg-muted border-b border-gray-200">
                     <tr>
                       <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                         Partner #

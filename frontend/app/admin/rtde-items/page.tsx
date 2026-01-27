@@ -65,7 +65,7 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-3 p-4 bg-card border border-border rounded-lg hover:shadow-sm transition-shadow"
+      className="flex items-center gap-3 p-4 bg-card border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
     >
       {/* Drag Handle */}
       <button

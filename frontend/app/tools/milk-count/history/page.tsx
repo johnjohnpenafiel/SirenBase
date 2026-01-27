@@ -266,7 +266,7 @@ export default function HistoryPage() {
 
                           {/* Additional Info for Completed Sessions */}
                           {session.status === "completed" && session.completed_at && (
-                            <div className="mt-3 pt-3 border-t border-border/50 flex items-center gap-4 text-xs text-muted-foreground">
+                            <div className="mt-3 pt-3 border-t border-gray-200/50 flex items-center gap-4 text-xs text-muted-foreground">
                               <div className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
                                 <span>

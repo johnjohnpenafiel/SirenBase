@@ -38,7 +38,7 @@ export function RTDEProgressBar({
     >
       {/* Title - only in default size */}
       {!isCompact && (
-        <h2 className="text-sm font-semibold text-popover-foreground mb-3 md:mb-4">
+        <h2 className="text-base font-semibold text-popover-foreground mb-3 md:mb-4">
           Counting Phase
         </h2>
       )}
@@ -76,15 +76,12 @@ export function RTDEProgressBar({
 
         <div
           className={cn(
-            "w-full bg-muted rounded-full overflow-hidden",
-            isCompact ? "h-1.5" : "h-2 md:h-2.5"
+            "w-full bg-gray-200/60 rounded-full overflow-hidden border border-gray-300/50",
+            isCompact ? "h-1.5" : "h-2.5"
           )}
         >
           <div
-            className={cn(
-              "bg-emerald-500 rounded-full transition-all duration-500 ease-out",
-              isCompact ? "h-1.5" : "h-2 md:h-2.5"
-            )}
+            className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progressPercent}%` }}
             role="progressbar"
             aria-valuenow={progressPercent}

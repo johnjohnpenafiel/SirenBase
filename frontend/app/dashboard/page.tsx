@@ -47,7 +47,7 @@ export default function DashboardPage() {
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
               )}
             >
-              <h1 className="text-3xl font-bold mb-1 text-gray-800">
+              <h1 className="text-3xl font-bold mb-1 text-neutral-700">
                 Dashboard
               </h1>
               <p className="text-sm text-muted-foreground">

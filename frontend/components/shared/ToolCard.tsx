@@ -68,7 +68,7 @@ export function ToolCard({
     >
       {icon && <div className="mb-4">{icon}</div>}
 
-      <h2 className="text-xl font-semibold mb-2 flex items-center gap-2 text-foreground">
+      <h2 className="text-xl mb-2 flex items-center gap-2 text-foreground">
         {title}
         {isAdminOnly && (
           <span className="text-xs px-2 py-1 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">

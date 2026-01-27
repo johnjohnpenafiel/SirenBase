@@ -19,7 +19,7 @@ export function CategoryCard({ category, count, onClick }: CategoryCardProps) {
       onClick={onClick}
       className={cn(
         "p-5 bg-card rounded-2xl text-left",
-        "border border-border",
+        "border border-gray-200",
         "active:bg-muted/50 transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       )}

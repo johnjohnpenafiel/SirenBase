@@ -48,7 +48,7 @@ export function ItemCard({
     <div
       className={cn(
         "p-5 bg-card rounded-2xl",
-        "border border-border",
+        "border border-gray-200",
         "transition-colors"
       )}
     >

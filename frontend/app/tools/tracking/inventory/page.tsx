@@ -199,7 +199,7 @@ export default function InventoryPage() {
                 className={cn(
                   "max-w-6xl mx-auto rounded-2xl",
                   "bg-gray-100/60 backdrop-blur-md",
-                  "border border-gray-200/50",
+                  "border border-gray-200",
                   "px-5 py-4 md:px-6 md:py-5",
                   "transition-all duration-300 ease-out",
                   isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -254,6 +254,7 @@ export default function InventoryPage() {
                       size="sm"
                       className={cn(
                         "rounded-full",
+                        viewMode === "all" && "bg-gray-200/80",
                         viewMode !== "all" && "text-muted-foreground"
                       )}
                       onClick={() => {
@@ -270,6 +271,7 @@ export default function InventoryPage() {
                       size="sm"
                       className={cn(
                         "rounded-full",
+                        viewMode === "categories" && "bg-gray-200/80",
                         viewMode !== "categories" && "text-muted-foreground"
                       )}
                       onClick={() => {

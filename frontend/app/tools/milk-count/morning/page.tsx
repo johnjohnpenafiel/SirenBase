@@ -177,7 +177,6 @@ export default function MorningCountPage() {
       });
 
       await apiClient.saveMilkCountMorning(session.id, { counts: morningCounts });
-      toast.success("Morning count saved!");
       router.push("/tools/milk-count/on-order");
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to save morning count");

@@ -118,7 +118,6 @@ export default function OnOrderPage() {
       }));
 
       await apiClient.saveMilkCountOnOrder(session.id, { on_orders: onOrderData });
-      toast.success("On order quantities saved!");
       router.push(`/tools/milk-count/summary/${session.id}`);
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to save on order quantities");

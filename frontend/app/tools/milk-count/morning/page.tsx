@@ -324,17 +324,8 @@ export default function MorningCountPage() {
               className="w-full h-12 text-lg font-semibold"
               size="lg"
             >
-              {saving ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  Save & Continue
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </>
-              )}
+              Save & Continue
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
         </div>

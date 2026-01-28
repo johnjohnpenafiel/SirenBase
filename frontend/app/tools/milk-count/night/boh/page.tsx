@@ -255,17 +255,8 @@ export default function NightBOHPage() {
               className="w-full h-12 text-lg font-semibold"
               size="lg"
             >
-              {saving ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Check className="mr-2 h-5 w-5" />
-                  Save Night Count
-                </>
-              )}
+              <Check className="mr-2 h-5 w-5" />
+              Save Night Count
             </Button>
           </div>
         </div>

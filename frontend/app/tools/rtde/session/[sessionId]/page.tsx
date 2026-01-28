@@ -587,7 +587,8 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
           <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
             {completed ? (
               // Success state with checkmark animation
-              <div className="flex flex-col items-center justify-center py-6">
+              // Fixed min-height to match confirmation dialog size for smooth transition
+              <div className="flex flex-col items-center justify-center min-h-[200px]">
                 <CheckmarkAnimation size={72} />
                 <p className="mt-4 text-lg font-medium text-foreground">
                   Session Complete!

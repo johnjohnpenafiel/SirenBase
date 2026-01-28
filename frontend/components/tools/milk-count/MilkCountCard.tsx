@@ -56,11 +56,10 @@ export function MilkCountCard({
     onCountChange(newCount);
   };
 
-  const handleCountClick = () => {
+  const handleInputFocus = () => {
     setIsEditing(true);
-    setTimeout(() => {
-      inputRef.current?.select();
-    }, 0);
+    // Select all text when focused (slight delay to ensure it works on mobile)
+    setTimeout(() => inputRef.current?.select(), 10);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,45 +132,34 @@ export function MilkCountCard({
         </p>
       </div>
 
-      {/* Count Display */}
+      {/* Count Display - Always rendered input for single-tap-to-keyboard */}
       <div className="shrink-0">
-        {isEditing ? (
-          <Input
-            ref={inputRef}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={inputValue}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-            onKeyDown={handleInputKeyDown}
-            className={cn(
-              "w-14 h-[92px]",
-              "text-3xl font-bold text-center",
-              "border-2 border-primary/60",
-              "rounded-2xl"
-            )}
-            maxLength={3}
-            aria-label={`Enter ${milkName} count`}
-          />
-        ) : (
-          <button
-            onClick={handleCountClick}
-            className={cn(
-              "w-14 h-[92px]",
-              "flex items-center justify-center",
-              "rounded-2xl",
-              "text-3xl font-bold tabular-nums",
-              "bg-muted/30 hover:bg-muted/50",
-              "transition-all duration-150",
-              "active:scale-[0.98]",
-              "focus-visible:ring-2 focus-visible:ring-primary/50"
-            )}
-            aria-label={`${milkName} count: ${currentCount}. Click to edit.`}
-          >
-            {currentCount}
-          </button>
-        )}
+        <Input
+          ref={inputRef}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          onKeyDown={handleInputKeyDown}
+          onFocus={handleInputFocus}
+          className={cn(
+            "w-14 h-[92px]",
+            "text-3xl font-bold text-center tabular-nums",
+            "rounded-2xl",
+            "transition-all duration-200",
+            isEditing
+              ? "border-2 border-primary/60"
+              : [
+                  "border-transparent bg-muted/30",
+                  "hover:bg-muted/50",
+                  "cursor-pointer",
+                ]
+          )}
+          maxLength={3}
+          aria-label={`${milkName} count: ${currentCount}. Tap to edit.`}
+        />
       </div>
 
       {/* Vertical +/- Button Stack */}

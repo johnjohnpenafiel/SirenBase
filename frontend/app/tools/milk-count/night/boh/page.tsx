@@ -124,7 +124,6 @@ export default function NightBOHPage() {
       }));
 
       await apiClient.saveMilkCountNightBOH(session.id, { counts: bohCounts });
-      toast.success("Night count saved! Return in the morning to complete.");
       router.push("/tools/milk-count");
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to save BOH count");

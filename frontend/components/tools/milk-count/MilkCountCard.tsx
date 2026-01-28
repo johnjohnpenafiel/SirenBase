@@ -145,7 +145,7 @@ export function MilkCountCard({
           onKeyDown={handleInputKeyDown}
           onFocus={handleInputFocus}
           className={cn(
-            "w-14 h-[92px]",
+            "w-14 h-[92px] px-0",
             "text-3xl font-bold text-center tabular-nums",
             "rounded-2xl",
             "transition-all duration-200",

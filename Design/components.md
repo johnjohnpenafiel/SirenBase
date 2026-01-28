@@ -226,6 +226,74 @@ This document defines the standard UI components used across SirenBase. For dial
 - ✅ Good: Auto-focus first input in dialog
 - ❌ Bad: Auto-focus on page load (triggers mobile keyboard)
 
+### Numeric Counter Inputs (Single-Tap-to-Keyboard)
+
+**Pattern**: Numeric input fields should open the keyboard immediately on first tap.
+
+**Problem Solved**: The default browser behavior for inputs can require two taps:
+1. First tap selects/highlights content
+2. Second tap opens keyboard
+
+This creates friction in counting workflows where speed is critical.
+
+**Implementation**:
+```tsx
+// ✅ CORRECT: Always-rendered input with onFocus handler
+const [isEditing, setIsEditing] = useState(false);
+const [inputValue, setInputValue] = useState(value.toString());
+const inputRef = useRef<HTMLInputElement>(null);
+
+const handleInputFocus = () => {
+  setIsEditing(true);
+  // Select all text when focused (slight delay ensures mobile compatibility)
+  setTimeout(() => inputRef.current?.select(), 10);
+};
+
+<Input
+  ref={inputRef}
+  type="text"
+  inputMode="numeric"
+  pattern="[0-9]*"
+  value={inputValue}
+  onFocus={handleInputFocus}
+  onBlur={handleInputBlur}
+  className={cn(
+    "text-3xl font-bold text-center tabular-nums rounded-2xl",
+    isEditing
+      ? "border-2 border-primary/60"
+      : "border-transparent bg-muted/30 hover:bg-muted/50 cursor-pointer"
+  )}
+/>
+```
+
+**Anti-Pattern**:
+```tsx
+// ❌ INCORRECT: Conditional button/input swap (requires two taps)
+{isEditing ? (
+  <Input ref={inputRef} ... />
+) : (
+  <button onClick={() => setIsEditing(true)}>
+    {value}
+  </button>
+)}
+```
+
+**Key Principles**:
+1. **Always render the Input** - Don't swap between button and input
+2. **Use `onFocus` handler** - Browser natively opens keyboard on focus
+3. **Auto-select content** - Use `setTimeout(() => inputRef.current?.select(), 10)` so typing replaces existing value
+4. **Conditional styling** - Use `isEditing` state only for visual styling, not for DOM structure
+
+**Styling States**:
+- **Not editing**: Transparent border, muted background, cursor-pointer
+- **Editing**: Visible border (primary color), optional ring/glow
+
+**Reference Implementations**:
+- `frontend/components/tools/rtde/RTDECountCard.tsx` - Original implementation
+- `frontend/components/tools/milk-count/MilkCountCard.tsx` - Counting rows
+- `frontend/components/tools/milk-count/OnOrderRow.tsx` - Order quantity input
+- `frontend/components/tools/milk-count/MorningCountRow.tsx` - Morning count input
+
 ---
 
 ## Lists & Tables
@@ -389,5 +457,6 @@ toast.warning("Please save your changes");
 |---------|------|---------|
 | 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
 | 1.0.1 | Jan 18, 2026 | WCAG touch target compliance for buttons (44px minimum) |
+| 1.1.0 | Jan 27, 2026 | Added Single-Tap-to-Keyboard pattern for numeric counter inputs |
 
-**Last Updated**: January 20, 2026
+**Last Updated**: January 27, 2026

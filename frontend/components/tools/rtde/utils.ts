@@ -18,7 +18,7 @@ import type { RTDEItem, ValidationResult, RTDEPullItem } from "./types";
  * Used in RTDESessionSidebar (desktop) and RTDEMobileDrawer (mobile).
  */
 export const CURRENT_ITEM_HIGHLIGHT =
-  "border-2 border-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.7),0_0_8px_rgba(52,211,153,0.9)]";
+  "border border-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.4),0_0_8px_rgba(52,211,153,0.6),inset_0_0_15px_rgba(52,211,153,0.4)]";
 
 /**
  * Validate All Items Counted - Phase Transition Check

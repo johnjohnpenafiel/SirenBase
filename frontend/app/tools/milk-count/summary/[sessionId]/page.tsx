@@ -155,41 +155,42 @@ export default function SummaryPage() {
                                 <div className="shrink-0 w-[52px] h-[52px] rounded-2xl flex items-center justify-center bg-muted text-blue-500/80">
                                   <Milk className="w-6 h-6" />
                                 </div>
-                                {/* Milk Name */}
+                                {/* Milk Name & Category */}
                                 <div className="flex-1 min-w-0">
                                   <h3 className="text-foreground truncate">{entry.milk_type}</h3>
+                                  <p className="text-xs text-muted-foreground">{entry.category === "dairy" ? "Dairy" : "Non-Dairy"}</p>
                                 </div>
                                 {/* Order Value */}
-                                <div className="text-center shrink-0">
+                                <div className="text-center shrink-0 bg-muted/50 rounded-xl px-3 py-1.5 border border-border/50">
                                   <p className="text-xs text-muted-foreground">Order</p>
                                   <p className="text-xl font-bold tabular-nums">{Math.max(0, entry.order)}</p>
                                 </div>
                               </div>
                               <CollapsibleContent>
                                 <CollapsibleTrigger className="w-full text-left">
-                                  <div className="px-3 pb-3 border-t border-gray-200 pt-3">
+                                  <div className="px-3 pb-3 pt-3">
                                     <div className="grid grid-cols-3 gap-3 text-sm">
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">FOH</p>
                                         <p className="font-semibold">{entry.foh}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">BOH</p>
                                         <p className="font-semibold">{entry.boh}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">Delivered</p>
                                         <p className="font-semibold">{entry.delivered}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">On Order</p>
                                         <p className="font-semibold">{entry.on_order}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">Total</p>
                                         <p className="font-semibold">{entry.total}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">Par</p>
                                         <p className="font-semibold">{entry.par}</p>
                                       </div>
@@ -199,7 +200,7 @@ export default function SummaryPage() {
                               </CollapsibleContent>
                               {/* Expand/collapse bar */}
                               <CollapsibleTrigger className="w-full">
-                                <div className="flex justify-center items-center py-1 border-t border-gray-200 bg-muted/20 active:bg-muted/40 transition-colors">
+                                <div className="flex justify-center items-center py-1 bg-muted/50 active:bg-muted/70 transition-colors">
                                   <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
                                 </div>
                               </CollapsibleTrigger>
@@ -225,41 +226,42 @@ export default function SummaryPage() {
                                 <div className="shrink-0 w-[52px] h-[52px] rounded-2xl flex items-center justify-center bg-muted text-green-500/80">
                                   <Leaf className="w-6 h-6" />
                                 </div>
-                                {/* Milk Name */}
+                                {/* Milk Name & Category */}
                                 <div className="flex-1 min-w-0">
                                   <h3 className="text-foreground truncate">{entry.milk_type}</h3>
+                                  <p className="text-xs text-muted-foreground">{entry.category === "dairy" ? "Dairy" : "Non-Dairy"}</p>
                                 </div>
                                 {/* Order Value */}
-                                <div className="text-center shrink-0">
+                                <div className="text-center shrink-0 bg-muted/50 rounded-xl px-3 py-1.5 border border-border/50">
                                   <p className="text-xs text-muted-foreground">Order</p>
                                   <p className="text-xl font-bold tabular-nums">{Math.max(0, entry.order)}</p>
                                 </div>
                               </div>
                               <CollapsibleContent>
                                 <CollapsibleTrigger className="w-full text-left">
-                                  <div className="px-3 pb-3 border-t border-gray-200 pt-3">
+                                  <div className="px-3 pb-3 pt-3">
                                     <div className="grid grid-cols-3 gap-3 text-sm">
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">FOH</p>
                                         <p className="font-semibold">{entry.foh}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">BOH</p>
                                         <p className="font-semibold">{entry.boh}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">Delivered</p>
                                         <p className="font-semibold">{entry.delivered}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">On Order</p>
                                         <p className="font-semibold">{entry.on_order}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">Total</p>
                                         <p className="font-semibold">{entry.total}</p>
                                       </div>
-                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                      <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
                                         <p className="text-xs text-muted-foreground">Par</p>
                                         <p className="font-semibold">{entry.par}</p>
                                       </div>
@@ -269,7 +271,7 @@ export default function SummaryPage() {
                               </CollapsibleContent>
                               {/* Expand/collapse bar */}
                               <CollapsibleTrigger className="w-full">
-                                <div className="flex justify-center items-center py-1 border-t border-gray-200 bg-muted/20 active:bg-muted/40 transition-colors">
+                                <div className="flex justify-center items-center py-1 bg-muted/50 active:bg-muted/70 transition-colors">
                                   <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
                                 </div>
                               </CollapsibleTrigger>

@@ -37,7 +37,7 @@ import {
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import { cn, parseLocalDate } from "@/lib/utils";
-import type { MilkCountSummaryEntry, MilkCountSummaryTotals, MilkCountSession } from "@/types";
+import type { MilkCountSummaryEntry, MilkCountSession } from "@/types";
 
 export default function SummaryPage() {
   const router = useRouter();
@@ -47,7 +47,6 @@ export default function SummaryPage() {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<MilkCountSession | null>(null);
   const [summary, setSummary] = useState<MilkCountSummaryEntry[]>([]);
-  const [totals, setTotals] = useState<MilkCountSummaryTotals | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -61,7 +60,6 @@ export default function SummaryPage() {
       const response = await apiClient.getMilkCountSummary(sessionId);
       setSession(response.session);
       setSummary(response.summary);
-      setTotals(response.totals);
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Failed to load summary");
       router.push("/tools/milk-count");
@@ -132,7 +130,7 @@ export default function SummaryPage() {
           </div>
 
           {/* Content - scrolls under the island */}
-          <div className="container max-w-2xl mx-auto px-4 pb-32">
+          <div className="container max-w-2xl mx-auto px-4 pb-20">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-16">
                 <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
@@ -152,58 +150,59 @@ export default function SummaryPage() {
                         {dairyEntries.map((entry) => (
                           <Collapsible key={entry.milk_type} className="group/collapsible">
                             <div className="bg-card border border-gray-200 rounded-2xl overflow-hidden">
-                              <CollapsibleTrigger className="w-full text-left">
-                                <div className="flex items-center gap-3 p-3">
-                                  {/* Category Icon */}
-                                  <div className="shrink-0 w-[52px] h-[52px] rounded-2xl flex items-center justify-center bg-muted text-muted-foreground">
-                                    <Milk className="w-6 h-6" />
+                              <div className="flex items-center gap-3 p-3 pr-5">
+                                {/* Category Icon */}
+                                <div className="shrink-0 w-[52px] h-[52px] rounded-2xl flex items-center justify-center bg-muted text-blue-500/80">
+                                  <Milk className="w-6 h-6" />
+                                </div>
+                                {/* Milk Name */}
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="text-foreground truncate">{entry.milk_type}</h3>
+                                </div>
+                                {/* Order Value */}
+                                <div className="text-center shrink-0">
+                                  <p className="text-xs text-muted-foreground">Order</p>
+                                  <p className="text-xl font-bold tabular-nums">{Math.max(0, entry.order)}</p>
+                                </div>
+                              </div>
+                              <CollapsibleContent>
+                                <CollapsibleTrigger className="w-full text-left">
+                                  <div className="px-3 pb-3 border-t border-gray-200 pt-3">
+                                    <div className="grid grid-cols-3 gap-3 text-sm">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">FOH</p>
+                                        <p className="font-semibold">{entry.foh}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">BOH</p>
+                                        <p className="font-semibold">{entry.boh}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">Delivered</p>
+                                        <p className="font-semibold">{entry.delivered}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">On Order</p>
+                                        <p className="font-semibold">{entry.on_order}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">Total</p>
+                                        <p className="font-semibold">{entry.total}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">Par</p>
+                                        <p className="font-semibold">{entry.par}</p>
+                                      </div>
+                                    </div>
                                   </div>
-                                  {/* Milk Name & Total */}
-                                  <div className="flex-1 min-w-0">
-                                    <h3 className="font-semibold text-foreground truncate">{entry.milk_type}</h3>
-                                    <p className="text-xs text-muted-foreground">
-                                      Total: {entry.total} · Par: {entry.par}
-                                    </p>
-                                  </div>
-                                  {/* Order Value */}
-                                  <div className="text-right shrink-0">
-                                    <p className="text-xs text-muted-foreground">Order</p>
-                                    <p className="text-xl font-bold tabular-nums">{Math.max(0, entry.order)}</p>
-                                  </div>
-                                  {/* Chevron */}
-                                  <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                                </CollapsibleTrigger>
+                              </CollapsibleContent>
+                              {/* Expand/collapse bar */}
+                              <CollapsibleTrigger className="w-full">
+                                <div className="flex justify-center items-center py-1 border-t border-gray-200 bg-muted/20 active:bg-muted/40 transition-colors">
+                                  <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
                                 </div>
                               </CollapsibleTrigger>
-                              <CollapsibleContent>
-                                <div className="px-3 pb-3 border-t border-gray-200 pt-3">
-                                  <div className="grid grid-cols-3 gap-3 text-sm">
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">FOH</p>
-                                      <p className="font-semibold">{entry.foh}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">BOH</p>
-                                      <p className="font-semibold">{entry.boh}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">Delivered</p>
-                                      <p className="font-semibold">{entry.delivered}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">On Order</p>
-                                      <p className="font-semibold">{entry.on_order}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">Total</p>
-                                      <p className="font-semibold">{entry.total}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">Par</p>
-                                      <p className="font-semibold">{entry.par}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </CollapsibleContent>
                             </div>
                           </Collapsible>
                         ))}
@@ -221,58 +220,59 @@ export default function SummaryPage() {
                         {nonDairyEntries.map((entry) => (
                           <Collapsible key={entry.milk_type} className="group/collapsible">
                             <div className="bg-card border border-gray-200 rounded-2xl overflow-hidden">
-                              <CollapsibleTrigger className="w-full text-left">
-                                <div className="flex items-center gap-3 p-3">
-                                  {/* Category Icon */}
-                                  <div className="shrink-0 w-[52px] h-[52px] rounded-2xl flex items-center justify-center bg-muted text-muted-foreground">
-                                    <Leaf className="w-6 h-6" />
+                              <div className="flex items-center gap-3 p-3 pr-5">
+                                {/* Category Icon */}
+                                <div className="shrink-0 w-[52px] h-[52px] rounded-2xl flex items-center justify-center bg-muted text-green-500/80">
+                                  <Leaf className="w-6 h-6" />
+                                </div>
+                                {/* Milk Name */}
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="text-foreground truncate">{entry.milk_type}</h3>
+                                </div>
+                                {/* Order Value */}
+                                <div className="text-center shrink-0">
+                                  <p className="text-xs text-muted-foreground">Order</p>
+                                  <p className="text-xl font-bold tabular-nums">{Math.max(0, entry.order)}</p>
+                                </div>
+                              </div>
+                              <CollapsibleContent>
+                                <CollapsibleTrigger className="w-full text-left">
+                                  <div className="px-3 pb-3 border-t border-gray-200 pt-3">
+                                    <div className="grid grid-cols-3 gap-3 text-sm">
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">FOH</p>
+                                        <p className="font-semibold">{entry.foh}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">BOH</p>
+                                        <p className="font-semibold">{entry.boh}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">Delivered</p>
+                                        <p className="font-semibold">{entry.delivered}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">On Order</p>
+                                        <p className="font-semibold">{entry.on_order}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">Total</p>
+                                        <p className="font-semibold">{entry.total}</p>
+                                      </div>
+                                      <div className="bg-muted/30 rounded-2xl p-2">
+                                        <p className="text-xs text-muted-foreground">Par</p>
+                                        <p className="font-semibold">{entry.par}</p>
+                                      </div>
+                                    </div>
                                   </div>
-                                  {/* Milk Name & Total */}
-                                  <div className="flex-1 min-w-0">
-                                    <h3 className="font-semibold text-foreground truncate">{entry.milk_type}</h3>
-                                    <p className="text-xs text-muted-foreground">
-                                      Total: {entry.total} · Par: {entry.par}
-                                    </p>
-                                  </div>
-                                  {/* Order Value */}
-                                  <div className="text-right shrink-0">
-                                    <p className="text-xs text-muted-foreground">Order</p>
-                                    <p className="text-xl font-bold tabular-nums">{Math.max(0, entry.order)}</p>
-                                  </div>
-                                  {/* Chevron */}
-                                  <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                                </CollapsibleTrigger>
+                              </CollapsibleContent>
+                              {/* Expand/collapse bar */}
+                              <CollapsibleTrigger className="w-full">
+                                <div className="flex justify-center items-center py-1 border-t border-gray-200 bg-muted/20 active:bg-muted/40 transition-colors">
+                                  <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
                                 </div>
                               </CollapsibleTrigger>
-                              <CollapsibleContent>
-                                <div className="px-3 pb-3 border-t border-gray-200 pt-3">
-                                  <div className="grid grid-cols-3 gap-3 text-sm">
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">FOH</p>
-                                      <p className="font-semibold">{entry.foh}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">BOH</p>
-                                      <p className="font-semibold">{entry.boh}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">Delivered</p>
-                                      <p className="font-semibold">{entry.delivered}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">On Order</p>
-                                      <p className="font-semibold">{entry.on_order}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">Total</p>
-                                      <p className="font-semibold">{entry.total}</p>
-                                    </div>
-                                    <div className="bg-muted/30 rounded-2xl p-2">
-                                      <p className="text-xs text-muted-foreground">Par</p>
-                                      <p className="font-semibold">{entry.par}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </CollapsibleContent>
                             </div>
                           </Collapsible>
                         ))}
@@ -283,19 +283,19 @@ export default function SummaryPage() {
 
                 {/* Summary Table - Desktop View */}
                 <div className="hidden md:block">
-                  <Card className="rounded-2xl overflow-hidden">
+                  <Card className="rounded-2xl overflow-hidden py-0">
                     <CardContent className="p-0">
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                           <thead>
                             <tr className="border-b bg-muted/50">
-                              <th className="text-left py-3 px-4 font-semibold">Milk Type</th>
-                              <th className="text-center py-3 px-4 font-semibold">FOH</th>
-                              <th className="text-center py-3 px-4 font-semibold">BOH</th>
-                              <th className="text-center py-3 px-4 font-semibold">Delivered</th>
-                              <th className="text-center py-3 px-4 font-semibold">On Order</th>
-                              <th className="text-center py-3 px-4 font-semibold">Total</th>
-                              <th className="text-center py-3 px-4 font-semibold">Par</th>
+                              <th className="text-left py-3 px-4 font-semibold border-r border-border/40">Milk Type</th>
+                              <th className="text-center py-3 px-4 font-semibold border-r border-border/40">FOH</th>
+                              <th className="text-center py-3 px-4 font-semibold border-r border-border/40">BOH</th>
+                              <th className="text-center py-3 px-4 font-semibold border-r border-border/40">Delivered</th>
+                              <th className="text-center py-3 px-4 font-semibold border-r border-border/40">On Order</th>
+                              <th className="text-center py-3 px-4 font-semibold border-r border-border/40">Total</th>
+                              <th className="text-center py-3 px-4 font-semibold border-r border-border/40">Par</th>
                               <th className="text-center py-3 px-4 font-semibold">Order</th>
                             </tr>
                           </thead>
@@ -304,20 +304,20 @@ export default function SummaryPage() {
                             {dairyEntries.length > 0 && (
                               <tr className="bg-muted/30">
                                 <td colSpan={8} className="py-2 px-4 font-semibold text-foreground flex items-center gap-2">
-                                  <Milk className="h-4 w-4 text-muted-foreground" />
+                                  <Milk className="h-4 w-4 text-blue-500/80" />
                                   Dairy
                                 </td>
                               </tr>
                             )}
                             {dairyEntries.map((entry) => (
-                              <tr key={entry.milk_type} className="border-b hover:bg-muted/30">
-                                <td className="py-3 px-4 font-medium">{entry.milk_type}</td>
-                                <td className="text-center py-3 px-4">{entry.foh}</td>
-                                <td className="text-center py-3 px-4">{entry.boh}</td>
-                                <td className="text-center py-3 px-4">{entry.delivered}</td>
-                                <td className="text-center py-3 px-4">{entry.on_order}</td>
-                                <td className="text-center py-3 px-4 font-semibold">{entry.total}</td>
-                                <td className="text-center py-3 px-4">{entry.par}</td>
+                              <tr key={entry.milk_type} className="border-b last:border-b-0 even:bg-muted/50 hover:bg-muted/60">
+                                <td className="py-3 px-4 font-medium border-r border-border/40">{entry.milk_type}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.foh}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.boh}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.delivered}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.on_order}</td>
+                                <td className="text-center py-3 px-4 font-semibold border-r border-border/40">{entry.total}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.par}</td>
                                 <td className="text-center py-3 px-4">
                                   <span className="font-bold">
                                     {Math.max(0, entry.order)}
@@ -330,20 +330,20 @@ export default function SummaryPage() {
                             {nonDairyEntries.length > 0 && (
                               <tr className="bg-muted/30">
                                 <td colSpan={8} className="py-2 px-4 font-semibold text-foreground flex items-center gap-2">
-                                  <Leaf className="h-4 w-4 text-muted-foreground" />
+                                  <Leaf className="h-4 w-4 text-green-500/80" />
                                   Non-Dairy
                                 </td>
                               </tr>
                             )}
                             {nonDairyEntries.map((entry) => (
-                              <tr key={entry.milk_type} className="border-b hover:bg-muted/30">
-                                <td className="py-3 px-4 font-medium">{entry.milk_type}</td>
-                                <td className="text-center py-3 px-4">{entry.foh}</td>
-                                <td className="text-center py-3 px-4">{entry.boh}</td>
-                                <td className="text-center py-3 px-4">{entry.delivered}</td>
-                                <td className="text-center py-3 px-4">{entry.on_order}</td>
-                                <td className="text-center py-3 px-4 font-semibold">{entry.total}</td>
-                                <td className="text-center py-3 px-4">{entry.par}</td>
+                              <tr key={entry.milk_type} className="border-b last:border-b-0 even:bg-muted/50 hover:bg-muted/60">
+                                <td className="py-3 px-4 font-medium border-r border-border/40">{entry.milk_type}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.foh}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.boh}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.delivered}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.on_order}</td>
+                                <td className="text-center py-3 px-4 font-semibold border-r border-border/40">{entry.total}</td>
+                                <td className="text-center py-3 px-4 border-r border-border/40">{entry.par}</td>
                                 <td className="text-center py-3 px-4">
                                   <span className="font-bold">
                                     {Math.max(0, entry.order)}
@@ -358,42 +358,6 @@ export default function SummaryPage() {
                   </Card>
                 </div>
 
-                {/* Totals Card */}
-                {totals && (
-                  <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4">
-                    <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
-                      Totals
-                    </h2>
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-                      <div>
-                        <p className="text-xs text-muted-foreground">FOH</p>
-                        <p className="text-lg font-bold tabular-nums">{totals.total_foh}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">BOH</p>
-                        <p className="text-lg font-bold tabular-nums">{totals.total_boh}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">Delivered</p>
-                        <p className="text-lg font-bold tabular-nums">{totals.total_delivered}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">On Order</p>
-                        <p className="text-lg font-bold tabular-nums">{totals.total_on_order}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">Inventory</p>
-                        <p className="text-lg font-bold tabular-nums">{totals.total_inventory}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground">Order</p>
-                        <p className="text-2xl font-bold tabular-nums text-foreground">
-                          {Math.max(0, totals.total_order)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             )}
           </div>

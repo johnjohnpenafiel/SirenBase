@@ -112,7 +112,8 @@ export function MilkCountCard({
       <div
         className={cn(
           "shrink-0 w-[72px] h-[72px] rounded-2xl flex items-center justify-center",
-          "bg-muted text-muted-foreground"
+          "bg-muted",
+          isDairy ? "text-blue-500/80" : "text-green-500/80"
         )}
       >
         {isDairy ? (

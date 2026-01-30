@@ -121,7 +121,8 @@ export function MorningCountRow({
                 className={cn(
                   "shrink-0 w-[72px] h-[72px] rounded-2xl flex items-center justify-center",
                   "border-2 border-dashed transition-all",
-                  "bg-muted text-muted-foreground border-gray-300",
+                  "bg-muted border-gray-300",
+                  isDairy ? "text-blue-500/80" : "text-green-500/80",
                   "group-data-[state=open]/collapsible:border-solid group-data-[state=open]/collapsible:border-sky-500"
                 )}
               >

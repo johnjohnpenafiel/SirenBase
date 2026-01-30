@@ -177,7 +177,7 @@ A modern Apple-style frosted glass "island" that floats above scrollable content
 │   │ ░░  Page Title                                   ░░ │   │    • rounded-2xl corners
 │   │ ░░  Subtitle or context message                  ░░ │   │    • bg-gray-100/60
 │   │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │   │    • backdrop-blur-md
-│   └─────────────────────────────────────────────────────┘   │    • border-gray-200/50
+│   └─────────────────────────────────────────────────────┘   │    • border-gray-200
 │                                                             │
 │   ┌─────────┐  ┌─────────┐  ┌─────────┐                     │
 │   │  Card   │  │  Card   │  │  Card   │  ← Content scrolls  │
@@ -196,7 +196,7 @@ A modern Apple-style frosted glass "island" that floats above scrollable content
 | **Border radius** | `rounded-2xl` (16px) | Apple-style soft corners |
 | **Background** | `bg-gray-100/60` | Light grey at 60% opacity |
 | **Blur** | `backdrop-blur-md` | 12px blur reveals content motion |
-| **Border** | `border border-gray-200/50` | Subtle edge definition |
+| **Border** | `border border-gray-200` | Defined edge (full opacity for stronger visual definition) |
 | **Inner padding** | `px-5 py-4 md:px-6 md:py-5` | Comfortable internal spacing |
 | **Scroll shadow** | `shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]` | Bottom-only shadow on scroll |
 | **Transition** | `transition-all duration-300 ease-out` | Smooth shadow appearance |
@@ -211,7 +211,7 @@ A modern Apple-style frosted glass "island" that floats above scrollable content
       className={cn(
         "max-w-6xl mx-auto rounded-2xl",
         "bg-gray-100/60 backdrop-blur-md",
-        "border border-gray-200/50",
+        "border border-gray-200",
         "px-5 py-4 md:px-6 md:py-5",
         "transition-all duration-300 ease-out",
         isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -377,7 +377,8 @@ Already configured in `globals.css` with `-webkit-overflow-scrolling: touch`.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
+| 1.1.0 | Jan 30, 2026 | Island border updated from `border-gray-200/50` to `border-gray-200` (full opacity) |
 | — | Jan 16, 2026 | Title Area Island Pattern added (pre-extraction) |
 | — | Dec 14, 2025 | Dynamic Scroll Shadow Pattern added (pre-extraction) |
 
-**Last Updated**: January 20, 2026
+**Last Updated**: January 30, 2026

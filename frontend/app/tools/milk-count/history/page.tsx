@@ -2,10 +2,14 @@
  * Milk Count - History Page
  *
  * Shows past milk count sessions with status and links to summaries.
+ *
+ * Follows Design/layout.md guidelines:
+ * - App-like scrolling (h-dvh layout with overflow-y-auto)
+ * - Frosted island header pattern
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
@@ -16,12 +20,12 @@ import {
   Loader2,
   Calendar,
   CheckCircle2,
-  Clock,
   ChevronRight,
   Moon,
   Sun,
   ClipboardList,
   XCircle,
+  History,
 } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
@@ -67,7 +71,13 @@ export default function HistoryPage() {
   const [sessions, setSessions] = useState<MilkCountSession[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
   const limit = 20;
+
+  const handleScroll = useCallback((e: React.UIEvent<HTMLElement>) => {
+    const scrollTop = (e.target as HTMLElement).scrollTop;
+    setIsScrolled(scrollTop > 16);
+  }, []);
 
   // Determine if session is "missed" (incomplete and from a past day)
   const isMissed = (session: MilkCountSession) => {
@@ -155,31 +165,43 @@ export default function HistoryPage() {
     <ProtectedRoute>
       <div className="flex flex-col h-dvh">
         <Header />
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Fixed Header */}
-          <div className="border-b bg-background">
-            <div className="container max-w-2xl mx-auto px-4 py-3 md:py-4">
-              <div className="flex items-center gap-3">
+        <main className="flex-1 overflow-y-auto" onScroll={handleScroll}>
+          {/* Sticky Frosted Island Header */}
+          <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+            <div
+              className={cn(
+                "max-w-2xl mx-auto rounded-2xl",
+                "bg-gray-100/60 backdrop-blur-md",
+                "border border-gray-200",
+                "px-5 py-4 md:px-6 md:py-5",
+                "transition-all duration-300 ease-out",
+                isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+              )}
+            >
+              {/* Back Button */}
+              <div className="mb-3">
                 <BackButton
                   variant="icon-only"
                   href="/tools/milk-count"
                   label="Back to Milk Count"
                 />
-                <div>
-                  <h1 className="text-lg md:text-xl font-bold text-foreground">
-                    Milk Count History
-                  </h1>
-                  <p className="text-xs text-muted-foreground">
-                    Past sessions and summaries
-                  </p>
-                </div>
               </div>
+
+              {/* Title */}
+              <div className="flex items-center gap-2">
+                <History className="h-5 w-5 text-sky-600" />
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+                  History
+                </h1>
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">
+                Past sessions and summaries
+              </p>
             </div>
           </div>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="container max-w-2xl mx-auto px-4 py-4 pb-8">
+          {/* Content - scrolls under the island */}
+          <div className="container max-w-2xl mx-auto px-4 pb-8">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-16">
                   <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
@@ -220,7 +242,7 @@ export default function HistoryPage() {
                       <Card
                         key={session.id}
                         className={cn(
-                          "rounded-2xl transition-all",
+                          "border border-gray-200 rounded-2xl transition-all",
                           isClickable && "cursor-pointer",
                           session.status === "completed" && "hover:border-primary/50",
                           sessionIsMissed && "opacity-60"
@@ -230,57 +252,63 @@ export default function HistoryPage() {
                         <CardContent className="p-4">
                           <div className="flex items-center gap-4">
                             {/* Date Icon */}
-                            <div className="shrink-0 w-12 h-12 rounded-2xl bg-muted flex flex-col items-center justify-center">
-                              <span className="text-xs text-muted-foreground uppercase">
+                            <div className="shrink-0 w-[52px] h-[52px] rounded-2xl bg-muted flex flex-col items-center justify-center gap-0.5">
+                              <span className="text-[10px] leading-none text-muted-foreground uppercase font-medium">
                                 {parseLocalDate(session.date).toLocaleDateString("en-US", { month: "short" })}
                               </span>
-                              <span className="text-lg font-bold">
+                              <span className="text-lg leading-none font-bold">
                                 {parseLocalDate(session.date).getDate()}
                               </span>
                             </div>
 
                             {/* Session Info */}
                             <div className="flex-1 min-w-0">
-                              <p className="font-semibold text-foreground">
-                                {formatDate(session.date)}
-                              </p>
+                              <div className="flex items-center gap-1.5">
+                                <p className="font-semibold text-foreground">
+                                  {formatDate(session.date)}
+                                </p>
+                                <span className={cn("shrink-0", displayConfig.color.split(" ")[0])}>
+                                  {displayConfig.icon}
+                                </span>
+                              </div>
                               <p className="text-xs text-muted-foreground">
                                 {formatFullDate(session.date)}
                               </p>
                             </div>
 
-                            {/* Status Badge */}
-                            <div className={cn(
-                              "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium",
-                              displayConfig.color
-                            )}>
-                              {displayConfig.icon}
-                              <span className="hidden sm:inline">{displayConfig.label}</span>
-                            </div>
-
-                            {/* Chevron - only for completed sessions */}
-                            {session.status === "completed" && (
+                            {/* Chevron - only for clickable sessions */}
+                            {isClickable && (
                               <ChevronRight className="h-5 w-5 text-muted-foreground" />
                             )}
                           </div>
 
                           {/* Additional Info for Completed Sessions */}
                           {session.status === "completed" && session.completed_at && (
-                            <div className="mt-3 pt-3 border-t border-gray-200/50 flex items-center gap-4 text-xs text-muted-foreground">
-                              <div className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                <span>
-                                  Completed at {new Date(session.completed_at).toLocaleTimeString("en-US", {
+                            <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+                              <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50 text-sm">
+                                <p className="text-xs text-muted-foreground">Completed</p>
+                                <p>
+                                  {new Date(session.completed_at).toLocaleTimeString("en-US", {
                                     hour: "numeric",
                                     minute: "2-digit",
                                   })}
-                                </span>
+                                </p>
                               </div>
-                              {session.night_count_user_name && (
-                                <span>Night: {session.night_count_user_name}</span>
-                              )}
-                              {session.morning_count_user_name && (
-                                <span>Morning: {session.morning_count_user_name}</span>
+                              {(session.night_count_user_name || session.morning_count_user_name) && (
+                                <div className="grid grid-cols-2 gap-2 text-sm">
+                                  {session.night_count_user_name && (
+                                    <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
+                                      <p className="text-xs text-muted-foreground">Night</p>
+                                      <p>{session.night_count_user_name}</p>
+                                    </div>
+                                  )}
+                                  {session.morning_count_user_name && (
+                                    <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
+                                      <p className="text-xs text-muted-foreground">Morning</p>
+                                      <p>{session.morning_count_user_name}</p>
+                                    </div>
+                                  )}
+                                </div>
                               )}
                             </div>
                           )}
@@ -302,7 +330,6 @@ export default function HistoryPage() {
                 </div>
               )}
             </div>
-          </div>
         </main>
       </div>
     </ProtectedRoute>

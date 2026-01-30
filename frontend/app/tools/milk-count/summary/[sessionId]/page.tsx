@@ -99,7 +99,7 @@ export default function SummaryPage() {
               className={cn(
                 "max-w-2xl mx-auto rounded-2xl",
                 "bg-gray-100/60 backdrop-blur-md",
-                "border border-gray-200/50",
+                "border border-gray-200",
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -199,8 +199,8 @@ export default function SummaryPage() {
                                 </CollapsibleTrigger>
                               </CollapsibleContent>
                               {/* Expand/collapse bar */}
-                              <CollapsibleTrigger className="w-full">
-                                <div className="flex justify-center items-center py-1 bg-muted/50 active:bg-muted/70 transition-colors">
+                              <CollapsibleTrigger className="block w-full">
+                                <div className="flex justify-center items-center py-1 bg-gray-200 active:bg-gray-300 transition-colors">
                                   <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
                                 </div>
                               </CollapsibleTrigger>
@@ -270,8 +270,8 @@ export default function SummaryPage() {
                                 </CollapsibleTrigger>
                               </CollapsibleContent>
                               {/* Expand/collapse bar */}
-                              <CollapsibleTrigger className="w-full">
-                                <div className="flex justify-center items-center py-1 bg-muted/50 active:bg-muted/70 transition-colors">
+                              <CollapsibleTrigger className="block w-full">
+                                <div className="flex justify-center items-center py-1 bg-gray-200 active:bg-gray-300 transition-colors">
                                   <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
                                 </div>
                               </CollapsibleTrigger>
@@ -366,10 +366,9 @@ export default function SummaryPage() {
 
           {/* Fixed Frosted Footer */}
           {!loading && (
-            <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-background">
               <div className="container max-w-2xl mx-auto px-4 py-3">
                 <Button
-                  variant="outline"
                   className="w-full"
                   onClick={() => router.push("/tools/milk-count/history")}
                 >

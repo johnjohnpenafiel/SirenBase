@@ -221,7 +221,7 @@ export default function HistoryPage() {
                         key={session.id}
                         className={cn(
                           "rounded-2xl transition-all",
-                          isClickable && "cursor-pointer hover:shadow-md",
+                          isClickable && "cursor-pointer",
                           session.status === "completed" && "hover:border-primary/50",
                           sessionIsMissed && "opacity-60"
                         )}

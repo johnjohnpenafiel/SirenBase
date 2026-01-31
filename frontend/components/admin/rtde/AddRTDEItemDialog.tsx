@@ -5,6 +5,7 @@
  * Allows setting item name, emoji icon, par level, and active status.
  *
  * Uses react-hook-form + zod for type-safe validation.
+ * Follows Design/dialogs.md guidelines.
  */
 'use client';
 
@@ -55,7 +56,6 @@ export function AddRTDEItemDialog({
   });
 
   const handleClose = () => {
-    // Reset form
     form.reset();
     onOpenChange(false);
   };
@@ -83,8 +83,8 @@ export function AddRTDEItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
+        <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
           <DialogTitle>Add RTD&E Item</DialogTitle>
           <DialogDescription>
             Create a new item for the RTD&E display. Product images are managed
@@ -94,7 +94,6 @@ export function AddRTDEItemDialog({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Item Name */}
             <FormField
               control={form.control}
               name="name"
@@ -116,7 +115,6 @@ export function AddRTDEItemDialog({
               )}
             />
 
-            {/* Brand (Optional) */}
             <FormField
               control={form.control}
               name="brand"
@@ -138,7 +136,6 @@ export function AddRTDEItemDialog({
               )}
             />
 
-            {/* Icon/Emoji (Optional) */}
             <FormField
               control={form.control}
               name="icon"
@@ -161,7 +158,6 @@ export function AddRTDEItemDialog({
               )}
             />
 
-            {/* Par Level */}
             <FormField
               control={form.control}
               name="par_level"
@@ -186,17 +182,18 @@ export function AddRTDEItemDialog({
               )}
             />
 
-            <DialogFooter className="gap-2 sm:gap-0">
+            <DialogFooter className="flex-col gap-2 sm:flex-col">
+              <Button type="submit" disabled={form.formState.isSubmitting} className="w-full">
+                {form.formState.isSubmitting ? 'Creating...' : 'Create Item'}
+              </Button>
               <Button
                 type="button"
-                variant="secondary"
+                variant="outline"
                 onClick={handleClose}
                 disabled={form.formState.isSubmitting}
+                className="w-full"
               >
                 Cancel
-              </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Creating...' : 'Create Item'}
               </Button>
             </DialogFooter>
           </form>

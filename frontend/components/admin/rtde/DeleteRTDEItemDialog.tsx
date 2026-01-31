@@ -3,6 +3,7 @@
  *
  * Confirmation dialog for deleting RTD&E items.
  * Warns about potential cascade effects if item is used in sessions.
+ * Follows Design/dialogs.md guidelines.
  */
 'use client';
 
@@ -19,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import apiClient from '@/lib/api';
 import { toast } from 'sonner';
 import type { RTDEItem } from '@/types';
-import { AlertCircle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 interface DeleteRTDEItemDialogProps {
   open: boolean;
@@ -58,22 +59,22 @@ export function DeleteRTDEItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Delete RTD&E Item</DialogTitle>
+      <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
+        <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
+          <DialogTitle>Delete RTD&E Item?</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete this item? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
         {item && (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {/* Item Preview */}
-            <div className="rounded-lg border p-4 bg-muted/50">
+            <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4">
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{item.icon}</span>
                 <div className="flex-1">
-                  <p className="font-medium">{item.name}</p>
+                  <p className="font-semibold text-foreground">{item.name}</p>
                   <p className="text-sm text-muted-foreground">
                     Par Level: {item.par_level}
                   </p>
@@ -82,35 +83,34 @@ export function DeleteRTDEItemDialog({
             </div>
 
             {/* Warning */}
-            <div className="flex items-start gap-3 rounded-lg border border-destructive/50 bg-destructive/10 p-4">
-              <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium text-destructive">Warning</p>
-                <p className="text-sm text-muted-foreground">
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-4">
+              <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
+                <AlertTriangle className="size-4 mt-0.5 flex-shrink-0" />
+                <span>
                   If this item has been used in counting sessions, it will be soft-deleted
                   (marked as inactive) to preserve historical data.
-                </p>
-              </div>
+                </span>
+              </p>
             </div>
           </div>
         )}
 
-        <DialogFooter className="gap-2 sm:gap-0">
+        <DialogFooter className="flex-col gap-2 sm:flex-col">
           <Button
-            type="button"
-            variant="secondary"
-            onClick={() => onOpenChange(false)}
-            disabled={isDeleting}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="button"
             variant="destructive"
             onClick={handleDelete}
             disabled={isDeleting}
+            className="w-full"
           >
             {isDeleting ? 'Deleting...' : 'Delete Item'}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isDeleting}
+            className="w-full"
+          >
+            Cancel
           </Button>
         </DialogFooter>
       </DialogContent>

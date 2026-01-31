@@ -233,6 +233,89 @@ A modern Apple-style frosted glass "island" that floats above scrollable content
 </main>
 ```
 
+### Island Content Layout
+
+The content inside the island follows a strict layout hierarchy. Navigation and actions sit on the **top row**, with the page title and subtitle below.
+
+#### Structure
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  [← Back]                              [Action Button]  │  ← Top row
+│                                                         │
+│  Page Title                                             │  ← Title
+│  Subtitle or context                                    │  ← Subtitle
+│  [Filter] [Toggle]                                      │  ← Controls (optional)
+└─────────────────────────────────────────────────────────┘
+```
+
+**Top Row Rules**:
+1. Back button on the **left**, action button(s) on the **right**, using `flex items-center justify-between`
+2. Back button uses the **default** `BackButton` variant: icon-only on mobile, icon + label on desktop
+3. Action buttons use `size="icon" className="md:w-auto md:px-4"`: icon-only on mobile, icon + label on desktop
+4. If there are no action buttons, the top row still contains only the back button (maintains consistent layout)
+5. If there are multiple action buttons, group them in a `flex gap-2` container on the right
+
+**Title Row Rules**:
+1. Title and subtitle sit **below** the top row, never on the same row as the back/action buttons
+2. The top row has `mb-4` spacing before the title
+
+**Controls Row (Optional)**:
+1. Filters, toggles, or secondary actions sit below the title with `mb-3` on the subtitle
+
+#### Implementation
+
+```tsx
+{/* Top row: Back + Actions */}
+<div className="flex items-center justify-between mb-4">
+  <BackButton
+    href="/parent-route"
+    label="Parent Page"
+  />
+  {/* Single action button */}
+  <Button
+    size="icon"
+    className="md:w-auto md:px-4"
+    onClick={handleAction}
+  >
+    <Plus className="h-4 w-4 md:mr-2" />
+    <span className="hidden md:inline">Add Item</span>
+  </Button>
+</div>
+
+{/* Title */}
+<h1 className="text-2xl md:text-3xl font-bold text-foreground">
+  Page Title
+</h1>
+<p className="text-sm text-muted-foreground">
+  Subtitle or context
+</p>
+```
+
+```tsx
+{/* Multiple action buttons */}
+<div className="flex items-center justify-between mb-4">
+  <BackButton href="/parent-route" label="Parent Page" />
+  <div className="flex gap-2">
+    <Button variant="outline" size="icon" className="md:w-auto md:px-4" onClick={handleSecondary}>
+      <History className="h-4 w-4 md:mr-2" />
+      <span className="hidden md:inline">History</span>
+    </Button>
+    <Button size="icon" className="md:w-auto md:px-4" onClick={handlePrimary}>
+      <Plus className="h-4 w-4 md:mr-2" />
+      <span className="hidden md:inline">Add Item</span>
+    </Button>
+  </div>
+</div>
+```
+
+#### Why This Pattern
+
+- **Mobile**: Back and action buttons are compact icons, maximizing space for the title
+- **Desktop**: Buttons expand to show labels for clarity
+- **Consistency**: Every sub-page island looks and behaves the same way regardless of how many actions it has
+- **Touch-friendly**: Buttons on the top row are easy to reach; title area below is purely informational
+
 ### Common Mistakes
 
 ❌ **Don't** nest the scroll container inside another `overflow-hidden` wrapper — blur won't work
@@ -377,6 +460,7 @@ Already configured in `globals.css` with `-webkit-overflow-scrolling: touch`.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
+| 1.2.0 | Jan 30, 2026 | Added Island Content Layout rules (top row nav + actions, title below) |
 | 1.1.0 | Jan 30, 2026 | Island border updated from `border-gray-200/50` to `border-gray-200` (full opacity) |
 | — | Jan 16, 2026 | Title Area Island Pattern added (pre-extraction) |
 | — | Dec 14, 2025 | Dynamic Scroll Shadow Pattern added (pre-extraction) |

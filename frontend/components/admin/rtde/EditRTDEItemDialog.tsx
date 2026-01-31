@@ -5,6 +5,7 @@
  * Allows updating item name, emoji icon, par level, and active status.
  *
  * Uses react-hook-form + zod for type-safe validation.
+ * Follows Design/dialogs.md guidelines.
  */
 'use client';
 
@@ -61,7 +62,6 @@ export function EditRTDEItemDialog({
     },
   });
 
-  // Update form when item changes
   useEffect(() => {
     if (item) {
       form.reset({
@@ -75,7 +75,6 @@ export function EditRTDEItemDialog({
   }, [item, form]);
 
   const handleClose = () => {
-    // Reset form
     form.reset();
     onOpenChange(false);
   };
@@ -106,8 +105,8 @@ export function EditRTDEItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
+        <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
           <DialogTitle>Edit RTD&E Item</DialogTitle>
           <DialogDescription>
             Update item details, par level, or active status. Product images are
@@ -119,27 +118,28 @@ export function EditRTDEItemDialog({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Current Image Preview (Read-only) */}
             {item && (
-              <div className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
-                <RTDEItemImage
-                  imageFilename={item.image_filename}
-                  icon={item.icon}
-                  size="md"
-                  alt={`${item.brand ? `${item.brand} ` : ''}${item.name}`}
-                />
-                <div className="flex-1 min-w-0">
-                  <Label className="text-sm font-medium">Current Display</Label>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {item.image_filename
-                      ? `Image: ${item.image_filename}`
-                      : item.icon
-                        ? `Emoji: ${item.icon}`
-                        : 'Placeholder icon'}
-                  </p>
+              <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4">
+                <div className="flex items-center gap-4">
+                  <RTDEItemImage
+                    imageFilename={item.image_filename}
+                    icon={item.icon}
+                    size="md"
+                    alt={`${item.brand ? `${item.brand} ` : ''}${item.name}`}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <Label className="text-sm font-medium">Current Display</Label>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {item.image_filename
+                        ? `Image: ${item.image_filename}`
+                        : item.icon
+                          ? `Emoji: ${item.icon}`
+                          : 'Placeholder icon'}
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Item Name */}
             <FormField
               control={form.control}
               name="name"
@@ -158,7 +158,6 @@ export function EditRTDEItemDialog({
               )}
             />
 
-            {/* Brand (Optional) */}
             <FormField
               control={form.control}
               name="brand"
@@ -180,7 +179,6 @@ export function EditRTDEItemDialog({
               )}
             />
 
-            {/* Icon/Emoji (Optional) */}
             <FormField
               control={form.control}
               name="icon"
@@ -203,7 +201,6 @@ export function EditRTDEItemDialog({
               )}
             />
 
-            {/* Par Level */}
             <FormField
               control={form.control}
               name="par_level"
@@ -233,7 +230,7 @@ export function EditRTDEItemDialog({
               control={form.control}
               name="active"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <FormItem className="flex flex-row items-center justify-between rounded-2xl border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Active</FormLabel>
                     <FormDescription>
@@ -253,17 +250,18 @@ export function EditRTDEItemDialog({
               )}
             />
 
-            <DialogFooter className="gap-2 sm:gap-0">
+            <DialogFooter className="flex-col gap-2 sm:flex-col">
+              <Button type="submit" disabled={form.formState.isSubmitting} className="w-full">
+                {form.formState.isSubmitting ? 'Saving...' : 'Save Changes'}
+              </Button>
               <Button
                 type="button"
-                variant="secondary"
+                variant="outline"
                 onClick={handleClose}
                 disabled={form.formState.isSubmitting}
+                className="w-full"
               >
                 Cancel
-              </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Saving...' : 'Save Changes'}
               </Button>
             </DialogFooter>
           </form>

@@ -22,11 +22,7 @@ import { Loader2, Check } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import type { MilkType, MilkCountSession } from "@/types";
-
-interface CountState {
-  [milkTypeId: string]: number;
-}
+import type { MilkType, MilkCountSession, MilkCountState } from "@/types";
 
 export default function NightBOHPage() {
   const router = useRouter();
@@ -34,7 +30,7 @@ export default function NightBOHPage() {
   const [saving, setSaving] = useState(false);
   const [milkTypes, setMilkTypes] = useState<MilkType[]>([]);
   const [session, setSession] = useState<MilkCountSession | null>(null);
-  const [counts, setCounts] = useState<CountState>({});
+  const [counts, setCounts] = useState<MilkCountState>({});
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -81,13 +77,13 @@ export default function NightBOHPage() {
       if (currentSession.id) {
         try {
           const sessionData = await apiClient.getMilkCountSession(currentSession.id);
-          const initialCounts: CountState = {};
+          const initialCounts: MilkCountState = {};
           sessionData.entries.forEach((entry) => {
             initialCounts[entry.milk_type_id] = entry.boh_count ?? 0;
           });
           setCounts(initialCounts);
         } catch {
-          const initialCounts: CountState = {};
+          const initialCounts: MilkCountState = {};
           activeMilkTypes.forEach(mt => {
             initialCounts[mt.id] = 0;
           });
@@ -210,7 +206,6 @@ export default function NightBOHPage() {
                       {dairyMilks.map(milk => (
                         <MilkCountCard
                           key={milk.id}
-                          milkTypeId={milk.id}
                           milkName={milk.name}
                           category={milk.category}
                           currentCount={counts[milk.id] ?? 0}
@@ -231,7 +226,6 @@ export default function NightBOHPage() {
                       {nonDairyMilks.map(milk => (
                         <MilkCountCard
                           key={milk.id}
-                          milkTypeId={milk.id}
                           milkName={milk.name}
                           category={milk.category}
                           currentCount={counts[milk.id] ?? 0}

@@ -9,15 +9,14 @@
  */
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Minus, Plus, Milk, Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCounterInput } from "@/hooks/use-counter-input";
 import type { MilkCategory } from "@/types";
 
 interface MilkCountCardProps {
-  milkTypeId: string;
   milkName: string;
   category: MilkCategory;
   currentCount: number;
@@ -27,7 +26,6 @@ interface MilkCountCardProps {
 }
 
 export function MilkCountCard({
-  milkTypeId,
   milkName,
   category,
   currentCount,
@@ -35,65 +33,17 @@ export function MilkCountCard({
   saving = false,
   className,
 }: MilkCountCardProps) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [inputValue, setInputValue] = useState(currentCount.toString());
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // Sync input value when currentCount changes externally
-  useEffect(() => {
-    if (!isEditing) {
-      setInputValue(currentCount.toString());
-    }
-  }, [currentCount, isEditing]);
-
-  const handleIncrement = () => {
-    const newCount = Math.min(currentCount + 1, 999);
-    onCountChange(newCount);
-  };
-
-  const handleDecrement = () => {
-    const newCount = Math.max(currentCount - 1, 0);
-    onCountChange(newCount);
-  };
-
-  const handleInputFocus = () => {
-    setIsEditing(true);
-    // Select all text when focused (slight delay to ensure it works on mobile)
-    setTimeout(() => inputRef.current?.select(), 10);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value === "") {
-      setInputValue("");
-      return;
-    }
-    if (/^\d+$/.test(value)) {
-      const numValue = parseInt(value, 10);
-      if (numValue <= 999) {
-        setInputValue(value);
-      }
-    }
-  };
-
-  const handleInputBlur = () => {
-    const numValue = parseInt(inputValue, 10);
-    if (!isNaN(numValue) && numValue >= 0 && numValue <= 999) {
-      onCountChange(numValue);
-    } else {
-      setInputValue(currentCount.toString());
-    }
-    setIsEditing(false);
-  };
-
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      inputRef.current?.blur();
-    } else if (e.key === "Escape") {
-      setInputValue(currentCount.toString());
-      setIsEditing(false);
-    }
-  };
+  const {
+    inputRef,
+    inputValue,
+    isEditing,
+    handleIncrement,
+    handleDecrement,
+    handleInputFocus,
+    handleInputChange,
+    handleInputBlur,
+    handleInputKeyDown,
+  } = useCounterInput({ value: currentCount, onChange: onCountChange });
 
   const isDairy = category === "dairy";
 
@@ -165,7 +115,6 @@ export function MilkCountCard({
 
       {/* Vertical +/- Button Stack */}
       <div className="flex flex-col gap-1 shrink-0">
-        {/* Increment Button (top) */}
         <Button
           onClick={handleIncrement}
           disabled={currentCount >= 999}
@@ -186,7 +135,6 @@ export function MilkCountCard({
           <Plus className="h-4 w-4" strokeWidth={2.5} />
         </Button>
 
-        {/* Decrement Button (bottom) */}
         <Button
           onClick={handleDecrement}
           disabled={currentCount === 0}

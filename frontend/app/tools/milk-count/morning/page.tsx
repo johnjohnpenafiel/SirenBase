@@ -24,7 +24,7 @@ import { Loader2, ArrowRight } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import type { MilkType, MilkCountSession, MilkCountEntry, MilkCountMorningMethod } from "@/types";
+import type { MilkType, MilkCountSession, MilkCountMorningMethod } from "@/types";
 
 interface CountState {
   [milkTypeId: string]: {
@@ -273,7 +273,6 @@ export default function MorningCountPage() {
                       {dairyMilks.map(milk => (
                         <MorningCountRow
                           key={milk.id}
-                          milkTypeId={milk.id}
                           milkName={milk.name}
                           category={milk.category}
                           nightBohCount={counts[milk.id]?.nightBoh ?? 0}
@@ -297,7 +296,6 @@ export default function MorningCountPage() {
                       {nonDairyMilks.map(milk => (
                         <MorningCountRow
                           key={milk.id}
-                          milkTypeId={milk.id}
                           milkName={milk.name}
                           category={milk.category}
                           nightBohCount={counts[milk.id]?.nightBoh ?? 0}

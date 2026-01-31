@@ -242,7 +242,7 @@ export default function HistoryPage() {
                       <Card
                         key={session.id}
                         className={cn(
-                          "border border-gray-200 rounded-2xl transition-all",
+                          "border border-gray-200 rounded-2xl transition-all py-0",
                           isClickable && "cursor-pointer",
                           session.status === "completed" && "hover:border-primary/50",
                           sessionIsMissed && "opacity-60"

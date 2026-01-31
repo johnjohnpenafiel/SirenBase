@@ -289,7 +289,11 @@ export default function MilkCountPage() {
                                       )}
                                     </div>
                                     {/* Label + Status */}
-                                    <div className={cn("flex-1", !isLast ? "pb-4" : "pb-0")}>
+                                    <div className={cn(
+                                      "flex-1 rounded-lg px-3 py-1.5",
+                                      !isLast ? "mb-1" : "",
+                                      i % 2 === 0 ? "bg-gray-200/50" : "bg-muted/60"
+                                    )}>
                                       <p className="font-medium">{step.label}</p>
                                       <p className="text-sm text-muted-foreground">
                                         {step.savedAt
@@ -310,7 +314,7 @@ export default function MilkCountPage() {
                                       <CheckCircle2 className="h-5 w-5 text-sky-600" />
                                     </div>
                                   </div>
-                                  <div className="flex-1">
+                                  <div className="flex-1 rounded-lg px-3 py-1.5 bg-gray-200/50">
                                     <p className="font-medium text-sky-600">Complete!</p>
                                     <p className="text-sm text-muted-foreground">
                                       {session.completed_at

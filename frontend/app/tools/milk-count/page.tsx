@@ -203,24 +203,24 @@ export default function MilkCountPage() {
             ) : (
               <div className="space-y-6">
                 {/* Status Card */}
-                <Card className="border border-gray-200 rounded-2xl">
-                  <CardHeader className="pb-2">
+                <Card className="border border-gray-200 rounded-2xl overflow-hidden py-0 gap-0">
+                  <CardHeader className="py-5">
                     <div className="flex items-start gap-4">
                       <div className={cn("p-3 rounded-2xl", config.iconBg)}>
                         {config.icon}
                       </div>
                       <div className="flex-1">
                         <CardTitle className="text-xl">{config.title}</CardTitle>
-                        <p className={cn("text-sm font-medium mt-0.5", config.statusColor)}>
+                        <span className={cn("inline-block text-xs font-medium mt-1 px-2.5 py-0.5 rounded-full bg-muted", config.statusColor)}>
                           {config.status}
-                        </p>
+                        </span>
                         <CardDescription className="mt-2">
                           {config.description}
                         </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent className="pt-4">
+                  <CardContent className="py-4">
                     <Button
                       onClick={handleAction}
                       disabled={starting}
@@ -249,112 +249,81 @@ export default function MilkCountPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-3">
-                        {/* Progress Steps - Sky brand color scheme */}
-                        <div className="flex items-center gap-3">
-                          <div className={cn(
-                            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
-                            session.night_foh_saved_at
-                              ? "bg-sky-100 text-sky-600"
-                              : session.status === "night_foh"
-                                ? "bg-muted text-foreground animate-pulse"
-                                : "bg-muted/50 text-muted-foreground"
-                          )}>
-                            1
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium">Night FOH</p>
-                            <p className="text-sm text-muted-foreground">
-                              {session.night_foh_saved_at
-                                ? `Saved at ${new Date(session.night_foh_saved_at).toLocaleTimeString()}`
-                                : session.status === "night_foh" ? "In progress..." : "Pending"
-                              }
-                            </p>
-                          </div>
-                        </div>
+                      <div className="relative">
+                        {/* Wizard Stepper */}
+                        {(() => {
+                          const steps = [
+                            { label: "Night FOH", savedAt: session.night_foh_saved_at, activeStatus: "night_foh" as const },
+                            { label: "Night BOH", savedAt: session.night_boh_saved_at, activeStatus: "night_boh" as const },
+                            { label: "Morning BOH", savedAt: session.morning_saved_at, activeStatus: "morning" as const },
+                            { label: "On Order", savedAt: session.on_order_saved_at, activeStatus: "on_order" as const },
+                          ];
+                          const showComplete = session.status === "completed";
 
-                        <div className="flex items-center gap-3">
-                          <div className={cn(
-                            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
-                            session.night_boh_saved_at
-                              ? "bg-sky-100 text-sky-600"
-                              : session.status === "night_boh"
-                                ? "bg-muted text-foreground animate-pulse"
-                                : "bg-muted/50 text-muted-foreground"
-                          )}>
-                            2
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium">Night BOH</p>
-                            <p className="text-sm text-muted-foreground">
-                              {session.night_boh_saved_at
-                                ? `Saved at ${new Date(session.night_boh_saved_at).toLocaleTimeString()}`
-                                : session.status === "night_boh" ? "In progress..." : "Pending"
-                              }
-                            </p>
-                          </div>
-                        </div>
+                          return (
+                            <div className="flex flex-col">
+                              {steps.map((step, i) => {
+                                const isCompleted = !!step.savedAt;
+                                const isActive = session.status === step.activeStatus;
+                                const isLast = !showComplete && i === steps.length - 1;
 
-                        <div className="flex items-center gap-3">
-                          <div className={cn(
-                            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
-                            session.morning_saved_at
-                              ? "bg-sky-100 text-sky-600"
-                              : session.status === "morning"
-                                ? "bg-muted text-foreground animate-pulse"
-                                : "bg-muted/50 text-muted-foreground"
-                          )}>
-                            3
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium">Morning BOH</p>
-                            <p className="text-sm text-muted-foreground">
-                              {session.morning_saved_at
-                                ? `Saved at ${new Date(session.morning_saved_at).toLocaleTimeString()}`
-                                : session.status === "morning" ? "In progress..." : "Pending"
-                              }
-                            </p>
-                          </div>
-                        </div>
+                                return (
+                                  <div key={step.label} className="flex gap-3">
+                                    {/* Circle + Connector column */}
+                                    <div className="flex flex-col items-center">
+                                      <div className={cn(
+                                        "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0",
+                                        isCompleted
+                                          ? "bg-sky-100 text-sky-600"
+                                          : isActive
+                                            ? "bg-muted text-foreground animate-pulse"
+                                            : "bg-muted/50 text-muted-foreground"
+                                      )}>
+                                        {i + 1}
+                                      </div>
+                                      {!isLast && (
+                                        <div className={cn(
+                                          "w-0.5 flex-1 my-1",
+                                          isCompleted ? "bg-sky-300" : "bg-gray-300"
+                                        )} />
+                                      )}
+                                    </div>
+                                    {/* Label + Status */}
+                                    <div className={cn("flex-1", !isLast ? "pb-4" : "pb-0")}>
+                                      <p className="font-medium">{step.label}</p>
+                                      <p className="text-sm text-muted-foreground">
+                                        {step.savedAt
+                                          ? `Saved at ${new Date(step.savedAt).toLocaleTimeString()}`
+                                          : isActive ? "In progress..." : "Pending"
+                                        }
+                                      </p>
+                                    </div>
+                                  </div>
+                                );
+                              })}
 
-                        <div className="flex items-center gap-3">
-                          <div className={cn(
-                            "w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold",
-                            session.on_order_saved_at
-                              ? "bg-sky-100 text-sky-600"
-                              : session.status === "on_order"
-                                ? "bg-muted text-foreground animate-pulse"
-                                : "bg-muted/50 text-muted-foreground"
-                          )}>
-                            4
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium">On Order</p>
-                            <p className="text-sm text-muted-foreground">
-                              {session.on_order_saved_at
-                                ? `Saved at ${new Date(session.on_order_saved_at).toLocaleTimeString()}`
-                                : session.status === "on_order" ? "In progress..." : "Pending"
-                              }
-                            </p>
-                          </div>
-                        </div>
-
-                        {session.status === "completed" && (
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-sky-100">
-                              <CheckCircle2 className="h-5 w-5 text-sky-600" />
+                              {/* Completed step */}
+                              {showComplete && (
+                                <div className="flex gap-3">
+                                  <div className="flex flex-col items-center">
+                                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-sky-100 shrink-0">
+                                      <CheckCircle2 className="h-5 w-5 text-sky-600" />
+                                    </div>
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="font-medium text-sky-600">Complete!</p>
+                                    <p className="text-sm text-muted-foreground">
+                                      {session.completed_at
+                                        ? `Completed at ${new Date(session.completed_at).toLocaleTimeString()}`
+                                        : "Session complete"
+                                      }
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
                             </div>
-                            <div className="flex-1">
-                              <p className="font-medium text-sky-600">Complete!</p>
-                              <p className="text-sm text-muted-foreground">
-                                {session.completed_at
-                                  ? `Completed at ${new Date(session.completed_at).toLocaleTimeString()}`
-                                  : "Session complete"
-                                }
-                              </p>
-                            </div>
-                          </div>
-                        )}
+                          );
+                        })()}
                       </div>
                     </CardContent>
                   </Card>

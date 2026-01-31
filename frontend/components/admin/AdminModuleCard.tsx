@@ -2,10 +2,10 @@
  * Admin Module Card Component
  *
  * Reusable card for displaying admin modules on the admin dashboard.
- * Similar to ToolCard but designed for administrative functions.
+ * Matches ToolCard design language with amber admin accent.
  * Follows Design/components.md guidelines:
  * - Uses design system color tokens
- * - Hover effects with theme colors
+ * - Hover effects with amber theme for admin
  * - Accessible with keyboard navigation
  */
 'use client';
@@ -51,14 +51,14 @@ export function AdminModuleCard({
       aria-label={`${title}${isDisabled ? ' (Coming soon)' : ''}`}
       aria-disabled={isDisabled}
       className={`
-        p-6 border border-gray-200 rounded-xl bg-card text-card-foreground transition-all
+        p-6 border border-gray-200 rounded-2xl bg-card text-card-foreground transition-all
         ${isDisabled
           ? 'opacity-50 cursor-not-allowed'
-          : 'cursor-pointer hover:shadow-lg hover:border-amber-500 hover:scale-102 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2'
+          : 'cursor-pointer hover:shadow-lg hover:scale-102 hover:border-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
         }
       `}
     >
-      {icon && <div className="mb-4 text-amber-600 dark:text-amber-400">{icon}</div>}
+      {icon && <div className="mb-4">{icon}</div>}
 
       <h2 className="text-xl font-semibold mb-2 text-foreground">
         {title}

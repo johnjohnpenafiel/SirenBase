@@ -5,6 +5,7 @@
  * Allows setting role (admin/staff) and initial PIN.
  *
  * Uses react-hook-form + zod for type-safe validation with PIN confirmation.
+ * Follows Design/dialogs.md guidelines.
  */
 'use client';
 
@@ -37,7 +38,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import apiClient from '@/lib/api';
-import type { UserRole } from '@/types';
 import { toast } from 'sonner';
 import { addUserSchema, type AddUserFormData } from '@/lib/validations/admin';
 
@@ -60,7 +60,6 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
   });
 
   const handleClose = () => {
-    // Reset form
     form.reset();
     onOpenChange(false);
   };
@@ -68,8 +67,8 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
   const onSubmit = async (data: AddUserFormData) => {
     try {
       await apiClient.createUser({
-        partner_number: data.partnerNumber, // Already trimmed and uppercased by schema
-        name: data.name, // Already trimmed by schema
+        partner_number: data.partnerNumber,
+        name: data.name,
         pin: data.pin,
         role: data.role,
       });
@@ -78,9 +77,6 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
       onUserAdded();
       handleClose();
     } catch (error: any) {
-      console.error('Failed to create user:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
       const errorMessage = error.response?.data?.error || error.message || 'Failed to create user';
       toast.error(`Failed to create user: ${errorMessage}`);
     }
@@ -90,17 +86,17 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Add New User</DialogTitle>
+      <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
+        <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
+          <DialogTitle>Add New Partner</DialogTitle>
           <DialogDescription>
-            Create a new user account with partner number and PIN.
+            Create a new partner account with partner number and PIN.
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-4 py-4">
+            <div className="space-y-4 py-2">
               <FormField
                 control={form.control}
                 name="partnerNumber"
@@ -211,12 +207,12 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
               />
             </div>
 
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
-                Cancel
+            <DialogFooter className="flex-col gap-2 sm:flex-col">
+              <Button type="submit" disabled={isLoading} className="w-full">
+                {isLoading ? 'Creating...' : 'Create Partner'}
               </Button>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Creating...' : 'Create User'}
+              <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading} className="w-full">
+                Cancel
               </Button>
             </DialogFooter>
           </form>

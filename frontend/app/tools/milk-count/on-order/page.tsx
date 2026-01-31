@@ -22,11 +22,7 @@ import { Loader2, ArrowRight } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import type { MilkType, MilkCountSession, MilkCountEntry } from "@/types";
-
-interface OnOrderState {
-  [milkTypeId: string]: number;
-}
+import type { MilkType, MilkCountSession, MilkCountState } from "@/types";
 
 export default function OnOrderPage() {
   const router = useRouter();
@@ -34,7 +30,7 @@ export default function OnOrderPage() {
   const [saving, setSaving] = useState(false);
   const [milkTypes, setMilkTypes] = useState<MilkType[]>([]);
   const [session, setSession] = useState<MilkCountSession | null>(null);
-  const [onOrders, setOnOrders] = useState<OnOrderState>({});
+  const [onOrders, setOnOrders] = useState<MilkCountState>({});
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -83,7 +79,7 @@ export default function OnOrderPage() {
       // Load session entries to get existing on_order values
       if (currentSession.id) {
         const sessionData = await apiClient.getMilkCountSession(currentSession.id);
-        const initialOnOrders: OnOrderState = {};
+        const initialOnOrders: MilkCountState = {};
 
         sessionData.entries.forEach((entry) => {
           // Default to 0 if not set
@@ -217,7 +213,6 @@ export default function OnOrderPage() {
                         {dairyMilks.map(milk => (
                           <OnOrderRow
                             key={milk.id}
-                            milkTypeId={milk.id}
                             milkName={milk.name}
                             category={milk.category}
                             value={onOrders[milk.id] ?? 0}
@@ -238,7 +233,6 @@ export default function OnOrderPage() {
                         {nonDairyMilks.map(milk => (
                           <OnOrderRow
                             key={milk.id}
-                            milkTypeId={milk.id}
                             milkName={milk.name}
                             category={milk.category}
                             value={onOrders[milk.id] ?? 0}

@@ -22,20 +22,15 @@ import { Loader2, ArrowRight } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import type { MilkType, MilkCountSession, MilkCountEntry, MilkCategory } from "@/types";
-
-interface CountState {
-  [milkTypeId: string]: number;
-}
+import type { MilkType, MilkCountSession, MilkCountState } from "@/types";
 
 export default function NightFOHPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [savingId, setSavingId] = useState<string | null>(null);
   const [milkTypes, setMilkTypes] = useState<MilkType[]>([]);
   const [session, setSession] = useState<MilkCountSession | null>(null);
-  const [counts, setCounts] = useState<CountState>({});
+  const [counts, setCounts] = useState<MilkCountState>({});
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -84,14 +79,14 @@ export default function NightFOHPage() {
         try {
           const sessionData = await apiClient.getMilkCountSession(currentSession.id);
           // Initialize counts from existing entries
-          const initialCounts: CountState = {};
+          const initialCounts: MilkCountState = {};
           sessionData.entries.forEach((entry) => {
             initialCounts[entry.milk_type_id] = entry.foh_count ?? 0;
           });
           setCounts(initialCounts);
         } catch {
           // New session with no entries yet - initialize to 0
-          const initialCounts: CountState = {};
+          const initialCounts: MilkCountState = {};
           activeMilkTypes.forEach(mt => {
             initialCounts[mt.id] = 0;
           });
@@ -215,7 +210,6 @@ export default function NightFOHPage() {
                       {dairyMilks.map(milk => (
                         <MilkCountCard
                           key={milk.id}
-                          milkTypeId={milk.id}
                           milkName={milk.name}
                           category={milk.category}
                           currentCount={counts[milk.id] ?? 0}
@@ -236,7 +230,6 @@ export default function NightFOHPage() {
                       {nonDairyMilks.map(milk => (
                         <MilkCountCard
                           key={milk.id}
-                          milkTypeId={milk.id}
                           milkName={milk.name}
                           category={milk.category}
                           currentCount={counts[milk.id] ?? 0}

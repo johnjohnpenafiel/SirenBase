@@ -482,6 +482,11 @@ export interface GetMilkCountHistoryResponse {
   offset: number;
 }
 
+// Milk count UI state - map of milk type ID to count value
+export interface MilkCountState {
+  [milkTypeId: string]: number;
+}
+
 // ============================================================================
 // UI State Types
 // ============================================================================

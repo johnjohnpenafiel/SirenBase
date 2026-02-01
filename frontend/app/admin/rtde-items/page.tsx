@@ -12,7 +12,7 @@
  */
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -35,7 +35,7 @@ import { Header } from '@/components/shared/Header';
 import { BackButton } from '@/components/shared/BackButton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Plus, Edit2, Trash2, GripVertical, Loader2, Package } from 'lucide-react';
+import { Plus, Edit2, Trash2, GripVertical, Loader2, Package, Ellipsis } from 'lucide-react';
 import { AddRTDEItemDialog } from '@/components/admin/rtde/AddRTDEItemDialog';
 import { EditRTDEItemDialog } from '@/components/admin/rtde/EditRTDEItemDialog';
 import { DeleteRTDEItemDialog } from '@/components/admin/rtde/DeleteRTDEItemDialog';
@@ -51,6 +51,9 @@ interface SortableItemProps {
 }
 
 function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
+  const [isActionMode, setIsActionMode] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
   const {
     attributes,
     listeners,
@@ -66,15 +69,50 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
     opacity: isDragging ? 0.5 : 1,
   };
 
+  useEffect(() => {
+    if (!isActionMode) return;
+    function handleMouseDown(event: MouseEvent) {
+      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+        setIsActionMode(false);
+      }
+    }
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, [isActionMode]);
+
+  const handleAction = useCallback((actionFn: () => void) => {
+    setIsActionMode(false);
+    actionFn();
+  }, []);
+
+  const actions = [
+    {
+      label: "Edit",
+      icon: <Edit2 className="size-4" />,
+      onClick: () => handleAction(() => onEdit(item)),
+    },
+    {
+      label: "Delete",
+      icon: <Trash2 className="size-4" />,
+      onClick: () => handleAction(() => onDelete(item)),
+    },
+  ];
+
   return (
     <div
-      ref={setNodeRef}
+      ref={(node) => {
+        setNodeRef(node);
+        (cardRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }}
       style={style}
-      className="flex items-center gap-3 p-4 bg-card border border-gray-200 rounded-2xl transition-all"
+      className="relative flex items-center gap-3 p-4 bg-card border border-gray-200 rounded-2xl transition-all"
     >
-      {/* Drag Handle */}
+      {/* Drag Handle - stays visible outside overlay */}
       <button
-        className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground transition-colors touch-none"
+        className={cn(
+          "cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground transition-colors touch-none",
+          isActionMode && "pointer-events-none opacity-30"
+        )}
         {...attributes}
         {...listeners}
         aria-label="Drag to reorder"
@@ -82,44 +120,62 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
         <GripVertical className="h-5 w-5" />
       </button>
 
-      {/* Item Icon */}
-      <span className="text-2xl shrink-0">{item.icon}</span>
-
-      {/* Item Info */}
-      <div className="flex-1 min-w-0">
-        {item.brand && (
-          <p className="text-xs text-muted-foreground truncate">{item.brand}</p>
+      {/* Content Layer */}
+      <div
+        className={cn(
+          "flex items-center gap-3 flex-1 min-w-0",
+          "transition-all duration-200",
+          isActionMode ? "opacity-30 blur-[2px] pointer-events-none" : "opacity-100 blur-0"
         )}
-        <p className="font-medium truncate">{item.name}</p>
-        <p className="text-sm text-muted-foreground">
-          Par: {item.par_level}
-          {!item.active && (
-            <span className="ml-2 text-xs bg-muted px-2 py-0.5 rounded-full">Inactive</span>
+      >
+        <span className="text-2xl shrink-0">{item.icon}</span>
+
+        <div className="flex-1 min-w-0">
+          {item.brand && (
+            <p className="text-xs text-muted-foreground truncate">{item.brand}</p>
           )}
-        </p>
+          <p className="font-medium truncate">{item.name}</p>
+          <p className="text-sm text-muted-foreground">
+            Par: {item.par_level}
+            {!item.active && (
+              <span className="ml-2 text-xs bg-muted px-2 py-0.5 rounded-full">Inactive</span>
+            )}
+          </p>
+        </div>
+
+        {/* Ellipsis trigger */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="ml-4 flex-shrink-0"
+          onClick={() => setIsActionMode(true)}
+          aria-label="Item actions"
+        >
+          <Ellipsis className="size-4" />
+        </Button>
       </div>
 
-      {/* Actions */}
-      <div className="flex items-center gap-1">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onEdit(item)}
-          aria-label={`Edit ${item.name}`}
-        >
-          <Edit2 className="h-4 w-4" />
-          <span className="hidden md:inline ml-1.5">Edit</span>
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onDelete(item)}
-          aria-label={`Delete ${item.name}`}
-          className="text-destructive hover:text-destructive"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      </div>
+      {/* Action Overlay */}
+      {isActionMode && (
+        <div className={cn(
+          "absolute inset-0 rounded-2xl",
+          "flex items-center justify-center gap-3",
+          "animate-fade-in"
+        )}>
+          {actions.map((action) => (
+            <Button
+              key={action.label}
+              variant="outline"
+              size="default"
+              className="min-w-[120px]"
+              onClick={action.onClick}
+            >
+              {action.icon}
+              <span className="ml-2">{action.label}</span>
+            </Button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

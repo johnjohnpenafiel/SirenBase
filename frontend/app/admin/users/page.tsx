@@ -11,7 +11,7 @@
  */
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
 import { BackButton } from '@/components/shared/BackButton';
@@ -22,7 +22,88 @@ import apiClient from '@/lib/api';
 import { cn } from '@/lib/utils';
 import type { User } from '@/types';
 import { toast } from 'sonner';
-import { Plus, UserCheck, Shield, Loader2, Users } from 'lucide-react';
+import { Plus, UserCheck, Shield, Loader2, Users, Ellipsis, Trash2 } from 'lucide-react';
+
+// Mobile user card with contextual action overlay
+function UserCard({ user, onDelete }: { user: User; onDelete: (user: User) => void }) {
+  const [isActionMode, setIsActionMode] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isActionMode) return;
+    function handleMouseDown(event: MouseEvent) {
+      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+        setIsActionMode(false);
+      }
+    }
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, [isActionMode]);
+
+  const handleAction = useCallback((actionFn: () => void) => {
+    setIsActionMode(false);
+    actionFn();
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      className="relative p-4 bg-card border border-gray-200 rounded-2xl"
+    >
+      <div
+        className={cn(
+          "transition-all duration-200",
+          isActionMode ? "opacity-30 blur-[2px] pointer-events-none" : "opacity-100 blur-0"
+        )}
+      >
+        <div className="flex justify-between items-center">
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-foreground">{user.name}</p>
+            <p className="text-sm font-mono text-muted-foreground mb-1">{user.partner_number}</p>
+            {user.role === 'admin' ? (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                <Shield className="h-3 w-3 mr-1" />
+                Admin
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                <UserCheck className="h-3 w-3 mr-1" />
+                Staff
+              </span>
+            )}
+          </div>
+          <Button
+            variant="outline"
+            size="icon"
+            className="ml-4 flex-shrink-0"
+            onClick={() => setIsActionMode(true)}
+            aria-label="User actions"
+          >
+            <Ellipsis className="size-4" />
+          </Button>
+        </div>
+      </div>
+
+      {isActionMode && (
+        <div className={cn(
+          "absolute inset-0 rounded-2xl",
+          "flex items-center justify-center gap-3",
+          "animate-fade-in"
+        )}>
+          <Button
+            variant="outline"
+            size="default"
+            className="min-w-[120px]"
+            onClick={() => handleAction(() => onDelete(user))}
+          >
+            <Trash2 className="size-4" />
+            <span className="ml-2">Delete</span>
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -201,36 +282,11 @@ export default function UserManagementPage() {
                 {/* Mobile Cards */}
                 <div className="md:hidden space-y-3">
                   {users.map((user) => (
-                    <div
+                    <UserCard
                       key={user.id}
-                      className="p-4 bg-card border border-gray-200 rounded-2xl"
-                    >
-                      <div className="mb-2">
-                        <p className="font-semibold text-foreground">{user.name}</p>
-                        <p className="text-sm font-mono text-muted-foreground">{user.partner_number}</p>
-                      </div>
-                      <div className="flex justify-between items-center mt-3">
-                        {user.role === 'admin' ? (
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                            <Shield className="h-3 w-3 mr-1" />
-                            Admin
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
-                            <UserCheck className="h-3 w-3 mr-1" />
-                            Staff
-                          </span>
-                        )}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setUserToDelete(user)}
-                          className="hover:border-destructive hover:text-destructive hover:bg-destructive/10"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
+                      user={user}
+                      onDelete={setUserToDelete}
+                    />
                   ))}
                 </div>
               </>

@@ -62,7 +62,7 @@ export default function DashboardPage() {
                 {/* Tool 1: Inventory Tracking - Active */}
                 <ToolCard
                   title="Inventory Tracking"
-                  description="Track basement inventory with 4-digit codes"
+                  description="Track basement inventory"
                   route="/tools/tracking/inventory"
                   icon={<Package className="w-12 h-12 text-stone-500/70" />}
                 />

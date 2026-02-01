@@ -64,7 +64,11 @@ export default function DashboardPage() {
                   title="Inventory Tracking"
                   description="Track basement inventory"
                   route="/tools/tracking/inventory"
-                  icon={<Package className="w-12 h-12 text-stone-500/70" />}
+                  icon={
+                    <div className="w-14 h-14 rounded-full bg-stone-500/15 flex items-center justify-center">
+                      <Package className="w-7 h-7 text-stone-500" />
+                    </div>
+                  }
                 />
 
                 {/* Tool 2: RTD&E - Active */}
@@ -72,7 +76,11 @@ export default function DashboardPage() {
                   title="RTD&E Display"
                   description="Display restocking with pull lists"
                   route="/tools/rtde"
-                  icon={<ShoppingBasket className="w-12 h-12 text-emerald-500/70" />}
+                  icon={
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/15 flex items-center justify-center">
+                      <ShoppingBasket className="w-7 h-7 text-emerald-500" />
+                    </div>
+                  }
                 />
 
                 {/* Tool 3: Milk Count - Active */}
@@ -80,7 +88,11 @@ export default function DashboardPage() {
                   title="Milk Count"
                   description="Milk counting with automated calculations"
                   route="/tools/milk-count"
-                  icon={<Milk className="w-12 h-12 text-sky-500/70" />}
+                  icon={
+                    <div className="w-14 h-14 rounded-full bg-sky-500/15 flex items-center justify-center">
+                      <Milk className="w-7 h-7 text-sky-500" />
+                    </div>
+                  }
                 />
 
                 {/* Admin Panel - Admin Only */}
@@ -89,7 +101,11 @@ export default function DashboardPage() {
                     title="Admin Panel"
                     description="Manage users and system settings"
                     route="/admin"
-                    icon={<ShieldCheck className="w-12 h-12 text-amber-500/70" />}
+                    icon={
+                      <div className="w-14 h-14 rounded-full bg-amber-500/15 flex items-center justify-center">
+                        <ShieldCheck className="w-7 h-7 text-amber-500" />
+                      </div>
+                    }
                     isAdminOnly={true}
                   />
                 )}

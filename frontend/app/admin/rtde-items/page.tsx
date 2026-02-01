@@ -1,5 +1,5 @@
 /**
- * RTD&E Items & Pars Management Page
+ * RTDE Items/Pars Management Page
  *
  * Admin interface for managing RTD&E items with drag-and-drop reordering.
  * Allows adding/editing/deleting items and adjusting par levels.
@@ -105,7 +105,7 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
         (cardRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       style={style}
-      className="relative flex items-center gap-3 p-5 bg-card border border-gray-200 rounded-2xl transition-all"
+      className="relative flex items-center gap-3 p-5 bg-card border border-gray-200 rounded-2xl transition-all select-none"
     >
       {/* Drag Handle - stays visible outside overlay */}
       <button
@@ -135,12 +135,14 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
             <p className="text-xs text-muted-foreground truncate">{item.brand}</p>
           )}
           <p className="font-medium truncate">{item.name}</p>
-          <p className="text-sm text-muted-foreground">
-            Par: {item.par_level}
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className="text-xs font-medium bg-black text-white px-2.5 py-0.5 rounded-full">
+              Par: {item.par_level}
+            </span>
             {!item.active && (
-              <span className="ml-2 text-xs bg-muted px-2 py-0.5 rounded-full">Inactive</span>
+              <span className="text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground">Inactive</span>
             )}
-          </p>
+          </div>
         </div>
       </div>
 
@@ -319,7 +321,7 @@ export default function RTDEItemsPage() {
                 </Button>
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-                RTD&E Items & Pars
+                RTDE Items/Pars
               </h1>
               <p className="text-sm text-muted-foreground mb-3">
                 Manage items, par levels, and display order

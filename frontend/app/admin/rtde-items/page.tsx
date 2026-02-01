@@ -105,7 +105,7 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
         (cardRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       style={style}
-      className="relative flex items-center gap-3 p-4 bg-card border border-gray-200 rounded-2xl transition-all"
+      className="relative flex items-center gap-3 p-5 bg-card border border-gray-200 rounded-2xl transition-all"
     >
       {/* Drag Handle - stays visible outside overlay */}
       <button
@@ -142,18 +142,22 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
             )}
           </p>
         </div>
-
-        {/* Ellipsis trigger */}
-        <Button
-          variant="outline"
-          size="icon"
-          className="ml-4 flex-shrink-0"
-          onClick={() => setIsActionMode(true)}
-          aria-label="Item actions"
-        >
-          <Ellipsis className="size-4" />
-        </Button>
       </div>
+
+      {/* Ellipsis trigger - outside content layer for consistent right-edge alignment */}
+      <Button
+        variant="outline"
+        size="icon"
+        className={cn(
+          "ml-4 flex-shrink-0",
+          "transition-all duration-200",
+          isActionMode ? "opacity-30 blur-[2px] pointer-events-none" : "opacity-100 blur-0"
+        )}
+        onClick={() => setIsActionMode(true)}
+        aria-label="Item actions"
+      >
+        <Ellipsis className="size-4" />
+      </Button>
 
       {/* Action Overlay */}
       {isActionMode && (

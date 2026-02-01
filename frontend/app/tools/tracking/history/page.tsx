@@ -123,7 +123,7 @@ export default function HistoryPage() {
                       setActionFilter(value as HistoryAction | "all")
                     }
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="shadow-none border-gray-200">
                       <SelectValue placeholder="Filter by action" />
                     </SelectTrigger>
                     <SelectContent>

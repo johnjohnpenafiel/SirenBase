@@ -84,8 +84,9 @@ export function BackButton({
   return (
     <Button
       variant="outline"
+      size="icon"
       onClick={handleClick}
-      className={cn(className)}
+      className={cn("md:w-auto md:px-4", className)}
     >
       <ArrowLeft className="h-4 w-4 md:mr-2" />
       <span className="hidden md:inline">{label}</span>

@@ -36,7 +36,7 @@ export default function InventoryPage() {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<ViewMode>("categories");
+  const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(
     null
   );

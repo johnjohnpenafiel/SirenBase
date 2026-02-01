@@ -48,7 +48,7 @@ export function HistoryEntryCard({
     >
       {/* Top row: Code pill and action indicator */}
       <div className="flex justify-between items-start mb-3">
-        <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-muted-foreground bg-muted px-2.5 py-1 rounded-full">
+        <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-white bg-black px-2.5 py-1 rounded-full">
           {itemCode}
         </p>
         <span className="inline-flex items-center gap-1 text-xs font-medium bg-muted text-foreground p-1.5 md:px-2.5 md:py-1 rounded-full">

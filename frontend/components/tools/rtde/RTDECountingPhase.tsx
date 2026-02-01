@@ -102,7 +102,7 @@ export function RTDECountingPhase({
             variant="outline"
             size="lg"
             onClick={onPrevious}
-            className="flex-1 h-12 border-2 border-gray-300/25 bg-gray-200/50 text-gray-700 hover:bg-gray-300"
+            className="flex-1 h-12 border border-zinc-300/30 bg-zinc-200/70 text-zinc-700 hover:bg-zinc-300/70"
           >
             <ChevronLeft className="h-5 w-5 mr-2" />
             Previous
@@ -119,7 +119,7 @@ export function RTDECountingPhase({
             variant="outline"
             size="lg"
             onClick={onNext}
-            className="flex-1 h-12 border-2 border-gray-300/25 bg-gray-200/50 text-gray-700 hover:bg-gray-300"
+            className="flex-1 h-12 border border-zinc-300/30 bg-zinc-200/70 text-zinc-700 hover:bg-zinc-300/70"
           >
             Next
             <ChevronRight className="h-5 w-5 ml-2" />
@@ -137,7 +137,7 @@ export function RTDECountingPhase({
                 variant="outline"
                 size="lg"
                 onClick={onPrevious}
-                className="flex-1 sm:flex-initial h-11 border-2 border-gray-300/25 bg-gray-200/50 text-gray-700 hover:bg-gray-300"
+                className="flex-1 sm:flex-initial h-11 border border-zinc-300/30 bg-zinc-200/70 text-zinc-700 hover:bg-zinc-300/70"
               >
                 <ChevronLeft className="h-5 w-5 mr-2" />
                 Previous
@@ -158,7 +158,7 @@ export function RTDECountingPhase({
                 variant="outline"
                 size="lg"
                 onClick={onNext}
-                className="flex-1 sm:flex-initial ml-auto h-11 border-2 border-gray-300/25 bg-gray-200/50 text-gray-700 hover:bg-gray-300"
+                className="flex-1 sm:flex-initial ml-auto h-11 border border-zinc-300/30 bg-zinc-200/70 text-zinc-700 hover:bg-zinc-300/70"
               >
                 Next
                 <ChevronRight className="h-5 w-5 ml-2" />

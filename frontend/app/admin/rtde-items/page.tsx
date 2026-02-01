@@ -105,7 +105,7 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
         (cardRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       style={style}
-      className="relative flex items-center gap-3 p-5 bg-card border border-gray-200 rounded-2xl transition-all select-none"
+      className="relative flex items-center gap-3 p-5 bg-card border border-gray-200 rounded-2xl transition-[opacity,border-color,box-shadow] select-none"
     >
       {/* Drag Handle - stays visible outside overlay */}
       <button

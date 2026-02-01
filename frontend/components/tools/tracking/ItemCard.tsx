@@ -1,14 +1,17 @@
+"use client";
+
 /**
  * ItemCard Component
  *
  * Displays an inventory item with code, name, and category.
  * Typography-focused design matching CategoryCard's visual language.
- * Uses curved arrow icon to indicate "moving out" of inventory.
+ * Ellipsis trigger reveals contextual action overlay within card bounds.
  */
 
+import { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { CornerUpRight } from "lucide-react";
+import { CornerUpRight, Ellipsis } from "lucide-react";
 
 interface ItemCardProps {
   code: string;
@@ -44,25 +47,65 @@ export function ItemCard({
   onRemove,
   isRemoving,
 }: ItemCardProps) {
+  const [isActionMode, setIsActionMode] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Dismiss overlay on click outside
+  useEffect(() => {
+    if (!isActionMode) return;
+
+    function handleMouseDown(event: MouseEvent) {
+      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+        setIsActionMode(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, [isActionMode]);
+
+  const handleAction = useCallback((actionFn: () => void) => {
+    setIsActionMode(false);
+    actionFn();
+  }, []);
+
+  const actions = [
+    {
+      label: isRemoving ? "Removing..." : "Remove",
+      icon: <CornerUpRight className="size-4" />,
+      onClick: () => handleAction(onRemove),
+      variant: "outline" as const,
+      disabled: isRemoving,
+    },
+  ];
+
   return (
     <div
+      ref={cardRef}
       className={cn(
-        "p-5 bg-card rounded-2xl",
+        "relative p-5 bg-card rounded-2xl",
         "border border-gray-200",
         "transition-colors"
       )}
     >
-      <div className="flex justify-between items-start">
+      {/* Content Layer */}
+      <div
+        className={cn(
+          "flex justify-between items-center",
+          "transition-all duration-200",
+          isActionMode ? "opacity-30 blur-[2px] pointer-events-none" : "opacity-100 blur-0"
+        )}
+      >
         <div className="flex-1 min-w-0">
-          {/* Code pill badge - like CategoryCard's category label */}
+          {/* Code pill badge */}
           <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-muted-foreground bg-muted px-2.5 py-1 rounded-full mb-3">
             {code}
           </p>
-          {/* Item name - prominent but slightly muted for hierarchy */}
+          {/* Item name */}
           <h3 className="text-xl font-normal text-gray-800 mb-1 truncate">
             {name}
           </h3>
-          {/* Category and date - muted secondary */}
+          {/* Category and date */}
           <p className="text-sm text-muted-foreground">
             {category}
             <span className="text-xs text-muted-foreground/60 ml-2">
@@ -70,19 +113,43 @@ export function ItemCard({
             </span>
           </p>
         </div>
+
+        {/* Ellipsis trigger */}
         <Button
           variant="outline"
           size="icon"
-          className="ml-4 flex-shrink-0 md:w-auto md:px-4 hover:border-destructive hover:text-destructive hover:bg-destructive/10"
-          onClick={onRemove}
-          disabled={isRemoving}
+          className="ml-4 flex-shrink-0"
+          onClick={() => setIsActionMode(true)}
+          aria-label="Item actions"
         >
-          <CornerUpRight className="size-4 md:mr-2" />
-          <span className="hidden md:inline">
-            {isRemoving ? "Removing..." : "Remove"}
-          </span>
+          <Ellipsis className="size-4" />
         </Button>
       </div>
+
+      {/* Action Overlay */}
+      {isActionMode && (
+        <div
+          className={cn(
+            "absolute inset-0 rounded-2xl",
+            "flex items-center justify-center gap-3",
+            "animate-fade-in"
+          )}
+        >
+          {actions.map((action) => (
+            <Button
+              key={action.label}
+              variant={action.variant}
+              size="default"
+              className="min-w-[120px]"
+              onClick={action.onClick}
+              disabled={action.disabled}
+            >
+              {action.icon}
+              <span className="ml-2">{action.label}</span>
+            </Button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

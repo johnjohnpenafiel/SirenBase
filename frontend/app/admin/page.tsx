@@ -59,21 +59,21 @@ export default function AdminPage() {
                 title="User Management"
                 description="Add, edit, and remove user accounts"
                 route="/admin/users"
-                icon={<Users className="w-12 h-12 text-amber-500/70" />}
+                icon={<Users className="w-12 h-12 text-gray-400" />}
               />
 
               <AdminModuleCard
-                title="RTD&E Items & Pars"
+                title="RTDE Items/Pars"
                 description="Manage RTD&E items and par levels"
                 route="/admin/rtde-items"
-                icon={<Package className="w-12 h-12 text-amber-500/70" />}
+                icon={<Package className="w-12 h-12 text-gray-400" />}
               />
 
               <AdminModuleCard
                 title="Milk Count Pars"
                 description="Configure milk par levels"
                 route="/admin/milk-pars"
-                icon={<Milk className="w-12 h-12 text-amber-500/70" />}
+                icon={<Milk className="w-12 h-12 text-gray-400" />}
               />
             </div>
           </div>

@@ -97,18 +97,20 @@ export function ItemCard({
         )}
       >
         <div className="flex-1 min-w-0">
-          {/* Code pill badge */}
-          <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-muted-foreground bg-muted px-2.5 py-1 rounded-full mb-3">
-            {code}
+          {/* Category */}
+          <p className="inline-block text-[10px] font-medium tracking-wide capitalize text-muted-foreground bg-muted px-2.5 py-1 rounded-full mb-3 whitespace-nowrap">
+            {category}
           </p>
           {/* Item name */}
           <h3 className="text-xl font-normal text-gray-800 mb-1 truncate">
             {name}
           </h3>
-          {/* Category and date */}
-          <p className="text-sm text-muted-foreground">
-            {category}
-            <span className="text-xs text-muted-foreground/60 ml-2">
+          {/* Code pill badge and date */}
+          <p className="flex items-center gap-2">
+            <span className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-muted-foreground bg-muted px-2.5 py-1 rounded-full">
+              {code}
+            </span>
+            <span className="text-xs text-muted-foreground/60">
               {formatAddedDate(addedAt)}
             </span>
           </p>

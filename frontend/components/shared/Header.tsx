@@ -38,10 +38,10 @@ export function Header() {
             <>
               {/* Dashboard Link - Always visible */}
               <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="gap-2">
+                <Button variant="ghost" size="icon" className="md:w-auto md:px-4 gap-2">
                   <Home
                     strokeWidth={1.5}
-                    className="size-6 mt-2 md:mt-0 md:size-5 md:mr-2 text-popover-foreground"
+                    className="size-5 text-popover-foreground"
                   />
                   <span className="hidden md:inline">Dashboard</span>
                 </Button>
@@ -52,13 +52,13 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    size="sm"
-                    className="gap-2"
+                    size="icon"
+                    className="md:w-auto md:px-4 gap-2"
                     aria-label="User menu"
                   >
                     <User
                       strokeWidth={1.5}
-                      className="size-6 md:size-5 md:mr-2 text-popover-foreground"
+                      className="size-5 text-popover-foreground"
                     />
                     <span className="hidden md:inline text-sm font-medium">
                       {user?.name}

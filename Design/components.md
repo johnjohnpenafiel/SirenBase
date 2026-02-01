@@ -137,6 +137,97 @@ This document defines the standard UI components used across SirenBase. For dial
 - Grid of items with input fields
 - Summary row at bottom
 
+### Contextual Action Overlay
+
+**Pattern**: Replace always-visible action buttons with an ellipsis trigger that reveals actions inside the card bounds. Reduces visual clutter while preserving fast access.
+
+**When to use**:
+- Card has discrete, infrequent actions (remove, delete, edit)
+- Actions are secondary to reading the card content
+- Card content is the primary focus
+
+**When NOT to use**:
+- Actions are the primary interaction (e.g., +/- counters on counting cards)
+- The entire card is a single tap target (navigation cards, toggle cards)
+- Inline editing patterns (click-to-edit fields)
+
+**Behavior**:
+
+| State | Content Layer | Overlay Layer | Trigger |
+|-------|--------------|---------------|---------|
+| Default | `opacity-100` | Hidden | Ellipsis button visible |
+| Action mode | `opacity-30 blur-[2px] pointer-events-none` | Visible, `animate-fade-in` | Click ellipsis |
+| Dismiss | Restore default | Remove | Click action, or click outside card |
+
+**Ellipsis Trigger**:
+```tsx
+<Button
+  variant="outline"
+  size="icon"
+  onClick={() => setIsActionMode(true)}
+  aria-label="Item actions"
+>
+  <Ellipsis className="size-4" />
+</Button>
+```
+
+- Positioned on the right, vertically centered (`items-center`)
+- `variant="outline"`, `size="icon"` (44x44px, WCAG compliant)
+- Horizontal ellipsis (`Ellipsis` from lucide-react)
+
+**Action Overlay**:
+```tsx
+{isActionMode && (
+  <div className={cn(
+    "absolute inset-0 rounded-2xl",
+    "flex items-center justify-center gap-3",
+    "animate-fade-in"
+  )}>
+    {actions.map((action) => (
+      <Button
+        key={action.label}
+        variant="outline"
+        size="default"
+        className="min-w-[120px]"
+        onClick={action.onClick}
+      >
+        {action.icon}
+        <span className="ml-2">{action.label}</span>
+      </Button>
+    ))}
+  </div>
+)}
+```
+
+- Absolute positioned within card (`relative` parent required)
+- Flex centering handles 1-3 actions naturally
+- `variant="outline"` for action buttons (no color emphasis)
+- `min-w-[120px]` for comfortable tap targets
+- Uses existing `animate-fade-in` keyframe (0.2s ease-out)
+
+**Action Layout**:
+- 1 action: centered
+- 2 actions: side-by-side with `gap-3`, centered
+- 3 actions: row with equal gaps
+
+**Click-Outside Dismissal**:
+```tsx
+useEffect(() => {
+  if (!isActionMode) return;
+  function handleMouseDown(event: MouseEvent) {
+    if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
+      setIsActionMode(false);
+    }
+  }
+  document.addEventListener("mousedown", handleMouseDown);
+  return () => document.removeEventListener("mousedown", handleMouseDown);
+}, [isActionMode]);
+```
+
+Uses `mousedown` (not `click`) to fire before focus changes, preventing race conditions.
+
+**Reference Implementation**: `frontend/components/tools/tracking/ItemCard.tsx`
+
 ---
 
 ## Forms & Inputs
@@ -458,5 +549,6 @@ toast.warning("Please save your changes");
 | 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
 | 1.0.1 | Jan 18, 2026 | WCAG touch target compliance for buttons (44px minimum) |
 | 1.1.0 | Jan 27, 2026 | Added Single-Tap-to-Keyboard pattern for numeric counter inputs |
+| 1.2.0 | Jan 31, 2026 | Added Contextual Action Overlay pattern for card actions |
 
-**Last Updated**: January 27, 2026
+**Last Updated**: January 31, 2026

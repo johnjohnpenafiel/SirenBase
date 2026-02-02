@@ -10,8 +10,10 @@
  */
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -26,10 +28,26 @@ const frostedGlass =
 
 export function Header() {
   const { user, isAuthenticated, logout } = useAuth();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      const target = e.target as Element;
+      if (target?.classList?.contains("overflow-y-auto")) {
+        setIsScrolled(target.scrollTop > 16);
+      }
+    };
+    document.addEventListener("scroll", handleScroll, { passive: true, capture: true });
+    return () => document.removeEventListener("scroll", handleScroll, { capture: true });
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 md:px-8 pt-3">
-      <div className="max-w-6xl mx-auto h-14 flex justify-between items-center rounded-full bg-white/70 backdrop-blur-md px-2">
+      <div className={cn(
+        "max-w-6xl mx-auto h-14 flex justify-between items-center rounded-full backdrop-blur-md px-2",
+        "transition-all duration-300 ease-out",
+        isScrolled ? "bg-white/70" : "bg-white/95"
+      )}>
         {/* Left: Logo pill */}
         <div
           className={`h-11 px-5 flex items-center`}

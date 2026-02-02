@@ -56,7 +56,7 @@ export function RTDEPullingPhase({
           <div
             className={cn(
               "max-w-4xl mx-auto rounded-2xl",
-              "bg-white/70 backdrop-blur-md",
+              isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
                             "px-5 py-4 md:px-6 md:py-5",
               "transition-all duration-300 ease-out",
               isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"

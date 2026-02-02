@@ -36,7 +36,7 @@ export default function AdminPage() {
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",
                 "bg-white/70 backdrop-blur-md",
-                "border-2 border-neutral-300/80",
+                
                 "px-5 py-5 md:px-6 md:py-6",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"

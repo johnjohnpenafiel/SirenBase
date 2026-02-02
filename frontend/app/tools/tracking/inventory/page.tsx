@@ -198,7 +198,7 @@ export default function InventoryPage() {
                 className={cn(
                   "max-w-6xl mx-auto rounded-2xl",
                   "bg-white/70 backdrop-blur-md",
-                  "border-2 border-neutral-300/80",
+                  
                   "px-5 py-4 md:px-6 md:py-5",
                   "transition-all duration-300 ease-out",
                   isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -313,7 +313,7 @@ export default function InventoryPage() {
                       resetScroll();
                     }
                   }}
-                  className="pl-10 pr-10 rounded-full bg-white/70 backdrop-blur-md border-2 border-neutral-300/80 shadow-none [&::-webkit-search-cancel-button]:hidden"
+                  className="pl-10 pr-10 rounded-full bg-white/70 backdrop-blur-md border-0 shadow-none [&::-webkit-search-cancel-button]:hidden"
                   aria-label="Search inventory items"
                 />
                 {searchQuery && (

@@ -1,10 +1,10 @@
 /**
  * Header Component
  *
- * Global navigation header shared across all pages.
- * Follows Design/layout.md adaptive interface guidelines:
- * - Desktop: Dashboard button + User icon with name → dropdown with Logout
- * - Mobile: Dashboard icon + User icon only → dropdown with Logout
+ * Split navbar design with transparent gap between elements.
+ * Left: Logo pill | Right: Icon circles (Home + Profile)
+ * Scrolling content is visible through the gap between elements.
+ *
  * - Sticky positioning with backdrop blur for app-like feel
  * - Uses design system color tokens
  */
@@ -21,48 +21,38 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User, Home } from "lucide-react";
 
+const frostedGlass =
+  "bg-white/70 backdrop-blur-md border-2 border-neutral-400/50 shadow-[0_1px_3px_-2px_rgba(0,0,0,0.06)]";
+
 export function Header() {
   const { user, isAuthenticated, logout } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 w-full px-4 md:px-8 pt-2">
-      <div className="container mx-auto px-4 h-14 flex justify-between items-center rounded-2xl bg-white/70 backdrop-blur-md border-3 border-neutral-400/50 shadow-[0_1px_3px_-2px_rgba(0,0,0,0.06)]">
-        {/* Logo / Brand */}
-        <div className="flex items-center gap-2">
+    <header className="sticky top-0 z-50 w-full px-4 md:px-8 pt-3">
+      <div className="max-w-6xl mx-auto h-14 flex justify-between items-center rounded-full bg-white/70 backdrop-blur-md px-2">
+        {/* Left: Logo pill */}
+        <div
+          className={`h-11 px-5 flex items-center`}
+        >
           <h1 className="text-xl font-medium text-foreground">sirenbase</h1>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex items-center gap-2">
+        {/* Right: Navigation circles */}
+        <nav className="flex items-center gap-2 pr-3 md:pr-4">
           {isAuthenticated ? (
             <>
-              {/* Dashboard Link - Always visible */}
+              {/* Dashboard Link */}
               <Link href="/dashboard">
-                <Button variant="ghost" size="icon" className="md:w-auto md:px-4 gap-2">
-                  <Home
-                    strokeWidth={1.5}
-                    className="size-5 text-popover-foreground"
-                  />
-                  <span className="hidden md:inline">Dashboard</span>
+                <Button size="icon" className="rounded-full" aria-label="Dashboard">
+                  <Home strokeWidth={1.5} className="size-5" />
                 </Button>
               </Link>
 
-              {/* User Dropdown - Adaptive (icon+name on desktop, icon only on mobile) */}
+              {/* User Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="md:w-auto md:px-4 gap-2"
-                    aria-label="User menu"
-                  >
-                    <User
-                      strokeWidth={1.5}
-                      className="size-5 text-popover-foreground"
-                    />
-                    <span className="hidden md:inline text-sm font-medium">
-                      {user?.name}
-                    </span>
+                  <Button size="icon" className="rounded-full" aria-label="User menu">
+                    <User strokeWidth={1.5} className="size-5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
@@ -75,9 +65,11 @@ export function Header() {
             </>
           ) : (
             <Link href="/login">
-              <Button variant="ghost" size="sm">
+              <button
+                className={`h-11 px-5 rounded-full flex items-center justify-center text-sm font-medium transition-colors hover:bg-white/90 ${frostedGlass}`}
+              >
                 Login
-              </Button>
+              </button>
             </Link>
           )}
         </nav>

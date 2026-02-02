@@ -61,7 +61,7 @@ export function MorningCountRow({
 
   return (
     <Collapsible className={cn("group/collapsible", className)}>
-      <div className="bg-card border border-gray-200 rounded-2xl overflow-hidden">
+      <div className="bg-card border border-neutral-300/80 rounded-2xl overflow-hidden">
         {/* Main Row */}
         <div className="flex items-center gap-4 p-4">
           {/* CollapsibleTrigger: Icon + Name area */}
@@ -134,7 +134,7 @@ export function MorningCountRow({
               className={cn(
                 "size-11",
                 "rounded-2xl",
-                "border-2 border-gray-200/50",
+                "border-2 border-gray-300/50",
                 "bg-gray-100 text-gray-700 hover:bg-gray-200",
                 "transition-all duration-150 ease-out",
                 "hover:scale-[1.02]",
@@ -153,7 +153,7 @@ export function MorningCountRow({
               className={cn(
                 "size-11",
                 "rounded-2xl",
-                "border-2 border-gray-200/50",
+                "border-2 border-gray-300/50",
                 "bg-gray-100 text-gray-700 hover:bg-gray-200",
                 "transition-all duration-150 ease-out",
                 "hover:scale-[1.02]",
@@ -168,7 +168,7 @@ export function MorningCountRow({
 
         {/* Expanded Details */}
         <CollapsibleContent>
-          <div className="px-3 pb-3 md:px-4 md:pb-4 border-t border-gray-200 pt-3 space-y-3">
+          <div className="px-3 pb-3 md:px-4 md:pb-4 border-t border-gray-300 pt-3 space-y-3">
             {/* Method Selection */}
             <div className="flex gap-2">
               <Button

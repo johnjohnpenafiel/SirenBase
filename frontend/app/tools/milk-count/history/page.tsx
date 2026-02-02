@@ -170,8 +170,8 @@ export default function HistoryPage() {
             <div
               className={cn(
                 "max-w-2xl mx-auto rounded-2xl",
-                "bg-gray-100/60 backdrop-blur-md",
-                "border border-gray-200",
+                "bg-white/70 backdrop-blur-md",
+                "border-2 border-neutral-300/80",
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -241,7 +241,7 @@ export default function HistoryPage() {
                       <Card
                         key={session.id}
                         className={cn(
-                          "border border-gray-200 rounded-2xl transition-all py-0",
+                          "border border-neutral-300/80 rounded-2xl transition-all py-0",
                           isClickable && "cursor-pointer",
                           session.status === "completed" && "hover:border-primary/50",
                           sessionIsMissed && "opacity-60"
@@ -283,7 +283,7 @@ export default function HistoryPage() {
 
                           {/* Additional Info for Completed Sessions */}
                           {session.status === "completed" && session.completed_at && (
-                            <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+                            <div className="mt-3 pt-3 border-t border-gray-300 space-y-2">
                               <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50 text-sm">
                                 <p className="text-xs text-muted-foreground">Completed</p>
                                 <p>

@@ -197,8 +197,8 @@ export default function InventoryPage() {
               <div
                 className={cn(
                   "max-w-6xl mx-auto rounded-2xl",
-                  "bg-gray-100/60 backdrop-blur-md",
-                  "border border-gray-200",
+                  "bg-white/70 backdrop-blur-md",
+                  "border-2 border-neutral-300/80",
                   "px-5 py-4 md:px-6 md:py-5",
                   "transition-all duration-300 ease-out",
                   isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -212,7 +212,7 @@ export default function InventoryPage() {
                       label="Back to Categories"
                     />
                   ) : (
-                    <h1 className="text-xl md:text-3xl font-normal text-foreground">
+                    <h1 className="text-xl md:text-3xl font-semibold tracking-tight text-black">
                       Inventory Tracking
                     </h1>
                   )}
@@ -247,13 +247,13 @@ export default function InventoryPage() {
 
                 {/* View Toggle - Only show when not in filtered category view */}
                 {viewMode !== "filtered" && (
-                  <div className="inline-flex rounded-full border border-gray-200 p-0.5">
+                  <div className="inline-flex rounded-full border border-neutral-300 p-0.5">
                     <Button
                       variant={viewMode === "all" ? "secondary" : "ghost"}
                       size="sm"
                       className={cn(
                         "rounded-full",
-                        viewMode === "all" && "bg-gray-200/80",
+                        viewMode === "all" && "bg-neutral-200 text-neutral-800 font-semibold",
                         viewMode !== "all" && "text-muted-foreground"
                       )}
                       onClick={() => {
@@ -270,7 +270,7 @@ export default function InventoryPage() {
                       size="sm"
                       className={cn(
                         "rounded-full",
-                        viewMode === "categories" && "bg-gray-200/80",
+                        viewMode === "categories" && "bg-neutral-200 text-neutral-800 font-semibold",
                         viewMode !== "categories" && "text-muted-foreground"
                       )}
                       onClick={() => {
@@ -288,7 +288,7 @@ export default function InventoryPage() {
             </div>
 
             {/* Search Bar - Below island, both stay fixed */}
-            <div className="px-4 md:px-8 pb-5">
+            <div className="px-4 md:px-8 pb-2">
               <div
                 className={cn(
                   "max-w-6xl mx-auto relative rounded-full transition-all duration-300 ease-out",
@@ -313,7 +313,7 @@ export default function InventoryPage() {
                       resetScroll();
                     }
                   }}
-                  className="pl-10 pr-10 rounded-full bg-gray-100/60 backdrop-blur-md shadow-none [&::-webkit-search-cancel-button]:hidden"
+                  className="pl-10 pr-10 rounded-full bg-white/70 backdrop-blur-md border-2 border-neutral-300/80 shadow-none [&::-webkit-search-cancel-button]:hidden"
                   aria-label="Search inventory items"
                 />
                 {searchQuery && (
@@ -348,7 +348,7 @@ export default function InventoryPage() {
 
               {/* All Items / Filtered View - Individual Display */}
               {(viewMode === "all" || viewMode === "filtered") && (
-                <div className="space-y-3">
+                <div className="space-y-1.5">
                   {searchedItems.length === 0 ? (
                     <div className="text-center py-12">
                       <p className="text-muted-foreground">

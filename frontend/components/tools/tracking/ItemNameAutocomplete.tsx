@@ -189,7 +189,7 @@ export function ItemNameAutocomplete({
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-1 bg-card border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto"
+          className="absolute z-50 w-full mt-1 bg-card border border-neutral-300/80 rounded-lg shadow-lg max-h-64 overflow-y-auto"
         >
           {suggestions.map((suggestion, index) => (
             <button
@@ -197,7 +197,7 @@ export function ItemNameAutocomplete({
               type="button"
               onClick={() => handleSelectSuggestion(suggestion)}
               className={`
-                w-full px-4 py-3 text-left hover:bg-muted border-b border-gray-200 last:border-b-0
+                w-full px-4 py-3 text-left hover:bg-muted border-b border-gray-300 last:border-b-0
                 min-h-[44px] flex items-center justify-between
                 ${selectedIndex === index ? 'bg-primary/10' : ''}
               `}
@@ -233,7 +233,7 @@ export function ItemNameAutocomplete({
       {showSuggestions && !loading && value.length >= 2 && suggestions.length === 0 && (
         <div
           ref={dropdownRef}
-          className="absolute z-50 w-full mt-1 bg-card border border-gray-200 rounded-lg shadow-lg p-4"
+          className="absolute z-50 w-full mt-1 bg-card border border-neutral-300/80 rounded-lg shadow-lg p-4"
         >
           <p className="text-sm text-muted-foreground text-center">
             No suggestions found. You can still enter any name.

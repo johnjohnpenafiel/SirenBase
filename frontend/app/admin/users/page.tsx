@@ -48,7 +48,7 @@ function UserCard({ user, onDelete }: { user: User; onDelete: (user: User) => vo
   return (
     <div
       ref={cardRef}
-      className="relative p-4 bg-card border border-gray-200 rounded-2xl"
+      className="relative p-4 bg-card border border-neutral-300/80 rounded-2xl"
     >
       <div
         className={cn(
@@ -168,8 +168,8 @@ export default function UserManagementPage() {
             <div
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",
-                "bg-gray-100/60 backdrop-blur-md",
-                "border border-gray-200",
+                "bg-white/70 backdrop-blur-md",
+                "border-2 border-neutral-300/80",
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -216,9 +216,9 @@ export default function UserManagementPage() {
             ) : (
               <>
                 {/* Desktop Table */}
-                <div className="hidden md:block bg-card rounded-2xl border border-gray-200 overflow-hidden">
+                <div className="hidden md:block bg-card rounded-2xl border border-neutral-300/80 overflow-hidden">
                   <table className="w-full">
-                    <thead className="bg-muted/50 border-b border-gray-200">
+                    <thead className="bg-muted/50 border-b border-gray-300">
                       <tr>
                         <th className="px-5 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                           Partner #

@@ -3,7 +3,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.9900 0 0);
+  --background: oklch(0.9500 0 0);
   --foreground: oklch(0 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0 0 0);
@@ -19,8 +19,8 @@
   --accent-foreground: oklch(0 0 0);
   --destructive: oklch(0.6300 0.1900 23.0300);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9200 0 0);
-  --input: oklch(0.9400 0 0);
+  --border: oklch(0.8000 0 0);
+  --input: oklch(0.8000 0 0);
   --ring: oklch(0 0 0);
   --chart-1: oklch(0.8100 0.1700 75.3500);
   --chart-2: oklch(0.5500 0.2200 264.5300);
@@ -159,7 +159,7 @@
 
 @layer base {
   * {
-    @apply border-gray-200 outline-ring/50;
+    @apply border-gray-300 outline-ring/50;
   }
   body {
     @apply text-foreground;

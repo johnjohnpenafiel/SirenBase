@@ -144,8 +144,8 @@ export default function OnOrderPage() {
             <div
               className={cn(
                 "max-w-2xl mx-auto rounded-2xl",
-                "bg-gray-100/60 backdrop-blur-md",
-                "border border-gray-200",
+                "bg-white/70 backdrop-blur-md",
+                "border-2 border-neutral-300/80",
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -175,7 +175,7 @@ export default function OnOrderPage() {
                   <span className="font-medium text-foreground">{enteredItems}</span>/{totalItems} entered
                 </p>
               </div>
-              <div className="h-2.5 bg-gray-200/60 rounded-full overflow-hidden border border-gray-300/50">
+              <div className="h-2.5 bg-gray-200/60 rounded-full overflow-hidden border border-neutral-300">
                 <div
                   className="h-full bg-sky-500 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${progressPercent}%` }}
@@ -194,7 +194,7 @@ export default function OnOrderPage() {
               ) : (
                 <div className="space-y-6">
                   {/* Instructions - Neutral styling */}
-                  <div className="bg-muted/50 border border-gray-200 rounded-2xl p-3 pl-4 text-sm text-foreground">
+                  <div className="bg-muted/50 border border-neutral-300/80 rounded-2xl p-3 pl-4 text-sm text-foreground">
                     <p className="font-medium mb-1">Check on-order quantities:</p>
                     <ul className="list-disc list-outside pl-4 space-y-0.5 text-xs text-muted-foreground">
                       <li>Enter the quantity that is on order for each milk type</li>

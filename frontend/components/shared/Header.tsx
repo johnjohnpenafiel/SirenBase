@@ -26,10 +26,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 md:px-8 pt-2">
-      <div className="container mx-auto px-4 h-14 flex justify-between items-center rounded-2xl bg-gray-100/60 backdrop-blur-md border border-gray-200 shadow-[0_1px_3px_-2px_rgba(0,0,0,0.06)]">
+      <div className="container mx-auto px-4 h-14 flex justify-between items-center rounded-2xl bg-white/70 backdrop-blur-md border-3 border-neutral-400/50 shadow-[0_1px_3px_-2px_rgba(0,0,0,0.06)]">
         {/* Logo / Brand */}
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold text-foreground">SirenBase</h1>
+          <h1 className="text-xl font-medium text-foreground">sirenbase</h1>
         </div>
 
         {/* Navigation */}

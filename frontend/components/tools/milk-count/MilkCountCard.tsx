@@ -52,7 +52,7 @@ export function MilkCountCard({
       className={cn(
         "flex items-center gap-4",
         "p-4",
-        "bg-card border border-gray-200",
+        "bg-card border border-neutral-300/80",
         "rounded-2xl",
         "transition-all duration-200",
         className
@@ -123,7 +123,7 @@ export function MilkCountCard({
           className={cn(
             "size-11",
             "rounded-2xl",
-            "border-2 border-gray-200/50",
+            "border-2 border-gray-300/50",
             "bg-gray-100 text-gray-700 hover:bg-gray-200",
             "transition-all duration-150 ease-out",
             "hover:scale-[1.02]",
@@ -143,7 +143,7 @@ export function MilkCountCard({
           className={cn(
             "size-11",
             "rounded-2xl",
-            "border-2 border-gray-200/50",
+            "border-2 border-gray-300/50",
             "bg-gray-100 text-gray-700 hover:bg-gray-200",
             "transition-all duration-150 ease-out",
             "hover:scale-[1.02]",

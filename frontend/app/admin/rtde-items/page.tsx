@@ -105,7 +105,7 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
         (cardRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       style={style}
-      className="relative flex items-center gap-3 p-5 bg-card border border-gray-200 rounded-2xl transition-[opacity,border-color,box-shadow] select-none"
+      className="relative flex items-center gap-3 p-5 bg-card border border-neutral-300/80 rounded-2xl transition-[opacity,border-color,box-shadow] select-none"
     >
       {/* Drag Handle - stays visible outside overlay */}
       <button
@@ -297,8 +297,8 @@ export default function RTDEItemsPage() {
             <div
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",
-                "bg-gray-100/60 backdrop-blur-md",
-                "border border-gray-200",
+                "bg-white/70 backdrop-blur-md",
+                "border-2 border-neutral-300/80",
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"

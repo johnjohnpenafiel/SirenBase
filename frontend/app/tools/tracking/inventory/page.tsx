@@ -197,8 +197,8 @@ export default function InventoryPage() {
               <div
                 className={cn(
                   "max-w-6xl mx-auto rounded-2xl",
-                  "bg-white/70 backdrop-blur-md",
-                  
+                  isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
+
                   "px-5 py-4 md:px-6 md:py-5",
                   "transition-all duration-300 ease-out",
                   isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -313,7 +313,10 @@ export default function InventoryPage() {
                       resetScroll();
                     }
                   }}
-                  className="pl-10 pr-10 rounded-full bg-white/70 backdrop-blur-md border-0 shadow-none [&::-webkit-search-cancel-button]:hidden"
+                  className={cn(
+                    "pl-10 pr-10 rounded-full backdrop-blur-md border-0 shadow-none [&::-webkit-search-cancel-button]:hidden",
+                    isSearchBarScrolled ? "bg-white/70" : "bg-white/95"
+                  )}
                   aria-label="Search inventory items"
                 />
                 {searchQuery && (

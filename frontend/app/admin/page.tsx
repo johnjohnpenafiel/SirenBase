@@ -35,7 +35,7 @@ export default function AdminPage() {
             <div
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",
-                "bg-white/70 backdrop-blur-md",
+                isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
                 
                 "px-5 py-5 md:px-6 md:py-6",
                 "transition-all duration-300 ease-out",

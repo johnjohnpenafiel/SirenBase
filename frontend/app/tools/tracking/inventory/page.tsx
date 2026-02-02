@@ -191,7 +191,7 @@ export default function InventoryPage() {
       <div ref={scrollContainerRef} className="h-dvh overflow-y-auto" onScroll={handleScroll}>
         <Header />
           {/* Sticky wrapper containing both island and search bar */}
-          <div className="sticky top-16 z-10">
+          <div className="sticky top-[68px] z-10">
             {/* Frosted Island */}
             <div className="px-4 md:px-8 pt-2 pb-2 md:pt-3 md:pb-3">
               <div

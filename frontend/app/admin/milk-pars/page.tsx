@@ -190,7 +190,7 @@ export default function MilkParsPage() {
       <div className="h-dvh overflow-y-auto" onScroll={handleScroll}>
         <Header />
           {/* Sticky Frosted Island */}
-          <div className="sticky top-16 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+          <div className="sticky top-[68px] z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
             <div
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",

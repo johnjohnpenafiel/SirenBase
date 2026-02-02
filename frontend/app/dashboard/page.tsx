@@ -48,7 +48,7 @@ export default function DashboardPage() {
       <div className="h-dvh overflow-y-auto" onScroll={handleScroll}>
         <Header />
           {/* Sticky Frosted Island - content scrolls beneath */}
-          {/* <div className="sticky top-16 z-10 px-4 md:px-8 pt-2 pb-2 md:pt-3 md:pb-3">
+          {/* <div className="sticky top-[68px] z-10 px-4 md:px-8 pt-2 pb-2 md:pt-3 md:pb-3">
             <div
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",

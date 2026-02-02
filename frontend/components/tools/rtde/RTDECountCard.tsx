@@ -180,8 +180,8 @@ export function RTDECountCard({
             className={cn(
               "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
               "rounded-2xl",
-              "border border-neutral-300",
-              "bg-neutral-300 text-black hover:bg-neutral-400",
+              "border border-neutral-200",
+              "bg-neutral-300 text-neutral-700 hover:bg-neutral-400",
               "transition-all duration-150 ease-out",
               "hover:scale-[1.02]",
               "active:scale-[0.98]",
@@ -237,8 +237,8 @@ export function RTDECountCard({
             className={cn(
               "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
               "rounded-2xl",
-              "border border-neutral-300",
-              "bg-neutral-300 text-black hover:bg-neutral-400",
+              "border border-neutral-200",
+              "bg-neutral-300 text-neutral-700 hover:bg-neutral-400",
               "transition-all duration-150 ease-out",
               "hover:scale-[1.02]",
               "active:scale-[0.98]",

@@ -47,7 +47,7 @@ export default function InventoryPage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchBarScrolled, setIsSearchBarScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const scrollContainerRef = useRef<HTMLElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Reset scroll position when view or category changes
   const resetScroll = () => {

@@ -90,11 +90,10 @@ export default function HistoryPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col h-dvh">
+      <div className="h-dvh overflow-y-auto" onScroll={handleScroll}>
         <Header />
-        <main className="flex-1 overflow-y-auto" onScroll={handleScroll}>
           {/* Sticky Frosted Island */}
-          <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+          <div className="sticky top-16 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
             <div
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",
@@ -201,7 +200,6 @@ export default function HistoryPage() {
               </>
             )}
           </div>
-        </main>
       </div>
     </ProtectedRoute>
   );

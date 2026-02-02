@@ -162,7 +162,7 @@
     @apply border-gray-200 outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
   /* iOS momentum scrolling for smooth scroll behavior */
   .overflow-y-auto,

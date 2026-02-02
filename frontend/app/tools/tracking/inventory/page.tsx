@@ -188,11 +188,10 @@ export default function InventoryPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex flex-col h-dvh">
+      <div ref={scrollContainerRef} className="h-dvh overflow-y-auto" onScroll={handleScroll}>
         <Header />
-        <main ref={scrollContainerRef} className="flex-1 overflow-y-auto" onScroll={handleScroll}>
           {/* Sticky wrapper containing both island and search bar */}
-          <div className="sticky top-0 z-10">
+          <div className="sticky top-16 z-10">
             {/* Frosted Island */}
             <div className="px-4 md:px-8 pt-2 pb-2 md:pt-3 md:pb-3">
               <div
@@ -374,7 +373,6 @@ export default function InventoryPage() {
                 </div>
               )}
             </div>
-        </main>
 
         {/* Add Item Dialog */}
         <AddItemDialog

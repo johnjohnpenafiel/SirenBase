@@ -126,7 +126,7 @@ export function RTDECountCard({
         "flex flex-col items-center gap-[clamp(0.125rem,0.75vh,0.5rem)] md:gap-4",
         "p-[clamp(0.5rem,1.5vh,1rem)] md:p-6",
         "bg-background",
-        "border border-gray-200",
+        "border-2 border-neutral-300/80",
         "rounded-3xl",
         "transition-all duration-200",
         "animate-scale-in",
@@ -156,7 +156,7 @@ export function RTDECountCard({
       {/* Par Level Info - Clickable quick-fill button */}
       <button
         onClick={handleQuickFill}
-        className="flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-muted/40 rounded-full border border-gray-200 cursor-pointer hover:bg-muted/60 transition-colors duration-150"
+        className="flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-muted/40 rounded-full border border-neutral-300/80 cursor-pointer hover:bg-muted/60 transition-colors duration-150"
         aria-label={`Set count to par level ${parLevel} and go to next item`}
       >
         <span className="text-[0.625rem] md:text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
@@ -180,7 +180,7 @@ export function RTDECountCard({
             className={cn(
               "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
               "rounded-2xl",
-              "border-2 border-gray-200/50",
+              "border-2 border-gray-300/50",
               "bg-gray-100 text-gray-700 hover:bg-gray-200",
               "transition-all duration-150 ease-out",
               "hover:scale-[1.02]",
@@ -237,7 +237,7 @@ export function RTDECountCard({
             className={cn(
               "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
               "rounded-2xl",
-              "border-2 border-gray-200/50",
+              "border-2 border-gray-300/50",
               "bg-gray-100 text-gray-700 hover:bg-gray-200",
               "transition-all duration-150 ease-out",
               "hover:scale-[1.02]",

@@ -597,7 +597,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
             ) : (
               // Confirmation state
               <>
-                <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
+                <DialogHeader className="bg-neutral-200 rounded-xl px-4 pt-3 pb-3">
                   <DialogTitle>Complete Session?</DialogTitle>
                   <DialogDescription>
                     This will complete the RTD&E counting session.

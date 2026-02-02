@@ -84,7 +84,7 @@ export function ItemCard({
       ref={cardRef}
       className={cn(
         "relative p-5 bg-card rounded-2xl",
-        "border border-gray-200",
+        "border border-neutral-300/80",
         "transition-colors"
       )}
     >

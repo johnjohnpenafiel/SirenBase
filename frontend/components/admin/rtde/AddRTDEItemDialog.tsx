@@ -84,7 +84,7 @@ export function AddRTDEItemDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md p-6 max-h-[85dvh] overflow-y-auto" showCloseButton={false}>
-        <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
+        <DialogHeader className="bg-neutral-200 rounded-xl px-4 pt-3 pb-3">
           <DialogTitle>Add RTD&E Item</DialogTitle>
           <DialogDescription>
             Create a new item for the RTD&E display. Product images are managed

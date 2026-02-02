@@ -123,7 +123,7 @@ export default function MilkParsPage() {
     return (
       <div
         key={parLevel.milk_type_id}
-        className="flex items-center gap-3 px-4 py-3 bg-card border border-gray-200 rounded-xl"
+        className="flex items-center gap-3 px-4 py-3 bg-card border border-neutral-300/80 rounded-xl"
       >
         {/* Category Icon */}
         <div className={cn(
@@ -194,8 +194,8 @@ export default function MilkParsPage() {
             <div
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",
-                "bg-gray-100/60 backdrop-blur-md",
-                "border border-gray-200",
+                "bg-white/70 backdrop-blur-md",
+                "border-2 border-neutral-300/80",
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"

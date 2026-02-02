@@ -63,7 +63,7 @@ function SummaryCard({ entry }: { entry: MilkCountSummaryEntry }) {
 
   return (
     <Collapsible className="group/collapsible">
-      <div className="bg-card border border-gray-200 rounded-2xl overflow-hidden">
+      <div className="bg-card border border-neutral-300/80 rounded-2xl overflow-hidden">
         <div className="flex items-center gap-3 p-3 pr-5">
           <div className={cn("shrink-0 w-[52px] h-[52px] rounded-2xl flex items-center justify-center bg-muted", config.iconColor)}>
             {config.icon}
@@ -215,8 +215,8 @@ export default function SummaryPage() {
             <div
               className={cn(
                 "max-w-2xl mx-auto rounded-2xl",
-                "bg-gray-100/60 backdrop-blur-md",
-                "border border-gray-200",
+                "bg-white/70 backdrop-blur-md",
+                "border-2 border-neutral-300/80",
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"

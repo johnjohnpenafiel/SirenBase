@@ -32,7 +32,7 @@ export function RTDEProgressBar({
   return (
     <div
       className={cn(
-        "bg-background border border-gray-200",
+        "bg-background border-2 border-neutral-300/80",
         isCompact ? "rounded-xl px-3 py-2" : "rounded-2xl px-4 md:px-6 py-3 md:py-5"
       )}
     >
@@ -76,7 +76,7 @@ export function RTDEProgressBar({
 
         <div
           className={cn(
-            "w-full bg-gray-200/60 rounded-full overflow-hidden border border-gray-300/50",
+            "w-full bg-gray-200/60 rounded-full overflow-hidden border border-neutral-300",
             isCompact ? "h-1.5" : "h-2.5"
           )}
         >

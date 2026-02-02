@@ -186,7 +186,7 @@ export function AddItemDialog({
       <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
         {step === 'input' ? (
           <>
-            <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
+            <DialogHeader className="bg-neutral-200 rounded-xl px-4 pt-3 pb-3">
               <DialogTitle>Add New Item</DialogTitle>
               <DialogDescription>
                 Enter the item details to generate a unique 4-digit code.
@@ -257,7 +257,7 @@ export function AddItemDialog({
           </>
         ) : (
           <>
-            <DialogHeader className="bg-gray-100 rounded-xl px-4 pt-3 pb-3">
+            <DialogHeader className="bg-neutral-200 rounded-xl px-4 pt-3 pb-3">
               <DialogTitle>Code Generated!</DialogTitle>
               <DialogDescription>
                 Write this code on the physical item with a marker, then confirm to save.
@@ -266,7 +266,7 @@ export function AddItemDialog({
 
             <div className="space-y-3">
               {/* Code display box */}
-              <div className="bg-muted/50 border border-gray-200 rounded-2xl px-5 py-4 text-center">
+              <div className="bg-muted/50 border border-neutral-300 rounded-2xl px-5 py-4 text-center">
                 <p className="text-sm text-muted-foreground mb-2">Your 4-digit code:</p>
                 <div className="text-5xl font-bold font-mono text-foreground tracking-wider">
                   {generatedCode}

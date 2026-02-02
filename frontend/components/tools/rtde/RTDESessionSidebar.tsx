@@ -36,9 +36,9 @@ export function RTDESessionSidebar({
   const isCountingPhase = phase === "counting";
 
   return (
-    <aside className="hidden md:flex md:flex-col w-64 lg:w-80 border-r border-gray-200 bg-muted/30">
+    <aside className="hidden md:flex md:flex-col w-64 lg:w-80 border-r border-gray-300 bg-muted/30">
       {/* Fixed title header */}
-      <div className="px-4 py-3 border-b border-gray-200 bg-muted/30">
+      <div className="px-4 py-3 border-b border-gray-300 bg-muted/30">
         <h2 className="text-sm font-semibold text-popover-foreground">
           RTD&E Items
         </h2>
@@ -108,7 +108,7 @@ export function RTDESessionSidebar({
       </div>
 
       {/* Fixed "Start Pull List" button */}
-      <div className="border-t border-gray-200 bg-background px-4 py-4 md:py-6">
+      <div className="border-t border-gray-300 bg-background px-4 py-4 md:py-6">
         <Button
           size="lg"
           onClick={onStartPull}

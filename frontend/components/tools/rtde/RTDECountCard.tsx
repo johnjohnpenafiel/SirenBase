@@ -125,8 +125,8 @@ export function RTDECountCard({
       className={cn(
         "flex flex-col items-center gap-[clamp(0.125rem,0.75vh,0.5rem)] md:gap-4",
         "p-[clamp(0.5rem,1.5vh,1rem)] md:p-6",
-        "bg-background",
-        "border-2 border-neutral-300/80",
+        "bg-card",
+        "border border-neutral-300/80",
         "rounded-3xl",
         "transition-all duration-200",
         "animate-scale-in",
@@ -144,7 +144,7 @@ export function RTDECountCard({
       {/* Brand & Item Name - Fixed height container, viewport-responsive */}
       <div className="flex flex-col items-center justify-center gap-0.5 h-[clamp(4rem,10vh,5.5rem)] md:h-[5.5rem]">
         {brand && (
-          <span className="text-xs md:text-sm font-medium text-gray-500 text-center">
+          <span className="text-xs md:text-sm font-medium text-neutral-500 text-center">
             {brand}
           </span>
         )}
@@ -180,8 +180,8 @@ export function RTDECountCard({
             className={cn(
               "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
               "rounded-2xl",
-              "border-2 border-gray-300/50",
-              "bg-gray-100 text-gray-700 hover:bg-gray-200",
+              "border border-neutral-300",
+              "bg-neutral-300 text-black hover:bg-neutral-400",
               "transition-all duration-150 ease-out",
               "hover:scale-[1.02]",
               "active:scale-[0.98]",
@@ -237,8 +237,8 @@ export function RTDECountCard({
             className={cn(
               "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
               "rounded-2xl",
-              "border-2 border-gray-300/50",
-              "bg-gray-100 text-gray-700 hover:bg-gray-200",
+              "border border-neutral-300",
+              "bg-neutral-300 text-black hover:bg-neutral-400",
               "transition-all duration-150 ease-out",
               "hover:scale-[1.02]",
               "active:scale-[0.98]",

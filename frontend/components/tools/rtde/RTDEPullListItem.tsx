@@ -44,7 +44,7 @@ export function RTDEPullListItem({
       className={cn(
         "flex items-center gap-4 w-full text-left",
         "p-5 bg-card rounded-2xl",
-        "border-2 border-neutral-300/80",
+        "border border-neutral-300/80",
         "transition-all duration-300 ease-out",
         "active:scale-[0.99]",
         isPulled && "bg-muted/50",
@@ -85,7 +85,7 @@ export function RTDEPullListItem({
         )}
         <p
           className={cn(
-            "text-base font-normal text-gray-800 truncate",
+            "text-base font-normal text-neutral-800 truncate",
             "transition-all duration-300",
             isPulled && "text-muted-foreground opacity-60"
           )}

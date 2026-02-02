@@ -11,12 +11,23 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+
+export type ToolAccent = "stone" | "emerald" | "sky" | "amber";
+
+const accentStyles: Record<ToolAccent, { hover: string }> = {
+  stone:   { hover: "hover:bg-stone-50/60"   },
+  emerald: { hover: "hover:bg-emerald-50/60" },
+  sky:     { hover: "hover:bg-sky-50/60"     },
+  amber:   { hover: "hover:bg-amber-50/60"   },
+};
 
 export interface ToolCardProps {
   title: string;
   description: string;
   route: string;
   icon?: React.ReactNode;
+  accent?: ToolAccent;
   isDisabled?: boolean;
   isAdminOnly?: boolean;
 }
@@ -26,6 +37,7 @@ export function ToolCard({
   description,
   route,
   icon,
+  accent,
   isDisabled = false,
   isAdminOnly = false,
 }: ToolCardProps) {
@@ -52,19 +64,19 @@ export function ToolCard({
       role="button"
       aria-label={`${title}${isDisabled ? " (Coming soon)" : ""}`}
       aria-disabled={isDisabled}
-      className={`
-        p-6 border border-gray-200 rounded-2xl bg-card text-card-foreground transition-all
-        ${
-          isDisabled
-            ? "opacity-50 cursor-not-allowed"
-            : `cursor-pointer hover:shadow-lg hover:scale-102 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-                isAdminOnly
+      className={cn(
+        "p-6 border border-gray-200 rounded-2xl bg-card text-card-foreground transition-all",
+        isDisabled
+          ? "opacity-50 cursor-not-allowed"
+          : cn(
+              "cursor-pointer hover:shadow-lg hover:scale-102 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              accent
+                ? accentStyles[accent].hover
+                : isAdminOnly
                   ? "hover:border-amber-500"
                   : "hover:border-slate-600"
-              }`
-        }
-        
-      `}
+            )
+      )}
     >
       {icon && <div className="mb-4">{icon}</div>}
 

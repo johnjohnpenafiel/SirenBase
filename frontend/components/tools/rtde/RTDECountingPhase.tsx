@@ -52,7 +52,7 @@ export function RTDECountingPhase({
   return (
     <main className="flex-1 flex flex-col overflow-hidden">
       {/* Progress Section - Full (hidden on very short viewports) */}
-      <div className="px-4 md:px-8 pt-3 md:pt-6 pb-2 [@media(max-height:670px)]:hidden">
+      <div className="px-4 md:px-8 pt-2 md:pt-6 pb-1 [@media(max-height:670px)]:hidden">
         <div className="container max-w-4xl mx-auto">
           <RTDEProgressBar
             currentIndex={currentIndex}
@@ -74,11 +74,11 @@ export function RTDECountingPhase({
         </div>
       </div>
 
-      {/* Count Card - Centered Content (min-h-0 allows flex shrinking) */}
-      <div className="flex-1 min-h-0 flex flex-col items-center justify-center py-1 md:py-4">
-        <div className="container max-w-4xl mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-center">
-            <div className="w-full max-w-lg">
+      {/* Count Card - Fills available space, image absorbs extra room */}
+      <div className="flex-1 min-h-0 flex flex-col px-4 md:px-8 py-1 md:py-4">
+        <div className="container max-w-lg mx-auto flex-1 min-h-0 flex flex-col">
+          <div className="flex-1 min-h-0 flex flex-col">
+            <div className="flex-1 min-h-0 flex flex-col">
               <RTDECountCard
                 itemName={currentItem.name}
                 brand={currentItem.brand}
@@ -87,7 +87,6 @@ export function RTDECountingPhase({
                 parLevel={currentItem.parLevel}
                 currentCount={currentItem.countedQuantity ?? 0}
                 onCountChange={onCountChange}
-                onNext={onNext}
                 saving={saving}
               />
             </div>
@@ -128,7 +127,7 @@ export function RTDECountingPhase({
       </div>
 
       {/* Navigation Buttons - Fixed (flex-shrink-0 ensures it never gets cut off) */}
-      <div className="border-t border-neutral-300/80 bg-background pb-safe flex-shrink-0">
+      <div className="border-t border-neutral-300/80 bg-card pb-safe flex-shrink-0">
         <div className="container max-w-4xl mx-auto px-4 pt-3 pb-6 md:py-6">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-between gap-3">

@@ -33,14 +33,19 @@ export function RTDEProgressBar({
     <div
       className={cn(
         "bg-card border border-neutral-300/80",
-        isCompact ? "rounded-xl px-3 py-2" : "rounded-2xl px-4 md:px-6 py-3 md:py-5"
+        isCompact ? "rounded-xl px-3 py-2" : "rounded-2xl px-4 md:px-6 py-4 md:py-5"
       )}
     >
-      {/* Title - only in default size */}
+      {/* Title row: RTD&E + phase badge */}
       {!isCompact && (
-        <h2 className="text-base font-semibold text-popover-foreground mb-3 md:mb-4">
-          Counting Phase
-        </h2>
+        <div className="flex items-center gap-2 mb-2 md:mb-3">
+          <h2 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+            RTD&E
+          </h2>
+          <span className="text-xs font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 text-neutral-800 px-2.5 py-1 rounded-full">
+            Count
+          </span>
+        </div>
       )}
 
       {/* Progress content */}
@@ -50,28 +55,23 @@ export function RTDEProgressBar({
             <span
               className={cn(
                 "font-medium text-foreground",
-                isCompact ? "text-xs" : "text-sm"
+                isCompact ? "text-[10px]" : "text-xs"
               )}
             >
               Item {currentIndex + 1}
             </span>
-            <span className={cn("text-muted-foreground", isCompact ? "text-xs" : "text-sm")}>
+            <span className={cn("text-muted-foreground", isCompact ? "text-[10px]" : "text-xs")}>
               of {totalItems}
             </span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <span
-              className={cn(
-                "font-bold text-emerald-500",
-                isCompact ? "text-xs" : "text-sm"
-              )}
-            >
-              {progressPercent}%
-            </span>
-            {!isCompact && (
-              <span className="text-sm text-muted-foreground">complete</span>
+          <span
+            className={cn(
+              "font-medium text-foreground tabular-nums",
+              isCompact ? "text-[10px]" : "text-xs"
             )}
-          </div>
+          >
+            {progressPercent}%
+          </span>
         </div>
 
         <div
@@ -81,7 +81,7 @@ export function RTDEProgressBar({
           )}
         >
           <div
-            className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
+            className="bg-emerald-400 h-full rounded-full transition-all duration-500 ease-out"
             style={{ width: `${progressPercent}%` }}
             role="progressbar"
             aria-valuenow={progressPercent}

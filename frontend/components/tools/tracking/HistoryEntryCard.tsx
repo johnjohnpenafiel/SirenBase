@@ -51,15 +51,18 @@ export function HistoryEntryCard({
         <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-white bg-black px-2.5 py-1 rounded-full">
           {itemCode}
         </p>
-        <span className="inline-flex items-center gap-1 text-xs font-medium bg-muted text-foreground p-1.5 md:px-2.5 md:py-1 rounded-full">
+        <span className={cn(
+          "inline-flex items-center gap-1 text-xs font-medium p-1.5 md:px-2.5 md:py-1 rounded-full",
+          isAdd ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+        )}>
           {isAdd ? (
             <>
-              <Plus className="size-3.5 text-green-400" strokeWidth={2.5} />
+              <Plus className="size-3.5" strokeWidth={2.5} />
               <span className="hidden md:inline">Added</span>
             </>
           ) : (
             <>
-              <CornerUpRight className="size-3.5 text-red-400" strokeWidth={2.5} />
+              <CornerUpRight className="size-3.5" strokeWidth={2.5} />
               <span className="hidden md:inline">Removed</span>
             </>
           )}

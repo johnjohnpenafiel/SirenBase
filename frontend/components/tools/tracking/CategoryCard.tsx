@@ -24,7 +24,7 @@ export function CategoryCard({ category, count, onClick }: CategoryCardProps) {
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       )}
     >
-      <p className="inline-block text-xs font-medium tracking-wide capitalize text-neutral-800 bg-neutral-200/80 border border-neutral-300 px-2.5 py-1 rounded-full mb-4 whitespace-nowrap">
+      <p className="inline-block text-xs font-medium tracking-wide capitalize text-neutral-800 bg-neutral-200/50 border border-neutral-300 px-2.5 py-1 rounded-full mb-4 whitespace-nowrap">
         {category}
       </p>
       <div className="flex items-baseline gap-1.5">

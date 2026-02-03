@@ -12,62 +12,20 @@
  */
 "use client";
 
-import { useState } from "react";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { useAuth } from "@/hooks/use-auth";
 import { Package, Milk, ShoppingBasket, ShieldCheck } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 17) return "Good afternoon";
-    return "Good evening";
-  };
-
-  const formattedDate = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    // Threshold of 16px before shadow activates - feels more intentional
-    setIsScrolled(e.currentTarget.scrollTop > 16);
-  };
 
   return (
     <ProtectedRoute>
-      <div className="h-dvh overflow-y-auto" onScroll={handleScroll}>
+      <div className="h-dvh overflow-y-auto">
         <Header />
-          {/* Sticky Frosted Island - content scrolls beneath */}
-          {/* <div className="sticky top-[68px] z-10 px-4 md:px-8 pt-2 pb-2 md:pt-3 md:pb-3">
-            <div
-              className={cn(
-                "max-w-6xl mx-auto rounded-2xl",
-                "bg-white/70 backdrop-blur-md",
-                
-                "px-5 py-5 md:px-6 md:py-6",
-                "transition-all duration-300 ease-out",
-                isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
-              )}
-            >
-              <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
-                Dashboard
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                {getGreeting()}, {user?.name || "Partner"}
-              </p>
-            </div>
-          </div> */}
-
           {/* Tools Grid */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">

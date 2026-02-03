@@ -132,7 +132,7 @@ export function RTDECountCard({
           icon={icon}
           size="lg"
           alt={`${brand ? `${brand} ` : ""}${itemName}`}
-          className="!w-full !h-full max-w-[10rem] max-h-[10rem]"
+          className="!h-full !w-auto max-h-[10rem]"
         />
       </div>
 

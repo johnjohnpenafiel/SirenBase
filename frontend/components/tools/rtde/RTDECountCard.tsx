@@ -28,7 +28,6 @@ interface RTDECountCardProps {
   parLevel: number;
   currentCount: number;
   onCountChange: (newCount: number) => void;
-  onNext?: () => void; // Optional callback to advance to next item
   saving?: boolean;
   className?: string;
 }
@@ -41,7 +40,6 @@ export function RTDECountCard({
   parLevel,
   currentCount,
   onCountChange,
-  onNext,
   saving = false,
   className,
 }: RTDECountCardProps) {
@@ -66,12 +64,6 @@ export function RTDECountCard({
   const handleDecrement = () => {
     const newCount = Math.max(currentCount - 1, 0); // Min 0
     onCountChange(newCount);
-  };
-
-  // Quick-fill: Set count to par level and advance to next item
-  const handleQuickFill = () => {
-    onCountChange(parLevel);
-    onNext?.();
   };
 
   // Enable direct editing mode when input is focused
@@ -123,23 +115,26 @@ export function RTDECountCard({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-[clamp(0.125rem,0.75vh,0.5rem)] md:gap-4",
-        "p-[clamp(0.5rem,1.5vh,1rem)] md:p-6",
+        "flex-1 min-h-0 flex flex-col items-center gap-[clamp(0.125rem,0.75vh,0.5rem)] md:gap-4",
+        "px-[clamp(0.5rem,1.5vh,1rem)] pb-[clamp(0.5rem,1.5vh,1rem)] pt-[clamp(1.25rem,3vh,1.75rem)] md:px-6 md:pb-6 md:pt-7",
         "bg-card",
         "border border-neutral-300/80",
-        "rounded-3xl",
+        "rounded-2xl",
         "transition-all duration-200",
         "animate-scale-in",
         className
       )}
     >
-      {/* Product Image / Emoji / Placeholder - with fallback hierarchy */}
-      <RTDEItemImage
-        imageFilename={imageFilename}
-        icon={icon}
-        size="lg"
-        alt={`${brand ? `${brand} ` : ""}${itemName}`}
-      />
+      {/* Product Image / Emoji / Placeholder - flex-grows to fill available space */}
+      <div className="flex-1 min-h-0 flex items-center justify-center">
+        <RTDEItemImage
+          imageFilename={imageFilename}
+          icon={icon}
+          size="lg"
+          alt={`${brand ? `${brand} ` : ""}${itemName}`}
+          className="!w-full !h-full max-w-[10rem] max-h-[10rem]"
+        />
+      </div>
 
       {/* Brand & Item Name - Fixed height container, viewport-responsive */}
       <div className="flex flex-col items-center justify-center gap-0.5 h-[clamp(4rem,10vh,5.5rem)] md:h-[5.5rem]">
@@ -153,19 +148,10 @@ export function RTDECountCard({
         </h2>
       </div>
 
-      {/* Par Level Info - Clickable quick-fill button */}
-      <button
-        onClick={handleQuickFill}
-        className="flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-muted/40 rounded-full border border-neutral-300/80 cursor-pointer hover:bg-muted/60 transition-colors duration-150"
-        aria-label={`Set count to par level ${parLevel} and go to next item`}
-      >
-        <span className="text-[0.625rem] md:text-[0.6875rem] uppercase tracking-[0.06em] font-semibold text-muted-foreground">
-          Par Level
-        </span>
-        <span className="text-sm md:text-lg font-bold text-foreground">
-          {parLevel}
-        </span>
-      </button>
+      {/* Par Level Info - Single black pill badge */}
+      <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
+        Par {parLevel}
+      </span>
 
       {/* Count Controls - Optimized spacing for mobile fit */}
       <div className="flex flex-col items-center gap-1.5 md:gap-2 w-full max-w-xs md:max-w-md mt-1 md:mt-2">
@@ -180,10 +166,10 @@ export function RTDECountCard({
             className={cn(
               "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
               "rounded-2xl",
-              "border border-neutral-200",
-              "bg-neutral-300 text-neutral-700 hover:bg-neutral-400",
+              "border border-neutral-300/80",
+              "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
               "transition-all duration-150 ease-out",
-              "hover:scale-[1.02]",
+
               "active:scale-[0.98]",
               "disabled:opacity-30 disabled:hover:scale-100"
             )}
@@ -216,11 +202,11 @@ export function RTDECountCard({
                       "ring-4 ring-primary/10",
                     ]
                   : [
-                      "border-transparent bg-transparent",
+                      "border-transparent bg-neutral-100",
                       "shadow-none",
                       "focus-visible:ring-0",
                       "cursor-pointer",
-                      "hover:bg-muted/30",
+                      "hover:bg-neutral-200/70",
                     ]
               )}
               maxLength={3}
@@ -237,10 +223,10 @@ export function RTDECountCard({
             className={cn(
               "h-14 w-14 md:h-14 md:w-14 p-0 shrink-0",
               "rounded-2xl",
-              "border border-neutral-200",
-              "bg-neutral-300 text-neutral-700 hover:bg-neutral-400",
+              "border border-neutral-300/80",
+              "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
               "transition-all duration-150 ease-out",
-              "hover:scale-[1.02]",
+
               "active:scale-[0.98]",
               "disabled:opacity-30 disabled:hover:scale-100"
             )}
@@ -251,18 +237,18 @@ export function RTDECountCard({
         </div>
 
         {/* Label below the controls */}
-        <span className="text-[0.625rem] md:text-[0.6875rem] font-semibold text-muted-foreground uppercase tracking-[0.06em]">
+        <span className="text-[9px] md:text-[0.625rem] font-semibold text-muted-foreground uppercase tracking-[0.06em]">
           Current Count
         </span>
       </div>
 
-      {/* Saving Indicator - Fixed height container to prevent layout shift */}
-      <div className="h-4 md:h-5 flex items-center justify-center">
+      {/* Saving Indicator - Collapse when not saving to balance spacing */}
+      <div className="h-3 flex items-center justify-center">
         <span
           role="status"
           aria-live="polite"
           className={cn(
-            "text-xs md:text-sm font-medium text-neutral-400",
+            "text-[10px] font-medium text-neutral-400",
             "transition-opacity duration-500 ease-in-out",
             saving ? "opacity-100" : "opacity-0"
           )}
@@ -271,10 +257,6 @@ export function RTDECountCard({
         </span>
       </div>
 
-      {/* Helper Text - Refined typography */}
-      <p className="text-xs md:text-[0.8125rem] leading-tight text-muted-foreground text-center">
-        Tap count to type directly
-      </p>
     </div>
   );
 }

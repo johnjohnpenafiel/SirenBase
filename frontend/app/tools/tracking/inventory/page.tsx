@@ -213,7 +213,7 @@ export default function InventoryPage() {
                     />
                   ) : (
                     <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
-                      Inventory Tracking
+                      Inventory
                     </h1>
                   )}
 

@@ -37,7 +37,7 @@ const SIZE_CONFIG = {
   },
   lg: {
     // Viewport-responsive: shrinks from 112px down to 64px on very short viewports
-    container: "w-[clamp(4rem,12vh,7rem)] h-[clamp(4rem,12vh,7rem)] md:w-36 md:h-36",
+    container: "w-[clamp(5rem,14vh,8.5rem)] h-[clamp(5rem,14vh,8.5rem)] md:w-36 md:h-36",
     image: 144, // Will be used for both mobile and desktop with responsive sizing
     emoji: "text-[clamp(2rem,6vh,3.5rem)] md:text-[5rem]",
     icon: "h-[clamp(2rem,6vh,3.5rem)] w-[clamp(2rem,6vh,3.5rem)] md:h-[4.5rem] md:w-[4.5rem]",
@@ -94,11 +94,8 @@ export function RTDEItemImage({
     <div
       className={cn(
         "flex items-center justify-center",
-        "rounded-full",
-        showBackground && [
-          "bg-gradient-to-br from-muted/50 to-muted",
-          "shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]",
-        ],
+        "rounded-full aspect-square",
+        showBackground && "bg-muted/40",
         config.container,
         grayscale && "grayscale",
         className

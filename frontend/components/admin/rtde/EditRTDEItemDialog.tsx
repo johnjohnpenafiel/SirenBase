@@ -118,7 +118,7 @@ export function EditRTDEItemDialog({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Current Image Preview (Read-only) */}
             {item && (
-              <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4">
+              <div className="bg-muted/50 border border-neutral-300/80 rounded-2xl px-5 py-4">
                 <div className="flex items-center gap-4">
                   <RTDEItemImage
                     imageFilename={item.image_filename}
@@ -230,7 +230,7 @@ export function EditRTDEItemDialog({
               control={form.control}
               name="active"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-2xl border p-4">
+                <FormItem className="flex flex-row items-center justify-between rounded-2xl border border-neutral-300/80 p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Active</FormLabel>
                     <FormDescription>

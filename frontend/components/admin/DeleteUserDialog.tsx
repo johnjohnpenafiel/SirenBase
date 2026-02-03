@@ -79,7 +79,7 @@ export function DeleteUserDialog({
 
         <div className="space-y-3">
           {/* Partner details */}
-          <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4">
+          <div className="bg-muted/50 border border-neutral-300/80 rounded-2xl px-5 py-4">
             <p className="font-semibold text-foreground">{user.name}</p>
             <p className="text-sm font-mono text-muted-foreground">{user.partner_number}</p>
           </div>

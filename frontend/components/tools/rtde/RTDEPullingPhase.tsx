@@ -108,7 +108,7 @@ export function RTDEPullingPhase({
                     </span>
                   </div>
                 </div>
-                <div className="w-full bg-neutral-200/60 rounded-full h-2.5 overflow-hidden border border-neutral-300">
+                <div className="w-full bg-neutral-200/60 rounded-full h-2.5 overflow-hidden border border-neutral-300/80">
                   <div
                     className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
                     style={{ width: `${pullProgress}%` }}
@@ -177,7 +177,7 @@ export function RTDEPullingPhase({
 
       {/* Complete Session Button - Mobile Footer (always visible at bottom) */}
       {hasItemsToPull && (
-        <div className="sm:hidden bg-background border-t border-neutral-300 pb-safe shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+        <div className="sm:hidden bg-background border-t border-neutral-300/80 pb-safe shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
           <div className="container max-w-4xl mx-auto px-4 pt-4 pb-6">
             <Button
               onClick={onComplete}

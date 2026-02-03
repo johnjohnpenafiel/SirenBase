@@ -64,7 +64,7 @@ export function ResumeSessionDialog({
 
         <div className="space-y-3">
           {/* Session Info Card */}
-          <div className="bg-muted/50 border border-neutral-300 rounded-2xl px-5 py-4 space-y-3">
+          <div className="bg-muted/50 border border-neutral-300/80 rounded-2xl px-5 py-4 space-y-3">
             {/* Time Started */}
             <div className="flex items-center gap-2 text-sm">
               <Clock className="h-4 w-4 text-muted-foreground" />
@@ -82,7 +82,7 @@ export function ResumeSessionDialog({
                   {itemsCounted} of {totalItems} items counted
                 </span>
               </div>
-              <div className="w-full bg-neutral-200/60 rounded-full h-2.5 overflow-hidden border border-neutral-300">
+              <div className="w-full bg-neutral-200/60 rounded-full h-2.5 overflow-hidden border border-neutral-300/80">
                 <div
                   className="bg-emerald-500 h-full rounded-full transition-all"
                   style={{ width: `${progress}%` }}

@@ -49,11 +49,11 @@ export function UncountedItemsDialog({
         </DialogHeader>
 
         {/* List of uncounted items */}
-        <div className="bg-neutral-200 rounded-xl p-2 max-h-[200px] overflow-y-auto space-y-1.5 border border-neutral-300">
+        <div className="bg-neutral-200 rounded-xl p-2 max-h-[200px] overflow-y-auto space-y-1.5 border border-neutral-300/80">
           {uncountedItems.map((item) => (
             <div
               key={item.itemId}
-              className="flex items-center gap-2 bg-background border border-neutral-300 rounded-lg px-3 py-1.5"
+              className="flex items-center gap-2 bg-background border border-neutral-300/80 rounded-lg px-3 py-1.5"
             >
               <span className="text-base" aria-hidden="true">
                 {item.icon}

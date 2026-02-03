@@ -53,7 +53,7 @@ export function RemoveItemDialog({
 
         <div className="space-y-3">
           {/* Item details box - matching ItemCard design */}
-          <div className="bg-muted/50 border border-neutral-300 rounded-2xl px-5 py-4">
+          <div className="bg-muted/50 border border-neutral-300/80 rounded-2xl px-5 py-4">
             <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase text-foreground bg-secondary px-2.5 py-1 rounded-full mb-2">
               {itemCode}
             </p>

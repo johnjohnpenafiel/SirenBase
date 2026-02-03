@@ -175,7 +175,7 @@ export default function OnOrderPage() {
                   <span className="font-medium text-foreground">{enteredItems}</span>/{totalItems} entered
                 </p>
               </div>
-              <div className="h-2.5 bg-gray-200/60 rounded-full overflow-hidden border border-neutral-300">
+              <div className="h-2.5 bg-gray-200/60 rounded-full overflow-hidden border border-neutral-300/80">
                 <div
                   className="h-full bg-sky-500 rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${progressPercent}%` }}

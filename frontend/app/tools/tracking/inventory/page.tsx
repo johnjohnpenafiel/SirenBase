@@ -247,7 +247,7 @@ export default function InventoryPage() {
 
                 {/* View Toggle - Only show when not in filtered category view */}
                 {viewMode !== "filtered" && (
-                  <div className="inline-flex rounded-full border border-neutral-300 p-0.5">
+                  <div className="inline-flex rounded-full border border-neutral-300/80 p-0.5">
                     <Button
                       variant={viewMode === "all" ? "secondary" : "ghost"}
                       size="sm"

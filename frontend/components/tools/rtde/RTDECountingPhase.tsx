@@ -102,7 +102,7 @@ export function RTDECountingPhase({
             variant="outline"
             size="lg"
             onClick={onPrevious}
-            className="flex-1 h-12 border border-neutral-300 bg-card text-neutral-700 hover:bg-neutral-200"
+            className="flex-1 h-12 border border-neutral-300/80 bg-card text-neutral-700 hover:bg-neutral-200"
           >
             <ChevronLeft className="h-5 w-5 mr-2" />
             Previous
@@ -119,7 +119,7 @@ export function RTDECountingPhase({
             variant="outline"
             size="lg"
             onClick={onNext}
-            className="flex-1 h-12 border border-neutral-300 bg-card text-neutral-700 hover:bg-neutral-200"
+            className="flex-1 h-12 border border-neutral-300/80 bg-card text-neutral-700 hover:bg-neutral-200"
           >
             Next
             <ChevronRight className="h-5 w-5 ml-2" />
@@ -128,7 +128,7 @@ export function RTDECountingPhase({
       </div>
 
       {/* Navigation Buttons - Fixed (flex-shrink-0 ensures it never gets cut off) */}
-      <div className="border-t border-neutral-300 bg-background pb-safe flex-shrink-0">
+      <div className="border-t border-neutral-300/80 bg-background pb-safe flex-shrink-0">
         <div className="container max-w-4xl mx-auto px-4 pt-3 pb-6 md:py-6">
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-between gap-3">
@@ -137,7 +137,7 @@ export function RTDECountingPhase({
                 variant="outline"
                 size="lg"
                 onClick={onPrevious}
-                className="flex-1 sm:flex-initial h-11 border border-neutral-300 bg-card text-neutral-700 hover:bg-neutral-200"
+                className="flex-1 sm:flex-initial h-11 border border-neutral-300/80 bg-card text-neutral-700 hover:bg-neutral-200"
               >
                 <ChevronLeft className="h-5 w-5 mr-2" />
                 Previous
@@ -158,7 +158,7 @@ export function RTDECountingPhase({
                 variant="outline"
                 size="lg"
                 onClick={onNext}
-                className="flex-1 sm:flex-initial ml-auto h-11 border border-neutral-300 bg-card text-neutral-700 hover:bg-neutral-200"
+                className="flex-1 sm:flex-initial ml-auto h-11 border border-neutral-300/80 bg-card text-neutral-700 hover:bg-neutral-200"
               >
                 Next
                 <ChevronRight className="h-5 w-5 ml-2" />

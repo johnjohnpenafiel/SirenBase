@@ -6,13 +6,14 @@ Each tool in SirenBase has its own personality while sharing the common design l
 
 ## Tool 1: Inventory Tracking System
 
-**Personality**: Professional, organized, efficient
+**Personality**: Dense, precise, technical
 
 ### Dashboard Card
 
-- **Icon**: Package or Clipboard
-- **Title**: "Inventory Tracking"
-- **Description**: "Manage basement inventory with 4-digit codes"
+- **Tool number**: `01` (black pill badge)
+- **Icon**: `Package` at `size-5 text-stone-400` (top-right)
+- **Title**: "Inventory"
+- **Description**: "Track basement inventory"
 
 ### Key UI Elements
 
@@ -56,24 +57,37 @@ Each tool in SirenBase has its own personality while sharing the common design l
 
 ### Item Card Pattern
 
+Uses the Contextual Action Overlay pattern (see [components.md](./components.md#contextual-action-overlay)) with ellipsis trigger instead of always-visible action buttons.
+
 ```tsx
-<Card className="border-[1.5px] border-border hover:border-slate-600 hover:shadow-md transition-all">
-  <CardContent className="p-4">
-    <div className="flex items-start justify-between">
-      <div>
-        <p className="inline-block text-[10px] font-mono font-bold tracking-wide uppercase bg-secondary px-2.5 py-1 rounded-full mb-2">
+<div className="relative p-5 bg-card rounded-2xl border border-neutral-300/80">
+  {/* Content layer */}
+  <div className="flex items-center justify-between">
+    <div className="flex-1 min-w-0">
+      {/* Category pill */}
+      <span className="text-xs font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 px-2.5 py-1 rounded-full">
+        {category}
+      </span>
+      {/* Item name */}
+      <p className="text-xl font-normal text-gray-800 truncate mt-2">{name}</p>
+      {/* Code badge + date */}
+      <div className="flex items-center gap-2 mt-1">
+        <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
           {code}
-        </p>
-        <p className="text-lg font-semibold">{name}</p>
-        <p className="text-sm text-muted-foreground">{category}</p>
+        </span>
+        <span className="text-xs text-muted-foreground/60">{date}</span>
       </div>
-      <Button variant="ghost" size="icon" className="text-muted-foreground">
-        <Trash2 className="h-4 w-4" />
-      </Button>
     </div>
-  </CardContent>
-</Card>
+    {/* Ellipsis trigger for actions */}
+    <Button variant="outline" size="icon" onClick={() => setIsActionMode(true)}>
+      <Ellipsis className="size-4" />
+    </Button>
+  </div>
+  {/* Action overlay (shown on ellipsis click) */}
+</div>
 ```
+
+**Reference Implementation**: `frontend/components/tools/tracking/ItemCard.tsx`
 
 ---
 
@@ -83,9 +97,10 @@ Each tool in SirenBase has its own personality while sharing the common design l
 
 ### Dashboard Card
 
-- **Icon**: Milk bottle or Calculator
+- **Tool number**: `03` (black pill badge)
+- **Icon**: `Milk` at `size-5 text-sky-400` (top-right)
 - **Title**: "Milk Count"
-- **Description**: "Track milk inventory with automated calculations"
+- **Description**: "Milk counting with automated calculations"
 
 ### Key UI Elements
 
@@ -153,9 +168,10 @@ Each tool in SirenBase has its own personality while sharing the common design l
 
 ### Dashboard Card
 
-- **Icon**: Shopping bag or Sandwich
-- **Title**: "RTD&E Count"
-- **Description**: "Quick counts and pull list generation"
+- **Tool number**: `02` (black pill badge)
+- **Icon**: `ShoppingBasket` at `size-5 text-emerald-400` (top-right)
+- **Title**: "RTD&E"
+- **Description**: "Display restocking with pull lists"
 
 ### Key UI Elements
 
@@ -314,17 +330,21 @@ Common pattern for displaying count totals:
 
 ---
 
-## Tool Color Accents (Future Enhancement)
+## Tool Color Accents
 
-While all tools share the neutral palette, subtle color accents can help with tool identification:
+Each tool has a subtle color accent used only for small icons (`size-5`, 400-weight color). Color is subordinate to the black/white/neutral palette - it provides differentiation at a glance, not decoration.
 
-| Tool | Potential Accent | Use Case |
-|------|------------------|----------|
-| Inventory | Slate/Gray | Neutral, professional |
-| Milk Count | Blue | Calm, methodical |
-| RTD&E | Emerald/Green | Fresh, action-oriented |
+| Tool | Accent Color | Icon Color Class | Use Case |
+|------|-------------|-----------------|----------|
+| Inventory | Stone | `text-stone-400` | Neutral, grounded |
+| RTD&E | Emerald | `text-emerald-400` | Fresh, action-oriented |
+| Milk Count | Sky | `text-sky-400` | Calm, methodical |
+| Admin | Amber | `text-amber-400` | Attention, restricted |
 
-**Note**: Currently not implemented. All tools use the neutral grayscale palette.
+**Rules**:
+- Color appears only on small icons (`size-5`) and never as large circles or backgrounds
+- The black pill badge is always the primary visual anchor; color is secondary
+- Category pills within tools use neutral styling (`bg-neutral-200/50 border border-neutral-300`), not tool accent colors
 
 ---
 
@@ -332,6 +352,7 @@ While all tools share the neutral palette, subtle color accents can help with to
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.0.0 | Feb 2, 2026 | Updated dashboard card specs to match "Earned Space" design language; updated item card to use contextual action overlay; updated tool color accents from "future enhancement" to active implementation with rules |
 | 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
 
-**Last Updated**: January 20, 2026
+**Last Updated**: February 2, 2026

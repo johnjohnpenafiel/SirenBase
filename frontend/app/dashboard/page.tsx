@@ -28,65 +28,52 @@ export default function DashboardPage() {
         <Header />
           {/* Tools Grid */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                {/* Tool 1: Inventory Tracking - Active */}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
+                {/* Tool 1: Inventory Tracking */}
                 <ToolCard
                   title="Inventory"
                   description="Track basement inventory"
                   route="/tools/tracking/inventory"
                   accent="stone"
-                  icon={
-                    <div className="w-20 h-20 rounded-full bg-stone-500/15 flex items-center justify-center">
-                      <Package className="w-10 h-10 text-stone-500" />
-                    </div>
-                  }
+                  toolNumber="01"
+                  icon={<Package className="size-5 text-stone-400" />}
                 />
 
-                {/* Tool 2: RTD&E - Active */}
+                {/* Tool 2: RTD&E */}
                 <ToolCard
                   title="RTD&E"
                   description="Display restocking with pull lists"
                   route="/tools/rtde"
                   accent="emerald"
-                  icon={
-                    <div className="w-20 h-20 rounded-full bg-emerald-500/15 flex items-center justify-center">
-                      <ShoppingBasket className="w-10 h-10 text-emerald-500" />
-                    </div>
-                  }
+                  toolNumber="02"
+                  icon={<ShoppingBasket className="size-5 text-emerald-400" />}
                 />
 
-                {/* Tool 3: Milk Count - Active */}
+                {/* Tool 3: Milk Count */}
                 <ToolCard
                   title="Milk Count"
                   description="Milk counting with automated calculations"
                   route="/tools/milk-count"
                   accent="sky"
-                  icon={
-                    <div className="w-20 h-20 rounded-full bg-sky-500/15 flex items-center justify-center">
-                      <Milk className="w-10 h-10 text-sky-500" />
-                    </div>
-                  }
+                  toolNumber="03"
+                  icon={<Milk className="size-5 text-sky-400" />}
                 />
 
                 {/* Admin Panel - Admin Only */}
                 {isAdmin && (
                   <ToolCard
-                    title="Admin Panel"
-                    description="Manage users and system settings"
+                    title="Admin"
+                    description="Manage users and settings"
                     route="/admin"
                     accent="amber"
-                    icon={
-                      <div className="w-20 h-20 rounded-full bg-amber-500/15 flex items-center justify-center">
-                        <ShieldCheck className="w-10 h-10 text-amber-500" />
-                      </div>
-                    }
+                    icon={<ShieldCheck className="size-5 text-amber-400" />}
                     isAdminOnly={true}
                   />
                 )}
             </div>
 
             {!isAdmin && (
-              <p className="mt-8 text-sm text-muted-foreground text-center">
+              <p className="mt-6 text-xs text-muted-foreground/60 text-center">
                 Need admin access? Contact your store manager.
               </p>
             )}

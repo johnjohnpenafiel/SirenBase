@@ -44,7 +44,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full px-4 md:px-8 pt-2">
       <div className={cn(
-        "max-w-6xl mx-auto h-14 flex justify-between items-center rounded-full backdrop-blur-md px-2",
+        "max-w-6xl mx-auto h-14 flex justify-between items-center rounded-full backdrop-blur-md border border-neutral-300/80 px-2",
         "transition-all duration-300 ease-out",
         isScrolled ? "bg-white/70" : "bg-white/95"
       )}>

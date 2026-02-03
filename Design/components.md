@@ -120,11 +120,13 @@ This document defines the standard UI components used across SirenBase. For dial
 ### Card Patterns
 
 **Dashboard Tool Cards**:
-- Large, clickable cards with `hover:shadow-md` transition
-- Icon at top (48x48px)
-- Tool name (text-2xl, semibold)
-- Brief description (text-sm, muted)
-- Subtle hover effect (scale 1.02, shadow increase)
+- Compact, dense cards following "Earned Space" philosophy
+- **Top row**: Black monospace tool number badge (left) + small color icon (right, `size-5`, 400-weight color)
+- **Title**: `text-lg font-semibold tracking-tight`
+- **Bottom row**: Description (`text-xs text-muted-foreground`) + chevron-right navigation cue
+- **Padding**: `p-4` (tight, no wasted space)
+- **Hover**: `hover:shadow-md active:scale-[0.98]` (tactile, not exaggerated)
+- **Grid**: `grid-cols-2 lg:grid-cols-3 gap-2` (always 2 columns on mobile)
 
 **Inventory Item Cards**:
 - Compact layout with border emphasis
@@ -227,6 +229,68 @@ useEffect(() => {
 Uses `mousedown` (not `click`) to fire before focus changes, preventing race conditions.
 
 **Reference Implementation**: `frontend/components/tools/tracking/ItemCard.tsx`
+
+---
+
+## Black Pill Badge
+
+The signature visual element of SirenBase's design language. Black monospace badges provide contrast anchors that create visual rhythm across screens.
+
+### Styling
+
+```tsx
+<span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
+  {label}
+</span>
+```
+
+| Property | Value | Purpose |
+|----------|-------|---------|
+| Font size | `text-[10px]` | Compact, doesn't compete with titles |
+| Font | `font-mono font-bold uppercase` | Technical, precise feel |
+| Background | `bg-black text-white` | Maximum contrast anchor |
+| Padding | `px-2.5 py-1` | Comfortable pill shape |
+| Radius | `rounded-full` | Pill shape |
+
+### Variants
+
+**Item code badge** (Inventory Tracking):
+```tsx
+<span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
+  9674
+</span>
+```
+
+**Tool number badge** (Dashboard):
+```tsx
+<span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
+  01
+</span>
+```
+
+**Admin badge** (amber variant for admin-only elements):
+```tsx
+<span className="text-[10px] font-mono font-bold uppercase bg-amber-900 text-amber-100 px-2.5 py-1 rounded-full">
+  Admin
+</span>
+```
+
+### When to Use
+
+- Item identifiers (4-digit codes)
+- Tool/section numbering
+- Role indicators
+- Any element that needs to anchor the eye and provide rhythm
+
+### When NOT to Use
+
+- Category labels (use the lighter `bg-neutral-200/50 border border-neutral-300` pill instead)
+- Status indicators
+- Large blocks of text
+
+**Reference Implementations**:
+- `frontend/components/tools/tracking/ItemCard.tsx` - Item code badges
+- `frontend/components/shared/ToolCard.tsx` - Tool number badges
 
 ---
 
@@ -500,10 +564,12 @@ toast.warning("Please save your changes");
 |-------------|-----------|------------------------------------------|
 | `h-3 w-3`   | 12px      | Inline with small text                   |
 | `h-4 w-4`   | 16px      | **Default** - Button icons, inputs       |
-| `h-5 w-5`   | 20px      | Larger buttons, section headers          |
-| `h-6 w-6`   | 24px      | Tool cards, navigation                   |
+| `h-5 w-5`   | 20px      | Dashboard tool cards, section headers    |
+| `h-6 w-6`   | 24px      | Navigation icons                         |
 | `h-8 w-8`   | 32px      | Loading spinners, empty states           |
-| `h-12 w-12` | 48px      | Dashboard tool icons, large empty states |
+| `h-12 w-12` | 48px      | Large empty states only                  |
+
+**Note**: Icons should support text, never dominate. Dashboard tool cards use `size-5` (20px) icons, not large circles. Color is subtle (400-weight: `text-stone-400`, `text-emerald-400`, etc.).
 
 ### Common Icons
 
@@ -549,6 +615,7 @@ toast.warning("Please save your changes");
 | 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
 | 1.0.1 | Jan 18, 2026 | WCAG touch target compliance for buttons (44px minimum) |
 | 1.1.0 | Jan 27, 2026 | Added Single-Tap-to-Keyboard pattern for numeric counter inputs |
+| 2.0.0 | Feb 2, 2026 | Updated dashboard card pattern to "Earned Space" design; added Black Pill Badge pattern; updated icon size guidelines (subordinate icons, no large circles) |
 | 1.2.0 | Jan 31, 2026 | Added Contextual Action Overlay pattern for card actions |
 
-**Last Updated**: January 31, 2026
+**Last Updated**: February 2, 2026

@@ -155,9 +155,9 @@ For dynamic content updates:
 }
 ```
 
-**Scale on Hover** (Dashboard cards):
+**Tactile Press Feedback** (Dashboard cards):
 ```tsx
-<Card className="transition-transform hover:scale-102 duration-200">
+<Card className="transition-all hover:shadow-md active:scale-[0.98]">
 ```
 
 **Loading Spinner**:

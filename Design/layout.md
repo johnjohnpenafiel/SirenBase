@@ -334,26 +334,36 @@ The content inside the island follows a strict layout hierarchy. Navigation and 
 
 ### Header (Shared Across Tools)
 
+Frosted glass pill that floats above content. No bottom border - the pill shape and transparency provide separation.
+
 ```tsx
-<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-  <div className="container flex h-16 items-center justify-between px-4">
-    <div className="flex items-center gap-4">
-      <Logo />
-      <h1 className="text-xl font-semibold">Tool Name</h1>
+<header className="sticky top-0 z-50 w-full px-4 md:px-8 pt-2">
+  <div className={cn(
+    "max-w-6xl mx-auto h-14 flex justify-between items-center rounded-full backdrop-blur-md border border-neutral-300/80 px-2",
+    "transition-all duration-300 ease-out",
+    isScrolled ? "bg-white/70" : "bg-white/95"
+  )}>
+    {/* Left: Logo text */}
+    <div className="h-11 px-5 flex items-center">
+      <h1 className="text-xl font-medium text-foreground">sirenbase</h1>
     </div>
-    <nav className="flex items-center gap-2">
-      <Button variant="ghost" size="sm">Home</Button>
-      <Button variant="ghost" size="sm">Logout</Button>
+    {/* Right: Navigation icon buttons */}
+    <nav className="flex items-center gap-2 pr-3 md:pr-4">
+      <Button variant="outline" size="icon" className="rounded-full" />
+      <Button size="icon" className="rounded-full" />
     </nav>
   </div>
 </header>
 ```
 
 **Styling**:
-- **Height**: 64px (16 in Tailwind spacing)
-- **Sticky**: `sticky top-0` with backdrop blur
-- **Border**: Bottom border (`border-b`)
-- **Background**: Semi-transparent with blur for modern look
+- **Height**: 56px (`h-14`)
+- **Shape**: `rounded-full` pill
+- **Sticky**: `sticky top-0 z-50` with `pt-2` gap from viewport edge
+- **Background**: Dynamic opacity based on scroll (`bg-white/95` at rest, `bg-white/70` when scrolled)
+- **Blur**: `backdrop-blur-md` for frosted glass effect
+- **Border**: `border border-neutral-300/80` (not `border-b`)
+- **Nav buttons**: `rounded-full` icon buttons (outline for secondary, filled for primary)
 
 ### Footer (Optional)
 
@@ -366,8 +376,10 @@ The content inside the island follows a strict layout hierarchy. Navigation and 
 
 ### Dashboard Tool Cards
 
+Dense 2-column grid on mobile, 3 columns on desktop. Navigation targets don't need full-width single-column layout.
+
 ```tsx
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
   <ToolCard />
   <ToolCard />
   <ToolCard />
@@ -460,9 +472,10 @@ Already configured in `globals.css` with `-webkit-overflow-scrolling: touch`.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
+| 2.0.0 | Feb 2, 2026 | Updated dashboard grid to `grid-cols-2 lg:grid-cols-3`; updated header to frosted glass pill pattern; aligned with "Earned Space" design language |
 | 1.2.0 | Jan 30, 2026 | Added Island Content Layout rules (top row nav + actions, title below) |
 | 1.1.0 | Jan 30, 2026 | Island border updated from `border-gray-200/50` to `border-gray-200` (full opacity) |
 | — | Jan 16, 2026 | Title Area Island Pattern added (pre-extraction) |
 | — | Dec 14, 2025 | Dynamic Scroll Shadow Pattern added (pre-extraction) |
 
-**Last Updated**: January 30, 2026
+**Last Updated**: February 2, 2026

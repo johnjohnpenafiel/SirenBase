@@ -27,10 +27,24 @@ This directory contains the design system documentation for **SirenBase**. It de
 
 1. **Mobile-First Always** - Design for 320px width first, scale up gracefully
 2. **Speed & Simplicity** - Fast interactions, minimal cognitive load
-3. **Clarity Over Aesthetics** - Functional beauty, not decorative complexity
+3. **Density & Intentionality** - Every element earns its space; tight layouts over decorative whitespace
 4. **Accessibility by Default** - WCAG 2.1 AA compliance minimum
-5. **Consistent But Not Boring** - Shared patterns with tool-specific personality
+5. **Contrast & Rhythm** - Black accent elements (badges, pills) anchor the eye and create visual cadence
 6. **App-Like Behavior** - Contained scrolling, fixed layouts, native-app feel
+
+### Design Identity: "Earned Space"
+
+SirenBase's visual identity is defined by **density, contrast, and intentionality**. This is not a generic enterprise UI - it's a portfolio-grade operations platform where every pixel demonstrates craft.
+
+**What this means in practice:**
+- **No decorative whitespace.** If a card feels empty, it needs more information or less padding - not a larger icon.
+- **Black contrast anchors.** Monospace pills and badges (`text-[10px] font-mono font-bold bg-black text-white rounded-full`) create visual rhythm across every screen. These are the signature element of the design language.
+- **Small, subordinate icons.** Icons support text at 16-20px, never dominate at 40-80px. Color in icons is subtle (400-weight opacity), not pastel circles.
+- **Tight, purposeful cards.** Padding is `p-4` to `p-5`, not `p-6` to `p-8`. Cards are compact with multiple pieces of information (badge + title + description + navigation cue).
+- **Dense grids.** Two-column layouts on mobile for navigation targets. Single-column only when content requires full width (forms, item detail cards).
+- **Tactile interactions.** `active:scale-[0.98]` for press feedback, `hover:shadow-md` for subtle lift. No exaggerated scale effects.
+
+**The test:** If a screen looks like it could come from any UI component library, it doesn't match the design language yet. Every screen should feel as intentional as the Inventory Tracking tool's item list.
 
 ### User Experience Goals
 
@@ -197,6 +211,7 @@ When you identify 2+ implementations with consistent styling, extract the patter
 
 ## Change Log
 
+- **v6.0.0** (Feb 2, 2026): **DESIGN IDENTITY** — Added "Earned Space" design identity section; updated core principles to reflect density/contrast/intentionality philosophy; replaced generic "Clarity Over Aesthetics" and "Consistent But Not Boring" with specific, actionable principles
 - **v5.0.0** (Jan 20, 2026): **MAJOR RESTRUCTURE** — Reorganized monolithic DESIGN.md into modular Design/ directory:
   - Split ~1,700 line file into 7 focused documents
   - Added Design Workflow section for pattern documentation process
@@ -212,6 +227,6 @@ When you identify 2+ implementations with consistent styling, extract the patter
 
 ---
 
-**Last Updated**: January 20, 2026
-**Version**: 5.0.0
+**Last Updated**: February 2, 2026
+**Version**: 6.0.0
 **Maintainer**: Development Team

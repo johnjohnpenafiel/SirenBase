@@ -70,7 +70,7 @@ export function DeleteRTDEItemDialog({
         {item && (
           <div className="space-y-3">
             {/* Item Preview */}
-            <div className="bg-muted/50 border border-border rounded-2xl px-5 py-4">
+            <div className="bg-muted/50 border border-neutral-300/80 rounded-2xl px-5 py-4">
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{item.icon}</span>
                 <div className="flex-1">

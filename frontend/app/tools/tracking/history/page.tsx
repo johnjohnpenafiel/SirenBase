@@ -93,7 +93,7 @@ export default function HistoryPage() {
       <div className="h-dvh overflow-y-auto" onScroll={handleScroll}>
         <Header />
           {/* Sticky Frosted Island */}
-          <div className="sticky top-[68px] z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+          <div className="sticky top-[64px] z-10 px-4 md:px-8 pt-2 pb-2 md:pt-3 md:pb-3">
             <div
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",
@@ -110,7 +110,7 @@ export default function HistoryPage() {
                 className="mb-4"
               />
               <h1 className="text-xl md:text-3xl font-normal tracking-tight mb-4 text-black">
-                Audit History
+                History
               </h1>
 
               {/* Filters */}
@@ -133,7 +133,7 @@ export default function HistoryPage() {
                   </Select>
                 </div>
 
-                <div className="flex-1 text-sm text-muted-foreground flex items-center">
+                <div className="flex-1 text-xs text-muted-foreground flex items-center">
                   Showing {filteredHistory.length}{" "}
                   {filteredHistory.length === 1 ? "entry" : "entries"}
                 </div>
@@ -152,7 +152,7 @@ export default function HistoryPage() {
             ) : (
               <>
                 {/* Unified card list for all screen sizes */}
-                <div className="space-y-3">
+                <div className="space-y-1.5">
                   {paginatedHistory.map((entry) => (
                     <HistoryEntryCard
                       key={entry.id}

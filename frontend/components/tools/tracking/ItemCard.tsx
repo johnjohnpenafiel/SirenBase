@@ -98,7 +98,7 @@ export function ItemCard({
       >
         <div className="flex-1 min-w-0">
           {/* Category */}
-          <p className="inline-block text-xs font-medium tracking-wide capitalize text-muted-foreground bg-muted px-2.5 py-1 rounded-full mb-3 whitespace-nowrap">
+          <p className="inline-block text-xs font-medium tracking-wide capitalize text-neutral-800 bg-neutral-200/50 border border-neutral-300 px-2.5 py-1 rounded-full mb-3 whitespace-nowrap">
             {category}
           </p>
           {/* Item name */}

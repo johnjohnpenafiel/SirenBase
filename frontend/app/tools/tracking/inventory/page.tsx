@@ -191,12 +191,12 @@ export default function InventoryPage() {
       <div ref={scrollContainerRef} className="h-dvh overflow-y-auto" onScroll={handleScroll}>
         <Header />
           {/* Sticky wrapper containing both island and search bar */}
-          <div className="sticky top-[68px] z-10">
+          <div className="sticky top-[64px] z-10">
             {/* Frosted Island */}
             <div className="px-4 md:px-8 pt-2 pb-2 md:pt-3 md:pb-3">
               <div
                 className={cn(
-                  "max-w-6xl mx-auto rounded-2xl",
+                  "max-w-6xl mx-auto rounded-2xl border border-neutral-300/80",
                   isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
 
                   "px-5 py-4 md:px-6 md:py-5",
@@ -253,7 +253,7 @@ export default function InventoryPage() {
                       size="sm"
                       className={cn(
                         "rounded-full",
-                        viewMode === "all" && "bg-neutral-200 text-neutral-800 font-semibold",
+                        viewMode === "all" && "bg-neutral-200/70 text-neutral-800 font-semibold",
                         viewMode !== "all" && "text-muted-foreground"
                       )}
                       onClick={() => {
@@ -270,7 +270,7 @@ export default function InventoryPage() {
                       size="sm"
                       className={cn(
                         "rounded-full",
-                        viewMode === "categories" && "bg-neutral-200 text-neutral-800 font-semibold",
+                        viewMode === "categories" && "bg-neutral-200/70 text-neutral-800 font-semibold",
                         viewMode !== "categories" && "text-muted-foreground"
                       )}
                       onClick={() => {
@@ -291,7 +291,7 @@ export default function InventoryPage() {
             <div className="px-4 md:px-8 pb-2">
               <div
                 className={cn(
-                  "max-w-6xl mx-auto relative rounded-full transition-all duration-300 ease-out",
+                  "max-w-6xl mx-auto relative rounded-full border border-neutral-300/80 transition-all duration-300 ease-out",
                   isSearchBarScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
                 )}
               >

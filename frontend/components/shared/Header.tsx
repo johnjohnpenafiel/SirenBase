@@ -21,7 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, Home } from "lucide-react";
+import { LogOut, Settings, Home } from "lucide-react";
 
 const frostedGlass =
   "bg-white/70 backdrop-blur-md border-2 border-neutral-400/50 shadow-[0_1px_3px_-2px_rgba(0,0,0,0.06)]";
@@ -70,7 +70,7 @@ export function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="icon" className="rounded-full" aria-label="User menu">
-                    <User strokeWidth={1.5} className="size-5" />
+                    <Settings strokeWidth={1.5} className="size-5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">

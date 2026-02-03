@@ -183,7 +183,7 @@ export default function MilkCountPage() {
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
               )}
             >
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+              <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                 Milk Count
               </h1>
               <p className="text-muted-foreground text-sm">

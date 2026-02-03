@@ -212,7 +212,7 @@ export default function InventoryPage() {
                       label="Back to Categories"
                     />
                   ) : (
-                    <h1 className="text-xl md:text-3xl font-semibold tracking-tight text-black">
+                    <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                       Inventory Tracking
                     </h1>
                   )}
@@ -240,7 +240,7 @@ export default function InventoryPage() {
 
                 {/* Category title row (only in filtered view) */}
                 {viewMode === "filtered" && selectedCategory && (
-                  <h1 className="text-lg md:text-3xl font-bold text-foreground">
+                  <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                     {formatCategory(selectedCategory)}
                   </h1>
                 )}

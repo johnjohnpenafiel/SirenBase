@@ -208,7 +208,7 @@ export default function MilkParsPage() {
                   label="Admin Panel"
                 />
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+              <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                 Milk Count Pars
               </h1>
               <p className="text-sm text-muted-foreground">

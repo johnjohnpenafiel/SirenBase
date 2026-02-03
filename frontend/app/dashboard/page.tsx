@@ -59,7 +59,7 @@ export default function DashboardPage() {
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
               )}
             >
-              <h1 className="text-3xl font-semibold tracking-tight text-black">
+              <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                 Dashboard
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -69,30 +69,30 @@ export default function DashboardPage() {
           </div> */}
 
           {/* Tools Grid */}
-          <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-4 pb-8">
+          <div className="container max-w-6xl mx-auto px-4 md:px-8 pt-2 pb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                 {/* Tool 1: Inventory Tracking - Active */}
                 <ToolCard
-                  title="Inventory Tracking"
+                  title="Inventory"
                   description="Track basement inventory"
                   route="/tools/tracking/inventory"
                   accent="stone"
                   icon={
-                    <div className="w-14 h-14 rounded-full bg-stone-500/15 flex items-center justify-center">
-                      <Package className="w-7 h-7 text-stone-500" />
+                    <div className="w-20 h-20 rounded-full bg-stone-500/15 flex items-center justify-center">
+                      <Package className="w-10 h-10 text-stone-500" />
                     </div>
                   }
                 />
 
                 {/* Tool 2: RTD&E - Active */}
                 <ToolCard
-                  title="RTD&E Display"
+                  title="RTD&E"
                   description="Display restocking with pull lists"
                   route="/tools/rtde"
                   accent="emerald"
                   icon={
-                    <div className="w-14 h-14 rounded-full bg-emerald-500/15 flex items-center justify-center">
-                      <ShoppingBasket className="w-7 h-7 text-emerald-500" />
+                    <div className="w-20 h-20 rounded-full bg-emerald-500/15 flex items-center justify-center">
+                      <ShoppingBasket className="w-10 h-10 text-emerald-500" />
                     </div>
                   }
                 />
@@ -104,8 +104,8 @@ export default function DashboardPage() {
                   route="/tools/milk-count"
                   accent="sky"
                   icon={
-                    <div className="w-14 h-14 rounded-full bg-sky-500/15 flex items-center justify-center">
-                      <Milk className="w-7 h-7 text-sky-500" />
+                    <div className="w-20 h-20 rounded-full bg-sky-500/15 flex items-center justify-center">
+                      <Milk className="w-10 h-10 text-sky-500" />
                     </div>
                   }
                 />
@@ -118,8 +118,8 @@ export default function DashboardPage() {
                     route="/admin"
                     accent="amber"
                     icon={
-                      <div className="w-14 h-14 rounded-full bg-amber-500/15 flex items-center justify-center">
-                        <ShieldCheck className="w-7 h-7 text-amber-500" />
+                      <div className="w-20 h-20 rounded-full bg-amber-500/15 flex items-center justify-center">
+                        <ShieldCheck className="w-10 h-10 text-amber-500" />
                       </div>
                     }
                     isAdminOnly={true}

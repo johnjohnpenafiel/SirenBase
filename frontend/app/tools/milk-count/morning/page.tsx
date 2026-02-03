@@ -221,7 +221,7 @@ export default function MorningCountPage() {
 
               {/* Title */}
               <div className="mb-4">
-                <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+                <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                   Morning Count
                 </h1>
                 <p className="text-sm text-muted-foreground">Back of House</p>

@@ -232,7 +232,7 @@ export default function SummaryPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-5 w-5 text-sky-600" />
-                  <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+                  <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                     Summary
                   </h1>
                 </div>

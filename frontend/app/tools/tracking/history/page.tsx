@@ -109,7 +109,7 @@ export default function HistoryPage() {
                 label="Back to Inventory"
                 className="mb-4"
               />
-              <h1 className="text-2xl md:text-4xl font-normal mb-4 text-foreground">
+              <h1 className="text-xl md:text-3xl font-normal tracking-tight mb-4 text-black">
                 Audit History
               </h1>
 

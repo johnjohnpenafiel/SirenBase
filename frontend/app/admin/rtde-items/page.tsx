@@ -319,7 +319,7 @@ export default function RTDEItemsPage() {
                   <span className="hidden md:inline">Add Item</span>
                 </Button>
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+              <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                 RTDE Items/Pars
               </h1>
               <p className="text-sm text-muted-foreground mb-3">

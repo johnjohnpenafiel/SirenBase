@@ -42,7 +42,7 @@ export default function AdminPage() {
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
               )}
             >
-              <h1 className="text-3xl font-semibold tracking-tight text-black">
+              <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                 Admin Panel
               </h1>
               <p className="text-sm text-muted-foreground">

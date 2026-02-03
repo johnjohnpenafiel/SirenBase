@@ -61,7 +61,7 @@ export function Header() {
             <>
               {/* Dashboard Link */}
               <Link href="/dashboard">
-                <Button size="icon" className="rounded-full" aria-label="Dashboard">
+                <Button variant="outline" size="icon" className="rounded-full" aria-label="Dashboard">
                   <Home strokeWidth={1.5} className="size-5" />
                 </Button>
               </Link>

@@ -26,7 +26,6 @@ import {
   formatCountDisplay,
   isItemCounted,
   getCountedItemsCount,
-  CURRENT_ITEM_HIGHLIGHT,
 } from "./utils";
 import { RTDEItemImage } from "./RTDEItemImage";
 
@@ -79,21 +78,29 @@ export function RTDEMobileDrawer({
   return (
     <div className="md:hidden">
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="bg-background">
-          <DrawerHeader className="border-b border-neutral-300 bg-background pb-3">
-            <DrawerTitle className="text-lg">RTD&E Items</DrawerTitle>
-            <div className="flex justify-center">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-muted text-xs text-foreground">
-                <span className="font-bold">{countedCount}</span>
-                <span>of</span>
-                <span className="font-bold">{items.length}</span>
+        <DrawerContent className="bg-card">
+          <DrawerHeader className="border-b border-neutral-300/80 bg-card pb-3">
+            <div className="flex items-center justify-center gap-2">
+              <DrawerTitle className="text-xl font-normal tracking-tight text-black">
+                RTD&E
+              </DrawerTitle>
+              <span className="text-xs font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 text-neutral-800 px-2.5 py-1 rounded-full">
+                Items
+              </span>
+            </div>
+            <div className="flex justify-center mt-1">
+              <span className="inline-flex items-center gap-1 text-xs text-foreground">
+                <span className="font-medium">{countedCount}</span>
+                <span className="text-muted-foreground">of</span>
+                <span className="font-medium">{items.length}</span>
+                <span className="text-muted-foreground">counted</span>
               </span>
             </div>
           </DrawerHeader>
 
           {/* Scrollable item list */}
-          <div className="overflow-y-auto max-h-[60vh] bg-neutral-100 px-2 py-1">
-            <div className="flex flex-col gap-[3px]">
+          <div className="overflow-y-auto max-h-[60vh] bg-neutral-100 px-2 py-2">
+            <div className="flex flex-col gap-1">
               {items.map((item, index) => {
                 const isCurrent = index === currentIndex;
                 const counted = isItemCounted(item);
@@ -107,10 +114,12 @@ export function RTDEMobileDrawer({
                       disabled={!isCountingPhase}
                       className={cn(
                         "w-full flex items-center gap-2.5 py-2 px-3 text-left",
-                        "rounded-2xl bg-background",
+                        "rounded-xl bg-card border-2",
                         "transition-colors duration-150",
-                        "active:bg-muted/50",
-                        isCurrent && CURRENT_ITEM_HIGHLIGHT,
+                        "active:bg-neutral-100",
+                        isCurrent
+                          ? "border-emerald-400 shadow-sm"
+                          : "border-transparent",
                         !isCountingPhase && "cursor-not-allowed opacity-60"
                       )}
                       aria-label={`${item.name}, ${
@@ -122,7 +131,7 @@ export function RTDEMobileDrawer({
                       <RTDEItemImage
                         imageFilename={item.imageFilename}
                         icon={item.icon}
-                        size="md"
+                        size="sm"
                         alt={`${item.brand ? `${item.brand} ` : ""}${item.name}`}
                         className="shrink-0"
                       />
@@ -143,8 +152,10 @@ export function RTDEMobileDrawer({
                       <div
                         className={cn(
                           "w-7 h-7 rounded-full flex items-center justify-center shrink-0",
-                          "text-xs font-medium tabular-nums text-muted-foreground",
-                          counted && "border-2 border-emerald-500"
+                          "text-xs font-medium tabular-nums",
+                          counted
+                            ? "bg-emerald-400 text-white"
+                            : "text-muted-foreground"
                         )}
                       >
                         {countDisplay}
@@ -157,8 +168,8 @@ export function RTDEMobileDrawer({
           </div>
 
           {/* "Start Pull List" button */}
-          <DrawerFooter className="border-t border-neutral-300 bg-background pb-safe">
-            <div className="flex items-center justify-center w-full pt-4 pb-6">
+          <DrawerFooter className="border-t border-neutral-300/80 bg-card pb-safe">
+            <div className="flex items-center justify-center w-full pt-3 pb-6">
               <DrawerClose asChild>
                 <Button
                   size="lg"

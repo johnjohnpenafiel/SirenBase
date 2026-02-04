@@ -78,23 +78,10 @@ export function RTDEMobileDrawer({
   return (
     <div className="md:hidden">
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="bg-card">
-          <DrawerHeader className="border-b border-neutral-300/80 bg-card pb-3">
-            <div className="flex items-center justify-center gap-2">
-              <DrawerTitle className="text-xl font-normal tracking-tight text-black">
-                RTD&E
-              </DrawerTitle>
-              <span className="text-xs font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 text-neutral-800 px-2.5 py-1 rounded-full">
-                Items
-              </span>
-            </div>
-            <div className="flex justify-center mt-1">
-              <span className="inline-flex items-center gap-1 text-xs text-foreground">
-                <span className="font-medium">{countedCount}</span>
-                <span className="text-muted-foreground">of</span>
-                <span className="font-medium">{items.length}</span>
-                <span className="text-muted-foreground">counted</span>
-              </span>
+        <DrawerContent className="bg-card" aria-describedby={undefined}>
+          <DrawerHeader className="border-b border-neutral-300/80 bg-card p-0">
+            <div className="px-4 pt-3 pb-6">
+              <DrawerTitle className="sr-only">Items</DrawerTitle>
             </div>
           </DrawerHeader>
 
@@ -117,7 +104,7 @@ export function RTDEMobileDrawer({
                         "rounded-xl bg-card",
                         "transition-colors duration-150",
                         "active:bg-neutral-100",
-                        isCurrent && "border-x-4 border-neutral-800 ring-2 ring-neutral-800",
+                        isCurrent && "ring-[3px] ring-neutral-800 shadow-[inset_4px_0_0_0_#262626,inset_-4px_0_0_0_#262626]",
                         !isCountingPhase && "cursor-not-allowed opacity-60"
                       )}
                       aria-label={`${item.name}, ${

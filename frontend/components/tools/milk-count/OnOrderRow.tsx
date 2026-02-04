@@ -58,18 +58,18 @@ export function OnOrderRow({
     >
       {/* Left: Icon + Name + Category */}
       <div className="flex items-center gap-3 flex-1 min-w-0">
-        {/* Category Icon - Small and subordinate */}
+        {/* Category Icon */}
         <div
           className={cn(
-            "shrink-0 size-10 rounded-xl flex items-center justify-center",
+            "shrink-0 size-14 rounded-xl flex items-center justify-center",
             "bg-muted",
             isDairy ? "text-sky-400" : "text-emerald-400"
           )}
         >
           {isDairy ? (
-            <Milk className="size-5" />
+            <Milk className="size-8" />
           ) : (
-            <Leaf className="size-5" />
+            <Leaf className="size-8" />
           )}
         </div>
 
@@ -87,24 +87,6 @@ export function OnOrderRow({
 
       {/* Right: Counter controls */}
       <div className="flex items-center gap-1.5 shrink-0">
-        {/* Decrement Button */}
-        <Button
-          onClick={handleDecrement}
-          disabled={value === 0}
-          variant="outline"
-          size="icon"
-          className={cn(
-            "size-11 rounded-xl",
-            "border border-neutral-300/80",
-            "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
-            "active:scale-[0.98]",
-            "disabled:opacity-30"
-          )}
-          aria-label={`Decrease ${milkName} on order`}
-        >
-          <Minus className="size-4" strokeWidth={2.5} />
-        </Button>
-
         {/* Count Input - Single tap to keyboard */}
         <Input
           ref={inputRef}
@@ -133,23 +115,41 @@ export function OnOrderRow({
           aria-label={`${milkName} on order: ${value}. Tap to edit.`}
         />
 
-        {/* Increment Button */}
-        <Button
-          onClick={handleIncrement}
-          disabled={value >= 999}
-          variant="outline"
-          size="icon"
-          className={cn(
-            "size-11 rounded-xl",
-            "border border-neutral-300/80",
-            "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
-            "active:scale-[0.98]",
-            "disabled:opacity-30"
-          )}
-          aria-label={`Increase ${milkName} on order`}
-        >
-          <Plus className="size-4" strokeWidth={2.5} />
-        </Button>
+        {/* Vertical buttons - for one-handed ergonomics (size-11 = 44px for WCAG) */}
+        <div className="flex flex-col gap-1">
+          <Button
+            onClick={handleIncrement}
+            disabled={value >= 999}
+            variant="outline"
+            size="icon"
+            className={cn(
+              "size-11 rounded-xl",
+              "border border-neutral-300/80",
+              "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+              "active:scale-[0.98]",
+              "disabled:opacity-30"
+            )}
+            aria-label={`Increase ${milkName} on order`}
+          >
+            <Plus className="size-4" strokeWidth={2.5} />
+          </Button>
+          <Button
+            onClick={handleDecrement}
+            disabled={value === 0}
+            variant="outline"
+            size="icon"
+            className={cn(
+              "size-11 rounded-xl",
+              "border border-neutral-300/80",
+              "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+              "active:scale-[0.98]",
+              "disabled:opacity-30"
+            )}
+            aria-label={`Decrease ${milkName} on order`}
+          >
+            <Minus className="size-4" strokeWidth={2.5} />
+          </Button>
+        </div>
       </div>
     </div>
   );

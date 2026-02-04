@@ -61,18 +61,18 @@ export function MilkCountCard({
     >
       {/* Left: Icon + Name + Category */}
       <div className="flex items-center gap-3 flex-1 min-w-0">
-        {/* Category Icon - Small and subordinate */}
+        {/* Category Icon */}
         <div
           className={cn(
-            "shrink-0 size-10 rounded-xl flex items-center justify-center",
+            "shrink-0 size-14 rounded-xl flex items-center justify-center",
             "bg-muted",
             isDairy ? "text-sky-400" : "text-emerald-400"
           )}
         >
           {isDairy ? (
-            <Milk className="size-5" />
+            <Milk className="size-8" />
           ) : (
-            <Leaf className="size-5" />
+            <Leaf className="size-8" />
           )}
         </div>
 
@@ -90,24 +90,6 @@ export function MilkCountCard({
 
       {/* Right: Counter controls */}
       <div className="flex items-center gap-1.5 shrink-0">
-        {/* Decrement Button */}
-        <Button
-          onClick={handleDecrement}
-          disabled={currentCount === 0}
-          variant="outline"
-          size="icon"
-          className={cn(
-            "size-11 rounded-xl",
-            "border border-neutral-300/80",
-            "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
-            "active:scale-[0.98]",
-            "disabled:opacity-30"
-          )}
-          aria-label={`Decrease ${milkName} count`}
-        >
-          <Minus className="size-4" strokeWidth={2.5} />
-        </Button>
-
         {/* Count Input - Single tap to keyboard */}
         <Input
           ref={inputRef}
@@ -136,23 +118,41 @@ export function MilkCountCard({
           aria-label={`${milkName} count: ${currentCount}. Tap to edit.`}
         />
 
-        {/* Increment Button */}
-        <Button
-          onClick={handleIncrement}
-          disabled={currentCount >= 999}
-          variant="outline"
-          size="icon"
-          className={cn(
-            "size-11 rounded-xl",
-            "border border-neutral-300/80",
-            "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
-            "active:scale-[0.98]",
-            "disabled:opacity-30"
-          )}
-          aria-label={`Increase ${milkName} count`}
-        >
-          <Plus className="size-4" strokeWidth={2.5} />
-        </Button>
+        {/* Vertical buttons - for one-handed ergonomics (size-11 = 44px for WCAG) */}
+        <div className="flex flex-col gap-1">
+          <Button
+            onClick={handleIncrement}
+            disabled={currentCount >= 999}
+            variant="outline"
+            size="icon"
+            className={cn(
+              "size-11 rounded-xl",
+              "border border-neutral-300/80",
+              "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+              "active:scale-[0.98]",
+              "disabled:opacity-30"
+            )}
+            aria-label={`Increase ${milkName} count`}
+          >
+            <Plus className="size-4" strokeWidth={2.5} />
+          </Button>
+          <Button
+            onClick={handleDecrement}
+            disabled={currentCount === 0}
+            variant="outline"
+            size="icon"
+            className={cn(
+              "size-11 rounded-xl",
+              "border border-neutral-300/80",
+              "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+              "active:scale-[0.98]",
+              "disabled:opacity-30"
+            )}
+            aria-label={`Decrease ${milkName} count`}
+          >
+            <Minus className="size-4" strokeWidth={2.5} />
+          </Button>
+        </div>
       </div>
 
       {/* Saving Indicator - Subtle */}

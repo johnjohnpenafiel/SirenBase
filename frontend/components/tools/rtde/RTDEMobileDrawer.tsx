@@ -114,12 +114,10 @@ export function RTDEMobileDrawer({
                       disabled={!isCountingPhase}
                       className={cn(
                         "w-full flex items-center gap-2.5 py-2 px-3 text-left",
-                        "rounded-xl bg-card border-2",
+                        "rounded-xl bg-card",
                         "transition-colors duration-150",
                         "active:bg-neutral-100",
-                        isCurrent
-                          ? "border-emerald-400 shadow-sm"
-                          : "border-transparent",
+                        isCurrent && "border-x-4 border-neutral-800 ring-2 ring-neutral-800",
                         !isCountingPhase && "cursor-not-allowed opacity-60"
                       )}
                       aria-label={`${item.name}, ${
@@ -168,8 +166,8 @@ export function RTDEMobileDrawer({
           </div>
 
           {/* "Start Pull List" button */}
-          <DrawerFooter className="border-t border-neutral-300/80 bg-card pb-safe">
-            <div className="flex items-center justify-center w-full pt-3 pb-6">
+          <DrawerFooter className="border-t border-neutral-300/80 bg-card pb-safe p-0">
+            <div className="flex items-center justify-center w-full px-4 pt-3 pb-6">
               <DrawerClose asChild>
                 <Button
                   size="lg"

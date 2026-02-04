@@ -1,22 +1,25 @@
 /**
  * Admin Module Card Component
  *
- * Reusable card for displaying admin modules on the admin dashboard.
- * Matches ToolCard design language with amber admin accent.
- * Follows Design/components.md guidelines:
- * - Uses design system color tokens
- * - Hover effects with amber theme for admin
+ * Compact, dense card for admin module launcher.
+ * Follows the "Earned Space" design language:
+ * - Amber accent badges for admin theme
+ * - Tight spacing (p-4), no wasted space
+ * - Small inline icons (size-5), not oversized circles
  * - Accessible with keyboard navigation
  */
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { ChevronRight } from "lucide-react";
 
 export interface AdminModuleCardProps {
   title: string;
   description: string;
   route: string;
   icon?: React.ReactNode;
+  moduleId?: string;
   isDisabled?: boolean;
 }
 
@@ -25,6 +28,7 @@ export function AdminModuleCard({
   description,
   route,
   icon,
+  moduleId,
   isDisabled = false,
 }: AdminModuleCardProps) {
   const router = useRouter();
@@ -36,7 +40,7 @@ export function AdminModuleCard({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isDisabled && (e.key === 'Enter' || e.key === ' ')) {
+    if (!isDisabled && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       router.push(route);
     }
@@ -48,25 +52,39 @@ export function AdminModuleCard({
       onKeyDown={handleKeyDown}
       tabIndex={isDisabled ? -1 : 0}
       role="button"
-      aria-label={`${title}${isDisabled ? ' (Coming soon)' : ''}`}
+      aria-label={`${title}${isDisabled ? " (Coming soon)" : ""}`}
       aria-disabled={isDisabled}
-      className={`
-        p-6 border border-neutral-300/80 rounded-2xl bg-card text-card-foreground transition-all
-        ${isDisabled
-          ? 'opacity-50 cursor-not-allowed'
-          : 'cursor-pointer hover:shadow-lg hover:scale-102 hover:border-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
-        }
-      `}
+      className={cn(
+        "p-4 border border-neutral-300/80 rounded-2xl bg-card text-card-foreground transition-all",
+        isDisabled
+          ? "opacity-50 cursor-not-allowed"
+          : "cursor-pointer hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      )}
     >
-      {icon && <div className="mb-4">{icon}</div>}
+      {/* Top row: module badge + icon */}
+      <div className="flex items-center justify-between mb-3">
+        {moduleId && (
+          <span className="text-[10px] font-mono font-bold uppercase bg-amber-900 text-amber-100 px-2.5 py-1 rounded-full">
+            {moduleId}
+          </span>
+        )}
+        {icon}
+      </div>
 
-      <h2 className="text-xl font-semibold mb-2 text-foreground">
+      {/* Title */}
+      <h2 className="text-lg font-semibold tracking-tight text-foreground">
         {title}
       </h2>
 
-      <p className="text-sm text-muted-foreground">
-        {isDisabled ? 'Coming soon...' : description}
-      </p>
+      {/* Description + chevron */}
+      <div className="flex items-end justify-between mt-1">
+        <p className="text-xs text-muted-foreground leading-relaxed pr-4">
+          {isDisabled ? "Coming soon..." : description}
+        </p>
+        {!isDisabled && (
+          <ChevronRight className="size-4 text-muted-foreground/40 shrink-0" />
+        )}
+      </div>
     </div>
   );
 }

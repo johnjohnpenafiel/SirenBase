@@ -65,10 +65,13 @@ export function RTDEMobileDrawer({
     [open]
   );
 
-  const handleItemSelect = (index: number) => {
-    onItemClick(index);
-    onOpenChange(false); // Close drawer after selection
-  };
+  const handleItemSelect = useCallback(
+    (index: number) => {
+      onItemClick(index);
+      onOpenChange(false); // Close drawer after selection
+    },
+    [onItemClick, onOpenChange]
+  );
 
   // Hide drawer in pull phase (not needed during pulling)
   if (phase === "pulling") {
@@ -78,7 +81,7 @@ export function RTDEMobileDrawer({
   return (
     <div className="md:hidden">
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="bg-card" aria-describedby={undefined}>
+        <DrawerContent className="bg-card">
           <DrawerHeader className="border-b border-neutral-300/80 bg-card p-0">
             <div className="px-4 pt-3 pb-6">
               <DrawerTitle className="sr-only">Items</DrawerTitle>

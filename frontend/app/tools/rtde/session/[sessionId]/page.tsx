@@ -21,6 +21,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { RTDECountingPhase } from "@/components/tools/rtde/RTDECountingPhase";
 import { RTDECountingPhaseSkeleton } from "@/components/tools/rtde/RTDECountingPhaseSkeleton";
+import { RTDESidebarSkeleton } from "@/components/tools/rtde/RTDESidebarSkeleton";
 import { RTDEPullingPhase } from "@/components/tools/rtde/RTDEPullingPhase";
 import { RTDESessionSidebar } from "@/components/tools/rtde/RTDESessionSidebar";
 import { RTDEMobileDrawer } from "@/components/tools/rtde/RTDEMobileDrawer";
@@ -36,9 +37,9 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CheckmarkAnimation } from "@/components/ui/checkmark-animation";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2, AlertTriangle } from "lucide-react";
 import apiClient from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import { toast } from "sonner";
 import type {
   RTDESessionWithPhase,
@@ -97,6 +98,8 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   const savingStartTimeRef = useRef<number | null>(null);
   // Minimum time to show "Saving..." indicator (allows fade animation to complete)
   const MIN_SAVING_DISPLAY_MS = 800;
+  // Debounce delay for auto-save (ms)
+  const DEBOUNCE_SAVE_MS = 500;
 
   // Load session data on mount
   useEffect(() => {
@@ -171,12 +174,8 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
         phase: "counting",
         currentItemIndex: 0,
       });
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error ||
-        error.message ||
-        "Failed to load session";
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to load session"));
       router.push("/tools/rtde");
     } finally {
       setLoading(false);
@@ -201,16 +200,15 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
         savingStartTimeRef.current = Date.now();
       }
 
-      // Debounce the actual API call (500ms)
+      // Debounce the actual API call
       saveTimerRef.current = setTimeout(async () => {
         try {
           await apiClient.updateRTDECount(sessionId, {
             item_id: itemId,
             counted_quantity: count ?? 0,
           });
-        } catch (error: any) {
-          console.error("Failed to save count:", error);
-          toast.error("Failed to save count");
+        } catch (error: unknown) {
+          toast.error(getErrorMessage(error, "Failed to save count"));
         } finally {
           // Ensure minimum display time for smooth fade animation
           const elapsed =
@@ -222,7 +220,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
             savingStartTimeRef.current = null;
           }, remaining);
         }
-      }, 500);
+      }, DEBOUNCE_SAVE_MS);
     },
     [sessionId]
   );
@@ -400,7 +398,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
         item_id: itemId,
         is_pulled: !currentlyPulled,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Revert on error
       const revertedItems = sessionData.items.map((item) =>
         item.itemId === itemId ? { ...item, isPulled: currentlyPulled } : item
@@ -410,7 +408,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
         ...sessionData,
         items: revertedItems,
       });
-      toast.error("Failed to update item");
+      toast.error(getErrorMessage(error, "Failed to update item"));
     }
   };
 
@@ -450,12 +448,8 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
       setTimeout(() => {
         router.push("/dashboard");
       }, 1500);
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error ||
-        error.message ||
-        "Failed to complete session";
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to complete session"));
       setCompleting(false);
       setShowCompleteDialog(false);
     }
@@ -470,12 +464,8 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
       // Backend auto-abandons old session when starting new
       const newSession = await apiClient.startRTDESession({});
       router.replace(`/tools/rtde/session/${newSession.session_id}`);
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error ||
-        error.message ||
-        "Failed to start new session";
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to start new session"));
     }
   };
 
@@ -486,20 +476,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
         <div className="flex flex-col h-dvh">
           <Header />
           <div className="flex-1 flex overflow-hidden">
-            {/* Desktop sidebar skeleton */}
-            <div className="hidden md:flex flex-col w-72 border-r border-neutral-300/80 bg-card">
-              <div className="p-4 border-b border-neutral-300/80">
-                <Skeleton className="h-6 w-32" />
-              </div>
-              <div className="flex-1 overflow-hidden p-2 space-y-2">
-                {[...Array(6)].map((_, i) => (
-                  <Skeleton key={i} className="h-14 w-full rounded-xl" />
-                ))}
-              </div>
-              <div className="p-4 border-t border-neutral-300/80">
-                <Skeleton className="h-10 w-full rounded-md" />
-              </div>
-            </div>
+            <RTDESidebarSkeleton />
             <RTDECountingPhaseSkeleton />
           </div>
         </div>

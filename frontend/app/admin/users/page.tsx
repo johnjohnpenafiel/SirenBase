@@ -56,7 +56,7 @@ function UserCard({ user, onDelete }: { user: User; onDelete: (user: User) => vo
           isActionMode ? "opacity-30 blur-[2px] pointer-events-none" : "opacity-100 blur-0"
         )}
       >
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-center">
           <div className="flex-1 min-w-0">
             {/* Partner number badge */}
             <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">

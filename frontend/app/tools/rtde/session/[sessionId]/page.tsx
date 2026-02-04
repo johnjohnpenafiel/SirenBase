@@ -1,22 +1,19 @@
 /**
  * RTD&E Session Page - Single-Page Workflow with Phase-Based Rendering
  *
- * Session orchestrator managing state, data loading, and API calls.
- * Delegates UI rendering to phase-specific components:
- * - RTDECountingPhase: Displays counting interface
- * - RTDEPullingPhase: Displays pull list interface
+ * Session orchestrator managing UI rendering and dialog state.
+ * Delegates business logic to useRTDESession hook.
  *
  * Features:
- * - Phase state management (counting → pulling)
+ * - Phase-based rendering (counting → pulling)
  * - Desktop sidebar + mobile drawer navigation
- * - Validation before pull phase transition
- * - Auto-save with debouncing (500ms)
- * - Optimistic UI updates
+ * - Resume session dialog for returning users
+ * - Complete session confirmation dialog
  */
 "use client";
 
-import { use, useState, useEffect, useCallback, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { use, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { RTDECountingPhase } from "@/components/tools/rtde/RTDECountingPhase";
@@ -38,21 +35,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { CheckmarkAnimation } from "@/components/ui/checkmark-animation";
 import { Loader2, AlertTriangle } from "lucide-react";
-import apiClient from "@/lib/api";
-import { getErrorMessage } from "@/lib/utils";
-import { toast } from "sonner";
-import type {
-  RTDESessionWithPhase,
-  RTDEItem,
-  RTDESessionPhase,
-} from "@/components/tools/rtde/types";
-import type {
-  RTDESessionItem as APISessionItem,
-  GetRTDESessionResponse,
-} from "@/types";
+import { useRTDESession } from "@/hooks/rtde/useRTDESession";
 import {
-  validateAllItemsCounted,
-  calculateNeedQuantity,
   calculateProgress,
   getCountedItemsCount,
   getPulledCountFromPullList,
@@ -66,23 +50,35 @@ interface SessionPageProps {
 }
 
 export default function RTDESessionPage({ params }: SessionPageProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { sessionId } = use(params);
 
-  // State management
-  const [loading, setLoading] = useState(true);
+  // Core session management via hook
+  const {
+    loading,
+    sessionData,
+    phase,
+    currentIndex,
+    saving,
+    showValidationDialog,
+    uncountedItems,
+    setShowValidationDialog,
+    jumpToItem,
+    handlePrevious,
+    handleNext,
+    handleCountChange,
+    handleStartPull,
+    handleContinueWithExclusions,
+    handleGoBack,
+    handleTogglePulled,
+    handleCompleteSession,
+    handleStartFresh,
+    completing,
+    completed,
+  } = useRTDESession({ sessionId });
+
+  // UI-only state (dialogs, drawers)
   const [showResumeDialog, setShowResumeDialog] = useState(false);
-  const [phase, setPhase] = useState<RTDESessionPhase>("counting");
-  const [sessionData, setSessionData] = useState<RTDESessionWithPhase | null>(
-    null
-  );
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [saving, setSaving] = useState(false);
-  const [showValidationDialog, setShowValidationDialog] = useState(false);
-  const [uncountedItems, setUncountedItems] = useState<RTDEItem[]>([]);
-  const [completing, setCompleting] = useState(false);
-  const [completed, setCompleted] = useState(false);
   const [showCompleteDialog, setShowCompleteDialog] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isPullingScrolled, setIsPullingScrolled] = useState(false);
@@ -91,20 +87,6 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
   const handlePullingScroll = (e: React.UIEvent<HTMLDivElement>) => {
     setIsPullingScrolled(e.currentTarget.scrollTop > 16);
   };
-
-  // Debounce timer ref for auto-save
-  const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
-  // Track when saving indicator started (for minimum display time)
-  const savingStartTimeRef = useRef<number | null>(null);
-  // Minimum time to show "Saving..." indicator (allows fade animation to complete)
-  const MIN_SAVING_DISPLAY_MS = 800;
-  // Debounce delay for auto-save (ms)
-  const DEBOUNCE_SAVE_MS = 500;
-
-  // Load session data on mount
-  useEffect(() => {
-    loadSession();
-  }, [sessionId]);
 
   // Check for resume prompt in URL (show dialog after session loads)
   useEffect(() => {
@@ -115,358 +97,10 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
     }
   }, [searchParams, sessionData, loading, sessionId]);
 
-  // Arrow key navigation (counting phase only)
-  useEffect(() => {
-    if (phase !== "counting" || !sessionData) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft" && currentIndex > 0) {
-        setCurrentIndex((prev) => prev - 1);
-      } else if (
-        e.key === "ArrowRight" &&
-        currentIndex < sessionData.items.length - 1
-      ) {
-        setCurrentIndex((prev) => prev + 1);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [phase, sessionData, currentIndex]);
-
-  /**
-   * Load session from API and transform to internal format
-   * NOTE: Backend defaults counted_quantity to 0, frontend treats 0 as "uncounted" (null)
-   */
-  const loadSession = async () => {
-    try {
-      setLoading(true);
-      const response: GetRTDESessionResponse = await apiClient.getRTDESession(
-        sessionId
-      );
-
-      // Transform API items to internal RTDEItem format
-      const items: RTDEItem[] = response.items.map(
-        (apiItem: APISessionItem) => ({
-          itemId: apiItem.item_id,
-          name: apiItem.name,
-          brand: apiItem.brand,
-          imageFilename: apiItem.image_filename,
-          icon: apiItem.icon,
-          parLevel: apiItem.par_level,
-          displayOrder: apiItem.display_order,
-          countedQuantity:
-            apiItem.counted_quantity === 0 ? null : apiItem.counted_quantity,
-          needQuantity: calculateNeedQuantity(
-            apiItem.par_level,
-            apiItem.counted_quantity === 0 ? null : apiItem.counted_quantity
-          ),
-          isPulled: apiItem.is_pulled,
-        })
-      );
-
-      setSessionData({
-        sessionId: response.session.id,
-        startedAt: response.session.started_at,
-        expiresAt: response.session.expires_at,
-        status: response.session.status,
-        items,
-        phase: "counting",
-        currentItemIndex: 0,
-      });
-    } catch (error: unknown) {
-      toast.error(getErrorMessage(error, "Failed to load session"));
-      router.push("/tools/rtde");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /**
-   * Save count with debouncing (500ms delay)
-   * Shows "Saving..." immediately, keeps visible through debounce + API call
-   * Uses minimum display time to prevent brief flashes during rapid clicks
-   */
-  const saveCount = useCallback(
-    async (itemId: string, count: number | null) => {
-      // Clear any pending save timer
-      if (saveTimerRef.current) {
-        clearTimeout(saveTimerRef.current);
-      }
-
-      // Show "Saving..." immediately when user starts interaction
-      setSaving(true);
-      if (!savingStartTimeRef.current) {
-        savingStartTimeRef.current = Date.now();
-      }
-
-      // Debounce the actual API call
-      saveTimerRef.current = setTimeout(async () => {
-        try {
-          await apiClient.updateRTDECount(sessionId, {
-            item_id: itemId,
-            counted_quantity: count ?? 0,
-          });
-        } catch (error: unknown) {
-          toast.error(getErrorMessage(error, "Failed to save count"));
-        } finally {
-          // Ensure minimum display time for smooth fade animation
-          const elapsed =
-            Date.now() - (savingStartTimeRef.current || Date.now());
-          const remaining = Math.max(0, MIN_SAVING_DISPLAY_MS - elapsed);
-
-          setTimeout(() => {
-            setSaving(false);
-            savingStartTimeRef.current = null;
-          }, remaining);
-        }
-      }, DEBOUNCE_SAVE_MS);
-    },
-    [sessionId]
-  );
-
-  /**
-   * Handle count change - optimistic UI update + debounced save
-   */
-  const handleCountChange = (newCount: number) => {
-    if (!sessionData) return;
-
-    const currentItem = sessionData.items[currentIndex];
-
-    // Update local state immediately (optimistic update)
-    const updatedItems = sessionData.items.map((item) =>
-      item.itemId === currentItem.itemId
-        ? {
-            ...item,
-            countedQuantity: newCount,
-            needQuantity: calculateNeedQuantity(item.parLevel, newCount),
-          }
-        : item
-    );
-
-    setSessionData({
-      ...sessionData,
-      items: updatedItems,
-    });
-
-    // Save to backend with debounce
-    saveCount(currentItem.itemId, newCount);
-  };
-
-  /**
-   * Navigation handlers
-   */
-  const jumpToItem = (index: number) => {
-    if (phase === "counting") {
-      setCurrentIndex(index);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (sessionData && currentIndex < sessionData.items.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-    }
-  };
-
-  /**
-   * Phase Transition: Counting → Pulling
-   *
-   * Validates counting status before phase transition.
-   *
-   * Architectural Pattern:
-   * - Phase-based rendering: Same route, different UI based on `phase` state
-   * - Validation check: Notifies user of uncounted items before pull list generation
-   * - No backend API call: Phase state is frontend-only (stateless transition)
-   *
-   * Flow:
-   * 1. User clicks "Start Pull" button (last item in counting phase)
-   * 2. Check if all items have countedQuantity !== null
-   * 3a. If all counted → setPhase("pulling") → RTDEPullingPhase renders
-   * 3b. If some uncounted → Show UncountedItemsDialog with 2 options:
-   *     - "Go Back & Count" → handleGoBack() → Jump to first uncounted item
-   *     - "Continue" → handleContinueWithExclusions() → Exclude uncounted from pull list
-   *
-   * Design Decision:
-   * - Uncounted items are excluded from pull list (not assigned 0)
-   * - Allows users to count only items they need to restock
-   */
-  const handleStartPull = () => {
-    if (!sessionData) return;
-
-    const validation = validateAllItemsCounted(sessionData.items);
-
-    if (validation.allCounted) {
-      // All items counted - proceed to pull phase
-      setPhase("pulling");
-    } else {
-      // Show validation dialog with uncounted items
-      setUncountedItems(validation.uncountedItems);
-      setShowValidationDialog(true);
-    }
-  };
-
-  /**
-   * Validation Dialog: "Continue" (Exclude Uncounted Items)
-   *
-   * User chose to proceed to pull phase with uncounted items excluded.
-   *
-   * Business Logic:
-   * - Uncounted items remain null (not modified)
-   * - Pull list excludes uncounted items via generatePullList() filter
-   * - User only sees items they explicitly counted that need restocking
-   *
-   * Use Case:
-   * - User only needs to restock a subset of items (e.g., 5 of 20 items)
-   * - Count only those items, proceed to pull phase
-   * - Uncounted items don't clutter the pull list
-   *
-   * Alternative Flow:
-   * - If user clicked "Go Back & Count", they'd jump to first uncounted item
-   */
-  const handleContinueWithExclusions = () => {
-    setShowValidationDialog(false);
-    setUncountedItems([]);
-    setPhase("pulling");
-  };
-
-  /**
-   * Handle "Go Back & Count" from validation dialog
-   * Returns to first uncounted item in counting phase
-   */
-  const handleGoBack = () => {
-    setShowValidationDialog(false);
-    if (uncountedItems.length > 0) {
-      const firstUncountedIndex = sessionData?.items.findIndex(
-        (item) => item.itemId === uncountedItems[0].itemId
-      );
-      if (firstUncountedIndex !== undefined && firstUncountedIndex >= 0) {
-        setCurrentIndex(firstUncountedIndex);
-      }
-    }
-    setUncountedItems([]);
-  };
-
-  /**
-   * Toggle Item Pulled Status (Pulling Phase)
-   *
-   * Marks items as pulled/unpulled in pull list via checkbox interaction.
-   *
-   * Optimistic Update Pattern:
-   * 1. Update local state immediately (instant UI feedback)
-   * 2. Save to backend asynchronously
-   * 3. If backend fails → Revert local state + Show error toast
-   *
-   * Why Optimistic Updates:
-   * - Mobile users expect instant feedback (no loading spinners)
-   * - Network latency shouldn't block UI interactions
-   * - Rare failure case handled gracefully with rollback
-   *
-   * State Management:
-   * - Updates full sessionData.items array (not just pull list)
-   * - Pull list is derived from items via generatePullList()
-   * - Progress recalculated automatically from updated state
-   *
-   * Backend Persistence:
-   * - POST /api/rtde/sessions/:sessionId/mark-pulled
-   * - Stores isPulled flag in rtde_session_items table
-   */
-  const handleTogglePulled = async (
-    itemId: string,
-    currentlyPulled: boolean
-  ) => {
-    if (!sessionData) return;
-
-    try {
-      // Optimistic update
-      const updatedItems = sessionData.items.map((item) =>
-        item.itemId === itemId ? { ...item, isPulled: !currentlyPulled } : item
-      );
-
-      setSessionData({
-        ...sessionData,
-        items: updatedItems,
-      });
-
-      // Save to backend
-      await apiClient.markRTDEItemPulled(sessionId, {
-        item_id: itemId,
-        is_pulled: !currentlyPulled,
-      });
-    } catch (error: unknown) {
-      // Revert on error
-      const revertedItems = sessionData.items.map((item) =>
-        item.itemId === itemId ? { ...item, isPulled: currentlyPulled } : item
-      );
-
-      setSessionData({
-        ...sessionData,
-        items: revertedItems,
-      });
-      toast.error(getErrorMessage(error, "Failed to update item"));
-    }
-  };
-
-  /**
-   * Complete Session - Calculator-Style Deletion
-   *
-   * Permanently deletes session and all associated data (no history preservation).
-   *
-   * Design Philosophy - "Calculator Style":
-   * - Like a calculator, session data is temporary working memory
-   * - Once complete, data is cleared (not archived)
-   * - Rationale: RTDE is a daily workflow tool, not historical reporting system
-   * - Staff complete session → Start fresh next time
-   *
-   * Deletion Scope:
-   * - Session record (rtde_sessions table)
-   * - All session items (rtde_session_items table - CASCADE delete)
-   * - No undo available after completion
-   *
-   * Confirmation Flow:
-   * - AlertDialog shown before execution (setShowCompleteDialog)
-   * - Warning if not all items pulled (optional safety check)
-   * - User must explicitly click "Complete" to confirm
-   *
-   * Post-Completion:
-   * - Navigate to /tools/rtde (landing page)
-   * - User can start new session from scratch
-   */
-  const handleCompleteSession = async () => {
-    try {
-      setCompleting(true);
-      await apiClient.completeRTDESession(sessionId);
-      // Show success animation before redirecting
-      setCompleting(false);
-      setCompleted(true);
-      // Wait for animation to play, then redirect
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1500);
-    } catch (error: unknown) {
-      toast.error(getErrorMessage(error, "Failed to complete session"));
-      setCompleting(false);
-      setShowCompleteDialog(false);
-    }
-  };
-
-  /**
-   * Handle "Start Fresh" from Resume Dialog
-   * Abandons current session, creates new one, and redirects
-   */
-  const handleStartFresh = async () => {
-    try {
-      // Backend auto-abandons old session when starting new
-      const newSession = await apiClient.startRTDESession({});
-      router.replace(`/tools/rtde/session/${newSession.session_id}`);
-    } catch (error: unknown) {
-      toast.error(getErrorMessage(error, "Failed to start new session"));
-    }
+  // Handle complete session with dialog close
+  const onCompleteSession = async () => {
+    await handleCompleteSession();
+    // Dialog closes automatically when completed state changes
   };
 
   // Loading state - skeleton loader
@@ -670,7 +304,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
               <DialogFooter className="flex-col gap-2 sm:flex-col">
                 <Button
-                  onClick={handleCompleteSession}
+                  onClick={onCompleteSession}
                   disabled={completing}
                   className="w-full"
                 >

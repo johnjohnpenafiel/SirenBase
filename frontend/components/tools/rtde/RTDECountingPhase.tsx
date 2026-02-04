@@ -51,51 +51,49 @@ export function RTDECountingPhase({
 
   return (
     <main className="flex-1 flex flex-col overflow-hidden">
-      {/* Progress Section - Full (hidden on very short viewports) */}
-      <div className="px-4 md:px-8 pt-2 md:pt-6 pb-1 [@media(max-height:670px)]:hidden">
-        <div className="container max-w-4xl mx-auto">
-          <RTDEProgressBar
-            currentIndex={currentIndex}
-            totalItems={totalItems}
-            progressPercent={progressPercent}
-          />
-        </div>
-      </div>
-
-      {/* Progress Section - Compact (only on very short viewports) */}
-      <div className="hidden [@media(max-height:670px)]:block px-4 pt-2 pb-1">
-        <div className="container max-w-4xl mx-auto">
-          <RTDEProgressBar
-            currentIndex={currentIndex}
-            totalItems={totalItems}
-            progressPercent={progressPercent}
-            size="compact"
-          />
-        </div>
-      </div>
-
-      {/* Count Card - Fills available space, image absorbs extra room */}
-      <div className="flex-1 min-h-0 flex flex-col px-4 md:px-8 py-1 md:py-4">
-        <div className="container max-w-lg mx-auto flex-1 min-h-0 flex flex-col">
-          <div className="flex-1 min-h-0 flex flex-col">
-            <div className="flex-1 min-h-0 flex flex-col">
-              <RTDECountCard
-                itemName={currentItem.name}
-                brand={currentItem.brand}
-                imageFilename={currentItem.imageFilename}
-                icon={currentItem.icon}
-                parLevel={currentItem.parLevel}
-                currentCount={currentItem.countedQuantity ?? 0}
-                onCountChange={onCountChange}
-                saving={saving}
-              />
-            </div>
+      {/* Content area with consistent gap-2 spacing between all elements */}
+      <div className="flex-1 min-h-0 flex flex-col gap-2 px-4 md:px-8 pt-2 md:pt-6 pb-2">
+        {/* Progress Section - Full (hidden on very short viewports) */}
+        <div className="flex-shrink-0 [@media(max-height:670px)]:hidden">
+          <div className="container max-w-4xl mx-auto">
+            <RTDEProgressBar
+              currentIndex={currentIndex}
+              totalItems={totalItems}
+              progressPercent={progressPercent}
+            />
           </div>
         </div>
-      </div>
 
-      {/* Mobile Navigation - Above Bottom Bar (flex-shrink-0 ensures it never gets cut off) */}
-      <div className="md:hidden flex justify-center gap-3 px-4 py-3 flex-shrink-0">
+        {/* Progress Section - Compact (only on very short viewports) */}
+        <div className="hidden [@media(max-height:670px)]:block flex-shrink-0">
+          <div className="container max-w-4xl mx-auto">
+            <RTDEProgressBar
+              currentIndex={currentIndex}
+              totalItems={totalItems}
+              progressPercent={progressPercent}
+              size="compact"
+            />
+          </div>
+        </div>
+
+        {/* Count Card - Fills available space, image absorbs extra room */}
+        <div className="flex-1 min-h-0 flex flex-col">
+          <div className="container max-w-lg mx-auto flex-1 min-h-0 flex flex-col">
+            <RTDECountCard
+              itemName={currentItem.name}
+              brand={currentItem.brand}
+              imageFilename={currentItem.imageFilename}
+              icon={currentItem.icon}
+              parLevel={currentItem.parLevel}
+              currentCount={currentItem.countedQuantity ?? 0}
+              onCountChange={onCountChange}
+              saving={saving}
+            />
+          </div>
+        </div>
+
+        {/* Mobile Navigation (flex-shrink-0 ensures it never gets cut off) */}
+        <div className="md:hidden flex justify-center gap-3 flex-shrink-0">
         {showPreviousButton && (
           <Button
             variant="outline"
@@ -124,6 +122,7 @@ export function RTDECountingPhase({
             <ChevronRight className="h-5 w-5 ml-2" />
           </Button>
         )}
+        </div>
       </div>
 
       {/* Navigation Buttons - Fixed (flex-shrink-0 ensures it never gets cut off) */}

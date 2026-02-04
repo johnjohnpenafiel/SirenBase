@@ -85,7 +85,7 @@ export function RTDEPullListItem({
         )}
         <p
           className={cn(
-            "text-base font-normal text-neutral-800 truncate",
+            "text-sm font-normal text-neutral-800 truncate",
             "transition-all duration-300",
             isPulled && "text-muted-foreground opacity-60"
           )}
@@ -101,7 +101,7 @@ export function RTDEPullListItem({
           "w-14 h-14 shrink-0",
           "rounded-full",
           "transition-all duration-300",
-          isPulled ? "bg-emerald-500" : "bg-muted"
+          isPulled ? "bg-emerald-500" : "bg-background border border-neutral-300/80"
         )}
       >
         {isPulled ? (

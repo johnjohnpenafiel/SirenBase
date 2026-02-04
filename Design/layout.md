@@ -370,6 +370,79 @@ Frosted glass pill that floats above content. No bottom border - the pill shape 
 - **Minimal**: Copyright, version number
 - **Sticky bottom** (optional): Only if page content is short
 
+### Fixed Bottom Action Bar
+
+For pages with a primary action button fixed at the bottom (counting phases, forms, wizards). Uses asymmetric padding to account for device safe areas and thumb ergonomics.
+
+#### Visual Reference
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  [Scrollable content above]                                 │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤ ← border-t
+│                         pt-3 (12px)                         │
+│   ┌─────────────────────────────────────────────────────┐   │
+│   │              [ Primary Action Button ]              │   │ ← h-11 (44px)
+│   └─────────────────────────────────────────────────────┘   │
+│                         pb-6 (24px)                         │
+│                         + pb-safe                           │ ← Device safe area
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Specifications
+
+| Property | Value | Purpose |
+|----------|-------|---------|
+| **Position** | `fixed bottom-0 left-0 right-0` | Stays at bottom of viewport |
+| **Background** | `bg-card` | Matches card white (not translucent) |
+| **Border** | `border-t border-neutral-300/80` | Subtle top separator |
+| **Safe area** | `pb-safe` | Respects device home indicator |
+| **Top padding** | `pt-3` (12px) | Compact spacing above button |
+| **Bottom padding** | `pb-6` (24px) | Extra space for thumb reach + visual weight |
+| **Button height** | `h-11` (44px) | WCAG touch target minimum |
+| **Button feedback** | `active:scale-[0.98]` | Tactile press response |
+
+#### Implementation
+
+```tsx
+{/* Fixed Bottom Action Bar */}
+<div className="fixed bottom-0 left-0 right-0 border-t border-neutral-300/80 bg-card pb-safe">
+  <div className="container max-w-2xl mx-auto px-4 pt-3 pb-6">
+    <Button
+      onClick={handleAction}
+      disabled={loading}
+      className="w-full h-11 font-semibold active:scale-[0.98]"
+      size="lg"
+    >
+      Primary Action
+      <ArrowRight className="ml-2 size-4" />
+    </Button>
+  </div>
+</div>
+```
+
+#### Why Asymmetric Padding
+
+- **`pt-3` (12px)**: Tight top padding keeps the bar compact
+- **`pb-6` (24px)**: Larger bottom padding provides:
+  1. Visual anchoring (heavier bottom feels stable)
+  2. Thumb-friendly spacing on mobile
+  3. Breathing room before device safe area kicks in
+- **`pb-safe`**: Adds `env(safe-area-inset-bottom)` for notched devices (iPhone home indicator)
+
+#### Common Mistakes
+
+❌ **Don't** use symmetric `py-3` — feels cramped at bottom
+❌ **Don't** use translucent `bg-background/95` — action bars should be solid
+❌ **Don't** forget `pb-safe` — button gets obscured on notched devices
+❌ **Don't** use `border-b` — there's nothing below the bar
+
+✅ **Do** use `bg-card` for solid white background
+✅ **Do** use `pt-3 pb-6` asymmetric padding
+✅ **Do** add `pb-safe` on outer container
+✅ **Do** ensure button is full-width (`w-full`) with `h-11`
+
 ---
 
 ## Grid Layouts
@@ -472,10 +545,11 @@ Already configured in `globals.css` with `-webkit-overflow-scrolling: touch`.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | Jan 20, 2026 | Initial extraction from DESIGN.md |
+| 2.1.0 | Feb 4, 2026 | Added Fixed Bottom Action Bar pattern with asymmetric padding and safe area handling |
 | 2.0.0 | Feb 2, 2026 | Updated dashboard grid to `grid-cols-2 lg:grid-cols-3`; updated header to frosted glass pill pattern; aligned with "Earned Space" design language |
 | 1.2.0 | Jan 30, 2026 | Added Island Content Layout rules (top row nav + actions, title below) |
 | 1.1.0 | Jan 30, 2026 | Island border updated from `border-gray-200/50` to `border-gray-200` (full opacity) |
 | — | Jan 16, 2026 | Title Area Island Pattern added (pre-extraction) |
 | — | Dec 14, 2025 | Dynamic Scroll Shadow Pattern added (pre-extraction) |
 
-**Last Updated**: February 2, 2026
+**Last Updated**: February 4, 2026

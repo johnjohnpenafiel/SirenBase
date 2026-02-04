@@ -196,10 +196,10 @@ export default function MorningCountPage() {
 
   return (
     <ProtectedRoute>
-      <div className="h-dvh overflow-y-auto" onScroll={handleScroll}>
+      <div className="h-dvh overflow-y-auto flex flex-col gap-2" onScroll={handleScroll}>
         <Header />
           {/* Sticky Frosted Island Header */}
-          <div className="sticky top-[68px] z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
+          <div className="sticky top-[72px] z-10 px-4 md:px-8">
             <div
               className={cn(
                 "max-w-2xl mx-auto rounded-2xl",
@@ -224,7 +224,9 @@ export default function MorningCountPage() {
                 <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                   Morning Count
                 </h1>
-                <p className="text-sm text-muted-foreground">Back of House</p>
+                <span className="inline-block text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full mt-1">
+                  BOH
+                </span>
               </div>
 
               {/* Progress Section */}
@@ -251,9 +253,9 @@ export default function MorningCountPage() {
                 <p className="mt-4 text-muted-foreground">Loading...</p>
               </div>
             ) : (
-              <div className="space-y-6">
-                {/* Instructions - Neutral styling */}
-                <div className="bg-muted/50 border border-neutral-300/80 rounded-2xl p-3 pl-4 text-sm text-foreground">
+              <div className="flex flex-col gap-2">
+                {/* Instructions */}
+                <div className="bg-card border border-neutral-300/80 rounded-2xl p-3 pl-4 text-sm text-foreground">
                   <p className="font-medium mb-1">How to count:</p>
                   <ul className="list-disc list-outside pl-4 space-y-0.5 text-xs text-muted-foreground">
                     <li>By default, enter the current BOH count (what you see now)</li>
@@ -265,10 +267,10 @@ export default function MorningCountPage() {
                 {/* Dairy Section */}
                 {dairyMilks.length > 0 && (
                   <section>
-                    <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                    <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2 mt-2">
                       Dairy ({dairyMilks.length})
                     </h2>
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-2">
                       {dairyMilks.map(milk => (
                         <MorningCountRow
                           key={milk.id}
@@ -288,10 +290,10 @@ export default function MorningCountPage() {
                 {/* Non-Dairy Section */}
                 {nonDairyMilks.length > 0 && (
                   <section>
-                    <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                    <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2 mt-2">
                       Non-Dairy ({nonDairyMilks.length})
                     </h2>
-                    <div className="space-y-2">
+                    <div className="flex flex-col gap-2">
                       {nonDairyMilks.map(milk => (
                         <MorningCountRow
                           key={milk.id}
@@ -312,8 +314,8 @@ export default function MorningCountPage() {
           </div>
 
         {/* Fixed Bottom Action */}
-        <div className="fixed bottom-0 left-0 right-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="container max-w-2xl mx-auto px-4 py-3">
+        <div className="fixed bottom-0 left-0 right-0 border-t border-neutral-300/80 bg-card pb-safe">
+          <div className="container max-w-2xl mx-auto px-4 pt-3 pb-6">
             <Button
               onClick={handleSaveMorningCount}
               disabled={saving || loading}

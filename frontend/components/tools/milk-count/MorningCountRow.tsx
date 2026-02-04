@@ -69,19 +69,19 @@ export function MorningCountRow({
           {/* Left: Icon + Name + Badges (Collapsible trigger) */}
           <CollapsibleTrigger asChild>
             <button className="flex items-center gap-3 flex-1 min-w-0 text-left">
-              {/* Category Icon - Small and subordinate */}
+              {/* Category Icon */}
               <div
                 className={cn(
-                  "shrink-0 size-10 rounded-xl flex items-center justify-center",
+                  "shrink-0 size-14 rounded-xl flex items-center justify-center",
                   "bg-muted transition-all",
                   isDairy ? "text-sky-400" : "text-emerald-400",
                   "group-data-[state=open]/collapsible:ring-2 group-data-[state=open]/collapsible:ring-sky-500/50"
                 )}
               >
                 {isDairy ? (
-                  <Milk className="size-5" />
+                  <Milk className="size-8" />
                 ) : (
-                  <Leaf className="size-5" />
+                  <Leaf className="size-8" />
                 )}
               </div>
 
@@ -89,10 +89,6 @@ export function MorningCountRow({
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-foreground text-base truncate">{milkName}</h3>
                 <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                  {/* Night BOH badge - Black monospace */}
-                  <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2 py-0.5 rounded-full">
-                    BOH {nightBohCount}
-                  </span>
                   {/* Category pill - Neutral */}
                   <span className="text-[10px] font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 px-2 py-0.5 rounded-full">
                     {isDairy ? "Dairy" : "Non-Dairy"}
@@ -106,23 +102,6 @@ export function MorningCountRow({
 
           {/* Right: Counter controls */}
           <div className="flex items-center gap-1.5 shrink-0">
-            {/* Decrement Button */}
-            <Button
-              onClick={handleDecrement}
-              disabled={value === 0}
-              variant="outline"
-              size="icon"
-              className={cn(
-                "size-11 rounded-xl",
-                "border border-neutral-300/80",
-                "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
-                "active:scale-[0.98]",
-                "disabled:opacity-30"
-              )}
-            >
-              <Minus className="size-4" strokeWidth={2.5} />
-            </Button>
-
             {/* Count Input */}
             <Input
               ref={inputRef}
@@ -151,22 +130,39 @@ export function MorningCountRow({
               aria-label={`${milkName} count: ${value}. Tap to edit.`}
             />
 
-            {/* Increment Button */}
-            <Button
-              onClick={handleIncrement}
-              disabled={value >= 999}
-              variant="outline"
-              size="icon"
-              className={cn(
-                "size-11 rounded-xl",
-                "border border-neutral-300/80",
-                "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
-                "active:scale-[0.98]",
-                "disabled:opacity-30"
-              )}
-            >
-              <Plus className="size-4" strokeWidth={2.5} />
-            </Button>
+            {/* Vertical buttons - for one-handed ergonomics (size-11 = 44px for WCAG) */}
+            <div className="flex flex-col gap-1">
+              <Button
+                onClick={handleIncrement}
+                disabled={value >= 999}
+                variant="outline"
+                size="icon"
+                className={cn(
+                  "size-11 rounded-xl",
+                  "border border-neutral-300/80",
+                  "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+                  "active:scale-[0.98]",
+                  "disabled:opacity-30"
+                )}
+              >
+                <Plus className="size-4" strokeWidth={2.5} />
+              </Button>
+              <Button
+                onClick={handleDecrement}
+                disabled={value === 0}
+                variant="outline"
+                size="icon"
+                className={cn(
+                  "size-11 rounded-xl",
+                  "border border-neutral-300/80",
+                  "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+                  "active:scale-[0.98]",
+                  "disabled:opacity-30"
+                )}
+              >
+                <Minus className="size-4" strokeWidth={2.5} />
+              </Button>
+            </div>
           </div>
         </div>
 

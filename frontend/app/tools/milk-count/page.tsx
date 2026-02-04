@@ -178,7 +178,7 @@ export default function MilkCountPage() {
       <div className="h-dvh overflow-y-auto flex flex-col gap-2" onScroll={handleScroll}>
         <Header />
           {/* Sticky Frosted Island */}
-          <div className="sticky top-[68px] z-10 px-4 md:px-8">
+          <div className="sticky top-[72px] z-10 px-4 md:px-8">
             <div
               className={cn(
                 "max-w-2xl mx-auto rounded-2xl",

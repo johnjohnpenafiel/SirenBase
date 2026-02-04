@@ -20,6 +20,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { RTDECountingPhase } from "@/components/tools/rtde/RTDECountingPhase";
+import { RTDECountingPhaseSkeleton } from "@/components/tools/rtde/RTDECountingPhaseSkeleton";
 import { RTDEPullingPhase } from "@/components/tools/rtde/RTDEPullingPhase";
 import { RTDESessionSidebar } from "@/components/tools/rtde/RTDESessionSidebar";
 import { RTDEMobileDrawer } from "@/components/tools/rtde/RTDEMobileDrawer";
@@ -35,6 +36,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CheckmarkAnimation } from "@/components/ui/checkmark-animation";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2, AlertTriangle } from "lucide-react";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
@@ -477,18 +479,29 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
     }
   };
 
-  // Loading state
+  // Loading state - skeleton loader
   if (loading) {
     return (
       <ProtectedRoute>
         <div className="flex flex-col h-dvh">
           <Header />
-          <main className="flex-1 flex items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-              <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
-              <p className="text-muted-foreground">Loading session...</p>
+          <div className="flex-1 flex overflow-hidden">
+            {/* Desktop sidebar skeleton */}
+            <div className="hidden md:flex flex-col w-72 border-r border-neutral-300/80 bg-card">
+              <div className="p-4 border-b border-neutral-300/80">
+                <Skeleton className="h-6 w-32" />
+              </div>
+              <div className="flex-1 overflow-hidden p-2 space-y-2">
+                {[...Array(6)].map((_, i) => (
+                  <Skeleton key={i} className="h-14 w-full rounded-xl" />
+                ))}
+              </div>
+              <div className="p-4 border-t border-neutral-300/80">
+                <Skeleton className="h-10 w-full rounded-md" />
+              </div>
             </div>
-          </main>
+            <RTDECountingPhaseSkeleton />
+          </div>
         </div>
       </ProtectedRoute>
     );
@@ -587,7 +600,7 @@ export default function RTDESessionPage({ params }: SessionPageProps) {
 
               {/* Mobile footer - OUTSIDE scroll container, always visible */}
               {pullList.length > 0 && (
-                <div className="sm:hidden bg-background border-t border-neutral-300/80 pb-safe shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+                <div className="sm:hidden bg-card border-t border-neutral-300/80 pb-safe shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
                   <div className="container max-w-4xl mx-auto px-4 pt-4 pb-6">
                     <Button
                       onClick={() => setShowCompleteDialog(true)}

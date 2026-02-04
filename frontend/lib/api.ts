@@ -58,6 +58,9 @@ import type {
   SaveMilkCountResponse,
   GetMilkCountSummaryResponse,
   GetMilkCountHistoryResponse,
+  // Activity Feed Types
+  GetRecentActivityResponse,
+  GetAdminActivityResponse,
 } from '@/types';
 import { API_BASE_URL, AUTH_TOKEN_KEY } from './constants';
 
@@ -472,6 +475,26 @@ class APIClient {
   async getMilkTypesForCounting(): Promise<GetMilkTypesResponse> {
     const response = await this.client.get<GetMilkTypesResponse>(
       '/api/milk-count/milk-types'
+    );
+    return response.data;
+  }
+
+  // ============================================================================
+  // Activity Feed Endpoints
+  // ============================================================================
+
+  async getRecentActivity(params?: { limit?: number }): Promise<GetRecentActivityResponse> {
+    const response = await this.client.get<GetRecentActivityResponse>(
+      '/api/activity/recent',
+      { params }
+    );
+    return response.data;
+  }
+
+  async getAdminActivity(params?: { limit?: number }): Promise<GetAdminActivityResponse> {
+    const response = await this.client.get<GetAdminActivityResponse>(
+      '/api/admin/activity',
+      { params }
     );
     return response.data;
   }

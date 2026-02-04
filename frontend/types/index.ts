@@ -488,6 +488,55 @@ export interface MilkCountState {
 }
 
 // ============================================================================
+// Activity Feed Types
+// ============================================================================
+
+export type DashboardActivityType =
+  | 'inventory_add'
+  | 'inventory_remove'
+  | 'milk_count_foh'
+  | 'milk_count_boh'
+  | 'milk_count_morning'
+  | 'milk_count_completed';
+
+export type AdminActivityType =
+  | 'user_created'
+  | 'user_deleted'
+  | 'milk_par_updated'
+  | 'rtde_item_created'
+  | 'rtde_item_updated'
+  | 'rtde_item_deleted';
+
+export interface DashboardActivity {
+  id: string;
+  type: DashboardActivityType;
+  title: string;
+  description: string;
+  user_name: string;
+  timestamp: string;
+  tool: 'inventory' | 'milk-count';
+}
+
+export interface AdminActivity {
+  id: string;
+  type: AdminActivityType;
+  title: string;
+  description: string;
+  admin_name: string;
+  timestamp: string;
+}
+
+export interface GetRecentActivityResponse {
+  activities: DashboardActivity[];
+  count: number;
+}
+
+export interface GetAdminActivityResponse {
+  activities: AdminActivity[];
+  count: number;
+}
+
+// ============================================================================
 // UI State Types
 // ============================================================================
 

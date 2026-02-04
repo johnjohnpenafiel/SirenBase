@@ -42,12 +42,14 @@ def create_app(config_name='default'):
     # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.admin import admin_bp
+    from app.routes.activity import activity_bp
     from app.routes.tools.tracking import tracking_bp
     from app.routes.tools.rtde import rtde_bp
     from app.routes.tools.milk_count import milk_count_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(activity_bp)
     app.register_blueprint(tracking_bp)
     app.register_blueprint(rtde_bp)
     app.register_blueprint(milk_count_bp)

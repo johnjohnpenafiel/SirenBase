@@ -15,6 +15,7 @@
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { ToolCard } from "@/components/shared/ToolCard";
+import { ActivityFeed } from "@/components/shared/ActivityFeed";
 import { useAuth } from "@/hooks/use-auth";
 import { Package, Milk, ShoppingBasket, ShieldCheck } from "lucide-react";
 
@@ -77,6 +78,19 @@ export default function DashboardPage() {
                 Need admin access? Contact your store manager.
               </p>
             )}
+
+            {/* Activity Feed Section */}
+            <div className="mt-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
+                  Recent
+                </span>
+                <h2 className="text-sm font-medium text-muted-foreground">
+                  Activity
+                </h2>
+              </div>
+              <ActivityFeed variant="dashboard" limit={6} />
+            </div>
           </div>
       </div>
     </ProtectedRoute>

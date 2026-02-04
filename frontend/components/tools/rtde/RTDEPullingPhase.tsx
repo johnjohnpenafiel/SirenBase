@@ -11,7 +11,6 @@
  */
 "use client";
 
-import { useState } from "react";
 import { RTDEPullListItem } from "./RTDEPullListItem";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -25,6 +24,7 @@ interface RTDEPullingPhaseProps {
   pullProgress: number;
   allPulled: boolean;
   completing: boolean;
+  isScrolled: boolean;
 
   // Event handlers
   onTogglePulled: (itemId: string, currentPulledState: boolean) => void;
@@ -37,91 +37,83 @@ export function RTDEPullingPhase({
   pullProgress,
   allPulled,
   completing,
+  isScrolled,
   onTogglePulled,
   onComplete,
 }: RTDEPullingPhaseProps) {
   const hasItemsToPull = pullList.length > 0;
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    setIsScrolled(e.currentTarget.scrollTop > 16);
-  };
 
   return (
-    <main className="flex-1 flex flex-col overflow-hidden">
-      {/* Scrollable Area - Contains Island + Pull List */}
-      <div className="flex-1 overflow-y-auto" onScroll={handleScroll}>
-        {/* Sticky Frosted Island - Progress Card */}
-        <div className="sticky top-0 z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
-          <div
-            className={cn(
-              "max-w-4xl mx-auto rounded-2xl",
-              isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
-                            "px-5 py-4 md:px-6 md:py-5",
-              "transition-all duration-300 ease-out",
-              isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
-            )}
-          >
-            {/* Header with Complete Button (Desktop) */}
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-semibold text-popover-foreground">
-                Pulling Phase
+    <main className="flex-1">
+      {/* Sticky Frosted Island - Progress Card (top-[64px] accounts for Header) */}
+      <div className="sticky top-[64px] z-10 px-4 md:px-8 pt-2 pb-2 md:pt-3 md:pb-2">
+        <div
+          className={cn(
+            "max-w-4xl mx-auto rounded-2xl",
+            "backdrop-blur-md border border-neutral-300/80",
+            "px-4 md:px-6 py-4 md:py-5",
+            "transition-all duration-300 ease-out",
+            isScrolled ? "bg-white/70 shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]" : "bg-white/95"
+          )}
+        >
+          {/* Title row: RTD&E + phase badge + Complete button (desktop) */}
+          <div className="flex items-center justify-between mb-2 md:mb-3">
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+                RTD&E
               </h2>
-              <Button
-                onClick={onComplete}
-                disabled={completing}
-                size="sm"
-                className="hidden sm:flex"
-              >
-                {completing ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Completing...
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 className="mr-2 h-4 w-4" />
-                    Complete
-                  </>
-                )}
-              </Button>
+              <span className="text-xs font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 text-neutral-800 px-2.5 py-1 rounded-full">
+                Pull
+              </span>
             </div>
-
-            {/* Progress Bar */}
-            {hasItemsToPull && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-foreground">
-                      {pulledCount} of {pullList.length}
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      items pulled
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-emerald-500">
-                      {pullProgress}%
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      complete
-                    </span>
-                  </div>
-                </div>
-                <div className="w-full bg-neutral-200/60 rounded-full h-2.5 overflow-hidden border border-neutral-300/80">
-                  <div
-                    className="bg-emerald-500 h-full rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${pullProgress}%` }}
-                    role="progressbar"
-                    aria-valuenow={pullProgress}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                  />
-                </div>
-              </div>
-            )}
+            <Button
+              onClick={onComplete}
+              disabled={completing}
+              size="sm"
+              className="hidden sm:flex"
+            >
+              {completing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Completing...
+                </>
+              ) : (
+                "Complete"
+              )}
+            </Button>
           </div>
+
+          {/* Progress content */}
+          {hasItemsToPull && (
+            <div className="space-y-2 md:space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-medium text-foreground">
+                    {pulledCount} of {pullList.length}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    pulled
+                  </span>
+                </div>
+                <span className="text-xs font-medium text-foreground tabular-nums">
+                  {pullProgress}%
+                </span>
+              </div>
+
+              <div className="w-full bg-neutral-200/60 rounded-full h-2.5 overflow-hidden border border-neutral-300">
+                <div
+                  className="bg-emerald-400 h-full rounded-full transition-all duration-500 ease-out"
+                  style={{ width: `${pullProgress}%` }}
+                  role="progressbar"
+                  aria-valuenow={pullProgress}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                />
+              </div>
+            </div>
+          )}
         </div>
+      </div>
 
         {/* Content - Scrolls under the island */}
         <div className="container max-w-4xl mx-auto px-4 md:px-8 pb-6 md:pb-8">
@@ -173,33 +165,6 @@ export function RTDEPullingPhase({
             </div>
           )}
         </div>
-      </div>
-
-      {/* Complete Session Button - Mobile Footer (always visible at bottom) */}
-      {hasItemsToPull && (
-        <div className="sm:hidden bg-background border-t border-neutral-300/80 pb-safe shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
-          <div className="container max-w-4xl mx-auto px-4 pt-4 pb-6">
-            <Button
-              onClick={onComplete}
-              disabled={completing}
-              size="lg"
-              className="w-full h-12"
-            >
-              {completing ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Completing...
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 className="mr-2 h-5 w-5" />
-                  Complete Session
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-      )}
     </main>
   );
 }

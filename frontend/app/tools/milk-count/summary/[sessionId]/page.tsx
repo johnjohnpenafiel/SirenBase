@@ -47,60 +47,75 @@ const CATEGORY_CONFIG: Record<MilkCategory, {
 }> = {
   dairy: {
     label: "Dairy",
-    icon: <Milk className="w-6 h-6" />,
-    iconColor: "text-blue-500/80",
+    icon: <Milk className="size-5" />,
+    iconColor: "text-sky-400",
   },
   non_dairy: {
     label: "Non-Dairy",
-    icon: <Leaf className="w-6 h-6" />,
-    iconColor: "text-green-500/80",
+    icon: <Leaf className="size-5" />,
+    iconColor: "text-emerald-400",
   },
 };
 
 // Mobile summary card for a single entry
 function SummaryCard({ entry }: { entry: MilkCountSummaryEntry }) {
   const config = CATEGORY_CONFIG[entry.category];
+  const orderAmount = Math.max(0, entry.order);
 
   return (
     <Collapsible className="group/collapsible">
       <div className="bg-card border border-neutral-300/80 rounded-2xl overflow-hidden">
-        <div className="flex items-center gap-3 p-3 pr-5">
-          <div className={cn("shrink-0 w-[52px] h-[52px] rounded-2xl flex items-center justify-center bg-muted", config.iconColor)}>
-            {config.icon}
+        <div className="flex items-center gap-3 p-4">
+          {/* Left: Icon + Name + Category */}
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className={cn("shrink-0 size-10 rounded-xl flex items-center justify-center bg-muted", config.iconColor)}>
+              {config.icon}
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-medium text-foreground truncate">{entry.milk_type}</h3>
+              <span className="inline-block text-[10px] font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 px-2 py-0.5 rounded-full mt-0.5">
+                {config.label}
+              </span>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-foreground truncate">{entry.milk_type}</h3>
-            <p className="text-xs text-muted-foreground">{config.label}</p>
-          </div>
-          <div className="text-center shrink-0 bg-muted/50 rounded-xl px-3 py-1.5 border border-border/50">
-            <p className="text-xs text-muted-foreground">Order</p>
-            <p className="text-xl font-bold tabular-nums">{Math.max(0, entry.order)}</p>
+
+          {/* Right: Order badge - Black monospace */}
+          <div className="shrink-0 flex flex-col items-center">
+            <span className="text-[10px] text-muted-foreground mb-1">Order</span>
+            <span className={cn(
+              "text-sm font-mono font-bold px-3 py-1.5 rounded-full tabular-nums",
+              orderAmount > 0
+                ? "bg-black text-white"
+                : "bg-neutral-200 text-muted-foreground"
+            )}>
+              {orderAmount}
+            </span>
           </div>
         </div>
+
         <CollapsibleContent>
-          <CollapsibleTrigger className="w-full text-left">
-            <div className="px-3 pb-3 pt-3">
-              <div className="grid grid-cols-3 gap-3 text-sm">
-                {[
-                  { label: "FOH", value: entry.foh },
-                  { label: "BOH", value: entry.boh },
-                  { label: "Delivered", value: entry.delivered },
-                  { label: "On Order", value: entry.on_order },
-                  { label: "Total", value: entry.total },
-                  { label: "Par", value: entry.par },
-                ].map((field) => (
-                  <div key={field.label} className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
-                    <p className="text-xs text-muted-foreground">{field.label}</p>
-                    <p className="font-semibold">{field.value}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="px-4 pb-4 pt-0">
+            <div className="grid grid-cols-3 gap-2 text-sm">
+              {[
+                { label: "FOH", value: entry.foh },
+                { label: "BOH", value: entry.boh },
+                { label: "Delivered", value: entry.delivered },
+                { label: "On Order", value: entry.on_order },
+                { label: "Total", value: entry.total },
+                { label: "Par", value: entry.par },
+              ].map((field) => (
+                <div key={field.label} className="bg-muted/30 rounded-xl p-2 border border-neutral-200">
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wide">{field.label}</p>
+                  <p className="font-bold tabular-nums">{field.value}</p>
+                </div>
+              ))}
             </div>
-          </CollapsibleTrigger>
+          </div>
         </CollapsibleContent>
+
         <CollapsibleTrigger className="block w-full">
-          <div className="flex justify-center items-center py-1 bg-gray-200 active:bg-gray-300 transition-colors">
-            <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+          <div className="flex justify-center items-center py-1.5 bg-neutral-100 active:bg-neutral-200 transition-colors border-t border-neutral-200">
+            <ChevronDown className="size-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
           </div>
         </CollapsibleTrigger>
       </div>
@@ -150,10 +165,12 @@ function CategoryHeaderRow({ category }: { category: MilkCategory }) {
   const SmallIcon = category === "dairy" ? Milk : Leaf;
 
   return (
-    <tr className="bg-muted/30">
-      <td colSpan={8} className="py-2 px-4 font-semibold text-foreground flex items-center gap-2">
-        <SmallIcon className={cn("h-4 w-4", config.iconColor)} />
-        {config.label}
+    <tr className="bg-neutral-100">
+      <td colSpan={8} className="py-2 px-4">
+        <div className="flex items-center gap-2">
+          <SmallIcon className={cn("size-4", config.iconColor)} />
+          <span className="font-semibold text-foreground">{config.label}</span>
+        </div>
       </td>
     </tr>
   );
@@ -215,8 +232,8 @@ export default function SummaryPage() {
             <div
               className={cn(
                 "max-w-2xl mx-auto rounded-2xl",
+                "border border-neutral-300/80",
                 isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
-                
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -231,7 +248,7 @@ export default function SummaryPage() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-sky-600" />
+                  <CheckCircle2 className="size-5 text-sky-500" />
                   <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                     Summary
                   </h1>
@@ -297,13 +314,13 @@ export default function SummaryPage() {
 
           {/* Fixed Frosted Footer */}
           {!loading && (
-            <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-background">
+            <div className="fixed bottom-0 left-0 right-0 z-20 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <div className="container max-w-2xl mx-auto px-4 py-3">
                 <Button
-                  className="w-full"
+                  className="w-full h-11 active:scale-[0.98]"
                   onClick={() => router.push("/tools/milk-count/history")}
                 >
-                  <History className="mr-2 h-5 w-5" />
+                  <History className="mr-2 size-4" />
                   View History
                 </Button>
               </div>

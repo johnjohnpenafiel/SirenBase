@@ -2,7 +2,11 @@
  * On Order Row Component
  *
  * Row component for entering on-order quantities from IMS.
- * Simple +/- counter interface for each milk type.
+ * Follows "Earned Space" design language:
+ * - Small, subordinate icons (size-5)
+ * - Neutral category pill
+ * - Tight, purposeful layout
+ * - Tactile interactions
  */
 "use client";
 
@@ -45,104 +49,107 @@ export function OnOrderRow({
   return (
     <div
       className={cn(
-        "bg-card border border-neutral-300/80 rounded-2xl overflow-hidden",
+        "flex items-center gap-3",
+        "p-4",
+        "bg-card border border-neutral-300/80",
+        "rounded-2xl",
         className
       )}
     >
-      <div className="flex items-center gap-4 p-4">
-        {/* Category Icon */}
+      {/* Left: Icon + Name + Category */}
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        {/* Category Icon - Small and subordinate */}
         <div
           className={cn(
-            "shrink-0 w-[72px] h-[72px] rounded-2xl flex items-center justify-center",
+            "shrink-0 size-10 rounded-xl flex items-center justify-center",
             "bg-muted",
-            isDairy ? "text-blue-500/80" : "text-green-500/80"
+            isDairy ? "text-sky-400" : "text-emerald-400"
           )}
         >
           {isDairy ? (
-            <Milk className="w-9 h-9" />
+            <Milk className="size-5" />
           ) : (
-            <Leaf className="w-9 h-9" />
+            <Leaf className="size-5" />
           )}
         </div>
 
-        {/* Milk Name */}
+        {/* Name + Category Pill */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-normal text-foreground text-base">{milkName}</h3>
-          <p className="text-xs text-muted-foreground">
-            On order
-          </p>
+          <h3 className="font-medium text-foreground text-base truncate">
+            {milkName}
+          </h3>
+          {/* Category pill - neutral styling */}
+          <span className="inline-block text-[10px] font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 px-2 py-0.5 rounded-full mt-0.5">
+            {isDairy ? "Dairy" : "Non-Dairy"}
+          </span>
         </div>
+      </div>
 
-        {/* Count Display */}
-        <div className="shrink-0">
-          <Input
-            ref={inputRef}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={inputValue}
-            onChange={handleInputChange}
-            onBlur={handleInputBlur}
-            onKeyDown={handleInputKeyDown}
-            onFocus={handleInputFocus}
-            className={cn(
-              "w-14 h-[92px] px-0",
-              "text-3xl font-bold text-center tabular-nums",
-              "rounded-2xl",
-              "transition-all duration-200",
-              isEditing
-                ? "border-2 border-primary/60"
-                : [
-                    "border-transparent bg-muted/30",
-                    "hover:bg-muted/50",
-                    "cursor-pointer",
-                  ]
-            )}
-            maxLength={3}
-            aria-label={`${milkName} on order: ${value}. Tap to edit.`}
-          />
-        </div>
+      {/* Right: Counter controls */}
+      <div className="flex items-center gap-1.5 shrink-0">
+        {/* Decrement Button */}
+        <Button
+          onClick={handleDecrement}
+          disabled={value === 0}
+          variant="outline"
+          size="icon"
+          className={cn(
+            "size-11 rounded-xl",
+            "border border-neutral-300/80",
+            "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+            "active:scale-[0.98]",
+            "disabled:opacity-30"
+          )}
+          aria-label={`Decrease ${milkName} on order`}
+        >
+          <Minus className="size-4" strokeWidth={2.5} />
+        </Button>
 
-        {/* Vertical +/- Button Stack */}
-        <div className="flex flex-col gap-1 shrink-0">
-          <Button
-            onClick={handleIncrement}
-            disabled={value >= 999}
-            variant="outline"
-            size="icon"
-            className={cn(
-              "size-11",
-              "rounded-2xl",
-              "border-2 border-gray-300/50",
-              "bg-gray-100 text-gray-700 hover:bg-gray-200",
-              "transition-all duration-150 ease-out",
-              "hover:scale-[1.02]",
-              "active:scale-[0.98]",
-              "disabled:opacity-30 disabled:hover:scale-100"
-            )}
-          >
-            <Plus className="h-4 w-4" strokeWidth={2.5} />
-          </Button>
+        {/* Count Input - Single tap to keyboard */}
+        <Input
+          ref={inputRef}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          onKeyDown={handleInputKeyDown}
+          onFocus={handleInputFocus}
+          className={cn(
+            "w-16 h-11 px-0",
+            "text-2xl font-bold text-center tabular-nums",
+            "rounded-xl",
+            "transition-all duration-200",
+            isEditing
+              ? "border-2 border-primary/60 ring-2 ring-primary/10"
+              : [
+                  "border-transparent bg-neutral-100",
+                  "hover:bg-neutral-200/70",
+                  "cursor-pointer",
+                ]
+          )}
+          maxLength={3}
+          aria-label={`${milkName} on order: ${value}. Tap to edit.`}
+        />
 
-          <Button
-            onClick={handleDecrement}
-            disabled={value === 0}
-            variant="outline"
-            size="icon"
-            className={cn(
-              "size-11",
-              "rounded-2xl",
-              "border-2 border-gray-300/50",
-              "bg-gray-100 text-gray-700 hover:bg-gray-200",
-              "transition-all duration-150 ease-out",
-              "hover:scale-[1.02]",
-              "active:scale-[0.98]",
-              "disabled:opacity-30 disabled:hover:scale-100"
-            )}
-          >
-            <Minus className="h-4 w-4" strokeWidth={2.5} />
-          </Button>
-        </div>
+        {/* Increment Button */}
+        <Button
+          onClick={handleIncrement}
+          disabled={value >= 999}
+          variant="outline"
+          size="icon"
+          className={cn(
+            "size-11 rounded-xl",
+            "border border-neutral-300/80",
+            "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+            "active:scale-[0.98]",
+            "disabled:opacity-30"
+          )}
+          aria-label={`Increase ${milkName} on order`}
+        >
+          <Plus className="size-4" strokeWidth={2.5} />
+        </Button>
       </div>
     </div>
   );

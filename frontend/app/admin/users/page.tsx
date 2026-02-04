@@ -3,26 +3,26 @@
  *
  * Admin-only page for managing user accounts.
  *
- * Follows Design/layout.md guidelines:
- * - App-like scrolling (h-dvh layout with overflow-y-auto)
- * - Frosted island header pattern with back button and actions
+ * Follows "Earned Space" design language:
+ * - App-like scrolling (h-dvh with flex flex-col gap-2)
+ * - Frosted island header with border
  * - Dynamic scroll shadow
- * - Rounded-2xl cards and table container
+ * - Contextual action overlay for cards
  */
-'use client';
+"use client";
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { Header } from '@/components/shared/Header';
-import { BackButton } from '@/components/shared/BackButton';
-import { Button } from '@/components/ui/button';
-import { AddUserDialog } from '@/components/admin/AddUserDialog';
-import { DeleteUserDialog } from '@/components/admin/DeleteUserDialog';
-import apiClient from '@/lib/api';
-import { cn } from '@/lib/utils';
-import type { User } from '@/types';
-import { toast } from 'sonner';
-import { Plus, UserCheck, Shield, Loader2, Users, Ellipsis, Trash2 } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from "react";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Header } from "@/components/shared/Header";
+import { BackButton } from "@/components/shared/BackButton";
+import { Button } from "@/components/ui/button";
+import { AddUserDialog } from "@/components/admin/AddUserDialog";
+import { DeleteUserDialog } from "@/components/admin/DeleteUserDialog";
+import apiClient from "@/lib/api";
+import { cn } from "@/lib/utils";
+import type { User } from "@/types";
+import { toast } from "sonner";
+import { Plus, Loader2, Users, Ellipsis, Trash2 } from "lucide-react";
 
 // Mobile user card with contextual action overlay
 function UserCard({ user, onDelete }: { user: User; onDelete: (user: User) => void }) {
@@ -56,18 +56,21 @@ function UserCard({ user, onDelete }: { user: User; onDelete: (user: User) => vo
           isActionMode ? "opacity-30 blur-[2px] pointer-events-none" : "opacity-100 blur-0"
         )}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-start">
           <div className="flex-1 min-w-0">
-            <p className="font-semibold text-foreground">{user.name}</p>
-            <p className="text-sm font-mono text-muted-foreground mb-1">{user.partner_number}</p>
-            {user.role === 'admin' ? (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                <Shield className="h-3 w-3 mr-1" />
+            {/* Partner number badge */}
+            <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
+              {user.partner_number}
+            </span>
+            {/* Name */}
+            <p className="font-semibold text-foreground mt-2">{user.name}</p>
+            {/* Role badge */}
+            {user.role === "admin" ? (
+              <span className="inline-flex items-center mt-1 text-[10px] font-mono font-bold uppercase bg-amber-900 text-amber-100 px-2.5 py-1 rounded-full">
                 Admin
               </span>
             ) : (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
-                <UserCheck className="h-3 w-3 mr-1" />
+              <span className="inline-flex items-center mt-1 text-xs font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 px-2.5 py-1 rounded-full">
                 Staff
               </span>
             )}
@@ -161,128 +164,126 @@ export default function UserManagementPage() {
 
   return (
     <ProtectedRoute requireAdmin>
-      <div className="h-dvh overflow-y-auto" onScroll={handleScroll}>
+      <div className="h-dvh overflow-y-auto flex flex-col gap-2" onScroll={handleScroll}>
         <Header />
-          {/* Sticky Frosted Island */}
-          <div className="sticky top-[68px] z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
-            <div
-              className={cn(
-                "max-w-6xl mx-auto rounded-2xl",
-                isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
-                
-                "px-5 py-4 md:px-6 md:py-5",
-                "transition-all duration-300 ease-out",
-                isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
-              )}
-            >
-              {/* Top row: Back + Action */}
-              <div className="flex items-center justify-between mb-4">
-                <BackButton
-                  href="/admin"
-                  label="Admin Panel"
-                />
-                <Button
-                  size="icon"
-                  className="md:w-auto md:px-4"
-                  onClick={() => setAddDialogOpen(true)}
-                >
-                  <Plus className="h-4 w-4 md:mr-2" />
-                  <span className="hidden md:inline">Add User</span>
-                </Button>
-              </div>
-              <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
-                User Management
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Manage partner accounts and access
-              </p>
-            </div>
-          </div>
 
-          {/* Content */}
-          <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-            {users.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <Users className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No Users</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Add your first user to get started.
-                </p>
-                <Button onClick={() => setAddDialogOpen(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add User
-                </Button>
-              </div>
-            ) : (
-              <>
-                {/* Desktop Table */}
-                <div className="hidden md:block bg-card rounded-2xl border border-neutral-300/80 overflow-hidden">
-                  <table className="w-full">
-                    <thead className="bg-muted/50 border-b border-gray-300">
-                      <tr>
-                        <th className="px-5 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                          Partner #
-                        </th>
-                        <th className="px-5 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                          Name
-                        </th>
-                        <th className="px-5 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                          Role
-                        </th>
-                        <th className="px-5 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border">
-                      {users.map((user) => (
-                        <tr key={user.id} className="hover:bg-muted/30 transition-colors">
-                          <td className="px-5 py-3.5 text-sm font-mono font-semibold text-foreground">
-                            {user.partner_number}
-                          </td>
-                          <td className="px-5 py-3.5 text-sm text-foreground">{user.name}</td>
-                          <td className="px-5 py-3.5 text-sm">
-                            {user.role === 'admin' ? (
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                                <Shield className="h-3 w-3 mr-1" />
-                                Admin
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
-                                <UserCheck className="h-3 w-3 mr-1" />
-                                Staff
-                              </span>
-                            )}
-                          </td>
-                          <td className="px-5 py-3.5 text-sm">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setUserToDelete(user)}
-                              className="hover:border-destructive hover:text-destructive hover:bg-destructive/10"
-                            >
-                              Delete
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Mobile Cards */}
-                <div className="md:hidden space-y-3">
-                  {users.map((user) => (
-                    <UserCard
-                      key={user.id}
-                      user={user}
-                      onDelete={setUserToDelete}
-                    />
-                  ))}
-                </div>
-              </>
+        {/* Sticky Frosted Island */}
+        <div className="sticky top-[72px] z-10 px-4 md:px-8">
+          <div
+            className={cn(
+              "max-w-6xl mx-auto rounded-2xl",
+              "border border-neutral-300/80",
+              isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
+              "px-5 py-4 md:px-6 md:py-5",
+              "transition-all duration-300 ease-out",
+              isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
             )}
+          >
+            {/* Top row: Back + Action */}
+            <div className="flex items-center justify-between mb-4">
+              <BackButton href="/admin" label="Admin" />
+              <Button
+                size="icon"
+                className="md:w-auto md:px-4 active:scale-[0.98]"
+                onClick={() => setAddDialogOpen(true)}
+              >
+                <Plus className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Add User</span>
+              </Button>
+            </div>
+            <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+              User Management
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Manage partner accounts and access
+            </p>
           </div>
+        </div>
+
+        {/* Content */}
+        <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
+          {users.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <Users className="h-12 w-12 text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No Users</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Add your first user to get started.
+              </p>
+              <Button onClick={() => setAddDialogOpen(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add User
+              </Button>
+            </div>
+          ) : (
+            <>
+              {/* Desktop Table */}
+              <div className="hidden md:block bg-card rounded-2xl border border-neutral-300/80 overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-muted/50 border-b border-neutral-300/80">
+                    <tr>
+                      <th className="px-5 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                        Partner #
+                      </th>
+                      <th className="px-5 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                        Name
+                      </th>
+                      <th className="px-5 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                        Role
+                      </th>
+                      <th className="px-5 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {users.map((user) => (
+                      <tr key={user.id} className="hover:bg-muted/30 transition-colors">
+                        <td className="px-5 py-3.5">
+                          <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
+                            {user.partner_number}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3.5 text-sm text-foreground">{user.name}</td>
+                        <td className="px-5 py-3.5 text-sm">
+                          {user.role === "admin" ? (
+                            <span className="text-[10px] font-mono font-bold uppercase bg-amber-900 text-amber-100 px-2.5 py-1 rounded-full">
+                              Admin
+                            </span>
+                          ) : (
+                            <span className="text-xs font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 px-2.5 py-1 rounded-full">
+                              Staff
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-5 py-3.5 text-sm">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setUserToDelete(user)}
+                            className="hover:border-destructive hover:text-destructive hover:bg-destructive/10 active:scale-[0.98]"
+                          >
+                            Delete
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Cards */}
+              <div className="md:hidden flex flex-col gap-2">
+                {users.map((user) => (
+                  <UserCard
+                    key={user.id}
+                    user={user}
+                    onDelete={setUserToDelete}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
 
         {/* Dialogs */}
         <AddUserDialog

@@ -4,13 +4,13 @@
  * Admin interface for managing RTD&E items with drag-and-drop reordering.
  * Allows adding/editing/deleting items and adjusting par levels.
  *
- * Follows Design/layout.md guidelines:
- * - App-like scrolling (h-dvh layout with overflow-y-auto)
- * - Frosted island header pattern with back button and actions
+ * Follows "Earned Space" design language:
+ * - App-like scrolling (h-dvh with flex flex-col gap-2)
+ * - Frosted island header with border
  * - Dynamic scroll shadow
- * - Rounded-2xl cards for sortable items
+ * - Contextual action overlay for cards
  */
-'use client';
+"use client";
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
@@ -105,7 +105,7 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
         (cardRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       style={style}
-      className="relative flex items-center gap-3 p-5 bg-card border border-neutral-300/80 rounded-2xl transition-[opacity,border-color,box-shadow] select-none"
+      className="relative flex items-center gap-3 p-4 bg-card border border-neutral-300/80 rounded-2xl transition-[opacity,border-color,box-shadow] select-none"
     >
       {/* Drag Handle - stays visible outside overlay */}
       <button
@@ -117,7 +117,7 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
         {...listeners}
         aria-label="Drag to reorder"
       >
-        <GripVertical className="h-5 w-5" />
+        <GripVertical className="size-5" />
       </button>
 
       {/* Content Layer */}
@@ -135,12 +135,14 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
             <p className="text-xs text-muted-foreground truncate">{item.brand}</p>
           )}
           <p className="font-medium truncate">{item.name}</p>
-          <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-xs font-medium bg-black text-white px-2.5 py-0.5 rounded-full">
-              Par: {item.par_level}
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
+              PAR {item.par_level}
             </span>
             {!item.active && (
-              <span className="text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground">Inactive</span>
+              <span className="text-xs font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 px-2.5 py-1 rounded-full">
+                Inactive
+              </span>
             )}
           </div>
         </div>
@@ -173,7 +175,7 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
               key={action.label}
               variant="outline"
               size="default"
-              className="min-w-[120px]"
+              className="min-w-[120px] active:scale-[0.98]"
               onClick={action.onClick}
             >
               {action.icon}
@@ -290,106 +292,105 @@ export default function RTDEItemsPage() {
 
   return (
     <ProtectedRoute requireAdmin>
-      <div className="h-dvh overflow-y-auto" onScroll={handleScroll}>
+      <div className="h-dvh overflow-y-auto flex flex-col gap-2" onScroll={handleScroll}>
         <Header />
-          {/* Sticky Frosted Island */}
-          <div className="sticky top-[68px] z-10 px-4 md:px-8 pt-2 pb-4 md:pt-3 md:pb-6">
-            <div
-              className={cn(
-                "max-w-6xl mx-auto rounded-2xl",
-                isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
-                
-                "px-5 py-4 md:px-6 md:py-5",
-                "transition-all duration-300 ease-out",
-                isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+
+        {/* Sticky Frosted Island */}
+        <div className="sticky top-[72px] z-10 px-4 md:px-8">
+          <div
+            className={cn(
+              "max-w-2xl mx-auto rounded-2xl",
+              "border border-neutral-300/80",
+              isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
+              "px-5 py-4 md:px-6 md:py-5",
+              "transition-all duration-300 ease-out",
+              isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
+            )}
+          >
+            {/* Top row: Back + Action */}
+            <div className="flex items-center justify-between mb-4">
+              <BackButton href="/admin" label="Admin" />
+              <Button
+                size="icon"
+                className="md:w-auto md:px-4 active:scale-[0.98]"
+                onClick={() => setAddDialogOpen(true)}
+              >
+                <Plus className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Add Item</span>
+              </Button>
+            </div>
+            <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+              RTDE Items
+            </h1>
+            <p className="text-sm text-muted-foreground mb-3">
+              Manage items, par levels, and display order
+            </p>
+
+            {/* Filter and Save Order */}
+            <div className="flex items-center justify-between">
+              <Button
+                variant="outline"
+                size="sm"
+                className="active:scale-[0.98]"
+                onClick={() => setShowActiveOnly(!showActiveOnly)}
+              >
+                {showActiveOnly ? "Show All" : "Active Only"}
+              </Button>
+
+              {hasReordered && (
+                <Button onClick={handleSaveOrder} disabled={saving} className="active:scale-[0.98]">
+                  {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {saving ? "Saving..." : "Save Order"}
+                </Button>
               )}
-            >
-              {/* Top row: Back + Action */}
-              <div className="flex items-center justify-between mb-4">
-                <BackButton
-                  href="/admin"
-                  label="Admin Panel"
-                />
-                <Button
-                  size="icon"
-                  className="md:w-auto md:px-4"
-                  onClick={() => setAddDialogOpen(true)}
-                >
-                  <Plus className="h-4 w-4 md:mr-2" />
-                  <span className="hidden md:inline">Add Item</span>
-                </Button>
-              </div>
-              <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
-                RTDE Items/Pars
-              </h1>
-              <p className="text-sm text-muted-foreground mb-3">
-                Manage items, par levels, and display order
-              </p>
-
-              {/* Filter and Save Order */}
-              <div className="flex items-center justify-between">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowActiveOnly(!showActiveOnly)}
-                >
-                  {showActiveOnly ? 'Show All Items' : 'Show Active Only'}
-                </Button>
-
-                {hasReordered && (
-                  <Button onClick={handleSaveOrder} disabled={saving}>
-                    {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    {saving ? 'Saving...' : 'Save Order'}
-                  </Button>
-                )}
-              </div>
             </div>
           </div>
+        </div>
 
-          {/* Content */}
-          <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-            {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-              </div>
-            ) : filteredItems.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <Package className="h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No items yet</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {showActiveOnly
-                    ? 'No active items. Add your first item or show inactive items.'
-                    : 'Add your first RTD&E item to get started'}
-                </p>
-                <Button onClick={() => setAddDialogOpen(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Item
-                </Button>
-              </div>
-            ) : (
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
+        {/* Content */}
+        <div className="container max-w-2xl mx-auto px-4 md:px-8 pb-8">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : filteredItems.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <Package className="h-12 w-12 text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No items yet</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                {showActiveOnly
+                  ? "No active items. Add your first item or show inactive items."
+                  : "Add your first RTD&E item to get started"}
+              </p>
+              <Button onClick={() => setAddDialogOpen(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Item
+              </Button>
+            </div>
+          ) : (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={filteredItems.map((item) => item.id)}
+                strategy={verticalListSortingStrategy}
               >
-                <SortableContext
-                  items={filteredItems.map((item) => item.id)}
-                  strategy={verticalListSortingStrategy}
-                >
-                  <div className="space-y-3">
-                    {filteredItems.map((item) => (
-                      <SortableItem
-                        key={item.id}
-                        item={item}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                      />
-                    ))}
-                  </div>
-                </SortableContext>
-              </DndContext>
-            )}
-          </div>
+                <div className="flex flex-col gap-2">
+                  {filteredItems.map((item) => (
+                    <SortableItem
+                      key={item.id}
+                      item={item}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                    />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
+          )}
+        </div>
       </div>
 
       {/* Dialogs */}

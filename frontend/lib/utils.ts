@@ -52,3 +52,34 @@ export function debounce<T extends (...args: any[]) => any>(
     timeout = setTimeout(later, wait);
   };
 }
+
+/**
+ * Extracts a user-friendly error message from an unknown error.
+ * Handles standard Error objects and Axios-style error responses.
+ *
+ * @param error - The caught error (unknown type)
+ * @param fallback - Fallback message if no error message can be extracted
+ * @returns A string error message suitable for displaying to users
+ */
+export function getErrorMessage(error: unknown, fallback: string): string {
+  // Check for Axios-style error response first
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "response" in error &&
+    typeof (error as { response?: unknown }).response === "object"
+  ) {
+    const response = (error as { response: { data?: { error?: string } } }).response;
+    if (response?.data?.error) {
+      return response.data.error;
+    }
+  }
+
+  // Check for standard Error object
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  // Return fallback
+  return fallback;
+}

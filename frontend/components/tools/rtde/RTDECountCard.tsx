@@ -20,6 +20,10 @@ import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { RTDEItemImage } from "./RTDEItemImage";
 
+// Count boundaries
+const MAX_COUNT = 999;
+const MIN_COUNT = 0;
+
 interface RTDECountCardProps {
   itemName: string;
   brand?: string | null; // Brand name displayed above item name
@@ -56,13 +60,13 @@ export function RTDECountCard({
 
   // Handle increment
   const handleIncrement = () => {
-    const newCount = Math.min(currentCount + 1, 999); // Max 999
+    const newCount = Math.min(currentCount + 1, MAX_COUNT);
     onCountChange(newCount);
   };
 
   // Handle decrement
   const handleDecrement = () => {
-    const newCount = Math.max(currentCount - 1, 0); // Min 0
+    const newCount = Math.max(currentCount - 1, MIN_COUNT);
     onCountChange(newCount);
   };
 
@@ -84,7 +88,7 @@ export function RTDECountCard({
     // Only allow digits
     if (/^\d+$/.test(value)) {
       const numValue = parseInt(value, 10);
-      if (numValue <= 999) {
+      if (numValue <= MAX_COUNT) {
         setInputValue(value);
       }
     }
@@ -93,7 +97,7 @@ export function RTDECountCard({
   // Handle input blur (save changes)
   const handleInputBlur = () => {
     const numValue = parseInt(inputValue, 10);
-    if (!isNaN(numValue) && numValue >= 0 && numValue <= 999) {
+    if (!isNaN(numValue) && numValue >= MIN_COUNT && numValue <= MAX_COUNT) {
       onCountChange(numValue);
     } else {
       // Reset to current count if invalid

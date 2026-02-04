@@ -15,8 +15,9 @@ import { useRouter } from 'next/navigation';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
 import { RTDECountingPhaseSkeleton } from '@/components/tools/rtde/RTDECountingPhaseSkeleton';
-import { Skeleton } from '@/components/ui/skeleton';
+import { RTDESidebarSkeleton } from '@/components/tools/rtde/RTDESidebarSkeleton';
 import apiClient from '@/lib/api';
+import { getErrorMessage } from '@/lib/utils';
 import { toast } from 'sonner';
 
 export default function RTDEToolPage() {
@@ -39,12 +40,8 @@ export default function RTDEToolPage() {
         const newSession = await apiClient.startRTDESession({});
         router.replace(`/tools/rtde/session/${newSession.session_id}`);
       }
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error ||
-        error.message ||
-        'Failed to start RTD&E session';
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to start RTD&E session'));
       router.push('/dashboard');
     }
   };
@@ -54,20 +51,7 @@ export default function RTDEToolPage() {
       <div className="flex flex-col h-dvh">
         <Header />
         <div className="flex-1 flex overflow-hidden">
-          {/* Desktop sidebar skeleton */}
-          <div className="hidden md:flex flex-col w-72 border-r border-neutral-300/80 bg-card">
-            <div className="p-4 border-b border-neutral-300/80">
-              <Skeleton className="h-6 w-32" />
-            </div>
-            <div className="flex-1 overflow-hidden p-2 space-y-2">
-              {[...Array(6)].map((_, i) => (
-                <Skeleton key={i} className="h-14 w-full rounded-xl" />
-              ))}
-            </div>
-            <div className="p-4 border-t border-neutral-300/80">
-              <Skeleton className="h-10 w-full rounded-md" />
-            </div>
-          </div>
+          <RTDESidebarSkeleton />
           <RTDECountingPhaseSkeleton />
         </div>
       </div>

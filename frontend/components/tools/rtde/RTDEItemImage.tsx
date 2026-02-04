@@ -36,9 +36,10 @@ const SIZE_CONFIG = {
     icon: "h-6 w-6",
   },
   lg: {
-    // Viewport-responsive: shrinks from 112px down to 64px on very short viewports
-    container: "w-[clamp(5rem,14vh,8.5rem)] h-[clamp(5rem,14vh,8.5rem)] md:w-36 md:h-36",
-    image: 144, // Will be used for both mobile and desktop with responsive sizing
+    // Used in RTDECountCard with fluid container sizing via className override
+    // Container sizing is provided by parent; these values are fallbacks
+    container: "",
+    image: 144,
     emoji: "text-[clamp(2rem,6vh,3.5rem)] md:text-[5rem]",
     icon: "h-[clamp(2rem,6vh,3.5rem)] w-[clamp(2rem,6vh,3.5rem)] md:h-[4.5rem] md:w-[4.5rem]",
   },

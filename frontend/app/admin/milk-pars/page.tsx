@@ -150,20 +150,20 @@ export default function MilkParsPage() {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onBlur={saveParLevel}
-            className="w-16 h-9 text-center text-base font-bold tabular-nums shrink-0 rounded-xl"
+            className="w-16 h-11 text-center text-lg font-bold tabular-nums shrink-0 rounded-xl border-2 border-primary/60 ring-4 ring-primary/10"
             maxLength={3}
             disabled={saving}
           />
         ) : (
           <button
             onClick={() => startEditing(parLevel)}
-            className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full tabular-nums shrink-0 hover:bg-neutral-800 transition-colors cursor-text"
+            className="w-16 h-11 text-center text-lg font-bold tabular-nums shrink-0 rounded-xl border border-neutral-300/80 bg-neutral-100 hover:bg-neutral-200/70 transition-colors cursor-text"
             aria-label={`Edit par level for ${parLevel.milk_type_name}`}
           >
             {saving && editing?.milkTypeId === parLevel.milk_type_id ? (
-              <Loader2 className="h-3 w-3 animate-spin mx-auto" />
+              <Loader2 className="h-4 w-4 animate-spin mx-auto" />
             ) : (
-              `PAR ${parLevel.par_value}`
+              parLevel.par_value
             )}
           </button>
         )}

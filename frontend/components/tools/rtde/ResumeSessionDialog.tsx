@@ -55,14 +55,14 @@ export function ResumeSessionDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md p-6" showCloseButton={false}>
-        <DialogHeader className="bg-neutral-200 rounded-xl px-4 pt-3 pb-3">
-          <DialogTitle>Active Session Found</DialogTitle>
-          <DialogDescription>
-            You have an active RTD&E counting session in progress.
-          </DialogDescription>
-        </DialogHeader>
+        <div className="space-y-2">
+          <DialogHeader className="bg-neutral-200 rounded-xl px-4 pt-3 pb-3">
+            <DialogTitle>Active Session Found</DialogTitle>
+            <DialogDescription>
+              You have an active RTD&E counting session in progress.
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-3">
           {/* Session Info Card */}
           <div className="bg-muted/50 border border-neutral-300/80 rounded-2xl px-5 py-4 space-y-3">
             {/* Time Started */}
@@ -84,7 +84,7 @@ export function ResumeSessionDialog({
               </div>
               <div className="w-full bg-neutral-200/60 rounded-full h-2.5 overflow-hidden border border-neutral-300/80">
                 <div
-                  className="bg-emerald-500 h-full rounded-full transition-all"
+                  className="bg-emerald-400 h-full rounded-full transition-all"
                   style={{ width: `${progress}%` }}
                   role="progressbar"
                   aria-valuenow={progress}
@@ -101,7 +101,7 @@ export function ResumeSessionDialog({
             <p className="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
               <AlertCircle className="size-4 mt-0.5 flex-shrink-0" />
               <span>
-                <strong>Starting fresh will discard current progress.</strong>{" "}
+                Starting fresh will discard current progress.{" "}
                 All counts from the current session will be lost.
               </span>
             </p>

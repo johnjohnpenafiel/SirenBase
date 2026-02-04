@@ -15,7 +15,6 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { BackButton } from "@/components/shared/BackButton";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Loader2,
   Calendar,
@@ -41,27 +40,27 @@ const STATUS_DISPLAY: Record<MilkCountSessionStatus, {
   night_foh: {
     label: "FOH In Progress",
     color: "text-foreground bg-muted",
-    icon: <Moon className="h-4 w-4" />,
+    icon: <Moon className="size-4" />,
   },
   night_boh: {
     label: "BOH In Progress",
     color: "text-foreground bg-muted",
-    icon: <Moon className="h-4 w-4" />,
+    icon: <Moon className="size-4" />,
   },
   morning: {
     label: "Morning Pending",
     color: "text-foreground bg-muted",
-    icon: <Sun className="h-4 w-4" />,
+    icon: <Sun className="size-4" />,
   },
   on_order: {
     label: "On Order Pending",
     color: "text-foreground bg-muted",
-    icon: <ClipboardList className="h-4 w-4" />,
+    icon: <ClipboardList className="size-4" />,
   },
   completed: {
     label: "Completed",
     color: "text-sky-600 bg-sky-50",
-    icon: <CheckCircle2 className="h-4 w-4" />,
+    icon: <CheckCircle2 className="size-4" />,
   },
 };
 
@@ -170,8 +169,8 @@ export default function HistoryPage() {
             <div
               className={cn(
                 "max-w-2xl mx-auto rounded-2xl",
+                "border border-neutral-300/80",
                 isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
-                
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -188,7 +187,7 @@ export default function HistoryPage() {
 
               {/* Title */}
               <div className="flex items-center gap-2">
-                <History className="h-5 w-5 text-sky-600" />
+                <History className="size-5 text-sky-500" />
                 <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                   History
                 </h1>
@@ -208,14 +207,19 @@ export default function HistoryPage() {
                 </div>
               ) : sessions.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <Calendar className="h-16 w-16 text-muted-foreground/50 mb-4" />
-                  <h2 className="text-xl font-semibold text-foreground mb-2">
+                  <div className="size-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
+                    <Calendar className="size-8 text-muted-foreground" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-foreground mb-1">
                     No History Yet
                   </h2>
-                  <p className="text-muted-foreground mb-6 max-w-xs">
+                  <p className="text-sm text-muted-foreground mb-6 max-w-xs">
                     Complete your first milk count to see it here
                   </p>
-                  <Button onClick={() => router.push("/tools/milk-count")}>
+                  <Button
+                    onClick={() => router.push("/tools/milk-count")}
+                    className="active:scale-[0.98]"
+                  >
                     Start Counting
                   </Button>
                 </div>
@@ -230,7 +234,7 @@ export default function HistoryPage() {
                       ? {
                           label: "Missed",
                           color: "text-red-600 bg-red-50",
-                          icon: <XCircle className="h-4 w-4" />,
+                          icon: <XCircle className="size-4" />,
                         }
                       : statusConfig;
 
@@ -238,81 +242,77 @@ export default function HistoryPage() {
                     const isClickable = session.status === "completed" || !sessionIsMissed;
 
                     return (
-                      <Card
+                      <div
                         key={session.id}
                         className={cn(
-                          "border border-neutral-300/80 rounded-2xl transition-all py-0",
-                          isClickable && "cursor-pointer",
-                          session.status === "completed" && "hover:border-primary/50",
+                          "p-4 border border-neutral-300/80 rounded-2xl bg-card transition-all",
+                          isClickable && "cursor-pointer hover:shadow-md active:scale-[0.98]",
+                          session.status === "completed" && "hover:border-sky-300",
                           sessionIsMissed && "opacity-60"
                         )}
                         onClick={() => handleSessionClick(session)}
                       >
-                        <CardContent className="p-4">
-                          <div className="flex items-center gap-4">
-                            {/* Date Icon */}
-                            <div className="shrink-0 w-[52px] h-[52px] rounded-2xl bg-muted flex flex-col items-center justify-center gap-0.5">
-                              <span className="text-[10px] leading-none text-muted-foreground uppercase font-medium">
-                                {parseLocalDate(session.date).toLocaleDateString("en-US", { month: "short" })}
-                              </span>
-                              <span className="text-lg leading-none font-bold">
-                                {parseLocalDate(session.date).getDate()}
-                              </span>
-                            </div>
-
-                            {/* Session Info */}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-1.5">
-                                <p className="font-semibold text-foreground">
-                                  {formatDate(session.date)}
-                                </p>
-                                <span className={cn("shrink-0", displayConfig.color.split(" ")[0])}>
-                                  {displayConfig.icon}
-                                </span>
-                              </div>
-                              <p className="text-xs text-muted-foreground">
-                                {formatFullDate(session.date)}
-                              </p>
-                            </div>
-
-                            {/* Chevron - only for clickable sessions */}
-                            {isClickable && (
-                              <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                            )}
+                        <div className="flex items-center gap-3">
+                          {/* Date Badge - Black monospace style */}
+                          <div className="shrink-0 size-12 rounded-xl bg-black text-white flex flex-col items-center justify-center">
+                            <span className="text-[9px] leading-none uppercase font-medium opacity-70">
+                              {parseLocalDate(session.date).toLocaleDateString("en-US", { month: "short" })}
+                            </span>
+                            <span className="text-lg leading-tight font-bold tabular-nums">
+                              {parseLocalDate(session.date).getDate()}
+                            </span>
                           </div>
 
-                          {/* Additional Info for Completed Sessions */}
-                          {session.status === "completed" && session.completed_at && (
-                            <div className="mt-3 pt-3 border-t border-gray-300 space-y-2">
-                              <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50 text-sm">
-                                <p className="text-xs text-muted-foreground">Completed</p>
-                                <p>
+                          {/* Session Info */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <p className="font-semibold text-foreground">
+                                {formatDate(session.date)}
+                              </p>
+                              <span className={cn("shrink-0", displayConfig.color.split(" ")[0])}>
+                                {displayConfig.icon}
+                              </span>
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                              {formatFullDate(session.date)}
+                            </p>
+                          </div>
+
+                          {/* Chevron - only for clickable sessions */}
+                          {isClickable && (
+                            <ChevronRight className="size-4 text-muted-foreground/40" />
+                          )}
+                        </div>
+
+                        {/* Additional Info for Completed Sessions */}
+                        {session.status === "completed" && session.completed_at && (
+                          <div className="mt-3 pt-3 border-t border-neutral-200">
+                            <div className="flex flex-wrap gap-2 text-sm">
+                              <div className="bg-muted/30 rounded-xl px-3 py-1.5 border border-neutral-200">
+                                <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Completed </span>
+                                <span className="font-medium tabular-nums">
                                   {new Date(session.completed_at).toLocaleTimeString("en-US", {
                                     hour: "numeric",
                                     minute: "2-digit",
                                   })}
-                                </p>
+                                </span>
                               </div>
-                              {(session.night_count_user_name || session.morning_count_user_name) && (
-                                <div className="grid grid-cols-2 gap-2 text-sm">
-                                  {session.night_count_user_name && (
-                                    <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
-                                      <p className="text-xs text-muted-foreground">Night</p>
-                                      <p>{session.night_count_user_name}</p>
-                                    </div>
-                                  )}
-                                  {session.morning_count_user_name && (
-                                    <div className="bg-muted/30 rounded-2xl p-2 pl-3 border border-border/50">
-                                      <p className="text-xs text-muted-foreground">Morning</p>
-                                      <p>{session.morning_count_user_name}</p>
-                                    </div>
-                                  )}
+                              {session.night_count_user_name && (
+                                <div className="bg-muted/30 rounded-xl px-3 py-1.5 border border-neutral-200">
+                                  <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Night </span>
+                                  <span className="font-medium">{session.night_count_user_name}</span>
+                                </div>
+                              )}
+                              {session.morning_count_user_name && (
+                                <div className="bg-muted/30 rounded-xl px-3 py-1.5 border border-neutral-200">
+                                  <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Morning </span>
+                                  <span className="font-medium">{session.morning_count_user_name}</span>
                                 </div>
                               )}
                             </div>
-                          )}
-                        </CardContent>
-                      </Card>
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
 
@@ -320,7 +320,7 @@ export default function HistoryPage() {
                   {hasMore && (
                     <Button
                       variant="outline"
-                      className="w-full"
+                      className="w-full h-11 active:scale-[0.98]"
                       onClick={handleLoadMore}
                     >
                       Load More

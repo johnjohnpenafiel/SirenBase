@@ -2,9 +2,11 @@
  * Morning Count Row Component
  *
  * Row component for morning milk counting with method selection.
- * Partners can either:
- * - Option A: Enter current BOH count (app calculates delivered)
- * - Option B: Enter delivered directly (app calculates current BOH)
+ * Follows "Earned Space" design language:
+ * - Small, subordinate icons (size-5)
+ * - Neutral category pill with night BOH badge
+ * - Tight, purposeful layout
+ * - Tactile interactions
  */
 "use client";
 
@@ -15,7 +17,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Minus, Plus, Milk, Leaf } from "lucide-react";
+import { Minus, Plus, Milk, Leaf, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCounterInput } from "@/hooks/use-counter-input";
 import type { MilkCategory, MilkCountMorningMethod } from "@/types";
@@ -63,39 +65,65 @@ export function MorningCountRow({
     <Collapsible className={cn("group/collapsible", className)}>
       <div className="bg-card border border-neutral-300/80 rounded-2xl overflow-hidden">
         {/* Main Row */}
-        <div className="flex items-center gap-4 p-4">
-          {/* CollapsibleTrigger: Icon + Name area */}
+        <div className="flex items-center gap-3 p-4">
+          {/* Left: Icon + Name + Badges (Collapsible trigger) */}
           <CollapsibleTrigger asChild>
-            <button className="flex items-center gap-4 flex-1 min-w-0 text-left">
-              {/* Category Icon */}
+            <button className="flex items-center gap-3 flex-1 min-w-0 text-left">
+              {/* Category Icon - Small and subordinate */}
               <div
                 className={cn(
-                  "shrink-0 w-[72px] h-[72px] rounded-2xl flex items-center justify-center",
-                  "border-2 border-dashed transition-all",
-                  "bg-muted border-gray-300",
-                  isDairy ? "text-blue-500/80" : "text-green-500/80",
-                  "group-data-[state=open]/collapsible:border-solid group-data-[state=open]/collapsible:border-sky-500"
+                  "shrink-0 size-10 rounded-xl flex items-center justify-center",
+                  "bg-muted transition-all",
+                  isDairy ? "text-sky-400" : "text-emerald-400",
+                  "group-data-[state=open]/collapsible:ring-2 group-data-[state=open]/collapsible:ring-sky-500/50"
                 )}
               >
                 {isDairy ? (
-                  <Milk className="w-9 h-9" />
+                  <Milk className="size-5" />
                 ) : (
-                  <Leaf className="w-9 h-9" />
+                  <Leaf className="size-5" />
                 )}
               </div>
 
-              {/* Milk Name & Night BOH */}
+              {/* Name + Badges */}
               <div className="flex-1 min-w-0">
-                <h3 className="font-normal text-foreground text-base">{milkName}</h3>
-                <p className="text-xs text-muted-foreground">
-                  Night BOH: {nightBohCount}
-                </p>
+                <h3 className="font-medium text-foreground text-base truncate">{milkName}</h3>
+                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                  {/* Night BOH badge - Black monospace */}
+                  <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2 py-0.5 rounded-full">
+                    BOH {nightBohCount}
+                  </span>
+                  {/* Category pill - Neutral */}
+                  <span className="text-[10px] font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 px-2 py-0.5 rounded-full">
+                    {isDairy ? "Dairy" : "Non-Dairy"}
+                  </span>
+                  {/* Expand indicator */}
+                  <ChevronDown className="size-3 text-muted-foreground transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                </div>
               </div>
             </button>
           </CollapsibleTrigger>
 
-          {/* Count Display */}
-          <div className="shrink-0">
+          {/* Right: Counter controls */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {/* Decrement Button */}
+            <Button
+              onClick={handleDecrement}
+              disabled={value === 0}
+              variant="outline"
+              size="icon"
+              className={cn(
+                "size-11 rounded-xl",
+                "border border-neutral-300/80",
+                "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
+                "active:scale-[0.98]",
+                "disabled:opacity-30"
+              )}
+            >
+              <Minus className="size-4" strokeWidth={2.5} />
+            </Button>
+
+            {/* Count Input */}
             <Input
               ref={inputRef}
               type="text"
@@ -107,103 +135,91 @@ export function MorningCountRow({
               onKeyDown={handleInputKeyDown}
               onFocus={handleInputFocus}
               className={cn(
-                "w-14 h-[92px] px-0",
-                "text-3xl font-bold text-center tabular-nums",
-                "rounded-2xl",
+                "w-16 h-11 px-0",
+                "text-2xl font-bold text-center tabular-nums",
+                "rounded-xl",
                 "transition-all duration-200",
                 isEditing
-                  ? "border-2 border-primary/60"
+                  ? "border-2 border-primary/60 ring-2 ring-primary/10"
                   : [
-                      "border-transparent bg-muted/30",
-                      "hover:bg-muted/50",
+                      "border-transparent bg-neutral-100",
+                      "hover:bg-neutral-200/70",
                       "cursor-pointer",
                     ]
               )}
               maxLength={3}
               aria-label={`${milkName} count: ${value}. Tap to edit.`}
             />
-          </div>
 
-          {/* Vertical +/- Button Stack */}
-          <div className="flex flex-col gap-1 shrink-0">
+            {/* Increment Button */}
             <Button
               onClick={handleIncrement}
               disabled={value >= 999}
               variant="outline"
               size="icon"
               className={cn(
-                "size-11",
-                "rounded-2xl",
-                "border-2 border-gray-300/50",
-                "bg-gray-100 text-gray-700 hover:bg-gray-200",
-                "transition-all duration-150 ease-out",
-                "hover:scale-[1.02]",
+                "size-11 rounded-xl",
+                "border border-neutral-300/80",
+                "bg-neutral-100 text-neutral-700 hover:bg-neutral-200",
                 "active:scale-[0.98]",
-                "disabled:opacity-30 disabled:hover:scale-100"
+                "disabled:opacity-30"
               )}
             >
-              <Plus className="h-4 w-4" strokeWidth={2.5} />
-            </Button>
-
-            <Button
-              onClick={handleDecrement}
-              disabled={value === 0}
-              variant="outline"
-              size="icon"
-              className={cn(
-                "size-11",
-                "rounded-2xl",
-                "border-2 border-gray-300/50",
-                "bg-gray-100 text-gray-700 hover:bg-gray-200",
-                "transition-all duration-150 ease-out",
-                "hover:scale-[1.02]",
-                "active:scale-[0.98]",
-                "disabled:opacity-30 disabled:hover:scale-100"
-              )}
-            >
-              <Minus className="h-4 w-4" strokeWidth={2.5} />
+              <Plus className="size-4" strokeWidth={2.5} />
             </Button>
           </div>
         </div>
 
         {/* Expanded Details */}
         <CollapsibleContent>
-          <div className="px-3 pb-3 md:px-4 md:pb-4 border-t border-gray-300 pt-3 space-y-3">
+          <div className="px-4 pb-4 border-t border-neutral-200 pt-3 space-y-3">
             {/* Method Selection */}
             <div className="flex gap-2">
               <Button
                 variant={method === "boh_count" ? "default" : "outline"}
                 onClick={() => onMethodChange("boh_count")}
-                className="flex-1 h-11"
+                className="flex-1 h-10 text-sm active:scale-[0.98]"
               >
                 Current BOH
               </Button>
               <Button
                 variant={method === "direct_delivered" ? "default" : "outline"}
                 onClick={() => onMethodChange("direct_delivered")}
-                className="flex-1 h-11"
+                className="flex-1 h-10 text-sm active:scale-[0.98]"
               >
                 Enter Delivered
               </Button>
             </div>
 
             {/* Calculated Values */}
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="bg-muted/30 rounded-2xl p-2">
-                <p className="text-xs text-muted-foreground mb-1">
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <div className={cn(
+                "rounded-xl p-3 border",
+                method === "boh_count"
+                  ? "bg-sky-50 border-sky-200"
+                  : "bg-muted/30 border-neutral-200"
+              )}>
+                <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-0.5">
                   {method === "boh_count" ? "Entering" : "Calculated"}
                 </p>
-                <p className="font-semibold">
-                  Current BOH: {currentBoh}
+                <p className="font-bold text-lg tabular-nums">
+                  {currentBoh}
                 </p>
+                <p className="text-xs text-muted-foreground">Current BOH</p>
               </div>
-              <div className="bg-muted/30 rounded-2xl p-2">
-                <p className="text-xs text-muted-foreground mb-1">
+              <div className={cn(
+                "rounded-xl p-3 border",
+                method === "direct_delivered"
+                  ? "bg-sky-50 border-sky-200"
+                  : "bg-muted/30 border-neutral-200"
+              )}>
+                <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide mb-0.5">
                   {method === "direct_delivered" ? "Entering" : "Calculated"}
                 </p>
-                <p className="font-semibold">
-                  Delivered: {delivered}
+                <p className="font-bold text-lg tabular-nums">
+                  {delivered}
                 </p>
+                <p className="text-xs text-muted-foreground">Delivered</p>
               </div>
             </div>
           </div>

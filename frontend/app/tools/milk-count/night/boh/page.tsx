@@ -146,8 +146,8 @@ export default function NightBOHPage() {
             <div
               className={cn(
                 "max-w-2xl mx-auto rounded-2xl",
+                "border border-neutral-300/80",
                 isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
-                
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -240,14 +240,14 @@ export default function NightBOHPage() {
 
         {/* Fixed Bottom Action */}
         <div className="fixed bottom-0 left-0 right-0 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="container max-w-2xl mx-auto px-4 py-4">
+          <div className="container max-w-2xl mx-auto px-4 py-3">
             <Button
               onClick={handleSaveNightCount}
               disabled={saving || loading}
-              className="w-full h-12 text-lg font-semibold"
+              className="w-full h-11 font-semibold active:scale-[0.98]"
               size="lg"
             >
-              <Check className="mr-2 h-5 w-5" />
+              <Check className="mr-2 size-4" />
               Save Night Count
             </Button>
           </div>

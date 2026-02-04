@@ -172,7 +172,7 @@ export function RTDECountingPhase({
                 onClick={onOpenDrawer}
                 className="h-12 w-full max-w-md"
               >
-                Items list
+                Items
               </Button>
             </div>
           )}

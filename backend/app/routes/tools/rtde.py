@@ -417,6 +417,37 @@ def get_active_session():
     }), 200
 
 
+@rtde_bp.route('/sessions/last-completed', methods=['GET'])
+@jwt_required()
+def get_last_completed():
+    """
+    Get the most recent completed RTD&E session (store-level).
+
+    Returns the timestamp and user name of the last completed session
+    across all users. Used by the dashboard RTD&E timer circle.
+
+    Returns:
+        200: {"last_completed_at": "2026-02-07T10:30:00Z", "user_name": "Sarah"}
+        200: {"last_completed_at": null} (if no completed sessions exist)
+    """
+    last_session = (
+        RTDECountSession.query
+        .filter_by(status='completed')
+        .order_by(RTDECountSession.completed_at.desc())
+        .first()
+    )
+
+    if not last_session or not last_session.completed_at:
+        return jsonify({"last_completed_at": None}), 200
+
+    user = User.query.get(last_session.user_id)
+
+    return jsonify({
+        "last_completed_at": last_session.completed_at.isoformat() + 'Z',
+        "user_name": user.name if user else "Unknown"
+    }), 200
+
+
 @rtde_bp.route('/sessions/start', methods=['POST'])
 @jwt_required()
 def start_session():
@@ -462,7 +493,7 @@ def start_session():
             }), 200
 
         # action == 'new'
-        # Delete ALL existing sessions (cascade deletes counts)
+        # Delete existing in_progress sessions (keep completed for history)
         for existing_session in existing_sessions:
             db.session.delete(existing_session)
 
@@ -793,12 +824,15 @@ def mark_item_pulled(session_id: str):
 @jwt_required()
 def complete_session(session_id: str):
     """
-    Mark session as complete and delete all data.
+    Mark session as complete and persist for activity tracking.
 
     Logic:
     1. Set status = 'completed'
     2. Set completed_at = NOW()
-    3. Delete session (cascade deletes all counts)
+    3. Clean up stray in_progress sessions for this user
+
+    Completed sessions are kept for dashboard activity feed and
+    RTD&E timer tracking. Session counts are deleted to save space.
 
     URL Parameters:
         session_id: The UUID of the session
@@ -821,13 +855,18 @@ def complete_session(session_id: str):
         return jsonify({"error": "Unauthorized - not your session"}), 403
 
     try:
-        # Delete this session (cascade deletes counts)
-        db.session.delete(session)
+        # Mark as completed (keep session for activity tracking)
+        session.mark_completed()
 
-        # Also clean up any other stray in_progress sessions for this user
-        stray_sessions = RTDECountSession.query.filter_by(
-            user_id=current_user_id,
-            status='in_progress'
+        # Delete session counts (no longer needed after completion)
+        for count in session.counts:
+            db.session.delete(count)
+
+        # Clean up any other stray in_progress sessions for this user
+        stray_sessions = RTDECountSession.query.filter(
+            RTDECountSession.user_id == current_user_id,
+            RTDECountSession.status == 'in_progress',
+            RTDECountSession.id != session_id
         ).all()
         for stray in stray_sessions:
             db.session.delete(stray)

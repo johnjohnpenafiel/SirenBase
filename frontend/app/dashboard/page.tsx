@@ -16,6 +16,8 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { ActivityFeed } from "@/components/shared/ActivityFeed";
+import { MilkCountProgress } from "@/components/shared/MilkCountProgress";
+import { RTDETimerCircle } from "@/components/shared/RTDETimerCircle";
 import { useAuth } from "@/hooks/use-auth";
 import { Package, Milk, ShoppingBasket, ShieldCheck } from "lucide-react";
 
@@ -79,7 +81,7 @@ export default function DashboardPage() {
               </p>
             )}
 
-            {/* Activity Feed Section */}
+            {/* Activity Section */}
             <div className="mt-6">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
@@ -89,6 +91,14 @@ export default function DashboardPage() {
                   Activity
                 </h2>
               </div>
+
+              {/* Status Circles */}
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <MilkCountProgress />
+                <RTDETimerCircle />
+              </div>
+
+              {/* Activity Log */}
               <ActivityFeed variant="dashboard" limit={6} />
             </div>
           </div>

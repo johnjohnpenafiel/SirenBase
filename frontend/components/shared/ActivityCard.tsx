@@ -15,6 +15,7 @@ import {
   Plus,
   Minus,
   Milk,
+  ShoppingBasket,
   UserPlus,
   UserMinus,
   Settings,
@@ -93,6 +94,12 @@ const BADGE_CONFIG: Record<
     label: "Done",
     color: "bg-sky-800 text-sky-100",
     icon: Milk,
+  },
+  // RTD&E activities
+  rtde_completed: {
+    label: "RTD&E",
+    color: "bg-emerald-700 text-emerald-100",
+    icon: ShoppingBasket,
   },
   // Admin activities
   user_created: {

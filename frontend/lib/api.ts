@@ -41,6 +41,7 @@ import type {
   MarkRTDEItemPulledRequest,
   MarkRTDEItemPulledResponse,
   CompleteRTDESessionResponse,
+  GetRTDELastCompletedResponse,
   // Milk Count Types
   GetMilkTypesResponse,
   UpdateMilkTypeRequest,
@@ -267,6 +268,13 @@ class APIClient {
   // ============================================================================
   // RTD&E Tool - Session Management Endpoints
   // ============================================================================
+
+  async getRTDELastCompleted(): Promise<GetRTDELastCompletedResponse> {
+    const response = await this.client.get<GetRTDELastCompletedResponse>(
+      '/api/rtde/sessions/last-completed'
+    );
+    return response.data;
+  }
 
   async getRTDEActiveSession(): Promise<GetRTDEActiveSessionResponse> {
     const response = await this.client.get<GetRTDEActiveSessionResponse>(

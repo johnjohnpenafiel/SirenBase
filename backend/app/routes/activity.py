@@ -2,7 +2,7 @@
 Activity feed routes for recent actions across the app.
 
 This module provides API endpoints for activity feeds:
-- /api/activity/recent - Dashboard activity feed (inventory + milk count)
+- /api/activity/recent - Dashboard activity feed (inventory + milk count + RTD&E)
 """
 from datetime import datetime
 from typing import List, Dict, Any
@@ -12,6 +12,7 @@ from flask_jwt_extended import jwt_required
 
 from app.models.history import History
 from app.models.milk_count import MilkCountSession, SessionStatus
+from app.models.rtde import RTDECountSession
 from app.extensions import db
 
 activity_bp = Blueprint('activity', __name__, url_prefix='/api/activity')
@@ -25,7 +26,7 @@ activity_bp = Blueprint('activity', __name__, url_prefix='/api/activity')
 @jwt_required()
 def get_recent_activity():
     """
-    Get recent activity from Inventory and Milk Count tools.
+    Get recent activity from Inventory, Milk Count, and RTD&E tools.
 
     Query Parameters:
         limit (optional): Number of activities to return (default: 8, max: 20)
@@ -151,6 +152,27 @@ def get_recent_activity():
                 'timestamp': session.completed_at.isoformat() + 'Z',
                 'tool': 'milk-count'
             })
+
+    # 3. Get recent completed RTD&E sessions
+    rtde_sessions = (
+        RTDECountSession.query
+        .filter_by(status='completed')
+        .order_by(RTDECountSession.completed_at.desc())
+        .limit(limit)
+        .all()
+    )
+
+    for session in rtde_sessions:
+        user_name = session.user.name if session.user else 'Unknown'
+        activities.append({
+            'id': f'rtde-{session.id}',
+            'type': 'rtde_completed',
+            'title': 'RTD&E Restocking Completed',
+            'description': 'Display restocking completed',
+            'user_name': user_name,
+            'timestamp': session.completed_at.isoformat() + 'Z',
+            'tool': 'rtde'
+        })
 
     # Sort all activities by timestamp descending
     activities.sort(key=lambda x: x['timestamp'], reverse=True)

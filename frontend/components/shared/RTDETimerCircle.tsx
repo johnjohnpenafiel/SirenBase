@@ -123,8 +123,8 @@ export function RTDETimerCircle() {
                 strokeLinecap="round"
                 className={`${getTimerColor(ratio)} transition-colors duration-500`}
                 strokeDasharray={`${arcLength} ${CIRCUMFERENCE - arcLength}`}
-                strokeDashoffset={CIRCUMFERENCE / 4}
-                transform={`rotate(-90 ${SIZE / 2} ${SIZE / 2})`}
+                strokeDashoffset={0}
+                transform={`translate(${SIZE}, 0) scale(-1, 1) rotate(-90 ${SIZE / 2} ${SIZE / 2})`}
               />
             )}
           </svg>

@@ -161,7 +161,7 @@ export function ActivityCard({
         >
           {config.label}
         </span>
-        <Icon className="size-4 text-muted-foreground/50" />
+        <Icon className="size-4 text-muted-foreground/50" aria-hidden="true" />
       </div>
 
       {/* Description */}

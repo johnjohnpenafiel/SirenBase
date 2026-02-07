@@ -303,6 +303,11 @@ export interface CompleteRTDESessionResponse {
   message: string;
 }
 
+export interface GetRTDELastCompletedResponse {
+  last_completed_at: string | null;
+  user_name?: string;
+}
+
 // ============================================================================
 // Milk Count Types (Tool 2)
 // ============================================================================
@@ -494,6 +499,7 @@ export interface MilkCountState {
 export type DashboardActivityType =
   | 'inventory_add'
   | 'inventory_remove'
+  | 'rtde_completed'
   | 'milk_count_foh'
   | 'milk_count_boh'
   | 'milk_count_morning'
@@ -514,7 +520,7 @@ export interface DashboardActivity {
   description: string;
   user_name: string;
   timestamp: string;
-  tool: 'inventory' | 'milk-count';
+  tool: 'inventory' | 'milk-count' | 'rtde';
 }
 
 export interface AdminActivity {

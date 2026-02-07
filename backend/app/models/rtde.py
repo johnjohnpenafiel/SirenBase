@@ -112,7 +112,7 @@ class RTDECountSession(db.Model):
     RTD&E counting session model.
 
     Sessions have a 30-minute expiration window and are user-specific.
-    Sessions are deleted immediately after completion (calculator-style).
+    Completed sessions are kept for activity tracking and dashboard timer.
 
     Attributes:
         id: UUID primary key

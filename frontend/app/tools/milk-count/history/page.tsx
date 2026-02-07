@@ -129,36 +129,7 @@ export default function HistoryPage() {
     // Past incomplete (missed): Do nothing - not clickable
   };
 
-  // Format date for display
-  const formatDate = (dateStr: string) => {
-    const date = parseLocalDate(dateStr);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize to midnight for comparison
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
 
-    if (date.toDateString() === today.toDateString()) {
-      return "Today";
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return "Yesterday";
-    } else {
-      return date.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-      });
-    }
-  };
-
-  const formatFullDate = (dateStr: string) => {
-    const date = parseLocalDate(dateStr);
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
 
   return (
     <ProtectedRoute>
@@ -187,7 +158,7 @@ export default function HistoryPage() {
 
               {/* Title */}
               <div className="flex items-center gap-2">
-                <History className="size-5 text-sky-500" />
+                <History className="size-5" />
                 <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
                   History
                 </h1>
@@ -253,9 +224,9 @@ export default function HistoryPage() {
                         onClick={() => handleSessionClick(session)}
                       >
                         <div className="flex items-center gap-3">
-                          {/* Date Badge - Black monospace style */}
-                          <div className="shrink-0 size-12 rounded-xl bg-black text-white flex flex-col items-center justify-center">
-                            <span className="text-[9px] leading-none uppercase font-medium opacity-70">
+                          {/* Date Badge */}
+                          <div className="shrink-0 size-12 rounded-xl bg-muted text-foreground border border-neutral-200 flex flex-col items-center justify-center">
+                            <span className="text-[9px] leading-none uppercase font-medium text-muted-foreground">
                               {parseLocalDate(session.date).toLocaleDateString("en-US", { month: "short" })}
                             </span>
                             <span className="text-lg leading-tight font-bold tabular-nums">
@@ -266,16 +237,18 @@ export default function HistoryPage() {
                           {/* Session Info */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5">
-                              <p className="font-semibold text-foreground">
-                                {formatDate(session.date)}
-                              </p>
+                              <span className="text-sm font-medium text-foreground">
+                                {displayConfig.label}
+                                {session.status === "completed" && session.completed_at && (
+                                  <span className="tabular-nums text-muted-foreground">
+                                    {" · "}{new Date(session.completed_at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
+                                  </span>
+                                )}
+                              </span>
                               <span className={cn("shrink-0", displayConfig.color.split(" ")[0])}>
                                 {displayConfig.icon}
                               </span>
                             </div>
-                            <p className="text-xs text-muted-foreground">
-                              {formatFullDate(session.date)}
-                            </p>
                           </div>
 
                           {/* Chevron - only for clickable sessions */}
@@ -285,18 +258,9 @@ export default function HistoryPage() {
                         </div>
 
                         {/* Additional Info for Completed Sessions */}
-                        {session.status === "completed" && session.completed_at && (
+                        {session.status === "completed" && (session.night_count_user_name || session.morning_count_user_name) && (
                           <div className="mt-3 pt-3 border-t border-neutral-200">
                             <div className="flex flex-wrap gap-2 text-sm">
-                              <div className="bg-muted/30 rounded-xl px-3 py-1.5 border border-neutral-200">
-                                <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Completed </span>
-                                <span className="font-medium tabular-nums">
-                                  {new Date(session.completed_at).toLocaleTimeString("en-US", {
-                                    hour: "numeric",
-                                    minute: "2-digit",
-                                  })}
-                                </span>
-                              </div>
                               {session.night_count_user_name && (
                                 <div className="bg-muted/30 rounded-xl px-3 py-1.5 border border-neutral-200">
                                   <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Night </span>

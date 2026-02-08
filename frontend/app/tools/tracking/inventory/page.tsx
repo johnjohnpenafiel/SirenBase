@@ -70,6 +70,11 @@ export default function InventoryPage() {
     fetchItems();
   }, []);
 
+  // Prefetch likely next navigation
+  useEffect(() => {
+    router.prefetch("/tools/tracking/history");
+  }, [router]);
+
   const fetchItems = async () => {
     try {
       setLoading(true);

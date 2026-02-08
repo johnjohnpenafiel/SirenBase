@@ -8,9 +8,7 @@
  * - Small inline icons, not oversized circles
  * - Accessible with keyboard navigation
  */
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 
@@ -37,36 +35,8 @@ export function ToolCard({
   isDisabled = false,
   isAdminOnly = false,
 }: ToolCardProps) {
-  const router = useRouter();
-
-  const handleClick = () => {
-    if (!isDisabled) {
-      router.push(route);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isDisabled && (e.key === "Enter" || e.key === " ")) {
-      e.preventDefault();
-      router.push(route);
-    }
-  };
-
-  return (
-    <div
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      tabIndex={isDisabled ? -1 : 0}
-      role="button"
-      aria-label={`${title}${isDisabled ? " (Coming soon)" : ""}`}
-      aria-disabled={isDisabled}
-      className={cn(
-        "p-4 border border-neutral-300/80 rounded-2xl bg-card text-card-foreground transition-all",
-        isDisabled
-          ? "opacity-50 cursor-not-allowed"
-          : "cursor-pointer hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-      )}
-    >
+  const content = (
+    <>
       {/* Top row: tool number badge + icon */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -98,6 +68,28 @@ export function ToolCard({
           <ChevronRight className="size-4 text-muted-foreground/40 shrink-0" />
         )}
       </div>
-    </div>
+    </>
+  );
+
+  if (isDisabled) {
+    return (
+      <div
+        aria-label={`${title} (Coming soon)`}
+        aria-disabled
+        className="p-4 border border-neutral-300/80 rounded-2xl bg-card text-card-foreground transition-all opacity-50 cursor-not-allowed"
+      >
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={route}
+      aria-label={title}
+      className="block p-4 border border-neutral-300/80 rounded-2xl bg-card text-card-foreground transition-all cursor-pointer hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+    >
+      {content}
+    </Link>
   );
 }

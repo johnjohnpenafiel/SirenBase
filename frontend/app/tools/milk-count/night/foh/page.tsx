@@ -38,6 +38,11 @@ export default function NightFOHPage() {
     loadData();
   }, []);
 
+  // Prefetch next step in workflow
+  useEffect(() => {
+    router.prefetch("/tools/milk-count/night/boh");
+  }, [router]);
+
   const loadData = async () => {
     try {
       // Load milk types and session in parallel

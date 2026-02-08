@@ -18,7 +18,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from '@/components/ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { loginSchema, type LoginFormData } from '@/lib/validations/auth';
@@ -70,7 +69,7 @@ export default function LoginPage() {
                     <FormControl>
                       <Input
                         type="text"
-                        placeholder="e.g., ADMIN001"
+                        placeholder=""
                         autoComplete="username"
                         autoFocus
                         disabled={isLoading}
@@ -94,13 +93,13 @@ export default function LoginPage() {
                         type="password"
                         inputMode="numeric"
                         maxLength={4}
-                        placeholder="4-digit PIN"
+                        placeholder=""
                         autoComplete="current-password"
                         disabled={isLoading}
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>Enter your 4-digit PIN</FormDescription>
+
                     <FormMessage />
                   </FormItem>
                 )}

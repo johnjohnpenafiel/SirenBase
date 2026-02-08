@@ -75,11 +75,6 @@ export default function DashboardPage() {
                 )}
             </div>
 
-            {!isAdmin && (
-              <p className="mt-6 text-xs text-muted-foreground/60 text-center">
-                Need admin access? Contact your store manager.
-              </p>
-            )}
 
             {/* Activity Section */}
             <div className="mt-6">

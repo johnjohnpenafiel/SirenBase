@@ -28,7 +28,7 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
  */
 function getTimerColor(ratio: number): string {
   if (ratio <= 0.5) return "stroke-emerald-500";
-  if (ratio <= 0.8) return "stroke-amber-500";
+  if (ratio <= 0.8) return "stroke-yellow-400";
   return "stroke-red-500";
 }
 
@@ -37,7 +37,7 @@ function getTimerColor(ratio: number): string {
  */
 function getDotColor(ratio: number): string {
   if (ratio <= 0.5) return "bg-emerald-500";
-  if (ratio <= 0.8) return "bg-amber-500";
+  if (ratio <= 0.8) return "bg-yellow-400";
   return "bg-red-500";
 }
 

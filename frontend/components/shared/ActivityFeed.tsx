@@ -76,6 +76,7 @@ export function ActivityFeed({ variant, limit = 5 }: ActivityFeedProps) {
 
   return (
     <div className="border border-neutral-300/80 rounded-2xl bg-neutral-100 p-1.5 flex flex-col gap-1">
+      <p className="text-xs text-muted-foreground/60 px-2 pt-0.5">Activity Log</p>
       {activities.map((activity) => (
         <ActivityCard key={activity.id} activity={activity} variant={variant} />
       ))}

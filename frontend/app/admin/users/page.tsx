@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import { AddUserDialog } from "@/components/admin/AddUserDialog";
 import { DeleteUserDialog } from "@/components/admin/DeleteUserDialog";
 import apiClient from "@/lib/api";
-import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { cn } from "@/lib/utils";
 import type { User } from "@/types";
 import { toast } from "sonner";
@@ -113,7 +112,6 @@ function UserCard({ user, onDelete }: { user: User; onDelete: (user: User) => vo
 export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const showLoading = useDelayedLoading(loading);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -189,10 +187,10 @@ export default function UserManagementPage() {
 
         {/* Content */}
         <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-          {showLoading ? (
+          {loading ? (
             <AdminUsersSkeleton />
           ) : users.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-in">
               <Users className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">No Users</h3>
               <p className="text-sm text-muted-foreground mb-4">
@@ -204,7 +202,7 @@ export default function UserManagementPage() {
               </Button>
             </div>
           ) : (
-            <>
+            <div className="animate-fade-in">
               {/* Desktop Table */}
               <div className="hidden md:block bg-card rounded-2xl border border-neutral-300/80 overflow-hidden">
                 <table className="w-full">
@@ -270,7 +268,7 @@ export default function UserManagementPage() {
                   />
                 ))}
               </div>
-            </>
+            </div>
           )}
         </div>
 

@@ -27,7 +27,6 @@ import {
 } from "lucide-react";
 import { MilkCountHistorySkeleton } from "@/components/tools/milk-count/MilkCountHistorySkeleton";
 import apiClient from "@/lib/api";
-import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { toast } from "sonner";
 import { cn, parseLocalDate } from "@/lib/utils";
 import type { MilkCountSession, MilkCountSessionStatus } from "@/types";
@@ -68,7 +67,6 @@ const STATUS_DISPLAY: Record<MilkCountSessionStatus, {
 export default function HistoryPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const showLoading = useDelayedLoading(loading);
   const [sessions, setSessions] = useState<MilkCountSession[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -173,10 +171,10 @@ export default function HistoryPage() {
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-2xl mx-auto px-4 pb-8">
-              {showLoading ? (
+              {loading ? (
                 <MilkCountHistorySkeleton />
               ) : sessions.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-in">
                   <div className="size-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
                     <Calendar className="size-8 text-muted-foreground" />
                   </div>
@@ -194,7 +192,7 @@ export default function HistoryPage() {
                   </Button>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-3 animate-fade-in">
                   {sessions.map((session) => {
                     const sessionIsMissed = isMissed(session);
                     const statusConfig = STATUS_DISPLAY[session.status];

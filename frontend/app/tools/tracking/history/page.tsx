@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import apiClient from "@/lib/api";
-import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { HISTORY_PAGE_SIZE, HISTORY_MAX_FETCH } from "@/lib/constants";
 import type { HistoryEntry, HistoryAction } from "@/types";
 import { toast } from "sonner";
@@ -31,7 +30,6 @@ import { HistoryEntryCard } from "@/components/tools/tracking/HistoryEntryCard";
 export default function HistoryPage() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const showLoading = useDelayedLoading(loading);
   const [actionFilter, setActionFilter] = useState<HistoryAction | "all">(
     "all"
   );
@@ -101,7 +99,6 @@ export default function HistoryPage() {
               </h1>
 
               {/* Filters */}
-              {!loading && (
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="w-full sm:w-48">
                   <Select
@@ -126,22 +123,21 @@ export default function HistoryPage() {
                   {filteredHistory.length === 1 ? "entry" : "entries"}
                 </div>
               </div>
-              )}
             </div>
           </div>
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-            {showLoading ? (
+            {loading ? (
               <TrackingHistorySkeleton />
             ) : paginatedHistory.length === 0 ? (
-              <div className="text-center py-12 bg-card rounded-2xl border border-neutral-300/80">
+              <div className="text-center py-12 bg-card rounded-2xl border border-neutral-300/80 animate-fade-in">
                 <p className="text-muted-foreground">
                   No history entries found.
                 </p>
               </div>
             ) : (
-              <>
+              <div className="animate-fade-in">
                 {/* Unified card list for all screen sizes */}
                 <div className="space-y-1.5">
                   {paginatedHistory.map((entry) => (
@@ -188,7 +184,7 @@ export default function HistoryPage() {
                     </div>
                   </div>
                 )}
-              </>
+              </div>
             )}
           </div>
       </div>

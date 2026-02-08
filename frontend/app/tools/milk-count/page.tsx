@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Moon, Sun, CheckCircle2, Clock, History, ClipboardList } from "lucide-react";
 import { MilkCountLandingSkeleton } from "@/components/tools/milk-count/MilkCountLandingSkeleton";
 import apiClient from "@/lib/api";
+import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { toast } from "sonner";
 import { cn, parseLocalDate } from "@/lib/utils";
 import type { MilkCountSession, MilkCountSessionStatus } from "@/types";
@@ -111,6 +112,7 @@ const STATUS_CONFIG: Record<MilkCountSessionStatus | "none", {
 export default function MilkCountPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const showLoading = useDelayedLoading(loading);
   const [session, setSession] = useState<MilkCountSession | null>(null);
   const [starting, setStarting] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -215,7 +217,7 @@ export default function MilkCountPage() {
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-2xl mx-auto px-4 pb-8">
-            {loading ? (
+            {showLoading ? (
               <MilkCountLandingSkeleton />
             ) : (
               <div className="flex flex-col gap-2">

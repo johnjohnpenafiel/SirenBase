@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import apiClient from "@/lib/api";
+import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { HISTORY_PAGE_SIZE, HISTORY_MAX_FETCH } from "@/lib/constants";
 import type { HistoryEntry, HistoryAction } from "@/types";
 import { toast } from "sonner";
@@ -30,6 +31,7 @@ import { HistoryEntryCard } from "@/components/tools/tracking/HistoryEntryCard";
 export default function HistoryPage() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const showLoading = useDelayedLoading(loading);
   const [actionFilter, setActionFilter] = useState<HistoryAction | "all">(
     "all"
   );
@@ -130,7 +132,7 @@ export default function HistoryPage() {
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-            {loading ? (
+            {showLoading ? (
               <TrackingHistorySkeleton />
             ) : paginatedHistory.length === 0 ? (
               <div className="text-center py-12 bg-card rounded-2xl border border-neutral-300/80">

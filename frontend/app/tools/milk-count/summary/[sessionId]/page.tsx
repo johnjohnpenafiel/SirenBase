@@ -35,6 +35,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import apiClient from "@/lib/api";
+import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { toast } from "sonner";
 import { cn, parseLocalDate } from "@/lib/utils";
 import type { MilkCountSummaryEntry, MilkCountSession, MilkCategory } from "@/types";
@@ -182,6 +183,7 @@ export default function SummaryPage() {
   const sessionId = params.sessionId as string;
 
   const [loading, setLoading] = useState(true);
+  const showLoading = useDelayedLoading(loading);
   const [session, setSession] = useState<MilkCountSession | null>(null);
   const [summary, setSummary] = useState<MilkCountSummaryEntry[]>([]);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -262,7 +264,7 @@ export default function SummaryPage() {
 
           {/* Content */}
           <div className="container max-w-2xl mx-auto px-4 pb-20">
-            {loading ? (
+            {showLoading ? (
               <MilkCountSummarySkeleton />
             ) : (
               <div className="space-y-6">

@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { AddItemDialog } from "@/components/tools/tracking/AddItemDialog";
 import { RemoveItemDialog } from "@/components/tools/tracking/RemoveItemDialog";
 import apiClient from "@/lib/api";
+import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { cn } from "@/lib/utils";
 import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
 import type { Item, ItemCategory, ViewMode } from "@/types";
@@ -37,6 +38,7 @@ export default function InventoryPage() {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+  const showLoading = useDelayedLoading(loading);
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(
     null
@@ -320,7 +322,7 @@ export default function InventoryPage() {
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-              {loading ? (
+              {showLoading ? (
                 <InventoryContentSkeleton />
               ) : (
               <>

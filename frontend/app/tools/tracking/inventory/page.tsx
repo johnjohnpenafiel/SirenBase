@@ -27,7 +27,8 @@ import { cn } from "@/lib/utils";
 import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
 import type { Item, ItemCategory, ViewMode } from "@/types";
 import { toast } from "sonner";
-import { Plus, History, Loader2, Search, X } from "lucide-react";
+import { Plus, History, Search, X } from "lucide-react";
+import { InventoryContentSkeleton } from "@/components/tools/tracking/InventoryContentSkeleton";
 import { Input } from "@/components/ui/input";
 import { CategoryCard } from "@/components/tools/tracking/CategoryCard";
 import { ItemCard } from "@/components/tools/tracking/ItemCard";
@@ -170,22 +171,6 @@ export default function InventoryPage() {
     resetScroll();
   };
 
-  if (loading) {
-    return (
-      <ProtectedRoute>
-        <div className="flex flex-col h-dvh">
-          <Header />
-          <main className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-              <p className="text-muted-foreground">Loading inventory...</p>
-            </div>
-          </main>
-        </div>
-      </ProtectedRoute>
-    );
-  }
-
   return (
     <ProtectedRoute>
       <div ref={scrollContainerRef} className="h-dvh overflow-y-auto" onScroll={handleScroll}>
@@ -246,7 +231,7 @@ export default function InventoryPage() {
                 )}
 
                 {/* View Toggle - Only show when not in filtered category view */}
-                {viewMode !== "filtered" && (
+                {!loading && viewMode !== "filtered" && (
                   <div className="inline-flex rounded-full border border-neutral-300/80 p-0.5">
                     <Button
                       variant={viewMode === "all" ? "secondary" : "ghost"}
@@ -335,6 +320,10 @@ export default function InventoryPage() {
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
+              {loading ? (
+                <InventoryContentSkeleton />
+              ) : (
+              <>
               {/* Categories View */}
               {viewMode === "categories" && (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -374,6 +363,8 @@ export default function InventoryPage() {
                     ))
                   )}
                 </div>
+              )}
+              </>
               )}
             </div>
 

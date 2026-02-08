@@ -18,7 +18,8 @@ import { Header } from "@/components/shared/Header";
 import { BackButton } from "@/components/shared/BackButton";
 import { Button } from "@/components/ui/button";
 import { MilkCountCard } from "@/components/tools/milk-count/MilkCountCard";
-import { Loader2, Check } from "lucide-react";
+import { Check } from "lucide-react";
+import { MilkCountStepSkeleton } from "@/components/tools/milk-count/MilkCountStepSkeleton";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -191,10 +192,7 @@ export default function NightBOHPage() {
           {/* Content - scrolls under the island */}
           <div className="container max-w-2xl mx-auto px-4 pb-32">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-16">
-                <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
-                <p className="mt-4 text-muted-foreground">Loading...</p>
-              </div>
+              <MilkCountStepSkeleton />
             ) : (
               <div className="flex flex-col gap-2">
                 {/* Dairy Section */}

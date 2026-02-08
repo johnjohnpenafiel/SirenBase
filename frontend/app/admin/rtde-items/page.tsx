@@ -36,6 +36,7 @@ import { BackButton } from '@/components/shared/BackButton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Plus, Edit2, Trash2, GripVertical, Loader2, Package, Ellipsis } from 'lucide-react';
+import { AdminItemsSkeleton } from '@/components/admin/AdminItemsSkeleton';
 import { AddRTDEItemDialog } from '@/components/admin/rtde/AddRTDEItemDialog';
 import { EditRTDEItemDialog } from '@/components/admin/rtde/EditRTDEItemDialog';
 import { DeleteRTDEItemDialog } from '@/components/admin/rtde/DeleteRTDEItemDialog';
@@ -350,9 +351,7 @@ export default function RTDEItemsPage() {
         {/* Content */}
         <div className="container max-w-2xl mx-auto px-4 md:px-8 pb-8">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            </div>
+            <AdminItemsSkeleton />
           ) : filteredItems.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <Package className="h-12 w-12 text-muted-foreground mb-4" />

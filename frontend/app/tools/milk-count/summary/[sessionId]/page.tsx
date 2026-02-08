@@ -22,13 +22,13 @@ import { BackButton } from "@/components/shared/BackButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  Loader2,
   History,
   CheckCircle2,
   Milk,
   Leaf,
   ChevronDown,
 } from "lucide-react";
+import { MilkCountSummarySkeleton } from "@/components/tools/milk-count/MilkCountSummarySkeleton";
 import {
   Collapsible,
   CollapsibleContent,
@@ -263,10 +263,7 @@ export default function SummaryPage() {
           {/* Content */}
           <div className="container max-w-2xl mx-auto px-4 pb-20">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-16">
-                <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
-                <p className="mt-4 text-muted-foreground">Loading summary...</p>
-              </div>
+              <MilkCountSummarySkeleton />
             ) : (
               <div className="space-y-6">
                 {/* Mobile Card View */}

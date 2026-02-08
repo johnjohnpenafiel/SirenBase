@@ -22,6 +22,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
 import { Loader2, Moon, Sun, CheckCircle2, Clock, History, ClipboardList } from "lucide-react";
+import { MilkCountLandingSkeleton } from "@/components/tools/milk-count/MilkCountLandingSkeleton";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
 import { cn, parseLocalDate } from "@/lib/utils";
@@ -215,10 +216,7 @@ export default function MilkCountPage() {
           {/* Content - scrolls under the island */}
           <div className="container max-w-2xl mx-auto px-4 pb-8">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-16">
-                <Loader2 className="h-12 w-12 animate-spin text-muted-foreground" />
-                <p className="mt-4 text-muted-foreground">Loading...</p>
-              </div>
+              <MilkCountLandingSkeleton />
             ) : (
               <div className="flex flex-col gap-2">
                 {/* Status Card */}

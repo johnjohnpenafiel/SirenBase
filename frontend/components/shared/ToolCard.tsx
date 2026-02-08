@@ -9,7 +9,6 @@
  * - Accessible with keyboard navigation
  */
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 
 export type ToolAccent = "stone" | "emerald" | "sky" | "amber";

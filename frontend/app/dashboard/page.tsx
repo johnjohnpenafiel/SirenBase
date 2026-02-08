@@ -83,8 +83,8 @@ export default function DashboardPage() {
 
             {/* Activity Section */}
             <div className="mt-6">
-              <h2 className="inline-block text-sm text-muted-foreground bg-white border border-neutral-300 px-3 py-1 rounded-full mb-3">
-                Recent Activity
+              <h2 className="inline-block text-[11px] text-white bg-black px-2.5 py-0.5 rounded-full mb-2 ml-2">
+                Overview
               </h2>
 
               {/* Status Circles */}

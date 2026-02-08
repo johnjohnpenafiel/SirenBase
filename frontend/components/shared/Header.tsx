@@ -50,7 +50,7 @@ export function Header() {
       )}>
         {/* Left: Logo pill */}
         <div
-          className={`h-11 px-5 flex items-center`}
+          className={`h-11 pl-3 pr-5 flex items-center`}
         >
           <h1 className="text-xl font-medium text-foreground">sirenbase</h1>
         </div>

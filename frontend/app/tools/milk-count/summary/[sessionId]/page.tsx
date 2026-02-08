@@ -192,6 +192,11 @@ export default function SummaryPage() {
     }
   }, [sessionId]);
 
+  // Prefetch likely next navigation
+  useEffect(() => {
+    router.prefetch("/tools/milk-count/history");
+  }, [router]);
+
   const loadSummary = async () => {
     try {
       const response = await apiClient.getMilkCountSummary(sessionId);

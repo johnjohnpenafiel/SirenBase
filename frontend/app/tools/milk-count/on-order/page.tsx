@@ -38,6 +38,13 @@ export default function OnOrderPage() {
     loadData();
   }, []);
 
+  // Prefetch summary page once session ID is available
+  useEffect(() => {
+    if (session?.id) {
+      router.prefetch(`/tools/milk-count/summary/${session.id}`);
+    }
+  }, [session?.id, router]);
+
   const loadData = async () => {
     try {
       const [typesResponse, sessionResponse] = await Promise.all([

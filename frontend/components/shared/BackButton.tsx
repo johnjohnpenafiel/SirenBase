@@ -6,7 +6,7 @@
  * - Default size (44px) for WCAG-compliant touch targets
  *
  * Supports two modes:
- * 1. Navigation: Provide `href` to navigate to a page
+ * 1. Navigation: Provide `href` to navigate to a page (uses <Link> for prefetching)
  * 2. Custom action: Provide `onClick` for custom behavior (e.g., state changes)
  *
  * Supports three display variants:
@@ -16,7 +16,7 @@
  */
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -41,23 +41,22 @@ export function BackButton({
   variant = "default",
   className
 }: BackButtonProps) {
-  const router = useRouter();
-
-  const handleClick = () => {
-    if (onClick) {
-      onClick();
-    } else if (href) {
-      router.push(href);
-    }
-  };
-
   // Icon-only: compact square button
   if (variant === "icon-only") {
+    if (href && !onClick) {
+      return (
+        <Button variant="outline" size="icon" asChild className={cn("shrink-0", className)}>
+          <Link href={href} aria-label={label || "Go back"}>
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+        </Button>
+      );
+    }
     return (
       <Button
         variant="outline"
         size="icon"
-        onClick={handleClick}
+        onClick={onClick}
         className={cn("shrink-0", className)}
         aria-label={label || "Go back"}
       >
@@ -68,10 +67,20 @@ export function BackButton({
 
   // Full: always show text (for admin pages)
   if (variant === "full") {
+    if (href && !onClick) {
+      return (
+        <Button variant="outline" asChild className={cn(className)}>
+          <Link href={href}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            {label}
+          </Link>
+        </Button>
+      );
+    }
     return (
       <Button
         variant="outline"
-        onClick={handleClick}
+        onClick={onClick}
         className={cn(className)}
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
@@ -81,11 +90,21 @@ export function BackButton({
   }
 
   // Default: responsive text (hidden on mobile)
+  if (href && !onClick) {
+    return (
+      <Button variant="outline" size="icon" asChild className={cn("md:w-auto md:px-4", className)}>
+        <Link href={href}>
+          <ArrowLeft className="h-4 w-4 md:mr-2" />
+          <span className="hidden md:inline">{label}</span>
+        </Link>
+      </Button>
+    );
+  }
   return (
     <Button
       variant="outline"
       size="icon"
-      onClick={handleClick}
+      onClick={onClick}
       className={cn("md:w-auto md:px-4", className)}
     >
       <ArrowLeft className="h-4 w-4 md:mr-2" />

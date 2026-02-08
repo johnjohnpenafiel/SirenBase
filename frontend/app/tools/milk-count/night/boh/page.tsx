@@ -38,6 +38,11 @@ export default function NightBOHPage() {
     loadData();
   }, []);
 
+  // Prefetch landing page (next destination after saving)
+  useEffect(() => {
+    router.prefetch("/tools/milk-count");
+  }, [router]);
+
   const loadData = async () => {
     try {
       const [typesResponse, sessionResponse] = await Promise.all([

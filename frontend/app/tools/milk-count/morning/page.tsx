@@ -48,6 +48,11 @@ export default function MorningCountPage() {
     loadData();
   }, []);
 
+  // Prefetch next step in workflow
+  useEffect(() => {
+    router.prefetch("/tools/milk-count/on-order");
+  }, [router]);
+
   const loadData = async () => {
     try {
       const [typesResponse, sessionResponse] = await Promise.all([

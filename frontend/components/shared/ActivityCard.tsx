@@ -112,14 +112,16 @@ export function ActivityCard({
 
   return (
     <div className="flex items-center gap-2.5 px-3 py-2.5 bg-white rounded-lg">
-      {/* Tool icon */}
-      <Icon
-        className={cn("size-4 shrink-0", config.color)}
-        aria-hidden="true"
-      />
+      {/* Tool icon — fixed-width container keeps icons visually aligned */}
+      <div className="w-5 shrink-0 flex items-center justify-center">
+        <Icon
+          className={cn("size-4", config.color)}
+          aria-hidden="true"
+        />
+      </div>
 
       {/* Description */}
-      <p className="flex-1 text-[13px] text-foreground truncate min-w-0">
+      <p className="flex-1 text-xs text-foreground truncate min-w-0">
         {activity.description}
       </p>
 
@@ -130,8 +132,8 @@ export function ActivityCard({
         </span>
       </div>
 
-      {/* Time */}
-      <span className="text-[11px] text-muted-foreground/50 tabular-nums shrink-0">
+      {/* Time — fixed width so varying text ("now", "52m", "4h") doesn't shift layout */}
+      <span className="w-6 text-right text-[11px] text-muted-foreground/50 tabular-nums shrink-0">
         {formatTimestamp(activity.timestamp)}
       </span>
     </div>

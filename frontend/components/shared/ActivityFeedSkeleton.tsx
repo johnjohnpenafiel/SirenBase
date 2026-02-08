@@ -1,40 +1,31 @@
 /**
  * Activity Feed Skeleton Component
  *
- * Loading state placeholder for activity feed.
- * Matches the ActivityCard structure for smooth transitions.
+ * Loading state placeholder for the activity feed.
+ * Matches the compact row structure inside a single card.
  */
 "use client";
-
-import { cn } from "@/lib/utils";
 
 interface ActivityFeedSkeletonProps {
   count?: number;
 }
 
-function SkeletonCard() {
+function SkeletonRow() {
   return (
-    <div className="p-3.5 border border-neutral-300/60 rounded-xl bg-card animate-pulse">
-      {/* Top row: Badge and icon placeholders */}
-      <div className="flex items-center justify-between mb-1.5">
-        <div className="h-5 w-14 bg-neutral-200 rounded-full" />
-        <div className="h-4 w-4 bg-neutral-200 rounded" />
-      </div>
-
-      {/* Description placeholder */}
-      <div className="h-4 w-3/4 bg-neutral-200 rounded mt-1" />
-
-      {/* Metadata row placeholder */}
-      <div className="h-3 w-1/2 bg-neutral-100 rounded mt-2" />
+    <div className="flex items-center gap-2.5 px-3 py-2.5 bg-white rounded-lg animate-pulse">
+      <div className="size-4 bg-neutral-200 rounded shrink-0" />
+      <div className="flex-1 h-3.5 bg-neutral-200 rounded" />
+      <div className="size-6 bg-neutral-200 rounded-full shrink-0" />
+      <div className="w-6 h-3 bg-neutral-100 rounded shrink-0" />
     </div>
   );
 }
 
 export function ActivityFeedSkeleton({ count = 4 }: ActivityFeedSkeletonProps) {
   return (
-    <div className="space-y-2">
+    <div className="border border-neutral-300/80 rounded-2xl bg-neutral-100 p-1.5 flex flex-col gap-1">
       {Array.from({ length: count }).map((_, index) => (
-        <SkeletonCard key={index} />
+        <SkeletonRow key={index} />
       ))}
     </div>
   );

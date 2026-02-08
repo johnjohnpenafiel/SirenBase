@@ -1,19 +1,20 @@
 /**
- * Activity Card Component
+ * Activity Row Component
  *
- * Compact card displaying a single activity event.
+ * Compact single-line row displaying an activity event.
+ * Used inside ActivityFeed's wrapping card.
+ *
  * Follows "Earned Space" design language:
- * - Colored badges for action type identification
- * - Tight spacing, dense information
- * - Small muted icons
- * - Monospace font for badges
+ * - Tool icon with accent color instead of text labels
+ * - User initials circle instead of full name
+ * - Compact relative timestamps
  */
 "use client";
 
 import { cn } from "@/lib/utils";
 import {
   Plus,
-  Minus,
+  CornerUpRight,
   Milk,
   ShoppingBasket,
   UserPlus,
@@ -29,8 +30,8 @@ import type {
 } from "@/types";
 
 /**
- * Format timestamp to relative or absolute time.
- * Shows "5m ago", "2h ago", or "Jan 4, 2:30 PM" for older.
+ * Format timestamp to compact relative time.
+ * "now", "5m", "2h", "3d", or "Jan 4"
  */
 function formatTimestamp(dateString: string): string {
   const date = new Date(dateString);
@@ -40,104 +41,56 @@ function formatTimestamp(dateString: string): string {
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffMins < 1) return "Just now";
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
+  if (diffMins < 1) return "now";
+  if (diffMins < 60) return `${diffMins}m`;
+  if (diffHours < 24) return `${diffHours}h`;
+  if (diffDays < 7) return `${diffDays}d`;
 
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
   }).format(date);
 }
 
-interface BadgeConfig {
-  label: string;
-  color: string;
-  icon: React.ComponentType<{ className?: string }>;
+/** Extract initials from a name (e.g. "Sarah Johnson" → "SJ") */
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
 }
 
-const BADGE_CONFIG: Record<
+interface IconConfig {
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+}
+
+/** Icon + color per activity type — uses tool accent colors */
+const ICON_CONFIG: Record<
   DashboardActivityType | AdminActivityType,
-  BadgeConfig
+  IconConfig
 > = {
-  // Dashboard activities
-  inventory_add: {
-    label: "Added",
-    color: "bg-green-700 text-green-100",
-    icon: Plus,
-  },
-  inventory_remove: {
-    label: "Removed",
-    color: "bg-red-700 text-red-100",
-    icon: Minus,
-  },
-  milk_count_foh: {
-    label: "FOH",
-    color: "bg-sky-700 text-sky-100",
-    icon: Milk,
-  },
-  milk_count_boh: {
-    label: "BOH",
-    color: "bg-sky-700 text-sky-100",
-    icon: Milk,
-  },
-  milk_count_morning: {
-    label: "Morning",
-    color: "bg-sky-700 text-sky-100",
-    icon: Milk,
-  },
-  milk_count_completed: {
-    label: "Done",
-    color: "bg-sky-800 text-sky-100",
-    icon: Milk,
-  },
-  // RTD&E activities
-  rtde_completed: {
-    label: "RTD&E",
-    color: "bg-emerald-700 text-emerald-100",
-    icon: ShoppingBasket,
-  },
-  // Admin activities
-  user_created: {
-    label: "Created",
-    color: "bg-emerald-700 text-emerald-100",
-    icon: UserPlus,
-  },
-  user_deleted: {
-    label: "Deleted",
-    color: "bg-red-800 text-red-100",
-    icon: UserMinus,
-  },
-  milk_par_updated: {
-    label: "Par",
-    color: "bg-amber-800 text-amber-100",
-    icon: Settings,
-  },
-  rtde_item_created: {
-    label: "Added",
-    color: "bg-emerald-700 text-emerald-100",
-    icon: Package,
-  },
-  rtde_item_updated: {
-    label: "Updated",
-    color: "bg-amber-800 text-amber-100",
-    icon: Package,
-  },
-  rtde_item_deleted: {
-    label: "Deleted",
-    color: "bg-red-800 text-red-100",
-    icon: Package,
-  },
+  // Dashboard — tool accent colors
+  inventory_add: { icon: Plus, color: "text-green-500" },
+  inventory_remove: { icon: CornerUpRight, color: "text-red-500" },
+  milk_count_foh: { icon: Milk, color: "text-sky-400" },
+  milk_count_boh: { icon: Milk, color: "text-sky-400" },
+  milk_count_morning: { icon: Milk, color: "text-sky-400" },
+  milk_count_completed: { icon: Milk, color: "text-sky-400" },
+  rtde_completed: { icon: ShoppingBasket, color: "text-emerald-400" },
+  // Admin
+  user_created: { icon: UserPlus, color: "text-emerald-400" },
+  user_deleted: { icon: UserMinus, color: "text-red-400" },
+  milk_par_updated: { icon: Settings, color: "text-amber-400" },
+  rtde_item_created: { icon: Package, color: "text-emerald-400" },
+  rtde_item_updated: { icon: Package, color: "text-amber-400" },
+  rtde_item_deleted: { icon: Package, color: "text-red-400" },
 };
 
-const DEFAULT_CONFIG: BadgeConfig = {
-  label: "Action",
-  color: "bg-neutral-700 text-neutral-100",
+const DEFAULT_CONFIG: IconConfig = {
   icon: Settings,
+  color: "text-muted-foreground/50",
 };
 
 export interface ActivityCardProps {
@@ -149,41 +102,38 @@ export function ActivityCard({
   activity,
   variant = "dashboard",
 }: ActivityCardProps) {
-  const config = BADGE_CONFIG[activity.type] || DEFAULT_CONFIG;
+  const config = ICON_CONFIG[activity.type] || DEFAULT_CONFIG;
   const Icon = config.icon;
   const userName =
     variant === "dashboard"
       ? (activity as DashboardActivity).user_name
       : (activity as AdminActivity).admin_name;
+  const initials = getInitials(userName || "??");
 
   return (
-    <div className="p-3.5 border border-neutral-300/60 rounded-xl bg-card">
-      {/* Top row: Badge and icon */}
-      <div className="flex items-center justify-between mb-1.5">
-        <span
-          className={cn(
-            "text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full",
-            config.color
-          )}
-        >
-          {config.label}
-        </span>
-        <Icon className="size-4 text-muted-foreground/50" aria-hidden="true" />
-      </div>
+    <div className="flex items-center gap-2.5 px-3 py-2.5 bg-white rounded-lg">
+      {/* Tool icon */}
+      <Icon
+        className={cn("size-4 shrink-0", config.color)}
+        aria-hidden="true"
+      />
 
       {/* Description */}
-      <p className="text-sm font-medium text-foreground leading-snug">
+      <p className="flex-1 text-[13px] text-foreground truncate min-w-0">
         {activity.description}
       </p>
 
-      {/* Metadata row */}
-      <p className="text-xs text-muted-foreground mt-1">
-        {userName}
-        <span className="text-muted-foreground/50 mx-1.5">·</span>
-        <span className="text-muted-foreground/70">
-          {formatTimestamp(activity.timestamp)}
+      {/* Initials circle */}
+      <div className="size-6 rounded-full bg-neutral-100 flex items-center justify-center shrink-0">
+        <span className="text-[9px] font-bold text-muted-foreground">
+          {initials}
         </span>
-      </p>
+      </div>
+
+      {/* Time */}
+      <span className="text-[11px] text-muted-foreground/50 tabular-nums shrink-0">
+        {formatTimestamp(activity.timestamp)}
+      </span>
     </div>
   );
 }

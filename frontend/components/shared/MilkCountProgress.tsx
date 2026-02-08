@@ -89,7 +89,7 @@ export function MilkCountProgress() {
     : 0;
 
   return (
-    <div className="p-3.5 border border-neutral-300/60 rounded-xl bg-card">
+    <div className="p-3.5 border border-neutral-300/80 rounded-2xl bg-card">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <span className="text-[10px] font-mono font-bold uppercase text-muted-foreground">

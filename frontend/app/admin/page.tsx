@@ -45,7 +45,7 @@ export default function AdminPage() {
 
             <AdminModuleCard
               title="Milk Pars"
-              description="Milk par levels"
+              description="Milk ordering par levels"
               route="/admin/milk-pars"
               moduleId="03"
               icon={<Milk className="size-5 text-amber-400" />}
@@ -54,14 +54,6 @@ export default function AdminPage() {
 
           {/* Admin Activity Feed Section */}
           <div className="mt-6">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-[10px] font-mono font-bold uppercase bg-amber-900 text-amber-100 px-2.5 py-1 rounded-full">
-                Admin
-              </span>
-              <h2 className="text-sm font-medium text-muted-foreground">
-                Activity Log
-              </h2>
-            </div>
             <ActivityFeed variant="admin" limit={8} />
           </div>
         </div>

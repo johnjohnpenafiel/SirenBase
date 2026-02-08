@@ -23,7 +23,8 @@ import apiClient from "@/lib/api";
 import { HISTORY_PAGE_SIZE, HISTORY_MAX_FETCH } from "@/lib/constants";
 import type { HistoryEntry, HistoryAction } from "@/types";
 import { toast } from "sonner";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { TrackingHistorySkeleton } from "@/components/tools/tracking/TrackingHistorySkeleton";
 import { HistoryEntryCard } from "@/components/tools/tracking/HistoryEntryCard";
 
 export default function HistoryPage() {
@@ -72,22 +73,6 @@ export default function HistoryPage() {
     setCurrentPage(1);
   }, [actionFilter]);
 
-  if (loading) {
-    return (
-      <ProtectedRoute>
-        <div className="flex flex-col h-dvh">
-          <Header />
-          <main className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-              <p className="text-muted-foreground">Loading history...</p>
-            </div>
-          </main>
-        </div>
-      </ProtectedRoute>
-    );
-  }
-
   return (
     <ProtectedRoute>
       <div className="h-dvh overflow-y-auto" onScroll={handleScroll}>
@@ -98,7 +83,7 @@ export default function HistoryPage() {
               className={cn(
                 "max-w-6xl mx-auto rounded-2xl",
                 isScrolled ? "bg-white/70 backdrop-blur-md" : "bg-white/95 backdrop-blur-md",
-                
+
                 "px-5 py-4 md:px-6 md:py-5",
                 "transition-all duration-300 ease-out",
                 isScrolled && "shadow-[0_4px_8px_-4px_rgba(0,0,0,0.08)]"
@@ -114,6 +99,7 @@ export default function HistoryPage() {
               </h1>
 
               {/* Filters */}
+              {!loading && (
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="w-full sm:w-48">
                   <Select
@@ -138,12 +124,15 @@ export default function HistoryPage() {
                   {filteredHistory.length === 1 ? "entry" : "entries"}
                 </div>
               </div>
+              )}
             </div>
           </div>
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-            {paginatedHistory.length === 0 ? (
+            {loading ? (
+              <TrackingHistorySkeleton />
+            ) : paginatedHistory.length === 0 ? (
               <div className="text-center py-12 bg-card rounded-2xl border border-neutral-300/80">
                 <p className="text-muted-foreground">
                   No history entries found.

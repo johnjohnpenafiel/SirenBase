@@ -22,7 +22,8 @@ import apiClient from "@/lib/api";
 import { cn } from "@/lib/utils";
 import type { User } from "@/types";
 import { toast } from "sonner";
-import { Plus, Loader2, Users, Ellipsis, Trash2 } from "lucide-react";
+import { Plus, Users, Ellipsis, Trash2 } from "lucide-react";
+import { AdminUsersSkeleton } from "@/components/admin/AdminUsersSkeleton";
 
 // Mobile user card with contextual action overlay
 function UserCard({ user, onDelete }: { user: User; onDelete: (user: User) => void }) {
@@ -146,22 +147,6 @@ export default function UserManagementPage() {
     setUserToDelete(null);
   };
 
-  if (loading) {
-    return (
-      <ProtectedRoute requireAdmin>
-        <div className="flex flex-col h-dvh">
-          <Header />
-          <main className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">Loading users...</p>
-            </div>
-          </main>
-        </div>
-      </ProtectedRoute>
-    );
-  }
-
   return (
     <ProtectedRoute requireAdmin>
       <div className="h-dvh overflow-y-auto flex flex-col gap-2" onScroll={handleScroll}>
@@ -202,7 +187,9 @@ export default function UserManagementPage() {
 
         {/* Content */}
         <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-          {users.length === 0 ? (
+          {loading ? (
+            <AdminUsersSkeleton />
+          ) : users.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <Users className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">No Users</h3>

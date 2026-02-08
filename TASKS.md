@@ -724,6 +724,17 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
+## UI Polish
+
+- [x] Add skeleton loading states to all data-fetching pages (12 pages, 9 skeleton components) — February 7, 2026
+  - Replaced Loader2 spinners with layout-preserving skeleton placeholders
+  - 9 new skeleton components: MilkCountLandingSkeleton, MilkCountStepSkeleton, MilkCountHistorySkeleton, MilkCountSummarySkeleton, AdminUsersSkeleton, AdminParsSkeleton, AdminItemsSkeleton, InventoryContentSkeleton, TrackingHistorySkeleton
+  - 3 pages restructured (Pattern A): admin/users, tracking/inventory, tracking/history — now show island header during loading
+  - 9 pages updated (Pattern B): milk-count landing, FOH, BOH, morning, on-order, history, summary, milk-pars, rtde-items
+  - Cleaned up 9 unused Loader2 imports
+
+---
+
 ## Ongoing Tasks
 
 ### Maintenance
@@ -783,5 +794,5 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
-_Last Updated: December 14, 2025_
-_Version: 3.4.0 - Phase 7A Complete (Production deployed: Vercel + Render + Neon + Custom Domain)_
+_Last Updated: February 7, 2026_
+_Version: 3.5.0 - UI Polish: Skeleton loading states across all pages_

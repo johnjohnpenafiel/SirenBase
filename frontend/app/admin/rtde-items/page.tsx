@@ -41,6 +41,7 @@ import { AddRTDEItemDialog } from '@/components/admin/rtde/AddRTDEItemDialog';
 import { EditRTDEItemDialog } from '@/components/admin/rtde/EditRTDEItemDialog';
 import { DeleteRTDEItemDialog } from '@/components/admin/rtde/DeleteRTDEItemDialog';
 import apiClient from '@/lib/api';
+import { useDelayedLoading } from '@/hooks/use-delayed-loading';
 import { toast } from 'sonner';
 import type { RTDEItem } from '@/types';
 
@@ -192,6 +193,7 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
 export default function RTDEItemsPage() {
   const [items, setItems] = useState<RTDEItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const showLoading = useDelayedLoading(loading);
   const [saving, setSaving] = useState(false);
   const [hasReordered, setHasReordered] = useState(false);
   const [showActiveOnly, setShowActiveOnly] = useState(true);
@@ -350,7 +352,7 @@ export default function RTDEItemsPage() {
 
         {/* Content */}
         <div className="container max-w-2xl mx-auto px-4 md:px-8 pb-8">
-          {loading ? (
+          {showLoading ? (
             <AdminItemsSkeleton />
           ) : filteredItems.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">

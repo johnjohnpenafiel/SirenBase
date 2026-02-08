@@ -21,6 +21,7 @@ import { OnOrderRow } from "@/components/tools/milk-count/OnOrderRow";
 import { ArrowRight } from "lucide-react";
 import { MilkCountStepSkeleton } from "@/components/tools/milk-count/MilkCountStepSkeleton";
 import apiClient from "@/lib/api";
+import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import type { MilkType, MilkCountSession, MilkCountState } from "@/types";
@@ -28,6 +29,7 @@ import type { MilkType, MilkCountSession, MilkCountState } from "@/types";
 export default function OnOrderPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const showLoading = useDelayedLoading(loading);
   const [saving, setSaving] = useState(false);
   const [milkTypes, setMilkTypes] = useState<MilkType[]>([]);
   const [session, setSession] = useState<MilkCountSession | null>(null);
@@ -189,7 +191,7 @@ export default function OnOrderPage() {
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-2xl mx-auto px-4 pb-32">
-              {loading ? (
+              {showLoading ? (
                 <MilkCountStepSkeleton showInstructions />
               ) : (
                 <div className="flex flex-col gap-2">

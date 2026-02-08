@@ -83,23 +83,18 @@ export default function DashboardPage() {
 
             {/* Activity Section */}
             <div className="mt-6">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full">
-                  Recent
-                </span>
-                <h2 className="text-sm font-medium text-muted-foreground">
-                  Activity
-                </h2>
-              </div>
+              <h2 className="inline-block text-sm text-muted-foreground bg-white border border-neutral-300 px-3 py-1 rounded-full mb-3">
+                Recent Activity
+              </h2>
 
               {/* Status Circles */}
-              <div className="grid grid-cols-2 gap-2 mb-3">
+              <div className="grid grid-cols-2 gap-2 mb-2">
                 <MilkCountProgress />
                 <RTDETimerCircle />
               </div>
 
               {/* Activity Log */}
-              <ActivityFeed variant="dashboard" limit={6} />
+              <ActivityFeed variant="dashboard" limit={5} />
             </div>
           </div>
       </div>

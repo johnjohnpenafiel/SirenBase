@@ -23,7 +23,6 @@ import { Button } from "@/components/ui/button";
 import { AddItemDialog } from "@/components/tools/tracking/AddItemDialog";
 import { RemoveItemDialog } from "@/components/tools/tracking/RemoveItemDialog";
 import apiClient from "@/lib/api";
-import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { cn } from "@/lib/utils";
 import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
 import type { Item, ItemCategory, ViewMode } from "@/types";
@@ -38,7 +37,6 @@ export default function InventoryPage() {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
-  const showLoading = useDelayedLoading(loading);
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | null>(
     null
@@ -233,7 +231,7 @@ export default function InventoryPage() {
                 )}
 
                 {/* View Toggle - Only show when not in filtered category view */}
-                {!loading && viewMode !== "filtered" && (
+                {viewMode !== "filtered" && (
                   <div className="inline-flex rounded-full border border-neutral-300/80 p-0.5">
                     <Button
                       variant={viewMode === "all" ? "secondary" : "ghost"}
@@ -322,10 +320,10 @@ export default function InventoryPage() {
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-6xl mx-auto px-4 md:px-8 pb-8">
-              {showLoading ? (
+              {loading ? (
                 <InventoryContentSkeleton />
               ) : (
-              <>
+              <div className="animate-fade-in">
               {/* Categories View */}
               {viewMode === "categories" && (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -366,7 +364,7 @@ export default function InventoryPage() {
                   )}
                 </div>
               )}
-              </>
+              </div>
               )}
             </div>
 

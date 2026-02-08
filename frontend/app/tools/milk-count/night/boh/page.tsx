@@ -21,7 +21,6 @@ import { MilkCountCard } from "@/components/tools/milk-count/MilkCountCard";
 import { Check } from "lucide-react";
 import { MilkCountStepSkeleton } from "@/components/tools/milk-count/MilkCountStepSkeleton";
 import apiClient from "@/lib/api";
-import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import type { MilkType, MilkCountSession, MilkCountState } from "@/types";
@@ -29,7 +28,6 @@ import type { MilkType, MilkCountSession, MilkCountState } from "@/types";
 export default function NightBOHPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const showLoading = useDelayedLoading(loading);
   const [saving, setSaving] = useState(false);
   const [milkTypes, setMilkTypes] = useState<MilkType[]>([]);
   const [session, setSession] = useState<MilkCountSession | null>(null);
@@ -193,10 +191,10 @@ export default function NightBOHPage() {
 
           {/* Content - scrolls under the island */}
           <div className="container max-w-2xl mx-auto px-4 pb-32">
-            {showLoading ? (
+            {loading ? (
               <MilkCountStepSkeleton />
             ) : (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 animate-fade-in">
                 {/* Dairy Section */}
                 {dairyMilks.length > 0 && (
                   <section>

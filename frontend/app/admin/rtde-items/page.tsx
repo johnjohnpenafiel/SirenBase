@@ -41,7 +41,6 @@ import { AddRTDEItemDialog } from '@/components/admin/rtde/AddRTDEItemDialog';
 import { EditRTDEItemDialog } from '@/components/admin/rtde/EditRTDEItemDialog';
 import { DeleteRTDEItemDialog } from '@/components/admin/rtde/DeleteRTDEItemDialog';
 import apiClient from '@/lib/api';
-import { useDelayedLoading } from '@/hooks/use-delayed-loading';
 import { toast } from 'sonner';
 import type { RTDEItem } from '@/types';
 
@@ -193,7 +192,6 @@ function SortableItem({ item, onEdit, onDelete }: SortableItemProps) {
 export default function RTDEItemsPage() {
   const [items, setItems] = useState<RTDEItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const showLoading = useDelayedLoading(loading);
   const [saving, setSaving] = useState(false);
   const [hasReordered, setHasReordered] = useState(false);
   const [showActiveOnly, setShowActiveOnly] = useState(true);
@@ -352,10 +350,10 @@ export default function RTDEItemsPage() {
 
         {/* Content */}
         <div className="container max-w-2xl mx-auto px-4 md:px-8 pb-8">
-          {showLoading ? (
+          {loading ? (
             <AdminItemsSkeleton />
           ) : filteredItems.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-in">
               <Package className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">No items yet</h3>
               <p className="text-sm text-muted-foreground mb-4">
@@ -369,6 +367,7 @@ export default function RTDEItemsPage() {
               </Button>
             </div>
           ) : (
+            <div className="animate-fade-in">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -390,6 +389,7 @@ export default function RTDEItemsPage() {
                 </div>
               </SortableContext>
             </DndContext>
+            </div>
           )}
         </div>
       </div>

@@ -21,7 +21,6 @@ import { cn } from "@/lib/utils";
 import { Milk, Leaf, Loader2 } from "lucide-react";
 import { AdminParsSkeleton } from "@/components/admin/AdminParsSkeleton";
 import apiClient from "@/lib/api";
-import { useDelayedLoading } from "@/hooks/use-delayed-loading";
 import { toast } from "sonner";
 import type { MilkCountParLevel } from "@/types";
 
@@ -32,7 +31,6 @@ interface EditingState {
 
 export default function MilkParsPage() {
   const [loading, setLoading] = useState(true);
-  const showLoading = useDelayedLoading(loading);
   const [parLevels, setParLevels] = useState<MilkCountParLevel[]>([]);
   const [editing, setEditing] = useState<EditingState | null>(null);
   const [saving, setSaving] = useState(false);
@@ -223,10 +221,10 @@ export default function MilkParsPage() {
 
         {/* Content */}
         <div className="container max-w-2xl mx-auto px-4 md:px-8 pb-8">
-          {showLoading ? (
+          {loading ? (
             <AdminParsSkeleton />
           ) : parLevels.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="flex flex-col items-center justify-center py-16 text-center animate-fade-in">
               <Milk className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">No Milk Types Found</h3>
               <p className="text-sm text-muted-foreground">
@@ -234,7 +232,7 @@ export default function MilkParsPage() {
               </p>
             </div>
           ) : (
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 animate-fade-in">
               {renderSection("Dairy", dairyLevels)}
               {renderSection("Non-Dairy", nonDairyLevels)}
             </div>

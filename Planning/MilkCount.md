@@ -2,7 +2,7 @@
 
 ## Tool Overview
 
-The **Milk Count Tool** is the second tool in SirenBase, designed to streamline the milk inventory counting and ordering process at Starbucks stores. This tool replaces the manual paper logbook system with an efficient, accurate, and user-friendly digital interface.
+The **Milk Count Tool** is the second tool in SirenBase, designed to streamline the milk inventory counting and ordering process at specialty coffee retail locations. This tool replaces the manual paper logbook system with an efficient, accurate, and user-friendly digital interface.
 
 ---
 

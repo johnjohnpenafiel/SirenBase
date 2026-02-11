@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**SirenBase** is a comprehensive digital operations platform designed for Starbucks store partners. It provides a unified suite of specialized tools to streamline daily workflows, replacing manual paper-based systems with fast, mobile-friendly, and accountable digital solutions. Partners log in once and access multiple tools from a central dashboard, each designed to solve a specific operational challenge.
+**SirenBase** is a comprehensive digital operations platform built for specialty coffee retail environments. It provides a unified suite of specialized tools to streamline daily store workflows, replacing manual paper-based systems with fast, mobile-friendly, and accountable digital solutions. Partners log in once and access multiple tools from a central dashboard, each designed to solve a specific operational challenge.
 
 ---
 
@@ -142,7 +142,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 - Multi-store support (MVP is single-store)
 - Advanced analytics and cross-tool reporting
 - Native mobile apps (MVP is mobile web)
-- Integration with Starbucks ordering systems
+- Integration with corporate ordering systems
 - Real-time collaborative editing (multiple users editing simultaneously)
 - Offline mode
 
@@ -557,7 +557,7 @@ Located in `backend/app/tools/{tool_name}/`:
 
 ## Assumptions
 
-1. **Single Store Deployment** - MVP designed for one Starbucks location
+1. **Single Store Deployment** - MVP designed for a single retail coffee location
 2. **Limited Concurrent Users** - Typically 5-10 staff members max at once
 3. **Internet Available** - Store has reliable wifi/cellular connectivity
 4. **Mobile Devices** - Staff have smartphones or tablets available
@@ -582,7 +582,7 @@ Located in `backend/app/tools/{tool_name}/`:
 - Budget-conscious (free tier services preferred for MVP)
 - Fast time-to-market (target 4-6 weeks per tool)
 - Minimal training required (staff should understand in < 5 minutes)
-- Must complement (not replace) official Starbucks recordkeeping
+- Must complement (not replace) official corporate recordkeeping
 
 ### Development Constraints
 

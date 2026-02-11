@@ -575,7 +575,7 @@ This document contains all completed development phases from the SirenBase proje
 - [x] Create database migration `2025110801_add_item_name_suggestions_table.py`
   - Table: `item_name_suggestions` (id, name, category, created_at, updated_at)
   - Index: `idx_suggestions_category_name` for fast queries
-  - Seed 49 common Starbucks items (8 syrups, 6 sauces, 5 coffee beans, 4 powders, 6 cups, 4 lids, 5 condiments, 6 cleaning supplies, 5 other)
+  - Seed 49 common store items (8 syrups, 6 sauces, 5 coffee beans, 4 powders, 6 cups, 4 lids, 5 condiments, 6 cleaning supplies, 5 other)
 - [x] Create `ItemSuggestion` model (`backend/app/models/item_suggestion.py`)
   - to_dict() method for serialization
   - Add to models __init__.py

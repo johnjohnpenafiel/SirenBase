@@ -555,7 +555,7 @@
 ### November 8, 2025
 
 - **Decision**: Use Nature theme for consistent green palette across all tools
-  - **Rationale**: Aligns with Starbucks brand (green/coffee/nature theme), provides cohesive look
+  - **Rationale**: Aligns with the store brand (green/coffee/nature theme), provides cohesive look
   - **Impact**: No tool-specific accent colors needed
 
 - **Decision**: Import Montserrat, Merriweather, Source Code Pro via Next.js Google Fonts

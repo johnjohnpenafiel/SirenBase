@@ -102,17 +102,17 @@ RTDE_ITEMS = [
         "icon": None,
         "par_level": 6,
     },
-    # 11. Starbucks Energy Tropical Peach
+    # 11. Store Brand Energy Tropical Peach
     {
-        "brand": "Starbucks",
+        "brand": "Store Brand",
         "name": "Iced Energy Tropical Peach",
         "image_filename": "starbucks-energy-tropical-peach.jpeg",
         "icon": None,
         "par_level": 4,
     },
-    # 12. Starbucks Energy Blueberry Lemonade
+    # 12. Store Brand Energy Blueberry Lemonade
     {
-        "brand": "Starbucks",
+        "brand": "Store Brand",
         "name": "Iced Energy Blueberry Lemonade",
         "image_filename": "starbucks-energy-blueberry-lemonade.jpeg",
         "icon": None,
@@ -200,7 +200,7 @@ RTDE_ITEMS = [
     },
     # 23. Avocado Spread
     {
-        "brand": "Starbucks",
+        "brand": "Store Brand",
         "name": "Avocado Spread",
         "image_filename": "starbucks-avocado-spread.jpeg",
         "icon": None,

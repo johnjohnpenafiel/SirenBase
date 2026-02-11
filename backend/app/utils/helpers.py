@@ -12,6 +12,22 @@ from app.models.item import Item
 from app.extensions import db
 
 
+def get_enum_value(enum_field) -> str:
+    """
+    Extract the string value from a SQLAlchemy enum field.
+
+    Handles both actual Python enum instances and plain string values
+    that SQLAlchemy may return depending on context.
+
+    Args:
+        enum_field: An enum instance or string value
+
+    Returns:
+        The string value of the enum field
+    """
+    return enum_field.value if hasattr(enum_field, 'value') else str(enum_field)
+
+
 def get_store_today() -> date:
     """
     Get today's date from the store's timezone perspective.

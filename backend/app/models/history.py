@@ -10,6 +10,7 @@ from sqlalchemy import String, DateTime, Text, ForeignKey, Enum as SQLEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import db
+from app.utils.helpers import get_enum_value
 
 if TYPE_CHECKING:
     from app.models.user import User
@@ -92,8 +93,7 @@ class History(db.Model):
         Returns:
             Dictionary representation of history entry
         """
-        # Extract action value from enum
-        action_value = self.action.value if hasattr(self.action, 'value') else str(self.action)
+        action_value = get_enum_value(self.action)
 
         data = {
             'id': self.id,

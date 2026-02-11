@@ -14,7 +14,7 @@ from app.models.history import History
 from app.models.item_suggestion import ItemSuggestion
 from app.schemas.item import ItemCreateSchema, ItemResponseSchema
 from app.extensions import db
-from app.utils.helpers import generate_unique_code
+from app.utils.helpers import generate_unique_code, get_enum_value
 
 tracking_bp = Blueprint('tracking', __name__, url_prefix='/api/tracking')
 
@@ -392,7 +392,7 @@ def get_history():
     for entry in history_entries:
         data = {
             'id': entry.id,
-            'action': entry.action if isinstance(entry.action, str) else entry.action.value if hasattr(entry.action, 'value') else str(entry.action),
+            'action': get_enum_value(entry.action),
             'item_name': entry.item_name,
             'item_code': entry.item_code,
             'user_id': entry.user_id,

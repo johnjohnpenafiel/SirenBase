@@ -11,7 +11,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { BackButton } from "@/components/shared/BackButton";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -49,8 +49,8 @@ export default function HistoryPage() {
       setLoading(true);
       const response = await apiClient.getHistory({ limit: HISTORY_MAX_FETCH });
       setHistory(response.history);
-    } catch (error: any) {
-      toast.error("Failed to load history");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to load history"));
     } finally {
       setLoading(false);
     }

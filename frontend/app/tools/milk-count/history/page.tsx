@@ -28,7 +28,7 @@ import {
 import { MilkCountHistorySkeleton } from "@/components/tools/milk-count/MilkCountHistorySkeleton";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn, parseLocalDate } from "@/lib/utils";
+import { cn, parseLocalDate, getErrorMessage } from "@/lib/utils";
 import type { MilkCountSession, MilkCountSessionStatus } from "@/types";
 
 // Status display configuration - Neutral for in-progress, sky for completed
@@ -107,8 +107,8 @@ export default function HistoryPage() {
 
       setHasMore(currentOffset + response.sessions.length < response.total);
       setOffset(currentOffset + response.sessions.length);
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to load history");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to load history"));
     } finally {
       setLoading(false);
     }

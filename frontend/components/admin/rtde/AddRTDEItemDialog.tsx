@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/form';
 import apiClient from '@/lib/api';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/utils';
 import { rtdeItemSchema, type RTDEItemFormData } from '@/lib/validations/rtde';
 
 interface AddRTDEItemDialogProps {
@@ -72,12 +73,8 @@ export function AddRTDEItemDialog({
       toast.success(`Item "${data.name}" created successfully!`);
       onItemAdded();
       handleClose();
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error ||
-        error.message ||
-        'Failed to create item. Please try again.';
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to create item. Please try again.'));
     }
   };
 

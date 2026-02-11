@@ -22,7 +22,7 @@ import { ArrowRight } from "lucide-react";
 import { MilkCountStepSkeleton } from "@/components/tools/milk-count/MilkCountStepSkeleton";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import type { MilkType, MilkCountSession, MilkCountState } from "@/types";
 
 export default function OnOrderPage() {
@@ -95,8 +95,8 @@ export default function OnOrderPage() {
         });
         setOnOrders(initialOnOrders);
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to load data");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to load data"));
       router.push("/tools/milk-count");
     } finally {
       setLoading(false);
@@ -123,8 +123,8 @@ export default function OnOrderPage() {
 
       await apiClient.saveMilkCountOnOrder(session.id, { on_orders: onOrderData });
       router.push(`/tools/milk-count/summary/${session.id}`);
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to save on order quantities");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to save on order quantities"));
     } finally {
       setSaving(false);
     }

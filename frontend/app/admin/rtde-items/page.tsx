@@ -34,7 +34,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Header } from '@/components/shared/Header';
 import { BackButton } from '@/components/shared/BackButton';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn, getErrorMessage } from '@/lib/utils';
 import { Plus, Edit2, Trash2, GripVertical, Loader2, Package, Ellipsis } from 'lucide-react';
 import { AdminItemsSkeleton } from '@/components/admin/AdminItemsSkeleton';
 import { AddRTDEItemDialog } from '@/components/admin/rtde/AddRTDEItemDialog';
@@ -224,8 +224,8 @@ export default function RTDEItemsPage() {
       setLoading(true);
       const response = await apiClient.getRTDEItems({ include_inactive: true });
       setItems(response.items);
-    } catch (error: any) {
-      toast.error('Failed to load items');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to load items'));
     } finally {
       setLoading(false);
     }
@@ -260,8 +260,8 @@ export default function RTDEItemsPage() {
       toast.success('Item order saved successfully!');
       setHasReordered(false);
       await loadItems();
-    } catch (error: any) {
-      toast.error('Failed to save item order');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to save item order'));
     } finally {
       setSaving(false);
     }

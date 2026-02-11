@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import enum
 
 from app.extensions import db
+from app.utils.helpers import get_enum_value
 
 if TYPE_CHECKING:
     from app.models.item import Item
@@ -144,8 +145,7 @@ class User(db.Model):
         Returns:
             Dictionary representation of user (excludes pin_hash)
         """
-        # Extract role value from enum
-        role_value = self.role.value if hasattr(self.role, 'value') else str(self.role)
+        role_value = get_enum_value(self.role)
 
         data = {
             'id': self.id,

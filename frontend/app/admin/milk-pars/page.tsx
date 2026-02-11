@@ -17,7 +17,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { BackButton } from "@/components/shared/BackButton";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import { Milk, Leaf, Loader2 } from "lucide-react";
 import { AdminParsSkeleton } from "@/components/admin/AdminParsSkeleton";
 import apiClient from "@/lib/api";
@@ -58,8 +58,8 @@ export default function MilkParsPage() {
     try {
       const response = await apiClient.getParLevels();
       setParLevels(response.par_levels);
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Failed to load par levels');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to load par levels'));
     } finally {
       setLoading(false);
     }
@@ -91,8 +91,8 @@ export default function MilkParsPage() {
       toast.success('Par level updated');
       setEditing(null);
       await loadParLevels();
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Failed to update par level');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to update par level'));
     } finally {
       setSaving(false);
     }

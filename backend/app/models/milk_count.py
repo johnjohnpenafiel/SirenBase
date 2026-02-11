@@ -253,8 +253,7 @@ class MilkCountSession(db.Model):
     session_date: Mapped[date] = mapped_column(
         Date,
         nullable=False,
-        unique=True,
-        index=True
+        unique=True
     )
     status: Mapped[str] = mapped_column(
         String(20),
@@ -434,11 +433,11 @@ class MilkCountEntry(db.Model):
     )
 
     # References
+    # Indexed via uq_milk_count_entries_session_milk_type unique constraint
     session_id: Mapped[str] = mapped_column(
         String(36),
         ForeignKey('milk_count_sessions.id', ondelete='CASCADE'),
-        nullable=False,
-        index=True
+        nullable=False
     )
     milk_type_id: Mapped[str] = mapped_column(
         String(36),

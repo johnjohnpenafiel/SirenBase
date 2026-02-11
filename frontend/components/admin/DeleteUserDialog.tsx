@@ -21,6 +21,7 @@ import { useAuth } from '@/hooks/use-auth';
 import apiClient from '@/lib/api';
 import type { User } from '@/types';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/utils';
 import { AlertTriangle } from 'lucide-react';
 
 interface DeleteUserDialogProps {
@@ -52,9 +53,8 @@ export function DeleteUserDialog({
       await apiClient.deleteUser(user.id);
       toast.success(`User ${user.name} deleted successfully`);
       onUserDeleted();
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.error || 'Failed to delete user';
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to delete user'));
     } finally {
       setDeleting(false);
     }

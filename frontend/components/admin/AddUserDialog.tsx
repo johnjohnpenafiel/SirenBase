@@ -39,6 +39,7 @@ import {
 } from '@/components/ui/select';
 import apiClient from '@/lib/api';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/utils';
 import { addUserSchema, type AddUserFormData } from '@/lib/validations/admin';
 
 interface AddUserDialogProps {
@@ -76,9 +77,8 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
       toast.success(`User ${data.name} created successfully!`);
       onUserAdded();
       handleClose();
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.error || error.message || 'Failed to create user';
-      toast.error(`Failed to create user: ${errorMessage}`);
+    } catch (error: unknown) {
+      toast.error(`Failed to create user: ${getErrorMessage(error, 'Failed to create user')}`);
     }
   };
 

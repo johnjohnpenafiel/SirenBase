@@ -24,7 +24,7 @@ import { ArrowRight } from "lucide-react";
 import { MilkCountStepSkeleton } from "@/components/tools/milk-count/MilkCountStepSkeleton";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import type { MilkType, MilkCountSession, MilkCountMorningMethod } from "@/types";
 
 interface CountState {
@@ -110,8 +110,8 @@ export default function MorningCountPage() {
         });
         setCounts(initialCounts);
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to load data");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to load data"));
       router.push("/tools/milk-count");
     } finally {
       setLoading(false);
@@ -184,8 +184,8 @@ export default function MorningCountPage() {
 
       await apiClient.saveMilkCountMorning(session.id, { counts: morningCounts });
       router.push("/tools/milk-count/on-order");
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to save morning count");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to save morning count"));
     } finally {
       setSaving(false);
     }

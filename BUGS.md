@@ -153,25 +153,20 @@ After leaving the app idle for extended periods (1+ hours), users would see tech
 
 ## 💡 Known Issues / Technical Debt
 
-### [TECH-002] No error boundary components
-
-**Description**:
-No React error boundaries exist to catch rendering errors gracefully.
-
-**Impact**: Low
-- Entire app could crash if a component throws
-- No fallback UI for errors
-
-**Recommendation**:
-Add error boundary wrapper in root layout with friendly error message.
-
-**Status**: Acknowledged
-**Priority**: Low
-**Deferred**: Phase 7 (Production Deployment)
-
 ---
 
 ## ✅ Fixed Bugs Archive
+
+### [TECH-002] No error boundary components
+
+**Fixed**: 2026-02-08
+**Description**: No React error boundaries existed to catch rendering errors gracefully.
+**Resolution**: Added `error.tsx` files at 5 route boundaries:
+- `app/error.tsx` (root)
+- `app/tools/tracking/error.tsx`
+- `app/tools/milk-count/error.tsx`
+- `app/tools/rtde/error.tsx`
+- `app/admin/error.tsx`
 
 ### [BUG-008] RTDE count adjustment causes loading flash (unnecessary session reload)
 

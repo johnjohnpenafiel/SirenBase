@@ -2,7 +2,7 @@
 
 ## Tool Overview
 
-The **Inventory Tracking System** is the first tool in SirenBase, designed to replace the paper-based inventory tracking used in the basement of a Starbucks store. The tool provides a simple, secure, and accountable way for staff to track inventory items using 4-digit unique identifiers, eliminating the need for physical trips to the basement during daily ordering operations.
+The **Inventory Tracking System** is the first tool in SirenBase, designed to replace the paper-based inventory tracking used in the basement storage of a retail coffee store. The tool provides a simple, secure, and accountable way for staff to track inventory items using 4-digit unique identifiers, eliminating the need for physical trips to the basement during daily ordering operations.
 
 ---
 

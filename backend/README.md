@@ -4,7 +4,7 @@
 
 ## Overview
 
-The SirenBase backend is a Flask-based REST API that serves multiple tools for Starbucks store partners. It implements a **multi-tool architecture** where each tool (Inventory Tracking, Milk Count, RTD&E) has its own namespaced API endpoints while sharing common infrastructure (authentication, database, admin functions).
+The SirenBase backend is a Flask-based REST API that serves multiple tools for specialty coffee retail store partners. It implements a **multi-tool architecture** where each tool (Inventory Tracking, Milk Count, RTD&E) has its own namespaced API endpoints while sharing common infrastructure (authentication, database, admin functions).
 
 ### Current Status
 - **Tool 1 (Inventory Tracking)**: ✅ Complete - `/api/tracking/*`

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**SirenBase** is a comprehensive digital operations platform for Starbucks store partners. It provides a unified suite of specialized tools to streamline daily workflows, replacing manual paper-based systems with fast, mobile-friendly, and accountable digital solutions.
+**SirenBase** is a comprehensive digital operations platform built for specialty coffee retail environments. It provides a unified suite of specialized tools to streamline daily store workflows, replacing manual paper-based systems with fast, mobile-friendly, and accountable digital solutions.
 
 **Multi-Tool Architecture**: Partners log in once and access multiple tools from a central dashboard:
 - **Tool 1**: Inventory Tracking System (basement inventory with 4-digit codes)

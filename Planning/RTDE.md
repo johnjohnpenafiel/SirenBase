@@ -2,7 +2,7 @@
 
 ## Tool Overview
 
-The **RTD&E Counting System** is the third tool in SirenBase, designed to streamline the process of restocking the Ready-to-Drink & Eat (RTD&E) display at Starbucks. This tool provides a digital counting interface, automatic pull list generation, and BOH fulfillment tracking to eliminate guesswork and reduce time wasted walking between the display and back of house.
+The **RTD&E Counting System** is the third tool in SirenBase, designed to streamline the process of restocking the Ready-to-Drink & Eat (RTD&E) display at a retail coffee location. This tool provides a digital counting interface, automatic pull list generation, and BOH fulfillment tracking to eliminate guesswork and reduce time wasted walking between the display and back of house.
 
 ---
 

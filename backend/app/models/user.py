@@ -30,7 +30,7 @@ class User(db.Model):
 
     Attributes:
         id: UUID primary key
-        partner_number: Unique partner identifier (Starbucks employee ID)
+        partner_number: Unique partner identifier (store employee ID)
         name: Full name of the staff member
         pin_hash: Bcrypt-hashed 4-digit PIN
         role: User role (admin or staff)

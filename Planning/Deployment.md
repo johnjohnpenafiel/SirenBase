@@ -448,7 +448,7 @@ After completing all phases, you can showcase:
 | Cloud Platforms | Vercel, Render → AWS (shows progression) |
 | Database Management | PostgreSQL with migrations, Neon → RDS |
 | Testing | 152+ tests, test automation |
-| Real-World Application | Actually deployed and used at Starbucks |
+| Real-World Application | Actually deployed and used at a live retail coffee location |
 | Documentation | PLANNING.md, architecture docs |
 | DevOps | Multi-environment (staging/prod) |
 

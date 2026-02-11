@@ -9,7 +9,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "SirenBase - Digital Operations Platform",
-  description: "Streamlined operations for Starbucks partners",
+  description: "Streamlined operations for coffee retail store partners",
 };
 
 export default function RootLayout({

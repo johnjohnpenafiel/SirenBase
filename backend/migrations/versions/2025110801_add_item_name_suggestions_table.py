@@ -32,7 +32,7 @@ def upgrade():
     # Create index for fast autocomplete queries
     op.create_index('idx_suggestions_category_name', 'item_name_suggestions', ['category', 'name'])
 
-    # Seed common Starbucks inventory items (50+ templates)
+    # Seed common coffee retail inventory items (50+ templates)
     # Using raw SQL for bulk insert
     op.execute("""
         INSERT INTO item_name_suggestions (id, name, category, created_at, updated_at) VALUES

@@ -558,7 +558,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ### Phase 7A: Quick Deploy (Vercel + Render + Neon) ✅ COMPLETE
 
-**Goal**: Get app live for real-world testing at Starbucks store
+**Goal**: Get app live for real-world testing at the store
 **Cost**: $7/month (Render Starter tier)
 **Completed**: December 14, 2025
 
@@ -613,7 +613,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 - [x] Test login flow end-to-end
 - [x] Test all Tool 1 (Inventory Tracking) features
 - [x] Test all Tool 3 (RTD&E) features
-- [ ] Real-world testing at Starbucks store
+- [ ] Real-world testing at the store
 
 ### Phase 7B: Infrastructure (Docker + CI/CD + Staging)
 

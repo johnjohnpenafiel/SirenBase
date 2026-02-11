@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import apiClient from '@/lib/api';
 import type { User, LoginRequest } from '@/types';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/utils';
 
 // ============================================================================
 // Types
@@ -86,10 +87,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // Redirect to dashboard
         router.push('/dashboard');
-      } catch (error: any) {
+      } catch (error: unknown) {
         // Handle errors
-        const errorMessage =
-          error.response?.data?.error || 'Invalid partner number or PIN';
+        const errorMessage = getErrorMessage(error, 'Invalid partner number or PIN');
         toast.error(errorMessage);
         throw error;
       }

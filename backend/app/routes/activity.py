@@ -14,6 +14,7 @@ from app.models.history import History
 from app.models.milk_count import MilkCountSession, SessionStatus
 from app.models.rtde import RTDECountSession
 from app.extensions import db
+from app.utils.helpers import get_enum_value
 
 activity_bp = Blueprint('activity', __name__, url_prefix='/api/activity')
 
@@ -67,7 +68,7 @@ def get_recent_activity():
 
     for entry in inventory_entries:
         # Determine action type and title
-        action_value = entry.action.value if hasattr(entry.action, 'value') else str(entry.action)
+        action_value = get_enum_value(entry.action)
         if action_value == 'ADD':
             activity_type = 'inventory_add'
             title = 'Added to Inventory'

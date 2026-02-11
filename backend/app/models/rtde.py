@@ -255,12 +255,11 @@ class RTDESessionCount(db.Model):
         default=lambda: str(uuid4())
     )
 
-    # References
+    # References — indexed via uq_rtde_session_counts_session_item unique constraint
     session_id: Mapped[str] = mapped_column(
         String(36),
         ForeignKey('rtde_count_sessions.id', ondelete='CASCADE'),
-        nullable=False,
-        index=True
+        nullable=False
     )
     item_id: Mapped[str] = mapped_column(
         String(36),

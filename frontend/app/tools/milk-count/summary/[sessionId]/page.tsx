@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/collapsible";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn, parseLocalDate } from "@/lib/utils";
+import { cn, parseLocalDate, getErrorMessage } from "@/lib/utils";
 import type { MilkCountSummaryEntry, MilkCountSession, MilkCategory } from "@/types";
 
 // Category display config
@@ -202,8 +202,8 @@ export default function SummaryPage() {
       const response = await apiClient.getMilkCountSummary(sessionId);
       setSession(response.session);
       setSummary(response.summary);
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to load summary");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to load summary"));
       router.push("/tools/milk-count");
     } finally {
       setLoading(false);

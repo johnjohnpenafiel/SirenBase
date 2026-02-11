@@ -250,7 +250,9 @@ A digital counting and restocking tool that:
 CREATE TABLE rtde_items (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(100) NOT NULL,
-    icon VARCHAR(10) NOT NULL,              -- Emoji (🥪, 🥤, 💧, etc.)
+    brand VARCHAR(50),                      -- Brand name (e.g., "Evolution")
+    image_filename VARCHAR(100),            -- Product image filename (managed by engineering)
+    icon VARCHAR(10),                       -- Emoji (🥪, 🥤, 💧, etc.) - optional if image used
     par_level INTEGER NOT NULL,             -- Target quantity for display
     display_order INTEGER NOT NULL,         -- Position in counting list
     active BOOLEAN DEFAULT TRUE,            -- Enable/disable seasonally

@@ -41,6 +41,7 @@ import apiClient from '@/lib/api';
 import { ITEM_CATEGORIES, formatCategory } from '@/lib/constants';
 import type { ItemCategory } from '@/types';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/utils';
 import { addItemSchema, type AddItemFormData } from '@/lib/validations/tracking';
 import { AlertTriangle } from 'lucide-react';
 
@@ -116,22 +117,8 @@ export function AddItemDialog({
       setGeneratedCode(newCode);
       setStep('confirm');
       toast.success('Code generated! Write it on the physical item.');
-    } catch (error: any) {
-      let errorMessage = 'Failed to generate code';
-
-      if (error.response?.data?.error) {
-        const err = error.response.data.error;
-        // Handle both string errors and validation error objects
-        if (typeof err === 'string') {
-          errorMessage = err;
-        } else if (typeof err === 'object') {
-          // Extract first error message from validation object
-          const firstKey = Object.keys(err)[0];
-          errorMessage = Array.isArray(err[firstKey]) ? err[firstKey][0] : err[firstKey];
-        }
-      }
-
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to generate code'));
     } finally {
       setLoading(false);
     }
@@ -153,22 +140,8 @@ export function AddItemDialog({
       toast.success(`${formData.itemName} added to inventory!`);
       onItemAdded();
       handleClose();
-    } catch (error: any) {
-      let errorMessage = 'Failed to save item';
-
-      if (error.response?.data?.error) {
-        const err = error.response.data.error;
-        // Handle both string errors and validation error objects
-        if (typeof err === 'string') {
-          errorMessage = err;
-        } else if (typeof err === 'object') {
-          // Extract first error message from validation object
-          const firstKey = Object.keys(err)[0];
-          errorMessage = Array.isArray(err[firstKey]) ? err[firstKey][0] : err[firstKey];
-        }
-      }
-
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to save item'));
     } finally {
       setLoading(false);
     }

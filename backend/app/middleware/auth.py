@@ -6,6 +6,7 @@ from flask import jsonify
 from flask_jwt_extended import get_jwt_identity
 
 from app.models.user import User
+from app.utils.helpers import get_enum_value
 
 
 def admin_required(fn):
@@ -37,7 +38,7 @@ def admin_required(fn):
         if not user:
             return jsonify({"error": "Admin access required"}), 403
 
-        user_role = user.role.value if hasattr(user.role, 'value') else str(user.role)
+        user_role = get_enum_value(user.role)
         if user_role != 'admin':
             return jsonify({"error": "Admin access required"}), 403
 

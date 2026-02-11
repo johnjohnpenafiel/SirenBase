@@ -65,6 +65,24 @@ class ProductionConfig(Config):
     DEBUG = False
     FLASK_ENV = 'production'
 
+    # Guard against deploying with default dev secret keys
+    _DEV_DEFAULTS = {
+        'dev-secret-key-change-in-production',
+        'jwt-secret-key-change-in-production',
+    }
+
+    def __init__(self) -> None:
+        if self.SECRET_KEY in self._DEV_DEFAULTS:
+            raise ValueError(
+                "SECRET_KEY still has the default dev value. "
+                "Set a secure SECRET_KEY environment variable for production."
+            )
+        if self.JWT_SECRET_KEY in self._DEV_DEFAULTS:
+            raise ValueError(
+                "JWT_SECRET_KEY still has the default dev value. "
+                "Set a secure JWT_SECRET_KEY environment variable for production."
+            )
+
 
 # Configuration dictionary
 config = {

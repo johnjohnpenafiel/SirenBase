@@ -25,7 +25,7 @@ import { Loader2, Moon, Sun, CheckCircle2, Clock, History, ClipboardList } from 
 import { MilkCountLandingSkeleton } from "@/components/tools/milk-count/MilkCountLandingSkeleton";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn, parseLocalDate } from "@/lib/utils";
+import { cn, parseLocalDate, getErrorMessage } from "@/lib/utils";
 import type { MilkCountSession, MilkCountSessionStatus } from "@/types";
 
 // Status configuration for display
@@ -123,8 +123,8 @@ export default function MilkCountPage() {
     try {
       const response = await apiClient.getMilkCountTodaySession();
       setSession(response.session);
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to load session");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to load session"));
     } finally {
       setLoading(false);
     }
@@ -150,8 +150,8 @@ export default function MilkCountPage() {
       try {
         const response = await apiClient.startMilkCountSession();
         router.push(config.route);
-      } catch (error: any) {
-        toast.error(error.response?.data?.error || "Failed to start session");
+      } catch (error: unknown) {
+        toast.error(getErrorMessage(error, "Failed to start session"));
         setStarting(false);
       }
       return;

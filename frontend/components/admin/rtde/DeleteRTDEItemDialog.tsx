@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import apiClient from '@/lib/api';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/utils';
 import type { RTDEItem } from '@/types';
 import { AlertTriangle } from 'lucide-react';
 
@@ -46,12 +47,8 @@ export function DeleteRTDEItemDialog({
       toast.success(`Item "${item.name}" deleted successfully!`);
       onItemDeleted();
       onOpenChange(false);
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error ||
-        error.message ||
-        'Failed to delete item. Please try again.';
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to delete item. Please try again.'));
     } finally {
       setIsDeleting(false);
     }

@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { AddUserDialog } from "@/components/admin/AddUserDialog";
 import { DeleteUserDialog } from "@/components/admin/DeleteUserDialog";
 import apiClient from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import type { User } from "@/types";
 import { toast } from "sonner";
 import { Plus, Users, Ellipsis, Trash2 } from "lucide-react";
@@ -129,8 +129,8 @@ export default function UserManagementPage() {
       setLoading(true);
       const response = await apiClient.getUsers();
       setUsers(response.users);
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.error || error.message || 'Failed to load users';
+    } catch (error: unknown) {
+      const errorMessage = getErrorMessage(error, 'Failed to load users');
       toast.error(`Failed to load users: ${errorMessage}`);
     } finally {
       setLoading(false);

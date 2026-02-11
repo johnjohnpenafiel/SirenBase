@@ -22,7 +22,7 @@ import { ArrowRight } from "lucide-react";
 import { MilkCountStepSkeleton } from "@/components/tools/milk-count/MilkCountStepSkeleton";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import type { MilkType, MilkCountSession, MilkCountState } from "@/types";
 
 export default function NightFOHPage() {
@@ -99,8 +99,8 @@ export default function NightFOHPage() {
           setCounts(initialCounts);
         }
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to load data");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to load data"));
       router.push("/tools/milk-count");
     } finally {
       setLoading(false);
@@ -131,8 +131,8 @@ export default function NightFOHPage() {
 
       await apiClient.saveMilkCountNightFOH(session.id, { counts: fohCounts });
       router.push("/tools/milk-count/night/boh");
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to save FOH count");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to save FOH count"));
     } finally {
       setSaving(false);
     }

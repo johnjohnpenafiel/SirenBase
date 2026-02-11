@@ -34,6 +34,7 @@ import {
 import { Label } from '@/components/ui/label';
 import apiClient from '@/lib/api';
 import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/utils';
 import { editRTDEItemSchema, type EditRTDEItemFormData } from '@/lib/validations/rtde';
 import type { RTDEItem } from '@/types';
 import { RTDEItemImage } from '@/components/tools/rtde/RTDEItemImage';
@@ -94,12 +95,8 @@ export function EditRTDEItemDialog({
       toast.success(`Item "${data.name}" updated successfully!`);
       onItemUpdated();
       handleClose();
-    } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error ||
-        error.message ||
-        'Failed to update item. Please try again.';
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, 'Failed to update item. Please try again.'));
     }
   };
 

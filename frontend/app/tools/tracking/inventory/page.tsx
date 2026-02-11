@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 import { AddItemDialog } from "@/components/tools/tracking/AddItemDialog";
 import { RemoveItemDialog } from "@/components/tools/tracking/RemoveItemDialog";
 import apiClient from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import { ITEM_CATEGORIES, formatCategory } from "@/lib/constants";
 import type { Item, ItemCategory, ViewMode } from "@/types";
 import { toast } from "sonner";
@@ -80,8 +80,8 @@ export default function InventoryPage() {
       setLoading(true);
       const response = await apiClient.getItems();
       setItems(response.items.filter((item) => !item.is_removed));
-    } catch (error: any) {
-      toast.error("Failed to load inventory");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to load inventory"));
     } finally {
       setLoading(false);
     }
@@ -155,8 +155,8 @@ export default function InventoryPage() {
       toast.success("Item removed successfully");
       fetchItems(); // Refresh list
       setRemoveDialogOpen(false);
-    } catch (error: any) {
-      toast.error("Failed to remove item");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, "Failed to remove item"));
     } finally {
       setRemovingCode(null);
       setItemToRemove(null);

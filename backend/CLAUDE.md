@@ -45,7 +45,9 @@ backend/
 │   │   ├── user.py           # Shared user model
 │   │   ├── item.py           # Tool 1: Tracking items
 │   │   ├── history.py        # Tool 1: Tracking history
-│   │   └── item_suggestion.py # Tool 1: Autocomplete templates
+│   │   ├── item_suggestion.py # Tool 1: Autocomplete templates
+│   │   ├── milk_count.py     # Tool 2: Milk Count models
+│   │   └── rtde.py           # Tool 3: RTD&E models
 │   ├── schemas/              # Marshmallow schemas for validation
 │   │   ├── __init__.py
 │   │   ├── user.py
@@ -58,8 +60,12 @@ backend/
 │   │   └── tools/            # Tool-specific routes
 │   │       ├── __init__.py
 │   │       ├── tracking.py   # /api/tracking/* endpoints (Tool 1)
-│   │       ├── milk_count.py # /api/milk-count/* endpoints (Tool 2) - Planned
-│   │       └── rtde.py       # /api/rtde/* endpoints (Tool 3) - Complete
+│   │       ├── milk_count/   # /api/milk-count/* endpoints (Tool 2) - Complete
+│   │       │   ├── admin.py      # Milk type + par level management
+│   │       │   └── sessions.py   # Session workflow + history
+│   │       └── rtde/         # /api/rtde/* endpoints (Tool 3) - Complete
+│   │           ├── admin.py      # Item CRUD + reorder
+│   │           └── sessions.py   # Session lifecycle + pull list
 │   ├── middleware/           # Custom middleware
 │   │   ├── __init__.py
 │   │   └── auth.py           # JWT verification, role checks
@@ -803,7 +809,7 @@ def create_app(config_class=Config):
     from app.routes.admin import admin_bp
     # Tool-specific routes
     from app.routes.tools.tracking import tracking_bp
-    # from app.routes.tools.milk_count import milk_count_bp  # Tool 2 - Planned
+    from app.routes.tools.milk_count import milk_count_bp  # Tool 2 - Complete
     from app.routes.tools.rtde import rtde_bp  # Tool 3 - Complete
 
     app.register_blueprint(auth_bp)
@@ -896,6 +902,6 @@ Before submitting PR, verify:
 
 ---
 
-**Last Updated**: December 2025
-**Version**: 3.3.0
+**Last Updated**: February 2026
+**Version**: 4.0.0
 **For**: SirenBase Backend Team

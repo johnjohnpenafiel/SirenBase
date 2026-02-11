@@ -8,8 +8,8 @@ The SirenBase backend is a Flask-based REST API that serves multiple tools for S
 
 ### Current Status
 - **Tool 1 (Inventory Tracking)**: ✅ Complete - `/api/tracking/*`
-- **Tool 2 (Milk Count)**: 🚧 Coming Soon - `/api/milk-count/*`
-- **Tool 3 (RTD&E)**: ✅ Backend Complete - `/api/rtde/*` (Phase 6B)
+- **Tool 2 (Milk Count)**: ✅ Complete - `/api/milk-count/*`
+- **Tool 3 (RTD&E)**: ✅ Complete - `/api/rtde/*`
 
 ## Tech Stack
 
@@ -18,7 +18,7 @@ The SirenBase backend is a Flask-based REST API that serves multiple tools for S
 - **Authentication**: JWT tokens via Flask-JWT-Extended
 - **Validation**: Marshmallow schemas
 - **Migrations**: Alembic (via Flask-Migrate)
-- **Testing**: Pytest with 152/152 tests passing
+- **Testing**: Pytest with 222+ tests passing
 
 ## Prerequisites
 
@@ -83,18 +83,20 @@ backend/
 │   │   ├── user.py          # Shared user model
 │   │   ├── item.py          # Tool 1: Tracking items
 │   │   ├── history.py       # Tool 1: Tracking history
-│   │   └── rtde.py          # Tool 3: RTD&E models
+│   │   ├── rtde.py          # Tool 3: RTD&E models
+│   │   └── milk_count.py    # Tool 2: Milk Count models
 │   ├── schemas/              # Marshmallow schemas
 │   ├── routes/               # API blueprints
 │   │   ├── auth.py           # /api/auth/* (shared)
 │   │   ├── admin.py          # /api/admin/* (shared)
 │   │   └── tools/            # Tool-specific routes
 │   │       ├── tracking.py   # /api/tracking/* (Tool 1)
-│   │       └── rtde.py       # /api/rtde/* (Tool 3)
+│   │       ├── milk_count/   # /api/milk-count/* (Tool 2)
+│   │       └── rtde/         # /api/rtde/* (Tool 3)
 │   ├── middleware/           # Custom middleware
 │   └── utils/                # Helper functions
 │       └── rtde_cleanup.py   # RTD&E session cleanup utility
-├── tests/                    # Test suite (152 tests)
+├── tests/                    # Test suite (222+ tests)
 ├── migrations/               # Database migrations
 ├── seed.py                   # Database seeding script
 └── requirements.txt          # Dependencies
@@ -120,10 +122,23 @@ Each tool operates in its own namespace to ensure isolation and scalability:
 - `DELETE /api/tracking/items/<code>` - Remove item
 - `GET /api/tracking/history` - View history
 
-**Tool 2: Milk Count** `/api/milk-count/*` (Coming Soon):
-- Session management endpoints
-- Count tracking endpoints
-- Par level management
+**Tool 2: Milk Count** `/api/milk-count/*`:
+- Admin Endpoints:
+  - `GET /api/milk-count/admin/milk-types` - List milk types (admin only)
+  - `PUT /api/milk-count/admin/milk-types/:id` - Update milk type (admin only)
+  - `GET /api/milk-count/admin/par-levels` - List par levels (admin only)
+  - `PUT /api/milk-count/admin/par-levels/:id` - Update par level (admin only)
+- Session Endpoints:
+  - `GET /api/milk-count/sessions/today` - Get today's session
+  - `POST /api/milk-count/sessions/start` - Start new session
+  - `GET /api/milk-count/sessions/:id` - Get session details
+  - `PUT /api/milk-count/sessions/:id/night-foh` - Save FOH counts
+  - `PUT /api/milk-count/sessions/:id/night-boh` - Save BOH counts
+  - `PUT /api/milk-count/sessions/:id/morning` - Save morning count
+  - `PUT /api/milk-count/sessions/:id/on-order` - Save on-order values
+  - `GET /api/milk-count/sessions/:id/summary` - Get calculated summary
+  - `GET /api/milk-count/history` - Session history
+  - `GET /api/milk-count/milk-types` - Active milk types (staff)
 
 **Tool 3: RTD&E** `/api/rtde/*`:
 - Admin Endpoints (item management):
@@ -168,7 +183,7 @@ pytest --cov=app
 pytest tests/test_items.py
 ```
 
-**Test Coverage**: 152/152 tests passing (100%)
+**Test Coverage**: 222+ tests passing
 - **Shared Tests** (54 tests):
   - 13 model tests (User, Item, History)
   - 8 utility tests
@@ -321,6 +336,6 @@ For questions or issues:
 
 ---
 
-**Last Updated**: November 22, 2025
-**Current Phase**: Phase 6B Complete - RTD&E Backend Infrastructure
-**Status**: Tool 1 complete, Tool 3 backend complete (152 tests passing)
+**Last Updated**: February 8, 2026
+**Current Phase**: Phase 7A Complete - All Tools Deployed
+**Status**: All three tools complete (222+ tests passing)

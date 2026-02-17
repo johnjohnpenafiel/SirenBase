@@ -1,44 +1,26 @@
 # SirenBase
 
-A comprehensive digital operations platform for Coffee House store partners, providing a unified suite of specialized tools to streamline daily workflows. Partners log in once and access multiple tools from a central dashboard, each designed to solve specific operational challenges while sharing authentication, UI components, and design systems.
+Built for a working coffeehouse, this modular platform replaces fragmented daily workflows with fast, accountable digital operations. Partners log in once and access all three tools from a central dashboard. The dashboard doubles as an operational overview — surfacing milk count progress and time since the last restock so partners know what's done and what's overdue without opening each tool.
 
-## Multi-Tool Platform
+**Live Site:** [sirenbase.com](https://sirenbase.com)
 
-SirenBase consists of three independent tools:
+## Tools
 
-- **Tool 1: Inventory Tracking System** _(Complete)_
+### Inventory Tracking
 
-  - Track basement inventory using unique 4-digit codes
-  - Autocomplete suggestions with 49 item name templates
-  - Complete audit history of all actions
+A shared, real-time inventory system that gives every partner immediate visibility into current stock. Items are identified by unique 4-digit codes written directly on them for fast physical lookup. A single search field queries across names, codes, and categories. Every add and remove is logged with ownership and timestamp, creating a persistent audit trail.
 
-- **Tool 2: Milk Count System** _(Complete)_
+### Milk Count
 
-  - Automate milk inventory counting (FOH/BOH)
-  - Calculate delivery amounts and order quantities
-  - Replace manual paper logbook system
+A structured daily workflow that walks partners through each counting phase in sequence — no steps can be skipped, no math is done by hand. The system collects stock levels from multiple locations, handles all calculations automatically, and logs every completed session. Par levels are admin-configurable, and the interface adapts to support both incremental counting and direct entry.
 
-- **Tool 3: RTD&E Counting System** _(Complete)_
-  - Streamline Ready-to-Drink & Eat display restocking
-  - Generate pull lists automatically
-  - Admin-managed item lists with drag-and-drop reordering
+### RTD&E Counting
+
+A guided restocking workflow that presents items one at a time, compares counts against par levels, and generates a pull list with exact quantities. Partners count what's on the display — the app tells them what to pull. Fulfillment is tracked as items are restocked, and sessions expire after 30 minutes to prevent stale data from carrying over.
 
 ## Tech Stack
 
-### Frontend
-
-- **Next.js 14+** with TypeScript
-- **TailwindCSS** for styling
-- **ShadCN UI** for components
-- **Axios** for API calls
-
-### Backend
-
-- **Flask 3.0+** with Python 3.12+
-- **SQLAlchemy** ORM
-- **PostgreSQL 15+** database
-- **JWT** authentication
-- **Marshmallow** for validation
+Next.js · React · TypeScript · Tailwind CSS · ShadCN/Radix · Flask · SQLAlchemy · PostgreSQL · JWT · Deployed on Vercel + Render + Neon
 
 ## Project Structure
 
@@ -210,41 +192,9 @@ npm run lint
 npm run test
 ```
 
-## Key Features
+## Architecture
 
-### Platform-Wide
-
-- **Single Sign-On**: One login for all tools
-- **Role-Based Access**: Global admin and staff roles
-- **Mobile-First Design**: Optimized for phones/tablets
-- **Dashboard Navigation**: Grid of tool cards for fast access
-- **Secure Authentication**: JWT tokens with 24-hour expiration
-
-### Tool 1: Inventory Tracking (Complete)
-
-- Unique 4-digit code generation for items
-- **Autocomplete suggestions** with 49 item name templates
-- Complete audit history of all actions
-- Category-based organization
-- Soft delete with full audit trail
-- **Status**: Backend complete (75/75 tests), Frontend complete
-
-### Tool 2: Milk Count (Complete)
-
-- Night count (FOH/BOH) with sequential screens
-- Morning count with dual input methods
-- Automatic delivery and order calculations
-- Par level management
-- **Status**: Backend complete, Frontend complete
-
-### Tool 3: RTD&E Counting (Complete)
-
-- One-item-at-a-time counting interface with +/- buttons
-- Automatic pull list generation
-- BOH fulfillment tracking with checkable items
-- Admin-managed item lists with drag-and-drop reordering
-- Session management with 30-minute expiration
-- **Status**: Backend complete (77/77 tests), Frontend complete
+A Next.js frontend backed by a Flask REST API and PostgreSQL database. Every tool is isolated at every layer — separate Flask Blueprints with prefixed routes (`/api/tracking/*`, `/api/milk-count/*`, `/api/rtde/*`), prefixed database tables per tool (`tracking_items`, `milk_count_sessions`, `rtde_count_sessions`) sharing only a central `users` table, and nested frontend route trees under `/tools/`. Authentication, UI components, and the design system are shared — everything else is namespaced.
 
 ## Documentation
 
@@ -288,28 +238,21 @@ NEXT_PUBLIC_APP_NAME=SirenBase
 
 ## Testing
 
-### Backend Tests
+226 backend tests covering authentication, CRUD operations, session state transitions, calculation accuracy, role-based access enforcement, and edge cases like expired sessions and duplicate entries. Every test runs against a real database with full isolation.
 
 ```bash
-cd backend
-source venv/bin/activate
-pytest -v
-```
+# Backend
+cd backend && source venv/bin/activate && pytest -v
 
-### Frontend Tests
-
-```bash
-cd frontend
-npm run test
+# Frontend
+cd frontend && npm run test
 ```
 
 ## Deployment
 
-- **Frontend**: Vercel (optimized for Next.js)
-- **Backend**: AWS Elastic Beanstalk
-- **Database**: AWS RDS PostgreSQL
-
-See deployment documentation (coming soon) for detailed instructions.
+- **Frontend**: Vercel
+- **Backend**: Render
+- **Database**: Neon (PostgreSQL)
 
 ## Contributing
 
@@ -328,20 +271,4 @@ For issues or questions, please create an issue in the GitHub repository.
 
 ---
 
-## Current Status
-
-- **Phase 0-2**: ✅ Complete (Project setup, database design, backend API)
-- **Phase 3A**: ✅ Complete (Multi-tool architecture setup)
-- **Phase 3B**: ✅ Complete (Tool 1 frontend - inventory, history, admin panel)
-- **Phase 3C**: ✅ Complete (Autocomplete with template suggestions)
-- **Phase 5**: ✅ Complete (Tool 2: Milk Count - Backend + Frontend)
-- **Phase 6**: ✅ Complete (Tool 3: RTD&E - Backend + Frontend)
-- **Phase 7A**: ✅ Complete (Deployment to Vercel/Render/Neon)
-- **Phase 7B**: ⏭️ Next (Production refinement)
-
-**Backend**: 222+ tests passing | **Frontend**: Dashboard, Tool 1, Tool 2, Tool 3 complete
-
----
-
-**Last Updated**: 2026-02-08
-**Version**: 4.0.0 (All Tools Complete, Phase 7A Deployed)
+**226 tests passing** · **3 tools deployed** · Built over 4.5 months and 281 commits

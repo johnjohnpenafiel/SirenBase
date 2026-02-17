@@ -20,3 +20,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Portfolio content (personal drafts)
+portfolio-content/

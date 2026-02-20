@@ -13,13 +13,13 @@ Each tool operates independently with its own features, while sharing authentica
 
 ## 🎯 Core Philosophy
 
-### KISS (Keep It Simple, Stupid)
+### Simplicity First
 
 - Choose straightforward solutions over complex ones
 - Simple code is easier to understand, maintain, and debug
 - Avoid premature optimization
 
-### YAGNI (You Aren't Gonna Need It)
+### Build Only What's Needed
 
 - Implement features only when needed, not when anticipated
 - No speculative functionality

@@ -254,7 +254,7 @@ export default function SummaryPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="size-5 text-sky-500" />
-                  <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+                  <h1 className="text-xl md:text-3xl font-medium tracking-tight text-black">
                     Summary
                   </h1>
                 </div>

@@ -59,7 +59,7 @@ export function RTDEPullingPhase({
           {/* Title row: RTD&E + phase badge + Complete button (desktop) */}
           <div className="flex items-center justify-between mb-2 md:mb-3">
             <div className="flex items-center gap-2">
-              <h2 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+              <h2 className="text-xl md:text-3xl font-medium tracking-tight text-black">
                 RTD&E
               </h2>
               <span className="text-xs font-medium tracking-wide capitalize bg-neutral-200/50 border border-neutral-300 text-neutral-800 px-2.5 py-1 rounded-full">

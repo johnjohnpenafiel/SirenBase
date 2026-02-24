@@ -210,7 +210,7 @@ export default function MilkParsPage() {
             <div className="flex items-center justify-between mb-4">
               <BackButton href="/admin" label="Admin" />
             </div>
-            <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+            <h1 className="text-xl md:text-3xl font-medium tracking-tight text-black">
               Milk Count Pars
             </h1>
             <p className="text-sm text-muted-foreground">

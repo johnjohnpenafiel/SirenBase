@@ -176,7 +176,7 @@ export default function UserManagementPage() {
                 <span className="hidden md:inline">Add User</span>
               </Button>
             </div>
-            <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+            <h1 className="text-xl md:text-3xl font-medium tracking-tight text-black">
               User Management
             </h1>
             <p className="text-sm text-muted-foreground">

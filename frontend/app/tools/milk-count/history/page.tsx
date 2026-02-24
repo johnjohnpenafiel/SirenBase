@@ -159,7 +159,7 @@ export default function HistoryPage() {
               {/* Title */}
               <div className="flex items-center gap-2">
                 <History className="size-5" />
-                <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+                <h1 className="text-xl md:text-3xl font-medium tracking-tight text-black">
                   History
                 </h1>
               </div>

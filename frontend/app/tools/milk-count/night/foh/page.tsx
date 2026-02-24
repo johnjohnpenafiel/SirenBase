@@ -174,7 +174,7 @@ export default function NightFOHPage() {
 
               {/* Title */}
               <div className="mb-4">
-                <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+                <h1 className="text-xl md:text-3xl font-medium tracking-tight text-black">
                   Night Count
                 </h1>
                 <span className="inline-block text-[10px] font-mono font-bold uppercase bg-black text-white px-2.5 py-1 rounded-full mt-1">

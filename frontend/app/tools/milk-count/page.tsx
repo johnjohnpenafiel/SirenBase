@@ -193,7 +193,7 @@ export default function MilkCountPage() {
               {/* Top row: Title + History button */}
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-xl md:text-3xl font-normal tracking-tight text-black">
+                  <h1 className="text-xl md:text-3xl font-medium tracking-tight text-black">
                     Milk Count
                   </h1>
                   <p className="text-muted-foreground text-sm">

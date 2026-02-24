@@ -94,7 +94,7 @@ export default function HistoryPage() {
                 label="Back to Inventory"
                 className="mb-4"
               />
-              <h1 className="text-xl md:text-3xl font-normal tracking-tight mb-4 text-black">
+              <h1 className="text-xl md:text-3xl font-medium tracking-tight mb-4 text-black">
                 History
               </h1>
 

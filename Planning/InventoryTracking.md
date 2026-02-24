@@ -304,8 +304,8 @@ notes             TEXT NULL
 - **`/tools/tracking/inventory`** - Main inventory page
 
   - **Three view modes accessible via navigation**:
-    - **Categories View** (default/home): Grid of category cards
-    - **All View**: Toggle to see full item list (all categories)
+    - **All View** (default/home): Full item list (all categories)
+    - **Categories View**: Grid of category cards
     - **Category-Filtered List**: Click category card to view items in that category
   - Add/remove item functionality
   - Toggle between Categories and All views
@@ -412,45 +412,12 @@ ITEM_CATEGORIES = [
 
 ### Three Main Views
 
-#### 1. Categories View (Default/Home)
+#### 1. All View (Default/Home)
 
 **Layout**:
 
 - Header: "Inventory Tracking"
-- View Toggle: `[ All | Categories ]` (Categories selected by default)
-- Grid Layout: 2 columns on mobile
-- "Add Item" functionality accessible
-- Category cards displayed in grid
-
-**Category Cards**:
-
-- Smooth rounded rectangles
-- Display category name (e.g., "Syrups", "Cups")
-- Item count badge (e.g., "12") - display based on usefulness
-- Tap to view items in that category
-
-**Visual Example**:
-
-```
-Inventory Tracking
-[ All | Categories ]
-
-┌─────────┬─────────┐
-│    +    │ Syrups  │
-│  Add    │   12    │
-└─────────┴─────────┘
-┌─────────┬─────────┐
-│  Cups   │  Lids   │
-│    8    │    6    │
-└─────────┴─────────┘
-```
-
-#### 2. All View
-
-**Layout**:
-
-- Header: "Inventory Tracking"
-- View Toggle: `[ All | Categories ]` (All selected)
+- View Toggle: `[ All | Categories ]` (All selected by default)
 - "Add Item" functionality accessible
 - Full-width item rectangles (all categories mixed)
 
@@ -476,6 +443,39 @@ Inventory Tracking
 ┌───────────────────────┐
 │ Caramel Syrup      2x │
 └───────────────────────┘
+```
+
+#### 2. Categories View
+
+**Layout**:
+
+- Header: "Inventory Tracking"
+- View Toggle: `[ All | Categories ]` (Categories selected)
+- Grid Layout: 2 columns on mobile
+- "Add Item" functionality accessible
+- Category cards displayed in grid
+
+**Category Cards**:
+
+- Smooth rounded rectangles
+- Display category name (e.g., "Syrups", "Cups")
+- Item count badge (e.g., "12") - display based on usefulness
+- Tap to view items in that category
+
+**Visual Example**:
+
+```
+Inventory Tracking
+[ All | Categories ]
+
+┌─────────┬─────────┐
+│    +    │ Syrups  │
+│  Add    │   12    │
+└─────────┴─────────┘
+┌─────────┬─────────┐
+│  Cups   │  Lids   │
+│    8    │    6    │
+└─────────┴─────────┘
 ```
 
 #### 3. Category Item List

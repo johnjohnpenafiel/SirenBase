@@ -74,18 +74,18 @@ const ICON_CONFIG: Record<
   // Dashboard — tool accent colors
   inventory_add: { icon: Plus, color: "text-green-500" },
   inventory_remove: { icon: CornerUpRight, color: "text-red-500" },
-  milk_order_foh: { icon: Milk, color: "text-sky-400" },
-  milk_order_boh: { icon: Milk, color: "text-sky-400" },
-  milk_order_morning: { icon: Milk, color: "text-sky-400" },
-  milk_order_completed: { icon: Milk, color: "text-sky-400" },
-  rtde_completed: { icon: ShoppingBasket, color: "text-emerald-400" },
+  milk_order_foh: { icon: Milk, color: "text-sky-500" },
+  milk_order_boh: { icon: Milk, color: "text-sky-500" },
+  milk_order_morning: { icon: Milk, color: "text-sky-500" },
+  milk_order_completed: { icon: Milk, color: "text-sky-500" },
+  rtde_completed: { icon: ShoppingBasket, color: "text-emerald-500" },
   // Admin
-  user_created: { icon: UserPlus, color: "text-emerald-400" },
-  user_deleted: { icon: UserMinus, color: "text-red-400" },
-  milk_par_updated: { icon: Settings, color: "text-amber-400" },
-  rtde_item_created: { icon: Package, color: "text-emerald-400" },
-  rtde_item_updated: { icon: Package, color: "text-amber-400" },
-  rtde_item_deleted: { icon: Package, color: "text-red-400" },
+  user_created: { icon: UserPlus, color: "text-emerald-500" },
+  user_deleted: { icon: UserMinus, color: "text-red-500" },
+  milk_par_updated: { icon: Settings, color: "text-amber-500" },
+  rtde_item_created: { icon: Package, color: "text-emerald-500" },
+  rtde_item_updated: { icon: Package, color: "text-amber-500" },
+  rtde_item_deleted: { icon: Package, color: "text-red-500" },
 };
 
 const DEFAULT_CONFIG: IconConfig = {
@@ -111,7 +111,7 @@ export function ActivityCard({
   const initials = getInitials(userName || "??");
 
   return (
-    <div className="flex items-center gap-2.5 px-3 py-2.5 bg-white rounded-lg">
+    <div className="flex items-center gap-2.5 px-3 py-2.5 bg-black/5 rounded-lg">
       {/* Tool icon — fixed-width container keeps icons visually aligned */}
       <div className="w-5 shrink-0 flex items-center justify-center">
         <Icon
@@ -121,19 +121,19 @@ export function ActivityCard({
       </div>
 
       {/* Description */}
-      <p className="flex-1 text-xs text-foreground truncate min-w-0">
+      <p className="flex-1 text-xs text-neutral-800 truncate min-w-0">
         {activity.description}
       </p>
 
       {/* Initials circle */}
-      <div className="size-6 rounded-full bg-neutral-100 flex items-center justify-center shrink-0">
-        <span className="text-[9px] font-bold text-muted-foreground">
+      <div className="size-6 rounded-full bg-black/10 flex items-center justify-center shrink-0">
+        <span className="text-[9px] font-bold text-neutral-600">
           {initials}
         </span>
       </div>
 
       {/* Time — fixed width so varying text ("now", "52m", "4h") doesn't shift layout */}
-      <span className="w-6 text-right text-[11px] text-muted-foreground/50 tabular-nums shrink-0">
+      <span className="w-6 text-right text-[11px] text-neutral-500 tabular-nums shrink-0">
         {formatTimestamp(activity.timestamp)}
       </span>
     </div>

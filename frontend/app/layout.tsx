@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${GeistMono.variable}`}>
-      <body className="antialiased bg-neutral-200 min-h-dvh">
+      <body className="antialiased bg-[#d9cfc3] min-h-dvh">
         <AuthProvider>
           {children}
           <Toaster />

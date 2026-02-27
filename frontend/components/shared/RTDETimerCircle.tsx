@@ -27,18 +27,18 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
  * 0–50%: green (fresh), 50–80%: yellow (getting stale), 80%+: red (overdue)
  */
 function getTimerColor(ratio: number): string {
-  if (ratio <= 0.5) return "stroke-emerald-500";
-  if (ratio <= 0.8) return "stroke-yellow-400";
-  return "stroke-red-500";
+  if (ratio <= 0.5) return "stroke-[#8a7259]";
+  if (ratio <= 0.8) return "stroke-[#a0845c]";
+  return "stroke-[#6b4a3a]";
 }
 
 /**
  * Get dot color for the label area.
  */
 function getDotColor(ratio: number): string {
-  if (ratio <= 0.5) return "bg-emerald-500";
-  if (ratio <= 0.8) return "bg-yellow-400";
-  return "bg-red-500";
+  if (ratio <= 0.5) return "bg-[#8a7259]";
+  if (ratio <= 0.8) return "bg-[#a0845c]";
+  return "bg-[#6b4a3a]";
 }
 
 /**
@@ -87,14 +87,14 @@ export function RTDETimerCircle() {
   const hasData = !isLoading && lastCompletedAt;
 
   return (
-    <div className="p-3.5 border border-neutral-300/80 rounded-2xl bg-card">
+    <div className="p-3.5 border border-[#b5a899] rounded-2xl bg-[#c4b8ab]">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[10px] font-mono font-bold uppercase text-muted-foreground">
+        <span className="text-[10px] font-mono font-bold uppercase text-neutral-600">
           RTD&E
         </span>
         <ShoppingBasket
-          className="size-4 text-muted-foreground/50"
+          className="size-4 text-neutral-500"
           aria-hidden="true"
         />
       </div>
@@ -110,7 +110,7 @@ export function RTDETimerCircle() {
               r={RADIUS}
               fill="none"
               strokeWidth={STROKE_WIDTH}
-              className="stroke-neutral-200"
+              className="stroke-neutral-400/40"
             />
             {/* Timer arc */}
             {hasData && (
@@ -131,13 +131,13 @@ export function RTDETimerCircle() {
           {/* Center text */}
           <div className="absolute inset-0 flex items-center justify-center">
             {isLoading ? (
-              <span className="text-xs text-muted-foreground/50">...</span>
+              <span className="text-xs text-neutral-500">...</span>
             ) : hasData ? (
-              <span className="text-sm font-bold text-foreground">
+              <span className="text-sm font-bold text-neutral-900">
                 {formatRemaining(elapsedMinutes)}
               </span>
             ) : (
-              <span className="text-[10px] text-muted-foreground/60">
+              <span className="text-[10px] text-neutral-500">
                 No data
               </span>
             )}
@@ -150,12 +150,12 @@ export function RTDETimerCircle() {
         {hasData ? (
           <>
             <div className={`size-1.5 rounded-full ${getDotColor(ratio)}`} />
-            <span className="text-[9px] font-mono text-muted-foreground truncate">
+            <span className="text-[9px] font-mono text-neutral-700 truncate">
               Last: {userName || "Unknown"}
             </span>
           </>
         ) : (
-          <span className="text-[9px] font-mono text-muted-foreground/40">
+          <span className="text-[9px] font-mono text-neutral-500">
             No completions yet
           </span>
         )}

@@ -24,7 +24,7 @@ import {
 import { LogOut, Settings, Home } from "lucide-react";
 
 const frostedGlass =
-  "bg-white/70 backdrop-blur-md border-2 border-neutral-400/50 shadow-[0_1px_3px_-2px_rgba(0,0,0,0.06)]";
+  "bg-white/20 backdrop-blur-md border-2 border-white/30 text-white shadow-[0_1px_3px_-2px_rgba(0,0,0,0.06)]";
 
 export function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -44,15 +44,15 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full px-4 md:px-8 pt-2">
       <div className={cn(
-        "max-w-6xl mx-auto h-14 flex justify-between items-center rounded-full backdrop-blur-md border border-neutral-300/80 px-2",
+        "max-w-6xl mx-auto h-14 flex justify-between items-center rounded-full backdrop-blur-md border border-white/20 px-2",
         "transition-all duration-300 ease-out",
-        isScrolled ? "bg-white/70" : "bg-white/95"
+        isScrolled ? "bg-[#787271]/90 text-white" : "bg-[#787271] text-white"
       )}>
         {/* Left: Logo pill */}
         <div
           className={`h-11 pl-3 pr-5 flex items-center`}
         >
-          <h1 className="text-xl font-medium text-foreground">sirenbase</h1>
+          <h1 className="text-xl font-medium text-white">sirenbase</h1>
         </div>
 
         {/* Right: Navigation circles */}
@@ -61,7 +61,7 @@ export function Header() {
             <>
               {/* Dashboard Link */}
               <Link href="/dashboard">
-                <Button variant="outline" size="icon" className="rounded-full" aria-label="Dashboard">
+                <Button variant="outline" size="icon" className="rounded-full border-white/30 bg-transparent text-white hover:bg-white/20 hover:text-white" aria-label="Dashboard">
                   <Home strokeWidth={1.5} className="size-5" />
                 </Button>
               </Link>
@@ -69,7 +69,7 @@ export function Header() {
               {/* User Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button size="icon" className="rounded-full" aria-label="User menu">
+                  <Button size="icon" className="rounded-full bg-white/20 text-white hover:bg-white/30 border-0" aria-label="User menu">
                     <Settings strokeWidth={1.5} className="size-5" />
                   </Button>
                 </DropdownMenuTrigger>

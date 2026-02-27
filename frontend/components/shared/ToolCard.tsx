@@ -45,7 +45,7 @@ export function ToolCard({
             </span>
           )}
           {isAdminOnly && (
-            <span className="text-[10px] font-mono font-bold uppercase bg-amber-900 text-amber-100 px-2.5 py-1 rounded-full">
+            <span className="text-[10px] font-mono font-bold uppercase bg-[#8a7259] text-white px-2.5 py-1 rounded-full">
               Admin
             </span>
           )}
@@ -54,17 +54,17 @@ export function ToolCard({
       </div>
 
       {/* Title */}
-      <h2 className="text-lg font-semibold tracking-tight text-foreground">
+      <h2 className="text-lg font-semibold tracking-tight text-neutral-900">
         {title}
       </h2>
 
       {/* Description + chevron */}
       <div className="flex items-end justify-between mt-1">
-        <p className="text-xs text-muted-foreground leading-relaxed pr-4">
+        <p className="text-xs text-neutral-600 leading-relaxed pr-4">
           {isDisabled ? "Coming soon..." : description}
         </p>
         {!isDisabled && (
-          <ChevronRight className="size-4 text-muted-foreground/40 shrink-0" />
+          <ChevronRight className="size-4 text-neutral-500 shrink-0" />
         )}
       </div>
     </>
@@ -75,7 +75,7 @@ export function ToolCard({
       <div
         aria-label={`${title} (Coming soon)`}
         aria-disabled
-        className="p-4 border border-neutral-300/80 rounded-2xl bg-card text-card-foreground transition-all opacity-50 cursor-not-allowed"
+        className="p-4 border border-[#b5a899] rounded-2xl bg-[#c4b8ab] text-neutral-800 transition-all opacity-50 cursor-not-allowed"
       >
         {content}
       </div>
@@ -86,7 +86,7 @@ export function ToolCard({
     <Link
       href={route}
       aria-label={title}
-      className="block p-4 border border-neutral-300/80 rounded-2xl bg-card text-card-foreground transition-all cursor-pointer hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="block p-4 border border-[#b5a899] rounded-2xl bg-[#c4b8ab] text-neutral-800 transition-all cursor-pointer hover:bg-[#d0c5b9] hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
       {content}
     </Link>

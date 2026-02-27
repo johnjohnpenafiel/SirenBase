@@ -39,7 +39,7 @@ export default function DashboardPage() {
                   route="/tools/tracking/inventory"
                   accent="stone"
                   toolNumber="01"
-                  icon={<Package className="size-5 text-stone-400" />}
+                  icon={<Package className="size-5 text-stone-500" />}
                 />
 
                 {/* Tool 2: RTD&E */}
@@ -49,7 +49,7 @@ export default function DashboardPage() {
                   route="/tools/rtde"
                   accent="emerald"
                   toolNumber="02"
-                  icon={<ShoppingBasket className="size-5 text-emerald-400" />}
+                  icon={<ShoppingBasket className="size-5 text-emerald-500" />}
                 />
 
                 {/* Tool 3: Milk Order */}
@@ -59,7 +59,7 @@ export default function DashboardPage() {
                   route="/tools/milk-order"
                   accent="sky"
                   toolNumber="03"
-                  icon={<Milk className="size-5 text-sky-400" />}
+                  icon={<Milk className="size-5 text-sky-500" />}
                 />
 
                 {/* Admin Panel - Admin Only */}
@@ -69,7 +69,7 @@ export default function DashboardPage() {
                     description="Manage users and settings"
                     route="/admin"
                     accent="amber"
-                    icon={<ShieldCheck className="size-5 text-amber-400" />}
+                    icon={<ShieldCheck className="size-5 text-neutral-700" />}
                     isAdminOnly={true}
                   />
                 )}
@@ -78,7 +78,7 @@ export default function DashboardPage() {
 
             {/* Activity Section */}
             <div className="mt-6">
-              <h2 className="inline-block text-[11px] text-white bg-black px-2.5 py-0.5 rounded-full mb-2 ml-2">
+              <h2 className="inline-block text-[11px] text-white bg-[#787271] px-2.5 py-0.5 rounded-full mb-2 ml-2">
                 Overview
               </h2>
 

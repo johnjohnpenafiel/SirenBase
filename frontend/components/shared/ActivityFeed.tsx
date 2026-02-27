@@ -59,24 +59,24 @@ export function ActivityFeed({ variant, limit = 5 }: ActivityFeedProps) {
 
   if (error) {
     return (
-      <div className="p-4 text-center border border-neutral-300/80 rounded-2xl bg-card">
-        <p className="text-sm text-muted-foreground">{error}</p>
+      <div className="p-4 text-center border border-[#b5a899] rounded-2xl bg-[#c4b8ab]">
+        <p className="text-sm text-neutral-600">{error}</p>
       </div>
     );
   }
 
   if (activities.length === 0) {
     return (
-      <div className="p-6 text-center border border-neutral-300/80 rounded-2xl bg-card">
-        <Activity className="size-5 text-muted-foreground/30 mx-auto mb-1.5" />
-        <p className="text-sm text-muted-foreground">No recent activity</p>
+      <div className="p-6 text-center border border-[#b5a899] rounded-2xl bg-[#c4b8ab]">
+        <Activity className="size-5 text-neutral-500/50 mx-auto mb-1.5" />
+        <p className="text-sm text-neutral-600">No recent activity</p>
       </div>
     );
   }
 
   return (
-    <div className="border border-neutral-300/80 rounded-2xl bg-neutral-100 p-1.5 flex flex-col gap-1">
-      <p className="text-xs text-muted-foreground/60 px-2 pt-0.5">Activity Log</p>
+    <div className="border border-[#b5a899] rounded-2xl bg-[#c4b8ab] p-1.5 flex flex-col gap-1">
+      <p className="text-xs text-neutral-600 px-2 pt-0.5">Activity Log</p>
       {activities.map((activity) => (
         <ActivityCard key={activity.id} activity={activity} variant={variant} />
       ))}

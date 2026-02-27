@@ -56,8 +56,8 @@ function Segment({ index, completed }: SegmentProps) {
       strokeLinecap="round"
       className={
         completed
-          ? "stroke-sky-500 transition-colors duration-500"
-          : "stroke-neutral-200 transition-colors duration-500"
+          ? "stroke-[#9e8a74] transition-colors duration-500"
+          : "stroke-neutral-400/40 transition-colors duration-500"
       }
       strokeDasharray={`${DASH_LENGTH} ${CIRCUMFERENCE - DASH_LENGTH}`}
       strokeDashoffset={0}
@@ -89,13 +89,13 @@ export function MilkOrderProgress() {
     : 0;
 
   return (
-    <div className="p-3.5 border border-neutral-300/80 rounded-2xl bg-card">
+    <div className="p-3.5 border border-[#b5a899] rounded-2xl bg-[#c4b8ab]">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[10px] font-mono font-bold uppercase text-muted-foreground">
+        <span className="text-[10px] font-mono font-bold uppercase text-neutral-600">
           Milk Order
         </span>
-        <Milk className="size-4 text-muted-foreground/50" aria-hidden="true" />
+        <Milk className="size-4 text-neutral-500" aria-hidden="true" />
       </div>
 
       {/* Circle + count */}
@@ -113,13 +113,13 @@ export function MilkOrderProgress() {
           {/* Center text */}
           <div className="absolute inset-0 flex items-center justify-center">
             {isLoading ? (
-              <span className="text-xs text-muted-foreground/50">...</span>
+              <span className="text-xs text-neutral-500">...</span>
             ) : session ? (
-              <span className="text-sm font-bold text-foreground">
+              <span className="text-sm font-bold text-neutral-900">
                 {completedCount}/4
               </span>
             ) : (
-              <span className="text-[10px] text-muted-foreground/60">None</span>
+              <span className="text-[10px] text-neutral-500">None</span>
             )}
           </div>
         </div>
@@ -133,14 +133,14 @@ export function MilkOrderProgress() {
             <div key={phase.key} className="flex items-center gap-0.5">
               <div
                 className={`size-1.5 rounded-full ${
-                  done ? "bg-sky-500" : "bg-neutral-200"
+                  done ? "bg-[#9e8a74]" : "bg-neutral-400/40"
                 }`}
               />
               <span
                 className={`text-[9px] font-mono uppercase ${
                   done
-                    ? "text-muted-foreground"
-                    : "text-muted-foreground/40"
+                    ? "text-neutral-700"
+                    : "text-neutral-500"
                 }`}
               >
                 {phase.label}

@@ -788,7 +788,7 @@ For pages with a primary action button fixed at the bottom (counting phases, for
 |------|-------|------------|
 | Inventory | Stone | `text-stone-400` |
 | RTD&E | Emerald | `text-emerald-400` |
-| Milk Count | Sky | `text-sky-400` |
+| Milk Order | Sky | `text-sky-400` |
 | Admin | Amber | `text-amber-400` |
 
 ### Rules

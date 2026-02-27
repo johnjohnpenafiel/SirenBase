@@ -36,7 +36,7 @@ def create_app(config_name='default'):
         from app.models import (
             User, Item, History,
             RTDEItem, RTDECountSession, RTDESessionCount,
-            MilkType, MilkCountParLevel, MilkCountSession, MilkCountEntry
+            MilkType, MilkOrderParLevel, MilkOrderSession, MilkOrderEntry
         )
 
     # Register blueprints
@@ -45,14 +45,14 @@ def create_app(config_name='default'):
     from app.routes.activity import activity_bp
     from app.routes.tools.tracking import tracking_bp
     from app.routes.tools.rtde import rtde_bp
-    from app.routes.tools.milk_count import milk_count_bp
+    from app.routes.tools.milk_order import milk_order_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(activity_bp)
     app.register_blueprint(tracking_bp)
     app.register_blueprint(rtde_bp)
-    app.register_blueprint(milk_count_bp)
+    app.register_blueprint(milk_order_bp)
 
     # Register error handlers
     register_error_handlers(app)

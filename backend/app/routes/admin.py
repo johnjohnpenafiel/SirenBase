@@ -8,7 +8,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from marshmallow import ValidationError
 
 from app.models.user import User
-from app.models.milk_count import MilkCountParLevel, MilkType
+from app.models.milk_order import MilkOrderParLevel, MilkType
 from app.models.rtde import RTDEItem
 from app.schemas.user import AdminCreateUserSchema, UserResponseSchema
 from app.middleware.auth import admin_required
@@ -297,11 +297,11 @@ def get_admin_activity():
 
     # 3. Milk par level changes (recent 30 days)
     par_changes = (
-        db.session.query(MilkCountParLevel, MilkType, User)
-        .join(MilkType, MilkCountParLevel.milk_type_id == MilkType.id)
-        .outerjoin(User, MilkCountParLevel.updated_by == User.id)
-        .filter(MilkCountParLevel.updated_at >= cutoff_date)
-        .order_by(MilkCountParLevel.updated_at.desc())
+        db.session.query(MilkOrderParLevel, MilkType, User)
+        .join(MilkType, MilkOrderParLevel.milk_type_id == MilkType.id)
+        .outerjoin(User, MilkOrderParLevel.updated_by == User.id)
+        .filter(MilkOrderParLevel.updated_at >= cutoff_date)
+        .order_by(MilkOrderParLevel.updated_at.desc())
         .limit(limit)
         .all()
     )

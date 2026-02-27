@@ -2,7 +2,7 @@
 
 This document contains clear, actionable tasks for building the SirenBase multi-tool platform. Tasks are organized by tool and development phase, with checkboxes for tracking progress.
 
-**Note**: See `PLANNING.md` for overall architecture, `BUGS.md` for active bugs and technical debt, and individual tool docs (`Planning/InventoryTracking.md`, `Planning/MilkCount.md`, `Planning/RTDE.md`) for detailed feature planning.
+**Note**: See `PLANNING.md` for overall architecture, `BUGS.md` for active bugs and technical debt, and individual tool docs (`Planning/InventoryTracking.md`, `Planning/MilkOrder.md`, `Planning/RTDE.md`) for detailed feature planning.
 
 **📦 Completed Work**: Phases 0-3D (Project Setup through Tool 1 Completion) have been archived to `docs/archive/TASKS_ARCHIVE.md` to keep this file focused on active work.
 
@@ -47,26 +47,26 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 ---
 
-## Phase 5: Tool 2 - Milk Count System (✅ COMPLETE)
+## Phase 5: Tool 2 - Milk Order System (✅ COMPLETE)
 
 **Status**: Complete
 **Completed**: January 12, 2026
-**Detailed Planning**: See `Planning/MilkCount.md`
+**Detailed Planning**: See `Planning/MilkOrder.md`
 
 ### Backend Development (✅ Complete)
 
 - [x] Design database schema
-  - milk_count_sessions table (night/morning counts)
-  - milk_count_par_levels table (target inventory)
-  - milk_count_milk_types table (milk definitions)
-  - milk_count_entries table (per-milk-type counts)
+  - milk_order_sessions table (night/morning counts)
+  - milk_order_par_levels table (target inventory)
+  - milk_order_milk_types table (milk definitions)
+  - milk_order_entries table (per-milk-type counts)
   - Create migration
 - [x] Create SQLAlchemy models
-  - MilkCountSession model with status state machine
-  - MilkCountParLevel model
+  - MilkOrderSession model with status state machine
+  - MilkOrderParLevel model
   - MilkType model
-  - MilkCountEntry model
-- [x] Implement API endpoints (`/api/milk-count/*`)
+  - MilkOrderEntry model
+- [x] Implement API endpoints (`/api/milk-order/*`)
   - Admin: milk types CRUD, par levels management
   - Sessions: today, start, get, FOH save, BOH save, morning save
   - Summary: calculated summary with totals
@@ -85,15 +85,15 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ### Frontend Development (✅ Complete)
 
 - [x] Create routing structure
-  - `/tools/milk-count/` - Landing/status page
-  - `/tools/milk-count/night/foh` - Night FOH count
-  - `/tools/milk-count/night/boh` - Night BOH count
-  - `/tools/milk-count/morning` - Morning count
-  - `/tools/milk-count/summary/[sessionId]` - Daily summary
-  - `/tools/milk-count/history` - Historical data
+  - `/tools/milk-order/` - Landing/status page
+  - `/tools/milk-order/night/foh` - Night FOH count
+  - `/tools/milk-order/night/boh` - Night BOH count
+  - `/tools/milk-order/morning` - Morning count
+  - `/tools/milk-order/summary/[sessionId]` - Daily summary
+  - `/tools/milk-order/history` - Historical data
   - `/admin/milk-pars` - Par management (admin only)
 - [x] Create shared components
-  - MilkCountCard: +/- buttons with direct input
+  - MilkOrderCard: +/- buttons with direct input
   - MorningCountRow: Method selection with calculated values
 - [x] Implement Night Count screens
   - FOH count screen with dairy/non-dairy sections
@@ -122,7 +122,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 - [x] Backend tests: 68/68 passing
 - [x] Frontend build: Successful (all pages compile)
-- [x] Dashboard: Milk Count tool enabled (no longer disabled)
+- [x] Dashboard: Milk Order tool enabled (no longer disabled)
 
 ---
 
@@ -146,7 +146,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
   - Create grid layout with ToolCard-style module cards
   - Add "User Management" card → Routes to `/admin/users`
   - Add "RTD&E Items & Pars" card → Routes to `/admin/rtde-items`
-  - Add "Milk Count Pars" card (placeholder/disabled) → Routes to `/admin/milk-pars`
+  - Add "Milk Order Pars" card (placeholder/disabled) → Routes to `/admin/milk-pars`
   - Use existing ProtectedRoute wrapper (admin-only access)
 
 - [x] Create `/app/admin/users/page.tsx`
@@ -728,9 +728,9 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 
 - [x] Add skeleton loading states to all data-fetching pages (12 pages, 9 skeleton components) — February 7, 2026
   - Replaced Loader2 spinners with layout-preserving skeleton placeholders
-  - 9 new skeleton components: MilkCountLandingSkeleton, MilkCountStepSkeleton, MilkCountHistorySkeleton, MilkCountSummarySkeleton, AdminUsersSkeleton, AdminParsSkeleton, AdminItemsSkeleton, InventoryContentSkeleton, TrackingHistorySkeleton
+  - 9 new skeleton components: MilkOrderLandingSkeleton, MilkOrderStepSkeleton, MilkOrderHistorySkeleton, MilkOrderSummarySkeleton, AdminUsersSkeleton, AdminParsSkeleton, AdminItemsSkeleton, InventoryContentSkeleton, TrackingHistorySkeleton
   - 3 pages restructured (Pattern A): admin/users, tracking/inventory, tracking/history — now show island header during loading
-  - 9 pages updated (Pattern B): milk-count landing, FOH, BOH, morning, on-order, history, summary, milk-pars, rtde-items
+  - 9 pages updated (Pattern B): milk-order landing, FOH, BOH, morning, on-order, history, summary, milk-pars, rtde-items
   - Cleaned up 9 unused Loader2 imports
 
 ---
@@ -787,7 +787,7 @@ This document contains clear, actionable tasks for building the SirenBase multi-
 ### Documentation
 
 - **PLANNING.md**: Overall multi-tool architecture and decisions
-- **Tool-specific docs**: `Planning/InventoryTracking.md`, `Planning/MilkCount.md`, `Planning/RTDE.md` for detailed features
+- **Tool-specific docs**: `Planning/InventoryTracking.md`, `Planning/MilkOrder.md`, `Planning/RTDE.md` for detailed features
 - **TASKS.md**: This file - track progress across all phases
 - **TASKS_ARCHIVE.md**: Completed phases (Phase 0-3D) for historical reference
 - **CLAUDE.md**: AI assistant guidelines for maintaining codebase

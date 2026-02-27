@@ -160,7 +160,7 @@ A modern Apple-style frosted glass "island" that floats above scrollable content
 | Scenario | Use Island? | Notes |
 |----------|-------------|-------|
 | Dashboard | ✅ Yes | Primary showcase of the pattern |
-| Tool landing pages | ✅ Yes | Inventory, Milk Count, RTD&E main pages |
+| Tool landing pages | ✅ Yes | Inventory, Milk Order, RTD&E main pages |
 | Admin list pages | ❌ No | Use standard scroll shadow pattern |
 | Forms/dialogs | ❌ No | Not applicable |
 | History/detail pages | ⚠️ Maybe | Evaluate based on content density |

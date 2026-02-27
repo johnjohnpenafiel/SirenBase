@@ -10,7 +10,7 @@ Built for a working coffeehouse, this modular platform replaces fragmented daily
 
 A shared, real-time inventory system that gives every partner immediate visibility into current stock. Items are identified by unique 4-digit codes written directly on them for fast physical lookup. A single search field queries across names, codes, and categories. Every add and remove is logged with ownership and timestamp, creating a persistent audit trail.
 
-### Milk Count
+### Milk Order
 
 A structured daily workflow that walks partners through each counting phase in sequence — no steps can be skipped, no math is done by hand. The system collects stock levels from multiple locations, handles all calculations automatically, and logs every completed session. Par levels are admin-configurable, and the interface adapts to support both incremental counting and direct entry.
 
@@ -28,7 +28,7 @@ Next.js · React · TypeScript · Tailwind CSS · ShadCN/Radix · Flask · SQLAl
 SirenBase/
 ├── Planning/              # Tool-specific planning documents
 │   ├── InventoryTracking.md   # Tool 1 detailed planning
-│   ├── MilkCount.md           # Tool 2 detailed planning
+│   ├── MilkOrder.md           # Tool 2 detailed planning
 │   └── RTDE.md                # Tool 3 detailed planning
 │
 ├── frontend/              # Next.js application
@@ -37,7 +37,7 @@ SirenBase/
 │   │   │   ├── dashboard/          # Tool selection grid
 │   │   │   ├── tools/
 │   │   │   │   ├── tracking/       # Tool 1 pages
-│   │   │   │   ├── milk-count/     # Tool 2 pages (complete)
+│   │   │   │   ├── milk-order/     # Tool 2 pages (complete)
 │   │   │   │   └── rtde/           # Tool 3 pages (complete)
 │   │   │   └── admin/              # Global admin panel
 │   │   ├── components/
@@ -51,7 +51,7 @@ SirenBase/
     │   │   ├── auth.py             # Shared authentication
     │   │   └── tools/
     │   │       ├── tracking.py     # Tool 1 routes
-    │   │       ├── milk_count/     # Tool 2 routes (complete)
+    │   │       ├── milk_order/     # Tool 2 routes (complete)
     │   │       └── rtde/           # Tool 3 routes (complete)
     │   ├── models/
     │   │   ├── user.py             # Shared users table
@@ -194,7 +194,7 @@ npm run test
 
 ## Architecture
 
-A Next.js frontend backed by a Flask REST API and PostgreSQL database. Every tool is isolated at every layer — separate Flask Blueprints with prefixed routes (`/api/tracking/*`, `/api/milk-count/*`, `/api/rtde/*`), prefixed database tables per tool (`tracking_items`, `milk_count_sessions`, `rtde_count_sessions`) sharing only a central `users` table, and nested frontend route trees under `/tools/`. Authentication, UI components, and the design system are shared — everything else is namespaced.
+A Next.js frontend backed by a Flask REST API and PostgreSQL database. Every tool is isolated at every layer — separate Flask Blueprints with prefixed routes (`/api/tracking/*`, `/api/milk-order/*`, `/api/rtde/*`), prefixed database tables per tool (`tracking_items`, `milk_order_sessions`, `rtde_count_sessions`) sharing only a central `users` table, and nested frontend route trees under `/tools/`. Authentication, UI components, and the design system are shared — everything else is namespaced.
 
 ## Documentation
 
@@ -208,7 +208,7 @@ A Next.js frontend backed by a Flask REST API and PostgreSQL database. Every too
 ### Tool-Specific Planning
 
 - **[Planning/InventoryTracking.md](./Planning/InventoryTracking.md)** - Tool 1 detailed planning
-- **[Planning/MilkCount.md](./Planning/MilkCount.md)** - Tool 2 detailed planning
+- **[Planning/MilkOrder.md](./Planning/MilkOrder.md)** - Tool 2 detailed planning
 - **[Planning/RTDE.md](./Planning/RTDE.md)** - Tool 3 detailed planning
 
 ### Component Documentation

@@ -6,7 +6,7 @@
 
 **Multi-Tool Architecture**: Partners log in once and access multiple tools from a central dashboard:
 - **Tool 1**: Inventory Tracking System (basement inventory with 4-digit codes)
-- **Tool 2**: Milk Count System (FOH/BOH counting with automated calculations)
+- **Tool 2**: Milk Order System (FOH/BOH counting with automated calculations)
 - **Tool 3**: RTD&E Counting System (display restocking with pull lists)
 
 Each tool operates independently with its own features, while sharing authentication, UI components, and design system.
@@ -68,13 +68,13 @@ Each tool operates independently with its own features, while sharing authentica
    - **Overall multi-tool architecture** and key decisions
    - Shared tech stack and infrastructure
    - API namespacing strategy (`/api/{tool-name}/*`)
-   - Database naming conventions (`tracking_items`, `milk_count_sessions`, etc.)
+   - Database naming conventions (`tracking_items`, `milk_order_sessions`, etc.)
    - Development roadmap (Tool 1 → Tool 2 → Tool 3)
 
 2. **Read tool-specific planning docs** when working on that tool
 
    - `Planning/InventoryTracking.md` - Tool 1: Basement inventory tracking
-   - `Planning/MilkCount.md` - Tool 2: Milk count system with calculations
+   - `Planning/MilkOrder.md` - Tool 2: Milk count system with calculations
    - `Planning/RTDE.md` - Tool 3: RTD&E display restocking
 
 3. **Check `TASKS.md`** before starting work
@@ -158,7 +158,7 @@ SirenBase/
 │
 ├── Planning/              # Tool-specific planning documents
 │   ├── InventoryTracking.md   # Tool 1: Detailed planning
-│   ├── MilkCount.md           # Tool 2: Detailed planning
+│   ├── MilkOrder.md           # Tool 2: Detailed planning
 │   └── RTDE.md                # Tool 3: Detailed planning
 │
 ├── frontend/              # Next.js application
@@ -168,7 +168,7 @@ SirenBase/
 │   │   │   ├── dashboard/          # Tool selection grid
 │   │   │   ├── tools/
 │   │   │   │   ├── tracking/       # Tool 1 pages
-│   │   │   │   ├── milk-count/     # Tool 2 pages
+│   │   │   │   ├── milk-order/     # Tool 2 pages
 │   │   │   │   └── rtde/           # Tool 3 pages
 │   │   │   └── admin/              # Global admin panel
 │   │   ├── components/
@@ -184,13 +184,13 @@ SirenBase/
     │   │   ├── auth.py             # Shared authentication
     │   │   └── tools/
     │   │       ├── tracking.py     # Tool 1 routes
-    │   │       ├── milk_count.py   # Tool 2 routes
+    │   │       ├── milk_order.py   # Tool 2 routes
     │   │       └── rtde.py         # Tool 3 routes
     │   ├── models/
     │   │   ├── user.py             # Shared users table
     │   │   └── tools/
     │   │       ├── tracking.py     # Tool 1 models
-    │   │       ├── milk_count.py   # Tool 2 models
+    │   │       ├── milk_order.py   # Tool 2 models
     │   │       └── rtde.py         # Tool 3 models
     │   └── ...
     └── ...
@@ -552,7 +552,7 @@ npm run dev
 - **Overall Architecture**: See `PLANNING.md` (multi-tool system design)
 - **Tool-Specific Planning**:
   - Tool 1: `Planning/InventoryTracking.md`
-  - Tool 2: `Planning/MilkCount.md`
+  - Tool 2: `Planning/MilkOrder.md`
   - Tool 3: `Planning/RTDE.md`
 - **Task Tracking**: See `TASKS.md` (organized by tool and phase)
 - **Bug Tracking**: See `BUGS.md` (all bugs with IDs and status)

@@ -7,7 +7,7 @@
 
 ## Summary
 
-Restructured the SirenBase application from a single-tool system (Inventory Tracking) to a scalable multi-tool platform that will eventually support three tools: Inventory Tracking, Milk Count, and RTD&E Count. This involved reorganizing both backend API routes and frontend pages to use namespaced architecture.
+Restructured the SirenBase application from a single-tool system (Inventory Tracking) to a scalable multi-tool platform that will eventually support three tools: Inventory Tracking, Milk Order, and RTD&E Count. This involved reorganizing both backend API routes and frontend pages to use namespaced architecture.
 
 ## Motivation
 
@@ -18,7 +18,7 @@ Store partners need multiple operational tools but don't want to switch between 
 - **Scalability**: Support adding new tools without refactoring existing code
 - **Isolation**: Each tool's code should be independent and maintainable
 - **Clarity**: Clear separation between shared and tool-specific functionality
-- **Future-proof**: Easy to add Tool 2 (Milk Count) and Tool 3 (RTD&E) later
+- **Future-proof**: Easy to add Tool 2 (Milk Order) and Tool 3 (RTD&E) later
 
 ## Changes Implemented
 
@@ -41,7 +41,7 @@ app/routes/
 ├── admin.py         # /api/admin/* (shared)
 └── tools/
     ├── tracking.py  # /api/tracking/* (Tool 1)
-    ├── milk_count.py  # /api/milk-count/* (Tool 2) - Future
+    ├── milk_order.py  # /api/milk-order/* (Tool 2) - Future
     └── rtde.py      # /api/rtde/* (Tool 3) - Future
 ```
 
@@ -60,7 +60,7 @@ All tool-specific endpoints now use prefixed routes:
 - `/api/history` → `/api/tracking/history`
 
 **Future Tool Endpoints**:
-- Tool 2: `/api/milk-count/*`
+- Tool 2: `/api/milk-order/*`
 - Tool 3: `/api/rtde/*`
 
 #### Implementation Details
@@ -84,7 +84,7 @@ With multiple tools sharing a database, table names needed prefixes to avoid con
 - `history` → `tracking_history`
 
 **Future Tables** (planned):
-- `milk_count_sessions`, `milk_count_par_levels`, `milk_count_milk_types`
+- `milk_order_sessions`, `milk_order_par_levels`, `milk_order_milk_types`
 - `rtde_items`, `rtde_pull_lists`
 
 #### Migration Strategy
@@ -126,7 +126,7 @@ app/
 ├── tools/
 │   ├── tracking/
 │   │   └── page.tsx (Tool 1 landing)
-│   ├── milk-count/  (Tool 2 placeholder)
+│   ├── milk-order/  (Tool 2 placeholder)
 │   └── rtde/        (Tool 3 placeholder)
 └── admin/
     └── page.tsx (global admin panel)
@@ -155,7 +155,7 @@ components/
 └── tools/
     ├── tracking/         # Tool 1 components
     ├── tracking-history/ # Tool 1 history components
-    ├── milk-count/       # Tool 2 components (future)
+    ├── milk-order/       # Tool 2 components (future)
     └── rtde/             # Tool 3 components (future)
 ```
 
@@ -178,7 +178,7 @@ components/
   - `isAdminOnly` for admin-only features
 - **Icons**: lucide-react icons for visual identification
   - 📦 Package (Inventory Tracking)
-  - 🥛 Milk (Milk Count)
+  - 🥛 Milk (Milk Order)
   - 📦 Box (RTD&E)
   - 🛡️ ShieldCheck (Admin Panel)
 - **Role-Based Access**: Admin card only visible to admin users
@@ -314,10 +314,10 @@ fetch('/api/tracking/history')
 - Add history viewing functionality
 - Integrate with backend API
 
-### Phase 4: Tool 2 - Milk Count
+### Phase 4: Tool 2 - Milk Order
 - Design and implement backend models
-- Create API endpoints under `/api/milk-count/*`
-- Build frontend pages under `/tools/milk-count/*`
+- Create API endpoints under `/api/milk-order/*`
+- Build frontend pages under `/tools/milk-order/*`
 - Implement milk counting workflows
 
 ### Phase 5: Tool 3 - RTD&E
@@ -360,7 +360,7 @@ If issues are discovered, rollback procedure:
 - **Frontend Guidelines**: `../frontend/CLAUDE.md`
 - **Tool Planning**:
   - `../Planning/InventoryTracking.md`
-  - `../Planning/MilkCount.md`
+  - `../Planning/MilkOrder.md`
   - `../Planning/RTDE.md`
 
 ## Authors

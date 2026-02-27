@@ -5,7 +5,7 @@
  * Renders all rows inside a single wrapping card with dividers.
  *
  * Supports two variants:
- * - dashboard: Shows inventory + milk count + RTD&E activities
+ * - dashboard: Shows inventory + milk order + RTD&E activities
  * - admin: Shows admin-specific actions (user management, config changes)
  */
 "use client";

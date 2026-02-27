@@ -81,7 +81,7 @@ A digital counting and restocking tool that:
    - Create modular admin dashboard:
      - 👥 User Management
      - 📦 RTD&E Items & Pars
-     - 🥛 Milk Count Pars (placeholder for Tool 2)
+     - 🥛 Milk Order Pars (placeholder for Tool 2)
    - Enables future tool admin features in organized way
 
 ### Out of Scope (Future Enhancements)
@@ -104,7 +104,7 @@ A digital counting and restocking tool that:
 3. Sees **Admin Dashboard** with module cards:
    - 👥 User Management
    - 📦 RTD&E Items & Pars
-   - 🥛 Milk Count Pars
+   - 🥛 Milk Order Pars
 4. Clicks "RTD&E Items & Pars"
 5. Sees list of current items with drag-to-reorder interface
 6. Can **add new item**:
@@ -651,7 +651,7 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
   - Grid of module cards:
     - 👥 User Management
     - 📦 RTD&E Items & Pars
-    - 🥛 Milk Count Pars (placeholder)
+    - 🥛 Milk Order Pars (placeholder)
   - Replaces direct user management screen
 
 - **`/admin/users`** - User Management (moved from `/admin`)
@@ -954,7 +954,7 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 │                                     │
 │  ┌───────────┐                      │
 │  │     🥛    │                      │
-│  │Milk Count │                      │
+│  │Milk Order │                      │
 │  │   Pars    │                      │
 │  └───────────┘                      │
 │                                     │
@@ -1127,14 +1127,14 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 - [ ] Create User Management module card → Routes to `/admin/users`
 - [ ] Move existing user management UI to `/admin/users`
 - [ ] Create RTD&E Items module card → Routes to `/admin/rtde-items`
-- [ ] Create Milk Count Pars module card (placeholder) → Routes to `/admin/milk-pars`
+- [ ] Create Milk Order Pars module card (placeholder) → Routes to `/admin/milk-pars`
 - [ ] Test admin dashboard navigation
 - [ ] Update documentation
 
 **Rationale:**
 
 - RTD&E tool requires item/par management
-- Milk Count tool will need par management
+- Milk Order tool will need par management
 - Build infrastructure now to avoid rework
 - Relatively small task that unlocks two tools
 
@@ -1181,7 +1181,7 @@ CREATE INDEX idx_rtde_counts_session ON rtde_session_counts(session_id);
 
 - **Overall Architecture**: See `PLANNING.md` for multi-tool system design
 - **Tool 1 Planning**: See `Planning/InventoryTracking.md`
-- **Tool 2 Planning**: See `Planning/MilkCount.md`
+- **Tool 2 Planning**: See `Planning/MilkOrder.md`
 - **Design System**: See `Design/README.md` for UI guidelines
 - **Development Guidelines**: See `CLAUDE.md`
 

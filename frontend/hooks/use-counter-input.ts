@@ -1,6 +1,6 @@
 /**
  * Shared hook for numeric counter input with tap-to-edit behavior.
- * Used by MilkCountCard, MorningCountRow, and OnOrderRow.
+ * Used by MilkOrderCard, MorningCountRow, and OnOrderRow.
  */
 import { useState, useRef, useEffect, useCallback } from "react";
 

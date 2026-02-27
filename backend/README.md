@@ -4,11 +4,11 @@
 
 ## Overview
 
-The SirenBase backend is a Flask-based REST API that serves multiple tools for specialty coffee retail store partners. It implements a **multi-tool architecture** where each tool (Inventory Tracking, Milk Count, RTD&E) has its own namespaced API endpoints while sharing common infrastructure (authentication, database, admin functions).
+The SirenBase backend is a Flask-based REST API that serves multiple tools for specialty coffee retail store partners. It implements a **multi-tool architecture** where each tool (Inventory Tracking, Milk Order, RTD&E) has its own namespaced API endpoints while sharing common infrastructure (authentication, database, admin functions).
 
 ### Current Status
 - **Tool 1 (Inventory Tracking)**: ✅ Complete - `/api/tracking/*`
-- **Tool 2 (Milk Count)**: ✅ Complete - `/api/milk-count/*`
+- **Tool 2 (Milk Order)**: ✅ Complete - `/api/milk-order/*`
 - **Tool 3 (RTD&E)**: ✅ Complete - `/api/rtde/*`
 
 ## Tech Stack
@@ -84,14 +84,14 @@ backend/
 │   │   ├── item.py          # Tool 1: Tracking items
 │   │   ├── history.py       # Tool 1: Tracking history
 │   │   ├── rtde.py          # Tool 3: RTD&E models
-│   │   └── milk_count.py    # Tool 2: Milk Count models
+│   │   └── milk_order.py    # Tool 2: Milk Order models
 │   ├── schemas/              # Marshmallow schemas
 │   ├── routes/               # API blueprints
 │   │   ├── auth.py           # /api/auth/* (shared)
 │   │   ├── admin.py          # /api/admin/* (shared)
 │   │   └── tools/            # Tool-specific routes
 │   │       ├── tracking.py   # /api/tracking/* (Tool 1)
-│   │       ├── milk_count/   # /api/milk-count/* (Tool 2)
+│   │       ├── milk_order/   # /api/milk-order/* (Tool 2)
 │   │       └── rtde/         # /api/rtde/* (Tool 3)
 │   ├── middleware/           # Custom middleware
 │   └── utils/                # Helper functions
@@ -122,23 +122,23 @@ Each tool operates in its own namespace to ensure isolation and scalability:
 - `DELETE /api/tracking/items/<code>` - Remove item
 - `GET /api/tracking/history` - View history
 
-**Tool 2: Milk Count** `/api/milk-count/*`:
+**Tool 2: Milk Order** `/api/milk-order/*`:
 - Admin Endpoints:
-  - `GET /api/milk-count/admin/milk-types` - List milk types (admin only)
-  - `PUT /api/milk-count/admin/milk-types/:id` - Update milk type (admin only)
-  - `GET /api/milk-count/admin/par-levels` - List par levels (admin only)
-  - `PUT /api/milk-count/admin/par-levels/:id` - Update par level (admin only)
+  - `GET /api/milk-order/admin/milk-types` - List milk types (admin only)
+  - `PUT /api/milk-order/admin/milk-types/:id` - Update milk type (admin only)
+  - `GET /api/milk-order/admin/par-levels` - List par levels (admin only)
+  - `PUT /api/milk-order/admin/par-levels/:id` - Update par level (admin only)
 - Session Endpoints:
-  - `GET /api/milk-count/sessions/today` - Get today's session
-  - `POST /api/milk-count/sessions/start` - Start new session
-  - `GET /api/milk-count/sessions/:id` - Get session details
-  - `PUT /api/milk-count/sessions/:id/night-foh` - Save FOH counts
-  - `PUT /api/milk-count/sessions/:id/night-boh` - Save BOH counts
-  - `PUT /api/milk-count/sessions/:id/morning` - Save morning count
-  - `PUT /api/milk-count/sessions/:id/on-order` - Save on-order values
-  - `GET /api/milk-count/sessions/:id/summary` - Get calculated summary
-  - `GET /api/milk-count/history` - Session history
-  - `GET /api/milk-count/milk-types` - Active milk types (staff)
+  - `GET /api/milk-order/sessions/today` - Get today's session
+  - `POST /api/milk-order/sessions/start` - Start new session
+  - `GET /api/milk-order/sessions/:id` - Get session details
+  - `PUT /api/milk-order/sessions/:id/night-foh` - Save FOH counts
+  - `PUT /api/milk-order/sessions/:id/night-boh` - Save BOH counts
+  - `PUT /api/milk-order/sessions/:id/morning` - Save morning count
+  - `PUT /api/milk-order/sessions/:id/on-order` - Save on-order values
+  - `GET /api/milk-order/sessions/:id/summary` - Get calculated summary
+  - `GET /api/milk-order/history` - Session history
+  - `GET /api/milk-order/milk-types` - Active milk types (staff)
 
 **Tool 3: RTD&E** `/api/rtde/*`:
 - Admin Endpoints (item management):
@@ -162,7 +162,7 @@ Each tool operates in its own namespace to ensure isolation and scalability:
 Tables are prefixed by tool to avoid conflicts:
 - Shared: `users`
 - Tool 1: `tracking_items`, `tracking_history`, `item_suggestions`
-- Tool 2: `milk_count_sessions`, `milk_count_par_levels`, etc.
+- Tool 2: `milk_order_sessions`, `milk_order_par_levels`, etc.
 - Tool 3: `rtde_items`, `rtde_count_sessions`, `rtde_session_counts`
 
 ## Development

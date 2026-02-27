@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains the design system documentation for **SirenBase**. It defines the visual design language, UI patterns, and interaction guidelines that ensure consistency across all three tools (Inventory Tracking, Milk Count, RTD&E) while maintaining a cohesive, mobile-first user experience.
+This directory contains the design system documentation for **SirenBase**. It defines the visual design language, UI patterns, and interaction guidelines that ensure consistency across all three tools (Inventory Tracking, Milk Order, RTD&E) while maintaining a cohesive, mobile-first user experience.
 
 **Purpose**: Serve as the single source of truth for all design decisions, enabling AI agents and developers to create uniform, accessible, and brand-consistent interfaces.
 

@@ -66,13 +66,13 @@ from app.models.item import Item
 from app.models.history import History, HistoryAction
 from app.models.item_suggestion import ItemSuggestion
 from app.models.rtde import RTDEItem, RTDECountSession, RTDESessionCount
-from app.models.milk_count import (
+from app.models.milk_order import (
     MilkType,
     MilkCategory,
-    MilkCountParLevel,
-    MilkCountSession,
+    MilkOrderParLevel,
+    MilkOrderSession,
     SessionStatus,
-    MilkCountEntry,
+    MilkOrderEntry,
     MorningMethod,
 )
 
@@ -85,13 +85,13 @@ __all__ = [
     'History',
     'HistoryAction',
     'ItemSuggestion',
-    # Tool 2: Milk Count models
+    # Tool 2: Milk Order models
     'MilkType',
     'MilkCategory',
-    'MilkCountParLevel',
-    'MilkCountSession',
+    'MilkOrderParLevel',
+    'MilkOrderSession',
     'SessionStatus',
-    'MilkCountEntry',
+    'MilkOrderEntry',
     'MorningMethod',
     # Tool 3: RTDE models
     'RTDEItem',

@@ -3,7 +3,7 @@ CLI commands for SirenBase development and testing.
 
 These commands are for development use only and will refuse to run in production.
 """
-from app.cli.milk_count import milk_count_cli
+from app.cli.milk_order import milk_order_cli
 
 
 def register_cli_commands(app):
@@ -13,4 +13,4 @@ def register_cli_commands(app):
     Args:
         app: Flask application instance
     """
-    app.cli.add_command(milk_count_cli)
+    app.cli.add_command(milk_order_cli)

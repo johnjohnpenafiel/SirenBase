@@ -16,7 +16,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Header } from "@/components/shared/Header";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { ActivityFeed } from "@/components/shared/ActivityFeed";
-import { MilkCountProgress } from "@/components/shared/MilkCountProgress";
+import { MilkOrderProgress } from "@/components/shared/MilkOrderProgress";
 import { RTDETimerCircle } from "@/components/shared/RTDETimerCircle";
 import { useAuth } from "@/hooks/use-auth";
 import { Package, Milk, ShoppingBasket, ShieldCheck } from "lucide-react";
@@ -52,11 +52,11 @@ export default function DashboardPage() {
                   icon={<ShoppingBasket className="size-5 text-emerald-400" />}
                 />
 
-                {/* Tool 3: Milk Count */}
+                {/* Tool 3: Milk Order */}
                 <ToolCard
-                  title="Milk Count"
-                  description="Milk counting with automated calculations"
-                  route="/tools/milk-count"
+                  title="Milk Order"
+                  description="Milk ordering with automated calculations"
+                  route="/tools/milk-order"
                   accent="sky"
                   toolNumber="03"
                   icon={<Milk className="size-5 text-sky-400" />}
@@ -84,7 +84,7 @@ export default function DashboardPage() {
 
               {/* Status Circles */}
               <div className="grid grid-cols-2 gap-2 mb-2">
-                <MilkCountProgress />
+                <MilkOrderProgress />
                 <RTDETimerCircle />
               </div>
 

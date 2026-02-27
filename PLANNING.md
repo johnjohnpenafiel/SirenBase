@@ -31,7 +31,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 **Dashboard Concept**:
 
-- Grid of tool cards (e.g., "Tracking System", "Milk Count", "RTD&E")
+- Grid of tool cards (e.g., "Tracking System", "Milk Order", "RTD&E")
 - Each card routes to a dedicated tool with its own workflows
 - Admin Panel card appears only for users with admin role
 - Simple, fast navigation - partners can switch between tools instantly
@@ -74,7 +74,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 ---
 
-### 🥛 Tool 2: Milk Count System (✅ COMPLETE)
+### 🥛 Tool 2: Milk Order System (✅ COMPLETE)
 
 **Purpose**: Streamline milk inventory counting and ordering process with automated calculations.
 
@@ -90,12 +90,12 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 **Status**: Backend 100% complete (68 tests passing), Frontend 100% complete (all pages, components, admin integration)
 
 **Implementation Details**:
-- **Backend**: 4 models (MilkType, ParLevel, Session, Entry), 13 API endpoints under `/api/milk-count/*`
-- **Frontend**: 7 pages (landing, FOH, BOH, morning, on-order, summary, history), 3 components (MilkCountCard, MorningCountRow, OnOrderRow)
+- **Backend**: 4 models (MilkType, ParLevel, Session, Entry), 13 API endpoints under `/api/milk-order/*`
+- **Frontend**: 7 pages (landing, FOH, BOH, morning, on-order, summary, history), 3 components (MilkOrderCard, MorningCountRow, OnOrderRow)
 - **Admin**: Functional par level management at `/admin/milk-pars`
 - **Workflow**: night_foh → night_boh → morning → on_order → completed (enforced state machine)
 
-**Detailed Planning**: See `Planning/MilkCount.md`
+**Detailed Planning**: See `Planning/MilkOrder.md`
 
 ---
 
@@ -135,7 +135,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 - Each tool has dedicated database tables, API endpoints, and UI screens
 - Tools are self-contained and independently buildable
-- Tool-specific admin features (e.g., par level management for Milk Count)
+- Tool-specific admin features (e.g., par level management for Milk Order)
 
 ### Out of Scope (Future Considerations)
 
@@ -321,7 +321,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 │                                     │
 │  ┌──────────────────────────────┐  │
 │  │ /tools/tracking/             │  │
-│  │ /tools/milk-count/           │  │
+│  │ /tools/milk-order/           │  │
 │  │ /tools/rtde/                 │  │
 │  │ /admin/                      │  │
 │  └──────────────────────────────┘  │
@@ -334,7 +334,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 │                                     │
 │  /api/auth/*        (shared)        │
 │  /api/tracking/*    (tool 1)        │
-│  /api/milk-count/*  (tool 2)        │
+│  /api/milk-order/*  (tool 2)        │
 │  /api/rtde/*        (tool 3)        │
 └──────────────┬──────────────────────┘
                │ SQLAlchemy
@@ -344,8 +344,8 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 │  users                  (shared)    │
 │  tracking_items         (tool 1)    │
 │  tracking_history       (tool 1)    │
-│  milk_count_sessions    (tool 2)    │
-│  milk_count_par_levels  (tool 2)    │
+│  milk_order_sessions    (tool 2)    │
+│  milk_order_par_levels  (tool 2)    │
 │  rtde_items             (tool 3)    │
 │  rtde_pull_lists        (tool 3)    │
 └─────────────────────────────────────┘
@@ -364,7 +364,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 2. **Dashboard Flow**
 
    - User logs in → Redirected to `/dashboard`
-   - Dashboard displays tool cards (Tracking, Milk Count, RTD&E)
+   - Dashboard displays tool cards (Tracking, Milk Order, RTD&E)
    - Admin users also see "Admin Panel" card
    - User clicks card → Routes to `/tools/{tool-name}/`
 
@@ -393,7 +393,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 
 **Rationale**:
 
-- Clear separation between tools (`/api/tracking/items` vs `/api/milk-count/sessions`)
+- Clear separation between tools (`/api/tracking/items` vs `/api/milk-order/sessions`)
 - Prevents naming conflicts as more tools are added
 - Easier to understand which tool an endpoint belongs to
 - Matches frontend routing structure (`/tools/tracking/*`)
@@ -403,7 +403,7 @@ Login → Dashboard (Tool Grid) → Select Tool → Tool-Specific Workflows
 ```
 /api/auth/*                 # Shared authentication
 /api/tracking/*             # Tool 1: Inventory Tracking
-/api/milk-count/*           # Tool 2: Milk Count
+/api/milk-order/*           # Tool 2: Milk Order
 /api/rtde/*                 # Tool 3: RTD&E
 ```
 
@@ -446,10 +446,10 @@ users
 tracking_items
 tracking_history
 
--- Tool 2: Milk Count
-milk_count_sessions
-milk_count_par_levels
-milk_count_milk_types
+-- Tool 2: Milk Order
+milk_order_sessions
+milk_order_par_levels
+milk_order_milk_types
 
 -- Tool 3: RTD&E
 rtde_items
@@ -477,7 +477,7 @@ rtde_pull_lists
 Each tool has its own prefixed tables. See individual tool planning docs:
 
 - **Tracking Tool**: `Planning/InventoryTracking.md` (tracking_items, tracking_history, item_name_suggestions)
-- **Milk Count Tool**: `Planning/MilkCount.md` (milk_count_sessions, milk_count_par_levels, etc.)
+- **Milk Order Tool**: `Planning/MilkOrder.md` (milk_order_sessions, milk_order_par_levels, etc.)
 - **RTD&E Tool**: `Planning/RTDE.md` (rtde_items, rtde_pull_lists, etc.)
 
 ### Key Database Principles
@@ -498,7 +498,7 @@ Located in `frontend/src/components/shared/`:
 
 - **Layout Components**: Dashboard, NavBar, Footer
 - **UI Primitives**: Button, Input, Card, Dialog (ShadCN)
-- **Counter Component**: +/- buttons (used by Milk Count and RTD&E)
+- **Counter Component**: +/- buttons (used by Milk Order and RTD&E)
 - **Auth Components**: LoginForm, ProtectedRoute
 - **Utility Components**: LoadingSpinner, ErrorMessage, Toast
 
@@ -694,14 +694,14 @@ Located in `backend/app/tools/{tool_name}/`:
 - Performance optimization
 - Bug fixes
 
-### Phase 5: Tool 2 - Milk Count System (✅ COMPLETE)
+### Phase 5: Tool 2 - Milk Order System (✅ COMPLETE)
 
 **Timeline**: Weeks 9-12
 **Status**: Fully complete with backend + frontend
 
 **Completed**:
-- ✅ Milk Count backend API (sessions, par levels, calculations)
-- ✅ Milk Count frontend UI (night/morning counts, summary, on-order, history)
+- ✅ Milk Order backend API (sessions, par levels, calculations)
+- ✅ Milk Order frontend UI (night/morning counts, summary, on-order, history)
 - ✅ Admin par level management
 - ✅ Comprehensive test coverage
 
@@ -800,7 +800,7 @@ Located in `backend/app/tools/{tool_name}/`:
 
 - **PLANNING.md** (this file) - Overall multi-tool architecture
 - **Planning/InventoryTracking.md** - Tool 1 detailed planning
-- **Planning/MilkCount.md** - Tool 2 detailed planning
+- **Planning/MilkOrder.md** - Tool 2 detailed planning
 - **Planning/RTDE.md** - Tool 3 detailed planning
 - **TASKS.md** - Task tracking organized by tool
 - **BUGS.md** - Bug and issue tracker with priorities

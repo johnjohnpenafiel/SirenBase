@@ -74,10 +74,10 @@ const ICON_CONFIG: Record<
   // Dashboard — tool accent colors
   inventory_add: { icon: Plus, color: "text-green-500" },
   inventory_remove: { icon: CornerUpRight, color: "text-red-500" },
-  milk_count_foh: { icon: Milk, color: "text-sky-400" },
-  milk_count_boh: { icon: Milk, color: "text-sky-400" },
-  milk_count_morning: { icon: Milk, color: "text-sky-400" },
-  milk_count_completed: { icon: Milk, color: "text-sky-400" },
+  milk_order_foh: { icon: Milk, color: "text-sky-400" },
+  milk_order_boh: { icon: Milk, color: "text-sky-400" },
+  milk_order_morning: { icon: Milk, color: "text-sky-400" },
+  milk_order_completed: { icon: Milk, color: "text-sky-400" },
   rtde_completed: { icon: ShoppingBasket, color: "text-emerald-400" },
   // Admin
   user_created: { icon: UserPlus, color: "text-emerald-400" },

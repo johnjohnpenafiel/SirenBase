@@ -46,7 +46,7 @@ backend/
 │   │   ├── item.py           # Tool 1: Tracking items
 │   │   ├── history.py        # Tool 1: Tracking history
 │   │   ├── item_suggestion.py # Tool 1: Autocomplete templates
-│   │   ├── milk_count.py     # Tool 2: Milk Count models
+│   │   ├── milk_order.py     # Tool 2: Milk Order models
 │   │   └── rtde.py           # Tool 3: RTD&E models
 │   ├── schemas/              # Marshmallow schemas for validation
 │   │   ├── __init__.py
@@ -60,7 +60,7 @@ backend/
 │   │   └── tools/            # Tool-specific routes
 │   │       ├── __init__.py
 │   │       ├── tracking.py   # /api/tracking/* endpoints (Tool 1)
-│   │       ├── milk_count/   # /api/milk-count/* endpoints (Tool 2) - Complete
+│   │       ├── milk_order/   # /api/milk-order/* endpoints (Tool 2) - Complete
 │   │       │   ├── admin.py      # Milk type + par level management
 │   │       │   └── sessions.py   # Session workflow + history
 │   │       └── rtde/         # /api/rtde/* endpoints (Tool 3) - Complete
@@ -809,7 +809,7 @@ def create_app(config_class=Config):
     from app.routes.admin import admin_bp
     # Tool-specific routes
     from app.routes.tools.tracking import tracking_bp
-    from app.routes.tools.milk_count import milk_count_bp  # Tool 2 - Complete
+    from app.routes.tools.milk_order import milk_order_bp  # Tool 2 - Complete
     from app.routes.tools.rtde import rtde_bp  # Tool 3 - Complete
 
     app.register_blueprint(auth_bp)

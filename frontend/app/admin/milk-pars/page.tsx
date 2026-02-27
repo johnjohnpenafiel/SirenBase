@@ -1,5 +1,5 @@
 /**
- * Milk Count Pars Management Page
+ * Milk Order Pars Management Page
  *
  * Admin interface for managing milk type par levels.
  * Par levels determine the target inventory for ordering calculations.
@@ -22,7 +22,7 @@ import { Milk, Leaf, Loader2 } from "lucide-react";
 import { AdminParsSkeleton } from "@/components/admin/AdminParsSkeleton";
 import apiClient from "@/lib/api";
 import { toast } from "sonner";
-import type { MilkCountParLevel } from "@/types";
+import type { MilkOrderParLevel } from "@/types";
 
 interface EditingState {
   milkTypeId: string;
@@ -31,7 +31,7 @@ interface EditingState {
 
 export default function MilkParsPage() {
   const [loading, setLoading] = useState(true);
-  const [parLevels, setParLevels] = useState<MilkCountParLevel[]>([]);
+  const [parLevels, setParLevels] = useState<MilkOrderParLevel[]>([]);
   const [editing, setEditing] = useState<EditingState | null>(null);
   const [saving, setSaving] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -65,7 +65,7 @@ export default function MilkParsPage() {
     }
   };
 
-  const startEditing = (parLevel: MilkCountParLevel) => {
+  const startEditing = (parLevel: MilkOrderParLevel) => {
     setEditing({
       milkTypeId: parLevel.milk_type_id,
       value: parLevel.par_value.toString(),
@@ -117,7 +117,7 @@ export default function MilkParsPage() {
   const dairyLevels = parLevels.filter(p => p.milk_type_category === 'dairy');
   const nonDairyLevels = parLevels.filter(p => p.milk_type_category === 'non_dairy');
 
-  const renderParLevelRow = (parLevel: MilkCountParLevel) => {
+  const renderParLevelRow = (parLevel: MilkOrderParLevel) => {
     const isEditing = editing?.milkTypeId === parLevel.milk_type_id;
     const isDairy = parLevel.milk_type_category === "dairy";
 
@@ -174,7 +174,7 @@ export default function MilkParsPage() {
 
   const renderSection = (
     label: string,
-    levels: MilkCountParLevel[]
+    levels: MilkOrderParLevel[]
   ) => {
     if (levels.length === 0) return null;
     return (
@@ -211,7 +211,7 @@ export default function MilkParsPage() {
               <BackButton href="/admin" label="Admin" />
             </div>
             <h1 className="text-xl md:text-3xl font-medium tracking-tight text-black">
-              Milk Count Pars
+              Milk Order Pars
             </h1>
             <p className="text-sm text-muted-foreground">
               Set target inventory levels for milk ordering

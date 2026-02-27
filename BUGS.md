@@ -164,7 +164,7 @@ After leaving the app idle for extended periods (1+ hours), users would see tech
 **Resolution**: Added `error.tsx` files at 5 route boundaries:
 - `app/error.tsx` (root)
 - `app/tools/tracking/error.tsx`
-- `app/tools/milk-count/error.tsx`
+- `app/tools/milk-order/error.tsx`
 - `app/tools/rtde/error.tsx`
 - `app/admin/error.tsx`
 

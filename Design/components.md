@@ -133,7 +133,7 @@ This document defines the standard UI components used across SirenBase. For dial
 - `border-[1.5px] border-border hover:border-slate-600 hover:shadow-md`
 - No shadow at rest, shadow on hover
 
-**Section Cards** (Milk Count):
+**Section Cards** (Milk Order):
 - Rounded corners with border
 - Section header (FOH/BOH)
 - Grid of items with input fields
@@ -445,9 +445,9 @@ const handleInputFocus = () => {
 
 **Reference Implementations**:
 - `frontend/components/tools/rtde/RTDECountCard.tsx` - Original implementation
-- `frontend/components/tools/milk-count/MilkCountCard.tsx` - Counting rows
-- `frontend/components/tools/milk-count/OnOrderRow.tsx` - Order quantity input
-- `frontend/components/tools/milk-count/MorningCountRow.tsx` - Morning count input
+- `frontend/components/tools/milk-order/MilkOrderCard.tsx` - Counting rows
+- `frontend/components/tools/milk-order/OnOrderRow.tsx` - Order quantity input
+- `frontend/components/tools/milk-order/MorningCountRow.tsx` - Morning count input
 
 ---
 

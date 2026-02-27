@@ -91,7 +91,7 @@ Uses the Contextual Action Overlay pattern (see [components.md](./components.md#
 
 ---
 
-## Tool 2: Milk Count System
+## Tool 2: Milk Order System
 
 **Personality**: Calm, methodical, calculator-like
 
@@ -99,7 +99,7 @@ Uses the Contextual Action Overlay pattern (see [components.md](./components.md#
 
 - **Tool number**: `03` (black pill badge)
 - **Icon**: `Milk` at `size-5 text-sky-400` (top-right)
-- **Title**: "Milk Count"
+- **Title**: "Milk Order"
 - **Description**: "Milk counting with automated calculations"
 
 ### Key UI Elements
@@ -111,7 +111,7 @@ Uses the Contextual Action Overlay pattern (see [components.md](./components.md#
 - **Input Style**: Large, number-focused inputs (`type="number"`, `inputMode="numeric"`)
 - **Summary Row**: Sticky bottom on mobile, always visible
 
-#### Milk Count Card
+#### Milk Order Card
 
 ```tsx
 <Card className="p-4">
@@ -282,7 +282,7 @@ RTD&E uses a phase-based navigation instead of separate routes:
 
 ### Counter Component
 
-Used by both Milk Count and RTD&E:
+Used by both Milk Order and RTD&E:
 
 ```tsx
 interface CounterProps {
@@ -303,7 +303,7 @@ const sizes = {
 
 ### Session Management UI
 
-Both Milk Count and RTD&E use sessions:
+Both Milk Order and RTD&E use sessions:
 
 - **Active Session Banner**: Shows current session status
 - **Resume Prompt**: Dialog to continue or start fresh
@@ -338,7 +338,7 @@ Each tool has a subtle color accent used only for small icons (`size-5`, 400-wei
 |------|-------------|-----------------|----------|
 | Inventory | Stone | `text-stone-400` | Neutral, grounded |
 | RTD&E | Emerald | `text-emerald-400` | Fresh, action-oriented |
-| Milk Count | Sky | `text-sky-400` | Calm, methodical |
+| Milk Order | Sky | `text-sky-400` | Calm, methodical |
 | Admin | Amber | `text-amber-400` | Attention, restricted |
 
 **Rules**:

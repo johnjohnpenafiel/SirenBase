@@ -9,7 +9,7 @@ The SirenBase frontend is a Next.js 15 application that provides a unified dashb
 ### Current Status
 - **Dashboard**: ✅ Complete - Tool selection with role-based visibility
 - **Tool 1 (Inventory Tracking)**: ✅ Complete - Full inventory management with autocomplete
-- **Tool 2 (Milk Count)**: ✅ Complete - Night/morning counts, summary, history
+- **Tool 2 (Milk Order)**: ✅ Complete - Night/morning counts, summary, history
 - **Tool 3 (RTD&E)**: ✅ Complete - Counting interface, pull list, and admin management
 
 ## Tech Stack
@@ -75,7 +75,7 @@ frontend/
 │   │   │   ├── page.tsx           # Landing page
 │   │   │   ├── inventory/         # Inventory view
 │   │   │   └── history/           # History view
-│   │   ├── milk-count/      # Tool 2: Milk Count (complete)
+│   │   ├── milk-order/      # Tool 2: Milk Order (complete)
 │   │   └── rtde/            # Tool 3: RTD&E Counting System
 │   │       ├── page.tsx           # Landing/Entry point
 │   │       └── session/[sessionId]/ # Unified session workflow (counting + pull list)
@@ -94,7 +94,7 @@ frontend/
 │   └── tools/               # Tool-specific components
 │       ├── tracking/        # Tool 1 components
 │       ├── tracking-history/# Tool 1 history components
-│       ├── milk-count/      # Tool 2 components (complete)
+│       ├── milk-order/      # Tool 2 components (complete)
 │       └── rtde/            # Tool 3 components
 │           ├── RTDECountCard.tsx      # Item counting interface
 │           ├── RTDESessionSidebar.tsx # Desktop navigation sidebar
@@ -125,14 +125,14 @@ The frontend mirrors the backend's multi-tool architecture with clear namespacin
 - `/tools/tracking/*` → Inventory Tracking pages (Tool 1)
   - `/tools/tracking/inventory` → Current inventory view
   - `/tools/tracking/history` → Transaction history
-- `/tools/milk-count/*` → Milk Count pages (Tool 2) - Complete
-  - `/tools/milk-count` → Landing page (start or resume session)
-  - `/tools/milk-count/night/foh` → Night FOH counting
-  - `/tools/milk-count/night/boh` → Night BOH counting
-  - `/tools/milk-count/morning` → Morning count
-  - `/tools/milk-count/on-order` → On-order entry
-  - `/tools/milk-count/summary/[sessionId]` → Session summary
-  - `/tools/milk-count/history` → Session history
+- `/tools/milk-order/*` → Milk Order pages (Tool 2) - Complete
+  - `/tools/milk-order` → Landing page (start or resume session)
+  - `/tools/milk-order/night/foh` → Night FOH counting
+  - `/tools/milk-order/night/boh` → Night BOH counting
+  - `/tools/milk-order/morning` → Morning count
+  - `/tools/milk-order/on-order` → On-order entry
+  - `/tools/milk-order/summary/[sessionId]` → Session summary
+  - `/tools/milk-order/history` → Session history
 - `/tools/rtde/*` → RTD&E Counting System (Tool 3)
   - `/tools/rtde` → Landing page (auto-start or resume session)
   - `/tools/rtde/session/[sessionId]` → Unified session workflow with phase-based rendering
@@ -155,7 +155,7 @@ Components are organized by scope:
 
 **Tool-Specific Components** (`components/tools/<tool-name>/`):
 - Isolated to a single tool
-- Examples: InventoryList, MilkCountForm, RTDEPullList
+- Examples: InventoryList, MilkOrderForm, RTDEPullList
 
 **Auth & Admin Components** (`components/auth/`, `components/admin/`):
 - Authentication flows and admin functionality
@@ -337,4 +337,4 @@ For questions or issues:
 
 **Last Updated**: February 8, 2026
 **Current Phase**: Phase 7A Complete - All Tools Deployed
-**Status**: Tool 1 (Inventory Tracking) ✅, Tool 2 (Milk Count) ✅, Tool 3 (RTD&E) ✅ - All Complete
+**Status**: Tool 1 (Inventory Tracking) ✅, Tool 2 (Milk Order) ✅, Tool 3 (RTD&E) ✅ - All Complete

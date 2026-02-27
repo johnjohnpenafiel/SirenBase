@@ -2,7 +2,7 @@
 Activity feed routes for recent actions across the app.
 
 This module provides API endpoints for activity feeds:
-- /api/activity/recent - Dashboard activity feed (inventory + milk count + RTD&E)
+- /api/activity/recent - Dashboard activity feed (inventory + milk order + RTD&E)
 """
 from datetime import datetime
 from typing import List, Dict, Any
@@ -11,7 +11,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 
 from app.models.history import History
-from app.models.milk_count import MilkCountSession, SessionStatus
+from app.models.milk_order import MilkOrderSession, SessionStatus
 from app.models.rtde import RTDECountSession
 from app.extensions import db
 from app.utils.helpers import get_enum_value
@@ -89,12 +89,12 @@ def get_recent_activity():
             'tool': 'inventory'
         })
 
-    # 2. Get recent milk count phase completions
+    # 2. Get recent milk order phase completions
     # Only include sessions that have progressed beyond initial state
     milk_sessions = (
-        MilkCountSession.query
-        .filter(MilkCountSession.status != SessionStatus.NIGHT_FOH.value)
-        .order_by(MilkCountSession.created_at.desc())
+        MilkOrderSession.query
+        .filter(MilkOrderSession.status != SessionStatus.NIGHT_FOH.value)
+        .order_by(MilkOrderSession.created_at.desc())
         .limit(limit)
         .all()
     )
@@ -107,12 +107,12 @@ def get_recent_activity():
             user_name = session.night_count_user.name if session.night_count_user else 'Unknown'
             activities.append({
                 'id': f'mc-foh-{session.id}',
-                'type': 'milk_count_foh',
+                'type': 'milk_order_foh',
                 'title': 'Milk FOH Count Saved',
                 'description': f'Session for {session_date_str}',
                 'user_name': user_name,
                 'timestamp': session.night_foh_saved_at.isoformat() + 'Z',
-                'tool': 'milk-count'
+                'tool': 'milk-order'
             })
 
         # BOH completion
@@ -120,12 +120,12 @@ def get_recent_activity():
             user_name = session.night_count_user.name if session.night_count_user else 'Unknown'
             activities.append({
                 'id': f'mc-boh-{session.id}',
-                'type': 'milk_count_boh',
+                'type': 'milk_order_boh',
                 'title': 'Milk BOH Count Saved',
                 'description': f'Session for {session_date_str}',
                 'user_name': user_name,
                 'timestamp': session.night_boh_saved_at.isoformat() + 'Z',
-                'tool': 'milk-count'
+                'tool': 'milk-order'
             })
 
         # Morning completion
@@ -133,12 +133,12 @@ def get_recent_activity():
             user_name = session.morning_count_user.name if session.morning_count_user else 'Unknown'
             activities.append({
                 'id': f'mc-morn-{session.id}',
-                'type': 'milk_count_morning',
+                'type': 'milk_order_morning',
                 'title': 'Milk Morning Count Saved',
                 'description': f'Session for {session_date_str}',
                 'user_name': user_name,
                 'timestamp': session.morning_saved_at.isoformat() + 'Z',
-                'tool': 'milk-count'
+                'tool': 'milk-order'
             })
 
         # Session completed
@@ -146,12 +146,12 @@ def get_recent_activity():
             user_name = session.morning_count_user.name if session.morning_count_user else 'Unknown'
             activities.append({
                 'id': f'mc-done-{session.id}',
-                'type': 'milk_count_completed',
-                'title': 'Milk Count Completed',
+                'type': 'milk_order_completed',
+                'title': 'Milk Order Completed',
                 'description': f'Session for {session_date_str}',
                 'user_name': user_name,
                 'timestamp': session.completed_at.isoformat() + 'Z',
-                'tool': 'milk-count'
+                'tool': 'milk-order'
             })
 
     # 3. Get recent completed RTD&E sessions
